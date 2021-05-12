@@ -248,8 +248,8 @@ namespace NetFabric.Hyperlinq
                 => source.ToArrayAt<TList, TSource, TPredicate>(predicate, offset, count);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public IMemoryOwner<TSource> ToArray(MemoryPool<TSource> memoryPool)
-                => source.ToArrayAt(memoryPool, predicate, offset, count);
+            public ValueMemoryOwner<TSource> ToArray(ArrayPool<TSource> pool, bool clearOnDispose = default)
+                => source.ToArrayAt(pool, clearOnDispose, predicate, offset, count);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public List<TSource> ToList()

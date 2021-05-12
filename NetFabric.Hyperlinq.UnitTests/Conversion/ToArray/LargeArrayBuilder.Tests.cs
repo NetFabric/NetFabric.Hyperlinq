@@ -20,7 +20,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
             var expected = Enumerable
                 .Range(0, count)
                 .ToArray();
-            using var builder = new LargeArrayBuilder<int>(ArrayPool<int>.Shared);
+            using var builder = new LargeArrayBuilder<int>(ArrayPool<int>.Shared, false);
             for (var index = 0; index < count; index++)
                 builder.Add(expected[index]);
 
@@ -39,16 +39,16 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
         public void ToArray_MemoryPool_Must_Succeed(int count)
         {
             // Arrange
-            var pool = MemoryPool<int>.Shared;
+            var pool = ArrayPool<int>.Shared;
             var expected = Enumerable
                 .Range(0, count)
                 .ToArray();
-            using var builder = new LargeArrayBuilder<int>(ArrayPool<int>.Shared);
+            using var builder = new LargeArrayBuilder<int>(ArrayPool<int>.Shared, false);
             for (var index = 0; index < count; index++)
                 builder.Add(expected[index]);
 
             // Act
-            using var result = builder.ToArray(pool);
+            using var result = builder.ToArray(pool, false);
 
             // Assert
             _ = result.Memory.Must()

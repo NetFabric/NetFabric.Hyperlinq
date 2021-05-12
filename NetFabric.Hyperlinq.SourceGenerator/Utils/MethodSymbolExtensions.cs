@@ -40,7 +40,7 @@ namespace NetFabric.Hyperlinq.SourceGenerator
                     Name = method.Name,
                     Parameters = method.Parameters
                         .Skip(skip)
-                        .Select(parameter => (parameter.Name, parameter.Type.ToDisplayString(), parameter.HasExplicitDefaultValue ? (parameter.ExplicitDefaultValue is null ? "default" : parameter.ExplicitDefaultValue.ToString()) : default))
+                        .Select(parameter => (parameter.Name, parameter.Type.ToDisplayString(), parameter.HasExplicitDefaultValue ? parameter.ExplicitDefaultValue is null ? "default" : ToDisplayString(parameter.ExplicitDefaultValue) : default))
                         .ToArray(),
                     TypeParameters =
                         method.ContainingType.TypeParameters.Concat(method.TypeParameters)
@@ -53,6 +53,15 @@ namespace NetFabric.Hyperlinq.SourceGenerator
             {
                 throw;
             }
+
+            string ToDisplayString(object? obj)
+                => obj switch
+                {
+                    null => "<NULL>",
+                    true => "true",
+                    false => "false",
+                    _ => obj.ToString()
+                };
         }
 
         public static MethodInfo ApplyMappings(this MethodInfo method, ImmutableArray<GeneratorMappingAttribute> typeGenericsMapping)

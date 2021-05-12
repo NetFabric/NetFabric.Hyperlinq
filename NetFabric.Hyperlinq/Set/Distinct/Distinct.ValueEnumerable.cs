@@ -112,8 +112,8 @@ namespace NetFabric.Hyperlinq
                 => GetSet().ToArray();
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public readonly IMemoryOwner<TSource> ToArray(MemoryPool<TSource> pool)
-                => GetSet().ToArray(pool);
+            public ValueMemoryOwner<TSource> ToArray(ArrayPool<TSource> pool, bool clearOnDispose = default)
+                => GetSet().ToArray(pool, clearOnDispose);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public readonly List<TSource> ToList()

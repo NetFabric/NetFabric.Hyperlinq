@@ -129,8 +129,8 @@ namespace NetFabric.Hyperlinq
             public TSource[] ToArray()
                 => source.ToArrayAt(predicate);
 
-            public IMemoryOwner<TSource> ToArray(MemoryPool<TSource> memoryPool)
-                => source.ToArrayAt(memoryPool, predicate);
+            public ValueMemoryOwner<TSource> ToArray(ArrayPool<TSource> pool, bool clearOnDispose = default)
+                => source.ToArrayAt(pool, clearOnDispose, predicate);
 
             public List<TSource> ToList()
                 => source.ToListAt(predicate);

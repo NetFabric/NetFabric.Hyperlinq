@@ -59,7 +59,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
         public void ToArray_MemoryPool_Must_Succeed(int[] source)
         {
             // Arrange
-            var pool = MemoryPool<int>.Shared;
+            var pool = ArrayPool<int>.Shared;
             var wrapped = Wrap
                 .AsValueReadOnlyCollection(source);
             var expected = source
@@ -107,7 +107,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
         public void ToArray_Predicate_MemoryPool_With_ValidData_Must_Succeed(int[] source, Func<int, string> selector)
         {
             // Arrange
-            var pool = MemoryPool<string>.Shared;
+            var pool = ArrayPool<string>.Shared;
             var wrapped = Wrap
                 .AsValueReadOnlyCollection(source);
             var expected = source
@@ -157,7 +157,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
         public void ToArray_SelectorAt_MemoryPool_With_ValidData_Must_Succeed(int[] source, Func<int, int, string> selector)
         {
             // Arrange
-            var pool = MemoryPool<string>.Shared;
+            var pool = ArrayPool<string>.Shared;
             var wrapped = Wrap
                 .AsValueReadOnlyCollection(source);
             var expected = source

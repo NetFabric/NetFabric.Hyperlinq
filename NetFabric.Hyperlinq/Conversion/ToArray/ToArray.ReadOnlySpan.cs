@@ -14,20 +14,11 @@ namespace NetFabric.Hyperlinq
 
         [GeneratorIgnore(false)]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        static IMemoryOwner<TSource> ToArray<TSource>(this ReadOnlySpan<TSource> source, MemoryPool<TSource> pool)
+        public static ValueMemoryOwner<TSource> ToArray<TSource>(this ReadOnlySpan<TSource> source, ArrayPool<TSource> pool, bool clearOnDispose = default)
         {
-            return source switch
-            {
-                { Length: 0 } => pool.Rent(0),
-                _ => BuildArray(source, pool)
-            };
-
-            static IMemoryOwner<TSource> BuildArray(ReadOnlySpan<TSource> source, MemoryPool<TSource> pool)
-            {
-                var result = pool.RentSliced(source.Length);
-                Copy(source, result.Memory.Span);
-                return result;
-            }
+            var result = pool.RentSliced(source.Length, clearOnDispose);
+            Copy(source, result.Memory.Span);
+            return result;
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -44,26 +35,17 @@ namespace NetFabric.Hyperlinq
 
             static TSource[] BuildArray(ReadOnlySpan<TSource> source, TPredicate predicate)
             {
-                using var arrayBuilder = ToArrayBuilder(source, ArrayPool<TSource>.Shared, predicate);
+                using var arrayBuilder = ToArrayBuilder(source, ArrayPool<TSource>.Shared, false, predicate);
                 return arrayBuilder.ToArray();
             }
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        static IMemoryOwner<TSource> ToArray<TSource, TPredicate>(this ReadOnlySpan<TSource> source, MemoryPool<TSource> pool, TPredicate predicate)
+        static ValueMemoryOwner<TSource> ToArray<TSource, TPredicate>(this ReadOnlySpan<TSource> source, ArrayPool<TSource> pool, bool clearOnDispose, TPredicate predicate)
             where TPredicate : struct, IFunction<TSource, bool>
         {
-            return source switch
-            {
-                { Length: 0 } => pool.Rent(0),
-                _ => BuildArray(source, pool, predicate)
-            };
-
-            static IMemoryOwner<TSource> BuildArray(ReadOnlySpan<TSource> source, MemoryPool<TSource> pool, TPredicate predicate)
-            {
-                using var arrayBuilder = ToArrayBuilder(source, ArrayPool<TSource>.Shared, predicate);
-                return arrayBuilder.ToArray(pool);
-            }
+            using var arrayBuilder = ToArrayBuilder(source, pool, clearOnDispose, predicate);
+            return arrayBuilder.ToArray(pool, clearOnDispose);
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -81,26 +63,17 @@ namespace NetFabric.Hyperlinq
 
             static TSource[] BuildArray(ReadOnlySpan<TSource> source, TPredicate predicate)
             {
-                using var arrayBuilder = ToArrayBuilderAt(source, ArrayPool<TSource>.Shared, predicate);
+                using var arrayBuilder = ToArrayBuilderAt(source, ArrayPool<TSource>.Shared, false, predicate);
                 return arrayBuilder.ToArray();
             }
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        static IMemoryOwner<TSource> ToArrayAt<TSource, TPredicate>(this ReadOnlySpan<TSource> source, MemoryPool<TSource> pool, TPredicate predicate)
+        static ValueMemoryOwner<TSource> ToArrayAt<TSource, TPredicate>(this ReadOnlySpan<TSource> source, ArrayPool<TSource> pool, bool clearOnDispose, TPredicate predicate)
             where TPredicate : struct, IFunction<TSource, int, bool>
         {
-            return source switch
-            {
-                { Length: 0 } => pool.Rent(0),
-                _ => BuildArray(source, pool, predicate)
-            };
-
-            static IMemoryOwner<TSource> BuildArray(ReadOnlySpan<TSource> source, MemoryPool<TSource> pool, TPredicate predicate)
-            {
-                using var arrayBuilder = ToArrayBuilderAt(source, ArrayPool<TSource>.Shared, predicate);
-                return arrayBuilder.ToArray(pool);
-            }
+            using var arrayBuilder = ToArrayBuilderAt(source, pool, clearOnDispose, predicate);
+            return arrayBuilder.ToArray(pool, clearOnDispose);
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -146,42 +119,24 @@ namespace NetFabric.Hyperlinq
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        static IMemoryOwner<TResult> ToArrayVector<TSource, TResult, TVectorSelector, TSelector>(this ReadOnlySpan<TSource> source, MemoryPool<TResult> pool, TVectorSelector vectorSelector, TSelector selector)
+        static ValueMemoryOwner<TResult> ToArrayVector<TSource, TResult, TVectorSelector, TSelector>(this ReadOnlySpan<TSource> source, ArrayPool<TResult> pool, bool clearOnDispose, TVectorSelector vectorSelector, TSelector selector)
             where TVectorSelector : struct, IFunction<Vector<TSource>, Vector<TResult>>
             where TSelector : struct, IFunction<TSource, TResult>
             where TSource : struct
             where TResult : struct
         {
-            return source switch
-            {
-                { Length: 0 } => pool.Rent(0),
-                _ => BuildArray(source, pool, vectorSelector, selector)
-            };
-
-            static IMemoryOwner<TResult> BuildArray(ReadOnlySpan<TSource> source, MemoryPool<TResult> pool, TVectorSelector vectorSelector, TSelector selector)
-            {
-                var result = pool.RentSliced(source.Length);
-                CopyVector(source, result.Memory.Span, vectorSelector, selector);
-                return result;
-            }
+            var result = pool.RentSliced(source.Length, clearOnDispose);
+            CopyVector(source, result.Memory.Span, vectorSelector, selector);
+            return result;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        static IMemoryOwner<TResult> ToArray<TSource, TResult, TSelector>(this ReadOnlySpan<TSource> source, MemoryPool<TResult> pool, TSelector selector)
+        static ValueMemoryOwner<TResult> ToArray<TSource, TResult, TSelector>(this ReadOnlySpan<TSource> source, ArrayPool<TResult> pool, bool clearOnDispose, TSelector selector)
             where TSelector : struct, IFunction<TSource, TResult>
         {
-            return source switch
-            {
-                { Length: 0 } => pool.Rent(0),
-                _ => BuildArray(source, pool, selector)
-            };
-
-            static IMemoryOwner<TResult> BuildArray(ReadOnlySpan<TSource> source, MemoryPool<TResult> pool, TSelector selector)
-            {
-                var result = pool.RentSliced(source.Length);
-                Copy(source, result.Memory.Span, selector);
-                return result;
-            }
+            var result = pool.RentSliced(source.Length, clearOnDispose);
+            Copy(source, result.Memory.Span, selector);
+            return result;
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -205,21 +160,12 @@ namespace NetFabric.Hyperlinq
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        static IMemoryOwner<TResult> ToArrayAt<TSource, TResult, TSelector>(this ReadOnlySpan<TSource> source, MemoryPool<TResult> pool, TSelector selector)
+        static ValueMemoryOwner<TResult> ToArrayAt<TSource, TResult, TSelector>(this ReadOnlySpan<TSource> source, ArrayPool<TResult> pool, bool clearOnDispose, TSelector selector)
             where TSelector : struct, IFunction<TSource, int, TResult>
         {
-            return source switch
-            {
-                { Length: 0 } => pool.Rent(0),
-                _ => BuildArray(source, pool, selector)
-            };
-
-            static IMemoryOwner<TResult> BuildArray(ReadOnlySpan<TSource> source, MemoryPool<TResult> pool, TSelector selector)
-            {
-                var result = pool.RentSliced(source.Length);
-                CopyAt(source, result.Memory.Span, selector);
-                return result;
-            }
+            var result = pool.RentSliced(source.Length, clearOnDispose);
+            CopyAt(source, result.Memory.Span, selector);
+            return result;
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -238,27 +184,18 @@ namespace NetFabric.Hyperlinq
 
             static TResult[] BuildArray(ReadOnlySpan<TSource> source, TPredicate predicate, TSelector selector)
             {
-                using var arrayBuilder = ToArrayBuilder(source, ArrayPool<TResult>.Shared, predicate, selector);
+                using var arrayBuilder = ToArrayBuilder(source, ArrayPool<TResult>.Shared, false, predicate, selector);
                 return arrayBuilder.ToArray();
             }
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        static IMemoryOwner<TResult> ToArray<TSource, TResult, TPredicate, TSelector>(this ReadOnlySpan<TSource> source, MemoryPool<TResult> pool, TPredicate predicate, TSelector selector)
+        static ValueMemoryOwner<TResult> ToArray<TSource, TResult, TPredicate, TSelector>(this ReadOnlySpan<TSource> source, ArrayPool<TResult> pool, bool clearOnDispose, TPredicate predicate, TSelector selector)
             where TPredicate : struct, IFunction<TSource, bool>
             where TSelector : struct, IFunction<TSource, TResult>
         {
-            return source switch
-            {
-                { Length: 0 } => pool.Rent(0),
-                _ => BuildArray(source, pool, predicate, selector)
-            };
-
-            static IMemoryOwner<TResult> BuildArray(ReadOnlySpan<TSource> source, MemoryPool<TResult> pool, TPredicate predicate, TSelector selector)
-            {
-                using var arrayBuilder = ToArrayBuilder(source, ArrayPool<TResult>.Shared, predicate, selector);
-                return arrayBuilder.ToArray(pool);
-            }
+            using var arrayBuilder = ToArrayBuilder(source, pool, clearOnDispose, predicate, selector);
+            return arrayBuilder.ToArray(pool, clearOnDispose);
         }
     }
 }

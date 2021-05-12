@@ -43,7 +43,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
         public void ToArray_MemoryPool_Must_Succeed(int[] source, int skip, int take)
         {
             // Arrange
-            var pool = MemoryPool<int>.Shared;
+            var pool = ArrayPool<int>.Shared;
             var wrapped = Wrap.AsReadOnlyList(source);
             var expected = source
                 .Skip(skip)
@@ -100,7 +100,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
         public void ToArray_Predicate_MemoryPool_Must_Succeed(int[] source, int skip, int take, Func<int, bool> predicate)
         {
             // Arrange
-            var pool = MemoryPool<int>.Shared;
+            var pool = ArrayPool<int>.Shared;
             var wrapped = Wrap.AsReadOnlyList(source);
             var expected = source
                 .Skip(skip)
@@ -159,7 +159,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
         public void ToArray_PredicateAt_MemoryPool_Must_Succeed(int[] source, int skip, int take, Func<int, int, bool> predicate)
         {
             // Arrange
-            var pool = MemoryPool<int>.Shared;
+            var pool = ArrayPool<int>.Shared;
             var wrapped = Wrap.AsReadOnlyList(source);
             var expected = source
                 .Skip(skip)
@@ -217,7 +217,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
         public void ToArray_Selector_MemoryPool_Must_Succeed(int[] source, int skip, int take, Func<int, string> selector)
         {
             // Arrange
-            var pool = MemoryPool<string>.Shared;
+            var pool = ArrayPool<string>.Shared;
             var wrapped = Wrap.AsReadOnlyList(source);
             var expected = source
                 .Skip(skip)
@@ -275,7 +275,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
         public void ToArray_SelectorAt_MemoryPool_Must_Succeed(int[] source, int skip, int take, Func<int, int, string> selector)
         {
             // Arrange
-            var pool = MemoryPool<string>.Shared;
+            var pool = ArrayPool<string>.Shared;
             var wrapped = Wrap.AsReadOnlyList(source);
             var expected = source
                 .Skip(skip)
@@ -335,7 +335,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
         public void ToArray_Predicate_Selector_MemoryPool_Must_Succeed(int[] source, int skip, int take, Func<int, bool> predicate, Func<int, string> selector)
         {
             // Arrange
-            var pool = MemoryPool<string>.Shared;
+            var pool = ArrayPool<string>.Shared;
             var wrapped = Wrap.AsReadOnlyList(source);
             var expected = source
                 .Skip(skip)

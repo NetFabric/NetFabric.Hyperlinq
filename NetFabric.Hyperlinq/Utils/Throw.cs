@@ -7,35 +7,35 @@ namespace NetFabric.Hyperlinq
     static class Throw
     {
         [DoesNotReturn]
-        public static void ArgumentArraySegmentNullException(string paramName)
+        public static void ArgumentArraySegmentNullException(string? paramName)
             => throw new ArgumentException(Resource.ArraySegmentNull, paramName);
 
         [DoesNotReturn]
-        public static void ArgumentException(string message, string paramName)
+        public static void ArgumentException(string? message, string? paramName)
             => throw new ArgumentException(message, paramName);
 
         [DoesNotReturn]
-        public static void ArgumentNullException(string paramName)
+        public static void ArgumentNullException(string? paramName)
             => throw new ArgumentNullException(paramName);
 
         [DoesNotReturn]
-        public static T ArgumentNullException<T>(string paramName)
+        public static T ArgumentNullException<T>(string? paramName)
             => throw new ArgumentNullException(paramName);
 
         [DoesNotReturn]
-        public static ref readonly T ArgumentNullExceptionRef<T>(string paramName)
+        public static ref readonly T ArgumentNullExceptionRef<T>(string? paramName)
             => throw new ArgumentNullException(paramName);
 
         [DoesNotReturn]
-        public static void ArgumentOutOfRangeException(string paramName)
+        public static void ArgumentOutOfRangeException(string? paramName)
             => throw new ArgumentOutOfRangeException(paramName);
 
         [DoesNotReturn]
-        public static T ArgumentOutOfRangeException<T>(string paramName)
+        public static T ArgumentOutOfRangeException<T>(string? paramName)
             => throw new ArgumentOutOfRangeException(paramName);
 
         [DoesNotReturn]
-        public static ref readonly T ArgumentOutOfRangeExceptionRef<T>(string paramName)
+        public static ref readonly T ArgumentOutOfRangeExceptionRef<T>(string? paramName)
             => throw new ArgumentOutOfRangeException(paramName);
 
         [DoesNotReturn]
@@ -75,7 +75,7 @@ namespace NetFabric.Hyperlinq
             => throw new InvalidOperationException();
 
         [DoesNotReturn]
-        public static void InvalidOperationException(string message)
+        public static void InvalidOperationException(string? message)
             => throw new InvalidOperationException(message);
 
         [DoesNotReturn]
@@ -89,5 +89,9 @@ namespace NetFabric.Hyperlinq
         [DoesNotReturn]
         public static T NotSupportedException<T>()
             => throw new NotSupportedException();
+
+        [DoesNotReturn]
+        public static void ObjectDisposedException(string? objectName)
+            => throw new ObjectDisposedException(objectName);
     }
 }
