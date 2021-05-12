@@ -65,7 +65,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Set.Distinct
             // Act
             using var result = wrapped.AsValueEnumerable()
                 .Distinct()
-                .ToArray(MemoryPool<int>.Shared);
+                .ToArray(ArrayPool<int>.Shared);
 
             // Assert
             _ = result.Memory.Must()

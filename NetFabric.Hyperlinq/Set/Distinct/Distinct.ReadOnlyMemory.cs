@@ -113,12 +113,8 @@ namespace NetFabric.Hyperlinq
                 };
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public readonly IMemoryOwner<TSource> ToArray(MemoryPool<TSource> pool)
-                => source switch
-                {
-                    { Length: 0 } => pool.Rent(0),
-                    _ => GetSet().ToArray(pool)
-                };
+            public ValueMemoryOwner<TSource> ToArray(ArrayPool<TSource> pool, bool clearOnDispose = default)
+                => GetSet().ToArray(pool, clearOnDispose);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public readonly List<TSource> ToList()

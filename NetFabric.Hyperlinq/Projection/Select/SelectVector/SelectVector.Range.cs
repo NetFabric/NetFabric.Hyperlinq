@@ -86,9 +86,9 @@ namespace NetFabric.Hyperlinq
             }
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public IMemoryOwner<TResult> ToArray(MemoryPool<TResult> pool)
+            public ValueMemoryOwner<TResult> ToArray(ArrayPool<TResult> pool, bool clearOnDispose = default)
             {
-                var result = pool.RentSliced(count);
+                var result = pool.RentSliced(count, clearOnDispose);
                 ArrayExtensions.CopyRange(start, count, result.Memory.Span, vectorSelector, selector);
                 return result;
             }

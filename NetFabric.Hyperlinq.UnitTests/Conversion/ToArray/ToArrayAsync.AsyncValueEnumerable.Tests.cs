@@ -39,7 +39,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
         public async ValueTask ToArrayAsync_MemoryPool_Must_Succeed(int[] source)
         {
             // Arrange
-            var pool = MemoryPool<int>.Shared;
+            var pool = ArrayPool<int>.Shared;
             var wrapped = Wrap
                 .AsAsyncValueEnumerable(source);
             var expected = source
@@ -89,7 +89,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
         public async ValueTask ToArrayAsync_Predicate_MemoryPool_Must_Succeed(int[] source, Func<int, bool> predicate)
         {
             // Arrange
-            var pool = MemoryPool<int>.Shared;
+            var pool = ArrayPool<int>.Shared;
             var wrapped = Wrap
                 .AsAsyncValueEnumerable(source);
             var expected = source
@@ -141,7 +141,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
         public async ValueTask ToArrayAsync_PredicateAt_MemoryPool_Must_Succeed(int[] source, Func<int, int, bool> predicate)
         {
             // Arrange
-            var pool = MemoryPool<int>.Shared;
+            var pool = ArrayPool<int>.Shared;
             var wrapped = Wrap
                 .AsAsyncValueEnumerable(source);
             var expected = source
@@ -193,7 +193,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
         public async ValueTask ToArrayAsync_Selector_MemoryPool_Must_Succeed(int[] source, Func<int, string> selector)
         {
             // Arrange
-            var pool = MemoryPool<string>.Shared;
+            var pool = ArrayPool<string>.Shared;
             var wrapped = Wrap
                 .AsAsyncValueEnumerable(source);
             var expected = source
@@ -245,7 +245,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
         public async ValueTask ToArrayAsync_SelectorAt_MemoryPool_Must_Succeed(int[] source, Func<int, int, string> selector)
         {
             // Arrange
-            var pool = MemoryPool<string>.Shared;
+            var pool = ArrayPool<string>.Shared;
             var wrapped = Wrap
                 .AsAsyncValueEnumerable(source);
             var expected = source
@@ -300,7 +300,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
         public async ValueTask ToArrayAsync_Predicate_Selector_MemoryPool_Must_Succeed(int[] source, Func<int, bool> predicate, Func<int, string> selector)
         {
             // Arrange
-            var pool = MemoryPool<string>.Shared;
+            var pool = ArrayPool<string>.Shared;
             var wrapped = Wrap
                 .AsAsyncValueEnumerable(source);
             var expected = source

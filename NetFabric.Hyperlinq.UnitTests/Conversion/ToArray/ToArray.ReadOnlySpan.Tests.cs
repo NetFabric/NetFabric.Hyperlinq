@@ -17,7 +17,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
         {
             // Arrange
             var wrapped = (ReadOnlySpan<int>)source.AsSpan();
-            var pool = MemoryPool<int>.Shared;
+            var pool = ArrayPool<int>.Shared;
             var expected = source
                 .ToArray();
 
@@ -66,7 +66,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
         {
             // Arrange
             var wrapped = (ReadOnlySpan<int>)source.AsSpan();
-            var pool = MemoryPool<int>.Shared;
+            var pool = ArrayPool<int>.Shared;
             var expected = source
                 .Where(predicate)
                 .ToArray();
@@ -117,7 +117,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
         {
             // Arrange
             var wrapped = (ReadOnlySpan<int>)source.AsSpan();
-            var pool = MemoryPool<int>.Shared;
+            var pool = ArrayPool<int>.Shared;
             var expected = source
                 .Where(predicate)
                 .ToArray();
@@ -167,7 +167,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
         {
             // Arrange
             var wrapped = (ReadOnlySpan<int>)source.AsSpan();
-            var pool = MemoryPool<string>.Shared;
+            var pool = ArrayPool<string>.Shared;
             var expected = source
                 .Select(selector)
                 .ToArray();
@@ -217,7 +217,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
         {
             // Arrange
             var wrapped = (ReadOnlySpan<int>)source.AsSpan();
-            var pool = MemoryPool<string>.Shared;
+            var pool = ArrayPool<string>.Shared;
             var expected = source
                 .Select(selector)
                 .ToArray();
@@ -269,7 +269,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
         {
             // Arrange
             var wrapped = (ReadOnlySpan<int>)source.AsSpan();
-            var pool = MemoryPool<string>.Shared;
+            var pool = ArrayPool<string>.Shared;
             var expected = source
                 .Where(predicate)
                 .Select(selector)

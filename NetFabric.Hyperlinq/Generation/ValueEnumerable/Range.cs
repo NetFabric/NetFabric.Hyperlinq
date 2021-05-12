@@ -226,9 +226,9 @@ namespace NetFabric.Hyperlinq
                 return array;
             }
 
-            public IMemoryOwner<int> ToArray(MemoryPool<int> pool)
+            public ValueMemoryOwner<int> ToArray(ArrayPool<int> pool, bool clearOnDispose = default)
             {
-                var result = pool.RentSliced(Count);
+                var result = pool.RentSliced(Count, clearOnDispose);
                 ArrayExtensions.CopyRange(start, Count, result.Memory.Span);
                 return result;
             }

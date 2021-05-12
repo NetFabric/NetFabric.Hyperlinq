@@ -6,23 +6,23 @@ namespace NetFabric.Hyperlinq
     public static partial class ValueEnumerableExtensions
     {
 
-        static LargeArrayBuilder<TSource> ToArrayBuilder<TEnumerable, TEnumerator, TSource>(TEnumerable source, ArrayPool<TSource> arrayPool)
+        static LargeArrayBuilder<TSource> ToArrayBuilder<TEnumerable, TEnumerator, TSource>(TEnumerable source, ArrayPool<TSource> arrayPool, bool clearOnDispose)
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
         {
-            var builder = new LargeArrayBuilder<TSource>(arrayPool);
+            var builder = new LargeArrayBuilder<TSource>(arrayPool, clearOnDispose);
             using var enumerator = source.GetEnumerator();
             while (enumerator.MoveNext())
                 builder.Add(enumerator.Current);
             return builder;
         }
 
-        static LargeArrayBuilder<TSource> ToArrayBuilder<TEnumerable, TEnumerator, TSource, TPredicate>(TEnumerable source, ArrayPool<TSource> arrayPool, TPredicate predicate)
+        static LargeArrayBuilder<TSource> ToArrayBuilder<TEnumerable, TEnumerator, TSource, TPredicate>(TEnumerable source, ArrayPool<TSource> arrayPool, bool clearOnDispose, TPredicate predicate)
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
             where TPredicate : struct, IFunction<TSource, bool>
         {
-            var builder = new LargeArrayBuilder<TSource>(arrayPool);
+            var builder = new LargeArrayBuilder<TSource>(arrayPool, clearOnDispose);
             using var enumerator = source.GetEnumerator();
             while (enumerator.MoveNext())
             {
@@ -33,12 +33,12 @@ namespace NetFabric.Hyperlinq
             return builder;
         }
 
-        static LargeArrayBuilder<TSource> ToArrayBuilderAt<TEnumerable, TEnumerator, TSource, TPredicate>(TEnumerable source, ArrayPool<TSource> arrayPool, TPredicate predicate)
+        static LargeArrayBuilder<TSource> ToArrayBuilderAt<TEnumerable, TEnumerator, TSource, TPredicate>(TEnumerable source, ArrayPool<TSource> arrayPool, bool clearOnDispose, TPredicate predicate)
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
             where TPredicate : struct, IFunction<TSource, int, bool>
         {
-            var builder = new LargeArrayBuilder<TSource>(arrayPool);
+            var builder = new LargeArrayBuilder<TSource>(arrayPool, clearOnDispose);
             using var enumerator = source.GetEnumerator();
             for (var index = 0; enumerator.MoveNext(); index++)
             {
@@ -49,24 +49,24 @@ namespace NetFabric.Hyperlinq
             return builder;
         }
 
-        static LargeArrayBuilder<TResult> ToArrayBuilder<TEnumerable, TEnumerator, TSource, TResult, TSelector>(TEnumerable source, ArrayPool<TResult> arrayPool, TSelector selector)
+        static LargeArrayBuilder<TResult> ToArrayBuilder<TEnumerable, TEnumerator, TSource, TResult, TSelector>(TEnumerable source, ArrayPool<TResult> arrayPool, bool clearOnDispose, TSelector selector)
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
             where TSelector : struct, IFunction<TSource, TResult>
         {
-            var builder = new LargeArrayBuilder<TResult>(arrayPool);
+            var builder = new LargeArrayBuilder<TResult>(arrayPool, clearOnDispose);
             using var enumerator = source.GetEnumerator();
             while (enumerator.MoveNext())
                 builder.Add(selector.Invoke(enumerator.Current));
             return builder;
         }
 
-        static LargeArrayBuilder<TResult> ToArrayBuilderAt<TEnumerable, TEnumerator, TSource, TResult, TSelector>(TEnumerable source, ArrayPool<TResult> arrayPool, TSelector selector)
+        static LargeArrayBuilder<TResult> ToArrayBuilderAt<TEnumerable, TEnumerator, TSource, TResult, TSelector>(TEnumerable source, ArrayPool<TResult> arrayPool, bool clearOnDispose, TSelector selector)
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
             where TSelector : struct, IFunction<TSource, int, TResult>
         {
-            var builder = new LargeArrayBuilder<TResult>(arrayPool);
+            var builder = new LargeArrayBuilder<TResult>(arrayPool, clearOnDispose);
             using var enumerator = source.GetEnumerator();
             checked
             {
@@ -76,13 +76,13 @@ namespace NetFabric.Hyperlinq
             return builder;
         }
 
-        static LargeArrayBuilder<TResult> ToArrayBuilder<TEnumerable, TEnumerator, TSource, TResult, TPredicate, TSelector>(TEnumerable source, ArrayPool<TResult> arrayPool, TPredicate predicate, TSelector selector)
+        static LargeArrayBuilder<TResult> ToArrayBuilder<TEnumerable, TEnumerator, TSource, TResult, TPredicate, TSelector>(TEnumerable source, ArrayPool<TResult> arrayPool, bool clearOnDispose, TPredicate predicate, TSelector selector)
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
             where TPredicate : struct, IFunction<TSource, bool>
             where TSelector : struct, IFunction<TSource, TResult>
         {
-            var builder = new LargeArrayBuilder<TResult>(arrayPool);
+            var builder = new LargeArrayBuilder<TResult>(arrayPool, clearOnDispose);
             using var enumerator = source.GetEnumerator();
             while (enumerator.MoveNext())
             {

@@ -8,11 +8,11 @@ namespace NetFabric.Hyperlinq
     public static partial class AsyncValueEnumerableExtensions
     {
 
-        static async ValueTask<LargeArrayBuilder<TSource>> ToArrayBuilderAsync<TEnumerable, TEnumerator, TSource>(this TEnumerable source, ArrayPool<TSource> arrayPool, CancellationToken cancellationToken)
+        static async ValueTask<LargeArrayBuilder<TSource>> ToArrayBuilderAsync<TEnumerable, TEnumerator, TSource>(this TEnumerable source, ArrayPool<TSource> arrayPool, bool clearOnDispose, CancellationToken cancellationToken)
             where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
         {
-            var builder = new LargeArrayBuilder<TSource>(arrayPool);
+            var builder = new LargeArrayBuilder<TSource>(arrayPool, clearOnDispose);
             var enumerator = source.GetAsyncEnumerator(cancellationToken);
             try
             {
@@ -29,12 +29,12 @@ namespace NetFabric.Hyperlinq
             return builder;
         }
 
-        static async ValueTask<LargeArrayBuilder<TSource>> ToArrayBuilderAsync<TEnumerable, TEnumerator, TSource, TPredicate>(this TEnumerable source, ArrayPool<TSource> arrayPool, CancellationToken cancellationToken, TPredicate predicate)
+        static async ValueTask<LargeArrayBuilder<TSource>> ToArrayBuilderAsync<TEnumerable, TEnumerator, TSource, TPredicate>(this TEnumerable source, ArrayPool<TSource> arrayPool, bool clearOnDispose, CancellationToken cancellationToken, TPredicate predicate)
             where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
             where TPredicate : struct, IAsyncFunction<TSource, bool>
         {
-            var builder = new LargeArrayBuilder<TSource>(arrayPool);
+            var builder = new LargeArrayBuilder<TSource>(arrayPool, clearOnDispose);
             var enumerator = source.GetAsyncEnumerator(cancellationToken);
             try
             {
@@ -54,12 +54,12 @@ namespace NetFabric.Hyperlinq
             return builder;
         }
 
-        static async ValueTask<LargeArrayBuilder<TSource>> ToArrayBuilderAtAsync<TEnumerable, TEnumerator, TSource, TPredicate>(this TEnumerable source, ArrayPool<TSource> arrayPool, CancellationToken cancellationToken, TPredicate predicate)
+        static async ValueTask<LargeArrayBuilder<TSource>> ToArrayBuilderAtAsync<TEnumerable, TEnumerator, TSource, TPredicate>(this TEnumerable source, ArrayPool<TSource> arrayPool, bool clearOnDispose, CancellationToken cancellationToken, TPredicate predicate)
             where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
             where TPredicate : struct, IAsyncFunction<TSource, int, bool>
         {
-            var builder = new LargeArrayBuilder<TSource>(arrayPool);
+            var builder = new LargeArrayBuilder<TSource>(arrayPool, clearOnDispose);
             var enumerator = source.GetAsyncEnumerator(cancellationToken);
             try
             {
@@ -82,12 +82,12 @@ namespace NetFabric.Hyperlinq
             return builder;
         }
 
-        static async ValueTask<LargeArrayBuilder<TResult>> ToArrayBuilderAsync<TEnumerable, TEnumerator, TSource, TResult, TSelector>(this TEnumerable source, ArrayPool<TResult> arrayPool, CancellationToken cancellationToken, TSelector selector)
+        static async ValueTask<LargeArrayBuilder<TResult>> ToArrayBuilderAsync<TEnumerable, TEnumerator, TSource, TResult, TSelector>(this TEnumerable source, ArrayPool<TResult> arrayPool, bool clearOnDispose, CancellationToken cancellationToken, TSelector selector)
             where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
             where TSelector : struct, IAsyncFunction<TSource, TResult>
         {
-            var builder = new LargeArrayBuilder<TResult>(arrayPool);
+            var builder = new LargeArrayBuilder<TResult>(arrayPool, clearOnDispose);
             var enumerator = source.GetAsyncEnumerator(cancellationToken);
             try
             {
@@ -105,12 +105,12 @@ namespace NetFabric.Hyperlinq
             return builder;
         }
 
-        static async ValueTask<LargeArrayBuilder<TResult>> ToArrayBuilderAtAsync<TEnumerable, TEnumerator, TSource, TResult, TSelector>(this TEnumerable source, ArrayPool<TResult> arrayPool, CancellationToken cancellationToken, TSelector selector)
+        static async ValueTask<LargeArrayBuilder<TResult>> ToArrayBuilderAtAsync<TEnumerable, TEnumerator, TSource, TResult, TSelector>(this TEnumerable source, ArrayPool<TResult> arrayPool, bool clearOnDispose, CancellationToken cancellationToken, TSelector selector)
             where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
             where TSelector : struct, IAsyncFunction<TSource, int, TResult>
         {
-            var builder = new LargeArrayBuilder<TResult>(arrayPool);
+            var builder = new LargeArrayBuilder<TResult>(arrayPool, clearOnDispose);
             var enumerator = source.GetAsyncEnumerator(cancellationToken);
             try
             {
@@ -131,13 +131,13 @@ namespace NetFabric.Hyperlinq
             return builder;
         }
 
-        static async ValueTask<LargeArrayBuilder<TResult>> ToArrayBuilderAsync<TEnumerable, TEnumerator, TSource, TResult, TPredicate, TSelector>(this TEnumerable source, ArrayPool<TResult> arrayPool, CancellationToken cancellationToken, TPredicate predicate, TSelector selector)
+        static async ValueTask<LargeArrayBuilder<TResult>> ToArrayBuilderAsync<TEnumerable, TEnumerator, TSource, TResult, TPredicate, TSelector>(this TEnumerable source, ArrayPool<TResult> arrayPool, bool clearOnDispose, CancellationToken cancellationToken, TPredicate predicate, TSelector selector)
             where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
             where TPredicate : struct, IAsyncFunction<TSource, bool>
             where TSelector : struct, IAsyncFunction<TSource, TResult>
         {
-            var builder = new LargeArrayBuilder<TResult>(arrayPool);
+            var builder = new LargeArrayBuilder<TResult>(arrayPool, clearOnDispose);
             var enumerator = source.GetAsyncEnumerator(cancellationToken);
             try
             {

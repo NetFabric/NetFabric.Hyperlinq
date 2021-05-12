@@ -103,8 +103,8 @@ namespace NetFabric.Hyperlinq
                 => source.ToArray<TSource, TResult, TSelector>(selector);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public IMemoryOwner<TResult> ToArray(MemoryPool<TResult> pool)
-                => source.ToArray(pool, selector);
+            public ValueMemoryOwner<TResult> ToArray(ArrayPool<TResult> pool, bool clearOnDispose = default)
+                => source.ToArray(pool, clearOnDispose, selector);
 
             public List<TResult> ToList()
                 => source.ToList<TSource, TResult, TSelector>(selector);
