@@ -48,11 +48,11 @@ namespace NetFabric.Hyperlinq
 
             public void CopyTo(Span<TSource> span)
             {
-                if (span.Length < Count)
-                    Throw.ArgumentException(Resource.DestinationNotLongEnough, nameof(span));
-
                 if (Count is 0)
                     return;
+
+                if (span.Length < Count)
+                    Throw.ArgumentException(Resource.DestinationNotLongEnough, nameof(span));
 
                 using var enumerator = source.GetEnumerator();
 
@@ -75,51 +75,18 @@ namespace NetFabric.Hyperlinq
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public void CopyTo(TSource[] array, int arrayIndex)
-                => CopyTo(array.AsSpan().Slice(arrayIndex));
-
-            public bool Contains(TSource item)
             {
                 if (Count is 0)
-                    return false;
+                    return;
 
                 if (skipCount is 0 && Count == source.Count && source is ICollection<TSource> collection)
-                    return collection.Contains(item);
-
-                using var enumerator = source.GetEnumerator();
-
-                // skip
-                for (var counter = 0; counter < skipCount; counter++)
-                {
-                    if (!enumerator.MoveNext())
-                        Throw.InvalidOperationException();
-                }
-
-                // take
-                if (Utils.IsValueType<TSource>())
-                {
-                    for (var counter = 0; counter < Count; counter++)
-                    {
-                        if (!enumerator.MoveNext())
-                            Throw.InvalidOperationException();
-
-                        if (EqualityComparer<TSource>.Default.Equals(enumerator.Current, item))
-                            return true;
-                    }
-                }
+                    collection.CopyTo(array, arrayIndex);
                 else
-                {
-                    var defaultComparer = EqualityComparer<TSource>.Default;
-                    for (var counter = 0; counter < Count; counter++)
-                    {
-                        if (!enumerator.MoveNext())
-                            Throw.InvalidOperationException();
-
-                        if (defaultComparer.Equals(enumerator.Current, item))
-                            return true;
-                    }
-                }
-                return false;
+                    CopyTo(array.AsSpan().Slice(arrayIndex));
             }
+            
+            public bool Contains(TSource item)
+                => Contains(item, EqualityComparer<TSource>.Default);
 
             [ExcludeFromCodeCoverage]
             void ICollection<TSource>.Add(TSource item) 
@@ -217,8 +184,7 @@ namespace NetFabric.Hyperlinq
                     if (skipCount is 0 && Count == source.Count && source is ICollection<TSource> collection)
                         return collection.Contains(value);
 
-                    if (Utils.IsValueType<TSource>())
-                        return DefaultContains(source, value, skipCount, Count);
+                    return DefaultContains(source, value, skipCount, Count);
                 }
 
                 return ComparerContains(source, value, comparer, skipCount, Count);

@@ -5,7 +5,6 @@ namespace NetFabric.Hyperlinq
 {
     static partial class ReadOnlyListExtensions
     {
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int IndexOf<TList, TSource>(TList source, TSource item, int offset, int count)
             where TList : IReadOnlyList<TSource>
         {

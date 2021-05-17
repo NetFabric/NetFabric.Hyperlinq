@@ -5,7 +5,6 @@ namespace NetFabric.Hyperlinq
 {
     static partial class ValueReadOnlyListExtensions
     {
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int IndexOf<TList, TSource>(TList source, TSource item, int offset, int count)
             where TList : struct, IReadOnlyList<TSource>
         {
@@ -40,7 +39,6 @@ namespace NetFabric.Hyperlinq
             return -1;
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int IndexOf<TList, TSource, TResult, TSelector>(TList source, TResult item, TSelector selector, int offset, int count)
             where TList : struct, IReadOnlyList<TSource>
             where TSelector : struct, IFunction<TSource, TResult>
@@ -73,7 +71,6 @@ namespace NetFabric.Hyperlinq
         }
 
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int IndexOfAt<TList, TSource, TResult, TSelector>(TList source, TResult item, TSelector selector, int offset, int count)
             where TList : struct, IReadOnlyList<TSource>
             where TSelector : struct, IFunction<TSource, int, TResult>

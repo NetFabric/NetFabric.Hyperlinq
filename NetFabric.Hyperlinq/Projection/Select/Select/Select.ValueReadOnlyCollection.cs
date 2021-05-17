@@ -58,17 +58,17 @@ namespace NetFabric.Hyperlinq
 
             public void CopyTo(Span<TResult> span) 
             {
+                if (Count is 0)
+                    return;
+                
                 if (span.Length < Count)
                     Throw.ArgumentException(Resource.DestinationNotLongEnough, nameof(span));
 
-                if (source.Count is not 0)
+                checked
                 {
-                    checked
-                    {
-                        using var enumerator = source.GetEnumerator();
-                        for (var index = 0; enumerator.MoveNext(); index++)
-                            span[index] = selector.Invoke(enumerator.Current);
-                    }
+                    using var enumerator = source.GetEnumerator();
+                    for (var index = 0; enumerator.MoveNext(); index++)
+                        span[index] = selector.Invoke(enumerator.Current);
                 }
             }
 
