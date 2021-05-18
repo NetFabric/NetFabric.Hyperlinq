@@ -1,4 +1,5 @@
-﻿using BenchmarkDotNet.Attributes;
+﻿using System;
+using BenchmarkDotNet.Attributes;
 using JM.LinqFaster;
 using NetFabric.Hyperlinq;
 using StructLinq;
@@ -85,6 +86,19 @@ namespace LinqBenchmarks.Array.Int32
                 .Where(item => item.IsEven())
                 .Select(item => item * 3)
                 .Run();
+            var sum = 0;
+            foreach (var item in items)
+                sum += item;
+            return sum;
+        }
+
+        [Benchmark]
+        public int SpanLinq()
+        {
+            var items = source
+                .AsSpan()
+                .Where(item => item.IsEven())
+                .Select(item => item * 3);
             var sum = 0;
             foreach (var item in items)
                 sum += item;

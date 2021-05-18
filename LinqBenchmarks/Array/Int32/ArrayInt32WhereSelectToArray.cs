@@ -1,4 +1,5 @@
-﻿using BenchmarkDotNet.Attributes;
+﻿using System;
+using BenchmarkDotNet.Attributes;
 using JM.LinqFaster;
 using NetFabric.Hyperlinq;
 using StructLinq;
@@ -68,6 +69,13 @@ namespace LinqBenchmarks.Array.Int32
                 .Select(item => item * 3)
                 .ToArray()
                 .Run();
+
+        [Benchmark]
+        public int[] SpanLinq()
+            => source.AsSpan()
+                .Where(item => item.IsEven())
+                .Select(item => item * 3)
+                .ToArray();
 
         [Benchmark]
         public int[] Streams()

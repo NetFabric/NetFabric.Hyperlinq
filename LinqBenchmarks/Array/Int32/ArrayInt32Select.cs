@@ -1,4 +1,5 @@
-﻿using BenchmarkDotNet.Attributes;
+﻿using System;
+using BenchmarkDotNet.Attributes;
 using JM.LinqFaster;
 using JM.LinqFaster.SIMD;
 using NetFabric.Hyperlinq;
@@ -85,6 +86,16 @@ namespace LinqBenchmarks.Array.Int32
         public int LinqOptimizer()
         {
             var items = source.AsQueryExpr().Select(item => item * 3).Run();
+            var sum = 0;
+            foreach (var item in items)
+                sum += item;
+            return sum;
+        }
+
+        [Benchmark]
+        public int SpanLinq()
+        {
+            var items = source.AsSpan().Select(item => item * 3);
             var sum = 0;
             foreach (var item in items)
                 sum += item;

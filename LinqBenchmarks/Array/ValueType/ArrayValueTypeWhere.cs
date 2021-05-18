@@ -1,4 +1,6 @@
-﻿using BenchmarkDotNet.Attributes;
+﻿using System;
+using System.Linq;
+using BenchmarkDotNet.Attributes;
 using JM.LinqFaster;
 using LinqFasterer;
 using Nessos.LinqOptimizer.CSharp;
@@ -85,6 +87,18 @@ namespace LinqBenchmarks.Array.ValueType
                 .Run();
             var sum = default(FatValueType);
             foreach (var item in items)
+                sum += item;
+            return sum;
+        }
+
+        [Benchmark]
+        public FatValueType SpanLinq()
+        {
+            var fatValueTypes = source
+                .AsSpan()
+                .Where(item => item.IsEven());
+            var sum = default(FatValueType);
+            foreach (var item in fatValueTypes)
                 sum += item;
             return sum;
         }

@@ -1,4 +1,5 @@
-﻿using BenchmarkDotNet.Attributes;
+﻿using System;
+using BenchmarkDotNet.Attributes;
 using JM.LinqFaster;
 using NetFabric.Hyperlinq;
 using StructLinq;
@@ -70,6 +71,14 @@ namespace LinqBenchmarks.Array.ValueType
                 .Select(item => item * 3)
                 .ToArray()
                 .Run();
+
+        [Benchmark]
+        public FatValueType[] SpanLinq()
+            => source
+                .AsSpan()
+                .Where(item => item.IsEven())
+                .Select(item => item * 3)
+                .ToArray();
 
         [Benchmark]
         public FatValueType[] Streams()
