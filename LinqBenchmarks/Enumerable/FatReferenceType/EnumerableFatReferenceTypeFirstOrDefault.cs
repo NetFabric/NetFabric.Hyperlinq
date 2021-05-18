@@ -8,6 +8,17 @@ namespace LinqBenchmarks.Enumerable.FatReferenceType
     public class EnumerableFatReferenceTypeFirstOrDefault: EnumerableFatReferenceTypeBenchmarkBase
     {
         [Benchmark(Baseline = true)]
+        public bool ForeachLoop()
+        {
+            foreach (var _ in source)
+            {
+                return true;
+            }
+
+            return false;
+        }
+        
+        [Benchmark]
         public bool Linq()
             => source.FirstOrDefault() is not null;
 
