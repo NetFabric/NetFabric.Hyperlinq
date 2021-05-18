@@ -20,10 +20,10 @@ namespace NetFabric.Hyperlinq
                 => 0;
 
             public TSource this[int index]
-                => Throw.IndexOutOfRangeException<TSource>();
+                => Throw.ArgumentOutOfRangeException<TSource>(nameof(index));
             TSource IList<TSource>.this[int index]
             {
-                get => Throw.IndexOutOfRangeException<TSource>();
+                get => Throw.ArgumentOutOfRangeException<TSource>(nameof(index));
                 
                 [ExcludeFromCodeCoverage]
                 // ReSharper disable once ValueParameterNotUsed

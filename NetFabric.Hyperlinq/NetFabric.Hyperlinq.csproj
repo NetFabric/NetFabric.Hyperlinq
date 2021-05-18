@@ -4,7 +4,7 @@
     <TargetFrameworks>net461;netstandard2.0;netcoreapp3.1;net5.0;net6.0</TargetFrameworks>
     <PackageId>NetFabric.Hyperlinq</PackageId>
     <Title>NetFabric.Hyperlinq</Title>
-    <Description> High performance LINQ implementation with minimal heap allocations. Supports enumerables, async enumerables, arrays, Memory and Span.</Description>
+    <Description> High performance LINQ implementation with minimal heap allocations. Supports enumerables, async enumerables, Memory, and Span.</Description>
     <Version>3.0.0-beta44</Version>
     <PackageIcon>Icon.png</PackageIcon>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
@@ -79,11 +79,6 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resource.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Conversion\AsAsyncEnumerable" />
-    <Folder Include="Utils\Generator\" />
   </ItemGroup>
 
 </Project>

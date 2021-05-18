@@ -39,14 +39,6 @@ namespace NetFabric.Hyperlinq
             => throw new ArgumentOutOfRangeException(paramName);
 
         [DoesNotReturn]
-        public static void IndexOutOfRangeException()
-            => throw new IndexOutOfRangeException();
-
-        [DoesNotReturn]
-        public static T IndexOutOfRangeException<T>()
-            => throw new IndexOutOfRangeException();
-
-        [DoesNotReturn]
         public static void EmptySequence()
             => throw new InvalidOperationException(Resource.EmptySequence);
 
