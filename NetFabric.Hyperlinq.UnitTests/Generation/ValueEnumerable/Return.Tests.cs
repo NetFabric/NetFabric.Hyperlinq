@@ -33,7 +33,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Generation.ValueEnumerableTests
             Func<int> action = () => ValueEnumerable.Return(value)[index];
 
             // Assert
-            _ = action.Must().Throw<IndexOutOfRangeException>();
+            _ = action.Must().Throw<ArgumentOutOfRangeException>();
         }    
     }
 }

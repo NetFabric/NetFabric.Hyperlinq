@@ -33,7 +33,7 @@ namespace NetFabric.Hyperlinq
                 get => index switch
                 {
                     0 => value,
-                    _ => Throw.IndexOutOfRangeException<TSource>()
+                    _ => Throw.ArgumentOutOfRangeException<TSource>(nameof(index))
                 };
             }
             TSource IReadOnlyList<TSource>.this[int index]
