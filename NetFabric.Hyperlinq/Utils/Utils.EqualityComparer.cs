@@ -7,10 +7,11 @@ namespace NetFabric.Hyperlinq
     {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool IsValueType<T>()
-            => default(T) is object;
+            => default(T) is {};
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool UseDefault<T>(IEqualityComparer<T>? comparer)
-            => IsValueType<T>() && (comparer is null || ReferenceEquals(comparer, EqualityComparer<T>.Default));
+            => IsValueType<T>() 
+               && (comparer is null || ReferenceEquals(comparer, EqualityComparer<T>.Default));
     }
 }

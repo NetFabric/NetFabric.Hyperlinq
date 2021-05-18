@@ -199,9 +199,10 @@ namespace NetFabric.Hyperlinq
 
         public readonly void CopyTo(Span<TElement> span)
         {
-            if (slots is null) return;
+            if (Count is 0)
+                return;
 
-            var source = slots.AsSpan().Slice(0, Count);
+            var source = slots!.AsSpan().Slice(0, Count);
             for (var index = 0; index < source.Length && index < span.Length; index++)
             {
                 ref readonly var slot = ref source[index];

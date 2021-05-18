@@ -18,7 +18,7 @@ namespace NetFabric.Hyperlinq
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ValueEnumerable<TList, TSource> AsValueEnumerable<TList, TSource>(this TList source)
             where TList : IReadOnlyList<TSource>
-            => new(source, 0, source.Count);
+            => new(source);
 
         [StructLayout(LayoutKind.Auto)]
         public readonly partial struct ValueEnumerable<TList, TSource>
@@ -27,23 +27,15 @@ namespace NetFabric.Hyperlinq
             where TList : IReadOnlyList<TSource>
         {
             internal readonly TList source;
-            internal readonly int offset;
 
-            internal ValueEnumerable(TList source, int offset, int count)
-                => (this.source, this.offset, Count) = (source, offset, count);
+            internal ValueEnumerable(TList source)
+                => this.source = source;
 
-            public readonly int Count { get; }
+            public readonly int Count 
+                => source.Count;
 
-            public readonly TSource this[int index]
-            {
-                [MethodImpl(MethodImplOptions.AggressiveInlining)]
-                get
-                {
-                    if (index < 0 || index >= Count) Throw.IndexOutOfRangeException();
-
-                    return source[index + offset];
-                }
-            }
+            public readonly TSource this[int index] 
+                => source[index];
 
             TSource IReadOnlyList<TSource>.this[int index]
                 => this[index];
@@ -78,22 +70,14 @@ namespace NetFabric.Hyperlinq
 
             public void CopyTo(Span<TSource> span)
             {
+                if (Count is 0)
+                    return;
+                
                 if (span.Length < Count)
                     Throw.ArgumentException(Resource.DestinationNotLongEnough, nameof(span));
 
-                if (Count is 0)
-                    return;
-
-                if (offset is 0)
-                {
-                    for (var index = 0; index < Count && index < span.Length; index++)
-                        span[index] = source[index];
-                }
-                else
-                {
-                    for (var index = 0; index < Count && index < span.Length; index++)
-                        span[index] = source[index + offset];
-                }
+                for (var index = 0; index < Count && index < span.Length; index++)
+                    span[index] = source[index];
             }
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -105,7 +89,7 @@ namespace NetFabric.Hyperlinq
                 => Count is not 0 && source.Contains(item);
 
             public int IndexOf(TSource item)
-                => ReadOnlyListExtensions.IndexOf(source, item, offset, Count);
+                => ReadOnlyListExtensions.IndexOf(source, item, 0, Count);
 
             [ExcludeFromCodeCoverage]
             void ICollection<TSource>.Add(TSource item)
@@ -137,7 +121,7 @@ namespace NetFabric.Hyperlinq
                 internal Enumerator(in ValueEnumerable<TList, TSource> enumerable)
                 {
                     source = enumerable.source;
-                    index = enumerable.offset - 1;
+                    index = -1;
                     end = index + enumerable.Count;
                 }
 
@@ -163,7 +147,7 @@ namespace NetFabric.Hyperlinq
                 internal DisposableEnumerator(in ValueEnumerable<TList, TSource> enumerable)
                 {
                     source = enumerable.source;
-                    index = enumerable.offset - 1;
+                    index = -1;
                     end = index + enumerable.Count;
                 }
 
@@ -201,15 +185,12 @@ namespace NetFabric.Hyperlinq
             #region Partitioning
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public ValueEnumerable<TList, TSource> Skip(int count)
-            {
-                var (skipCount, takeCount) = Utils.Skip(Count, count);
-                return new ValueEnumerable<TList, TSource>(source, offset + skipCount, takeCount);
-            }
-            
+            public ValueReadOnlyListExtensions.SkipTakeEnumerable<ValueEnumerable<TList, TSource>, TSource> Skip(int count)
+                => ValueReadOnlyListExtensions.Skip<ValueEnumerable<TList, TSource>, TSource>(this, count);
+
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public ValueEnumerable<TList, TSource> Take(int count)
-                => new(source, offset, Utils.Take(Count, count));
+            public ValueReadOnlyListExtensions.SkipTakeEnumerable<ValueEnumerable<TList, TSource>, TSource> Take(int count)
+                => ValueReadOnlyListExtensions.Take<ValueEnumerable<TList, TSource>, TSource>(this, count);
 
             #endregion
         }
@@ -222,51 +203,51 @@ namespace NetFabric.Hyperlinq
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int Sum<TList>(this ValueEnumerable<TList, int> source)
             where TList : IReadOnlyList<int>
-            => source.Sum<ValueEnumerable<TList, int>, int, int>();
+            => source.Sum<ValueEnumerable<TList, int>, ValueEnumerable<TList, int>.DisposableEnumerator, int, int>();
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int Sum<TList>(this ValueEnumerable<TList, int?> source)
             where TList : IReadOnlyList<int?>
-            => source.Sum<ValueEnumerable<TList, int?>, int?, int>();
+            => source.Sum<ValueEnumerable<TList, int?>, ValueEnumerable<TList, int?>.DisposableEnumerator, int?, int>();
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static long Sum<TList>(this ValueEnumerable<TList, long> source)
             where TList : IReadOnlyList<long>
-            => source.Sum<ValueEnumerable<TList, long>, long, long>();
+            => source.Sum<ValueEnumerable<TList, long>, ValueEnumerable<TList, long>.DisposableEnumerator, long, long>();
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static long Sum<TList>(this ValueEnumerable<TList, long?> source)
             where TList : IReadOnlyList<long?>
-            => source.Sum<ValueEnumerable<TList, long?>, long?, long>();
+            => source.Sum<ValueEnumerable<TList, long?>, ValueEnumerable<TList, long?>.DisposableEnumerator, long?, long>();
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float Sum<TList>(this ValueEnumerable<TList, float> source)
             where TList : IReadOnlyList<float>
-            => source.Sum<ValueEnumerable<TList, float>, float, int>();
+            => source.Sum<ValueEnumerable<TList, float>, ValueEnumerable<TList, float>.DisposableEnumerator, float, int>();
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float Sum<TList>(this ValueEnumerable<TList, float?> source)
             where TList : IReadOnlyList<float?>
-            => source.Sum<ValueEnumerable<TList, float?>, float?, float>();
+            => source.Sum<ValueEnumerable<TList, float?>, ValueEnumerable<TList, float?>.DisposableEnumerator, float?, float>();
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static double Sum<TList>(this ValueEnumerable<TList, double> source)
             where TList : IReadOnlyList<double>
-            => source.Sum<ValueEnumerable<TList, double>, double, double>();
+            => source.Sum<ValueEnumerable<TList, double>, ValueEnumerable<TList, double>.DisposableEnumerator, double, double>();
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static double Sum<TList>(this ValueEnumerable<TList, double?> source)
             where TList : IReadOnlyList<double?>
-            => source.Sum<ValueEnumerable<TList, double?>, double?, double>();
+            => source.Sum<ValueEnumerable<TList, double?>, ValueEnumerable<TList, double?>.DisposableEnumerator, double?, double>();
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static decimal Sum<TList>(this ValueEnumerable<TList, decimal> source)
             where TList : IReadOnlyList<decimal>
-            => source.Sum<ValueEnumerable<TList, decimal>, decimal, decimal>();
+            => source.Sum<ValueEnumerable<TList, decimal>, ValueEnumerable<TList, decimal>.DisposableEnumerator, decimal, decimal>();
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static decimal Sum<TList>(this ValueEnumerable<TList, decimal?> source)
             where TList : IReadOnlyList<decimal?>
-            => source.Sum<ValueEnumerable<TList, decimal?>, decimal?, decimal>();
+            => source.Sum<ValueEnumerable<TList, decimal?>, ValueEnumerable<TList, decimal?>.DisposableEnumerator, decimal?, decimal>();
     }
 }

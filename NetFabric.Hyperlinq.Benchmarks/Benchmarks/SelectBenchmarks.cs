@@ -269,21 +269,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
 
         [BenchmarkCategory("List_Value")]
         [Benchmark]
-        public int Hyperlinq_List_Value_For()
-        {
-            var source = listValue.AsValueEnumerable().Select(item => item);
-            var sum = 0;
-            for (var index = 0; index < source.Count; index++)
-            {
-                var item = source[index];
-                sum += item;
-            }
-            return sum;
-        }
-
-        [BenchmarkCategory("List_Value")]
-        [Benchmark]
-        public int Hyperlinq_List_Value_Foreach()
+        public int Hyperlinq_List_Value()
         {
             var sum = 0;
             foreach (var item in listValue.AsValueEnumerable().Select(item => item))
@@ -321,21 +307,10 @@ namespace NetFabric.Hyperlinq.Benchmarks
             return sum;
         }
 
-        [BenchmarkCategory("List_Reference")]
-        [Benchmark]
-        public int Hyperlinq_List_Reference_For()
-        {
-            var source = listReference.AsValueEnumerable().Select(item => item);
-            var sum = 0;
-            for (var index = 0; index < source.Count; index++)
-                sum += source[index];
-            return sum;
-        }
-
 #pragma warning disable HLQ010 // Consider using a 'for' loop instead.
         [BenchmarkCategory("List_Reference")]
         [Benchmark]
-        public int Hyperlinq_List_Reference_Foreach()
+        public int Hyperlinq_List_Reference()
         {
             var sum = 0;
             foreach (var item in listReference.AsValueEnumerable().Select(item => item))

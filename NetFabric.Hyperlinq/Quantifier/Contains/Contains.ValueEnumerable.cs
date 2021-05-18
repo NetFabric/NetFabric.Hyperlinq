@@ -14,8 +14,7 @@ namespace NetFabric.Hyperlinq
                 if (source is ICollection<TSource> collection)
                     return collection.Contains(value);
 
-                if (Utils.IsValueType<TSource>())
-                    return DefaultContains(source, value);
+                return DefaultContains(source, value);
             }
 
             return ComparerContains(source, value, comparer);

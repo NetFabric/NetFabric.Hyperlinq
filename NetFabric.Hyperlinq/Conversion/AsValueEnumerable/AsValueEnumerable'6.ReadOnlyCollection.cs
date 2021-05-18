@@ -79,6 +79,9 @@ namespace NetFabric.Hyperlinq
 
             public void CopyTo(Span<TSource> span)
             {
+                if (Count is 0)
+                    return;
+                
                 if (span.Length < Count)
                     Throw.ArgumentException(Resource.DestinationNotLongEnough, nameof(span));
 
