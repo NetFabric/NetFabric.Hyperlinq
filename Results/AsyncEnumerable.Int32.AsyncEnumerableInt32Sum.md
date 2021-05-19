@@ -1,7 +1,7 @@
-﻿## Enumerable.Int32.EnumerableInt32Distinct
+﻿## AsyncEnumerable.Int32.AsyncEnumerableInt32Sum
 
 ### Source
-[EnumerableInt32Distinct.cs](../LinqBenchmarks/Enumerable/Int32/EnumerableInt32Distinct.cs)
+[AsyncEnumerableInt32Sum.cs](../LinqBenchmarks/AsyncEnumerable/Int32/AsyncEnumerableInt32Sum.cs)
 
 ### References:
 - JM.LinqFaster: [1.1.2](https://www.nuget.org/packages/JM.LinqFaster/1.1.2)
@@ -27,11 +27,8 @@ Intel Core i7-7567U CPU 3.50GHz (Kaby Lake), 1 CPU, 4 logical and 2 physical cor
 Job=.NET 6  EnvironmentVariables=COMPlus_ReadyToRun=0,COMPlus_TC_QuickJitForLoops=1,COMPlus_TieredPGO=1  Runtime=.NET 6.0  
 
 ```
-|                   Method | Count |       Mean |    Error |   StdDev | Ratio | RatioSD |  Gen 0 | Gen 1 | Gen 2 | Allocated |
-|------------------------- |------ |-----------:|---------:|---------:|------:|--------:|-------:|------:|------:|----------:|
-|              ForeachLoop |   100 |   974.9 ns |  6.74 ns |  6.31 ns |  1.00 |    0.00 | 0.0992 |     - |     - |     208 B |
-|                     Linq |   100 |   957.0 ns | 19.09 ns | 19.60 ns |  0.98 |    0.02 | 0.1602 |     - |     - |     336 B |
-|                   LinqAF |   100 | 1,858.0 ns | 10.40 ns |  9.22 ns |  1.91 |    0.01 | 1.2531 |     - |     - |   2,624 B |
-|               StructLinq |   100 |   898.7 ns |  4.17 ns |  3.70 ns |  0.92 |    0.01 | 0.0305 |     - |     - |      64 B |
-| StructLinq_ValueDelegate |   100 |   801.6 ns |  4.93 ns |  4.61 ns |  0.82 |    0.01 | 0.0191 |     - |     - |      40 B |
-|                Hyperlinq |   100 |   982.8 ns |  4.14 ns |  3.67 ns |  1.01 |    0.01 | 0.0191 |     - |     - |      40 B |
+|      Method | Count |    Mean |    Error |   StdDev | Ratio | Gen 0 | Gen 1 | Gen 2 | Allocated |
+|------------ |------ |--------:|---------:|---------:|------:|------:|------:|------:|----------:|
+| ForeachLoop |   100 | 1.584 s | 0.0147 s | 0.0131 s |  1.00 |     - |     - |     - |     20 KB |
+|        Linq |   100 | 1.575 s | 0.0099 s | 0.0082 s |  0.99 |     - |     - |     - |     20 KB |
+|   Hyperlinq |   100 | 1.580 s | 0.0125 s | 0.0104 s |  1.00 |     - |     - |     - |     20 KB |
