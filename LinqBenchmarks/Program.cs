@@ -98,7 +98,7 @@ namespace LinqBenchmarks
             var linqOptimizerVersion = GetFileVersion(typeof(Nessos.LinqOptimizer.CSharp.Extensions).Assembly);
             logger.WriteLine($"- LinqOptimizer.CSharp: [{linqOptimizerVersion}](https://www.nuget.org/packages/LinqOptimizer.CSharp/{linqOptimizerVersion})");
 
-            var spanLinqVersion = GetInformationalVersion(typeof(SpanLinq).Assembly);
+            var spanLinqVersion = GetFileVersion(typeof(SpanLinq).Assembly);
             logger.WriteLine($"- SpanLinq: [{spanLinqVersion}](https://www.nuget.org/packages/SpanLinq/{spanLinqVersion})");
 
             var streamsVersion = GetInformationalVersion(typeof(Nessos.Streams.CSharp.Streams).Assembly);

@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace LinqBenchmarks.AsyncEnumerable.Int32
 {
-    public class AsyncEnumerableInt32WhereCount: AsyncEnumerableInt32BenchmarkBase
+    public class AsyncEnumerableInt32WhereCountAsync: AsyncEnumerableInt32BenchmarkBase
     {
         [Benchmark(Baseline = true)]
         public async ValueTask<int> ForeachLoop()

@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace LinqBenchmarks.AsyncEnumerable.Int32
 {
-    public class AsyncEnumerableInt32Contains: AsyncEnumerableInt32BenchmarkBase
+    public class AsyncEnumerableInt32ContainsAsync: AsyncEnumerableInt32BenchmarkBase
     {
         int value = int.MaxValue;
 

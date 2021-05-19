@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace LinqBenchmarks.AsyncEnumerable.FatReferenceType
 {
-    public class AsyncEnumerableFatReferenceTypeAny: AsyncEnumerableFatReferenceTypeBenchmarkBase
+    public class AsyncEnumerableFatReferenceTypeAnyAsync: AsyncEnumerableFatReferenceTypeBenchmarkBase
     {
         [Benchmark(Baseline = true)]
         public async ValueTask<bool> ForeachLoop()

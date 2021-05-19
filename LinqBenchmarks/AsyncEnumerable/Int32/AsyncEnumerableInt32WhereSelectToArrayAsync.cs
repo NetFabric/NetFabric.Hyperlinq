@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace LinqBenchmarks.AsyncEnumerable.Int32
 {
-    public partial class AsyncEnumerableInt32WhereSelectToArray: AsyncEnumerableInt32BenchmarkBase
+    public partial class AsyncEnumerableInt32WhereSelectToArrayAsync: AsyncEnumerableInt32BenchmarkBase
     {
         [Benchmark(Baseline = true)]
         public async ValueTask<int[]> ForeachLoop()

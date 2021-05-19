@@ -9,7 +9,7 @@ using Nessos.Streams.CSharp;
 
 namespace LinqBenchmarks.AsyncEnumerable.Int32
 {
-    public partial class AsyncEnumerableInt32WhereSelectToList: AsyncEnumerableInt32BenchmarkBase
+    public partial class AsyncEnumerableInt32WhereSelectToListAsync: AsyncEnumerableInt32BenchmarkBase
     {
         [Benchmark(Baseline = true)]
         public async ValueTask<List<int>> ForeachLoop()

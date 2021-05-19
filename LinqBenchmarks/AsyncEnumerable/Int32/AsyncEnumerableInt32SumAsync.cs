@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace LinqBenchmarks.AsyncEnumerable.Int32
 {
-    public class AsyncEnumerableInt32Sum: AsyncEnumerableInt32BenchmarkBase
+    public class AsyncEnumerableInt32SumAsync: AsyncEnumerableInt32BenchmarkBase
     {
         [Benchmark(Baseline = true)]
         public async ValueTask<int> ForeachLoop()
