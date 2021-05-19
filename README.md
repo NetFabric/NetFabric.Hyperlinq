@@ -6,6 +6,7 @@ Benchmarks comparing the performance of [LINQ](https://docs.microsoft.com/en-us/
 - [JM.LinqFaster](https://github.com/jackmott/LinqFaster)
 - [LinqFasterer](https://github.com/Zaczero/LinqFasterer)
 - [LinqAF](https://github.com/kevin-montrose/LinqAF)
+- [SpanLinq](https://github.com/YairHalberstadt/SpanLinq)
 - [Streams](https://github.com/nessos/Streams)
 - [LinqOptimizer](https://github.com/nessos/LinqOptimizer)
 - [StructLinq](https://github.com/reegeek/StructLinq)
