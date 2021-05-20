@@ -3,6 +3,7 @@ using JM.LinqFaster;
 using NetFabric.Hyperlinq;
 using StructLinq;
 using System.Linq;
+using System.Runtime.InteropServices;
 using LinqFasterer;
 using Nessos.LinqOptimizer.CSharp;
 using Nessos.Streams.CSharp;
@@ -70,6 +71,19 @@ namespace LinqBenchmarks.List.ValueType
                 .Take(Count)
                 .Select(item => item * 3)
                 .Run();
+            var sum = default(FatValueType);
+            foreach (var item in items)
+                sum += item;
+            return sum;
+        }
+
+        [Benchmark]
+        public FatValueType SpanLinq()
+        {
+            var items = CollectionsMarshal.AsSpan(source)
+                .Skip(Skip)
+                .Take(Count)
+                .Select(item => item * 3);
             var sum = default(FatValueType);
             foreach (var item in items)
                 sum += item;

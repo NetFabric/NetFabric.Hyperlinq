@@ -7,8 +7,8 @@
   </PropertyGroup>
   
   <ItemGroup>
-    <PackageReference Include="BenchmarkDotNet" Version="0.12.1.1538" />
-    <PackageReference Include="BenchmarkDotNet.Diagnostics.Windows" Version="0.12.1.1538" />
+    <PackageReference Include="BenchmarkDotNet" Version="0.13.0" />
+    <PackageReference Include="BenchmarkDotNet.Diagnostics.Windows" Version="0.13.0" />
     <PackageReference Include="LinqAF" Version="3.0.0" />
     <PackageReference Include="JM.LinqFaster" Version="1.1.2" />
     <PackageReference Include="LinqFaster.SIMD" Version="1.0.3" />
@@ -23,10 +23,7 @@
     <PackageReference Include="StructLinq" Version="0.26.0" />
     <PackageReference Include="System.Interactive" Version="5.0.0" />
     <PackageReference Include="System.Linq.Async" Version="5.0.0" />
-    <PackageReference Include="SpanLinq" Version="0.0.1">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
+    <PackageReference Include="SpanLinq" Version="0.0.1" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == 'net5.0'">

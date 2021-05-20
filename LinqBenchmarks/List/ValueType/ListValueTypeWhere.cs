@@ -1,4 +1,6 @@
-﻿using BenchmarkDotNet.Attributes;
+﻿using System.Linq;
+using System.Runtime.InteropServices;
+using BenchmarkDotNet.Attributes;
 using JM.LinqFaster;
 using NetFabric.Hyperlinq;
 using StructLinq;
@@ -84,6 +86,17 @@ namespace LinqBenchmarks.List.ValueType
                 .AsQueryExpr()
                 .Where(item => item.IsEven())
                 .Run();
+            var sum = default(FatValueType);
+            foreach (var item in items)
+                sum += item;
+            return sum;
+        }
+
+        [Benchmark]
+        public FatValueType SpanLinq()
+        {
+            var items = CollectionsMarshal.AsSpan(source)
+                .Where(item => item.IsEven());
             var sum = default(FatValueType);
             foreach (var item in items)
                 sum += item;

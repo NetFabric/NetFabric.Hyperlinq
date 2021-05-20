@@ -1,7 +1,7 @@
-﻿## AsyncEnumerable.Int32.AsyncEnumerableInt32SkipTakeSelect
+﻿## AsyncEnumerable.FatReferenceType.AsyncEnumerableFatReferenceTypeAnyAsync
 
 ### Source
-[AsyncEnumerableInt32SkipTakeSelect.cs](../LinqBenchmarks/AsyncEnumerable/Int32/AsyncEnumerableInt32SkipTakeSelect.cs)
+[AsyncEnumerableFatReferenceTypeAnyAsync.cs](../LinqBenchmarks/AsyncEnumerable/FatReferenceType/AsyncEnumerableFatReferenceTypeAnyAsync.cs)
 
 ### References:
 - JM.LinqFaster: [1.1.2](https://www.nuget.org/packages/JM.LinqFaster/1.1.2)
@@ -27,8 +27,8 @@ Intel Core i7-7567U CPU 3.50GHz (Kaby Lake), 1 CPU, 4 logical and 2 physical cor
 Job=.NET 6  EnvironmentVariables=COMPlus_ReadyToRun=0,COMPlus_TC_QuickJitForLoops=1,COMPlus_TieredPGO=1  Runtime=.NET 6.0  
 
 ```
-|                  Method | Skip | Count |    Mean |   Error |  StdDev |        Ratio | RatioSD | Gen 0 | Gen 1 | Gen 2 | Allocated |
-|------------------------ |----- |------ |--------:|--------:|--------:|-------------:|--------:|------:|------:|------:|----------:|
-|                    Linq | 1000 |   100 | 17.37 s | 0.116 s | 0.109 s |     baseline |         |     - |     - |     - |    277 KB |
-|               Hyperlinq | 1000 |   100 | 17.32 s | 0.084 s | 0.079 s | 1.00x faster |   0.01x |     - |     - |     - |    227 KB |
-| Hyperlinq_ValueDelegate | 1000 |   100 | 17.37 s | 0.138 s | 0.129 s | 1.00x slower |   0.01x |     - |     - |     - |    217 KB |
+|      Method | Count |     Mean |    Error |   StdDev |        Ratio | RatioSD | Gen 0 | Gen 1 | Gen 2 | Allocated |
+|------------ |------ |---------:|---------:|---------:|-------------:|--------:|------:|------:|------:|----------:|
+| ForeachLoop |   100 | 15.69 ms | 0.171 ms | 0.151 ms |     baseline |         |     - |     - |     - |     536 B |
+|        Linq |   100 | 15.71 ms | 0.303 ms | 0.349 ms | 1.00x faster |   0.02x |     - |     - |     - |     552 B |
+|   Hyperlinq |   100 | 15.74 ms | 0.247 ms | 0.219 ms | 1.00x slower |   0.02x |     - |     - |     - |     544 B |

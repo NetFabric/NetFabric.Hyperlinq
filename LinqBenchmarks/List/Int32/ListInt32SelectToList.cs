@@ -4,6 +4,7 @@ using NetFabric.Hyperlinq;
 using StructLinq;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using LinqFasterer;
 using Nessos.LinqOptimizer.CSharp;
 using Nessos.Streams.CSharp;
@@ -62,6 +63,12 @@ namespace LinqBenchmarks.List.Int32
                 .Select(item => item * 3)
                 .ToList()
                 .Run();
+
+        [Benchmark]
+        public List<int> SpanLinq()
+            => CollectionsMarshal.AsSpan(source)
+                .Select(item => item * 3)
+                .ToList();
 
         [Benchmark]
         public List<int> Streams()

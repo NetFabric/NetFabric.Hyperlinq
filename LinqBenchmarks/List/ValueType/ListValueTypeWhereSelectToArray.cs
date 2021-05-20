@@ -4,6 +4,7 @@ using NetFabric.Hyperlinq;
 using StructLinq;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using LinqFasterer;
 using Nessos.LinqOptimizer.CSharp;
 using Nessos.Streams.CSharp;
@@ -75,6 +76,13 @@ namespace LinqBenchmarks.List.ValueType
                 .Select(item => item * 3)
                 .ToArray()
                 .Run();
+
+        [Benchmark]
+        public FatValueType[] SpanLinq()
+            => CollectionsMarshal.AsSpan(source)
+                .Where(item => item.IsEven())
+                .Select(item => item * 3)
+                .ToArray();
 
         [Benchmark]
         public FatValueType[] Streams()

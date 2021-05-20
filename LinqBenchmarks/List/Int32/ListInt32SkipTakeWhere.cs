@@ -3,6 +3,7 @@ using JM.LinqFaster;
 using NetFabric.Hyperlinq;
 using StructLinq;
 using System.Linq;
+using System.Runtime.InteropServices;
 using LinqFasterer;
 using Nessos.LinqOptimizer.CSharp;
 using Nessos.Streams.CSharp;
@@ -74,6 +75,19 @@ namespace LinqBenchmarks.List.Int32
                 .Take(Count)
                 .Where(item => item.IsEven())
                 .Run();
+            var sum = 0;
+            foreach (var item in items)
+                sum += item;
+            return sum;
+        }
+
+        [Benchmark]
+        public int SpanLinq()
+        {
+            var items = CollectionsMarshal.AsSpan(source)
+                .Skip(Skip)
+                .Take(Count)
+                .Where(item => item.IsEven());
             var sum = 0;
             foreach (var item in items)
                 sum += item;

@@ -6,10 +6,12 @@ using JM.LinqFaster;
 using JM.LinqFaster.SIMD;
 using NetFabric.Hyperlinq;
 using System;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using BenchmarkDotNet.Columns;
 using BenchmarkDotNet.Configs;
 using BenchmarkDotNet.Diagnosers;
 using BenchmarkDotNet.Environments;
@@ -23,6 +25,7 @@ namespace LinqBenchmarks
         static void Main(string[] args)
         {
             var config = DefaultConfig.Instance
+                .WithSummaryStyle(SummaryStyle.Default.WithRatioStyle(RatioStyle.Trend))
                 .AddDiagnoser(MemoryDiagnoser.Default)
                 // .AddJob(Job.Default
                 //     .WithRuntime(CoreRuntime.Core50)
@@ -98,7 +101,7 @@ namespace LinqBenchmarks
             var linqOptimizerVersion = GetFileVersion(typeof(Nessos.LinqOptimizer.CSharp.Extensions).Assembly);
             logger.WriteLine($"- LinqOptimizer.CSharp: [{linqOptimizerVersion}](https://www.nuget.org/packages/LinqOptimizer.CSharp/{linqOptimizerVersion})");
 
-            var spanLinqVersion = GetFileVersion(typeof(SpanLinq).Assembly);
+            var spanLinqVersion = GetInformationalVersion(typeof(SpanLinq.SourceGenerator).Assembly);
             logger.WriteLine($"- SpanLinq: [{spanLinqVersion}](https://www.nuget.org/packages/SpanLinq/{spanLinqVersion})");
 
             var streamsVersion = GetInformationalVersion(typeof(Nessos.Streams.CSharp.Streams).Assembly);

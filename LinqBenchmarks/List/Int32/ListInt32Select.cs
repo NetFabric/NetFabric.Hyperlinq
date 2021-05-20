@@ -1,4 +1,6 @@
-﻿using BenchmarkDotNet.Attributes;
+﻿using System.Linq;
+using System.Runtime.InteropServices;
+using BenchmarkDotNet.Attributes;
 using JM.LinqFaster;
 using NetFabric.Hyperlinq;
 using StructLinq;
@@ -77,6 +79,17 @@ namespace LinqBenchmarks.List.Int32
                 .AsQueryExpr()
                 .Select(item => item * 3)
                 .Run();
+            var sum = 0;
+            foreach (var item in items)
+                sum += item;
+            return sum;
+        }
+
+        [Benchmark]
+        public int SpanLinq()
+        {
+            var items = CollectionsMarshal.AsSpan(source)
+                .Select(item => item * 3);
             var sum = 0;
             foreach (var item in items)
                 sum += item;
