@@ -138,13 +138,13 @@ namespace NetFabric.Hyperlinq
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public RepeatEnumerable<TSource> Skip(int count)
             {
-                var (_, takeCount) = Utils.Skip(this.count, count);
+                var (_, takeCount) = Partition.Skip(this.count, count);
                 return Repeat(value, takeCount);
             }
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public RepeatEnumerable<TSource> Take(int count)
-                => Repeat(value, Utils.Take(this.count, count));
+                => Repeat(value, Partition.Take(this.count, count));
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public bool All(Func<TSource, bool> predicate)

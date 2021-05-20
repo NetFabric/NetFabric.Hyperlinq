@@ -10,9 +10,9 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.9.1" />
-    <PackageReference Include="NetFabric.Assertive" Version="3.0.0" />
-    <PackageReference Include="NetFabric.Hyperlinq.Analyzer" Version="2.0.1">
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.9.4" />
+    <PackageReference Include="NetFabric.Assertive" Version="4.0.0-beta01" />
+    <PackageReference Include="NetFabric.Hyperlinq.Analyzer" Version="2.0.3">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
@@ -35,6 +35,10 @@
 
   <ItemGroup>
     <DotNetCliToolReference Include="dotnet-reportgenerator-cli" Version="4.3.8" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Partitioning\SkipTake" />
   </ItemGroup>
 
 </Project>

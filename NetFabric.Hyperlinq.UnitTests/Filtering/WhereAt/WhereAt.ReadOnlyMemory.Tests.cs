@@ -25,8 +25,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Filtering.WhereIndex
             // Assert
             _ = result.Must()
                 .BeEnumerableOf<int>()
-                .BeEqualTo(expected, testRefStructs: false, testRefReturns: false);
-            _ = result.SequenceEqual(expected).Must().BeTrue();
+                .BeEqualTo(expected);
         }
         
         [Theory]

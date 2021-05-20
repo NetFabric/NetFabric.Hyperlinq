@@ -188,6 +188,10 @@ namespace NetFabric.Hyperlinq
             }
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public readonly DistinctEnumerable<TEnumerable, TEnumerator, TSource> AsValueEnumerable()
+                => this;
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public readonly async ValueTask<int> CountAsync(CancellationToken cancellationToken = default)
                 => (await FillSetAsync(cancellationToken).ConfigureAwait(false)).Count;
 

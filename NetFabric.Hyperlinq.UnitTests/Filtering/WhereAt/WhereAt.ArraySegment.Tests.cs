@@ -21,8 +21,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Filtering.WhereAt
             // Assert
             _ = result.Must()
                 .BeEnumerableOf<int>()
-                .BeEqualTo(expected, testRefStructs: false, testRefReturns: false);
-            _ = result.SequenceEqual(expected).Must().BeTrue();
+                .BeEqualTo(expected);
         }
 
         [Theory]
@@ -32,7 +31,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Filtering.WhereAt
         public void Where_With_ValidData_Must_Succeed(int[] source, int skip, int take, Func<int, int, bool> predicate)
         {
             // Arrange
-            var (offset, count) = Utils.SkipTake(source.Length, skip, take);
+            var (offset, count) = Partition.SkipTake(source.Length, skip, take);
             var wrapped = new ArraySegment<int>(source, offset, count);
             var expected = Enumerable
                 .Where(wrapped, predicate);
@@ -44,8 +43,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Filtering.WhereAt
             // Assert
             _ = result.Must()
                 .BeEnumerableOf<int>()
-                .BeEqualTo(expected, testRefStructs: false, testRefReturns: false);
-            _ = result.SequenceEqual(expected).Must().BeTrue();
+                .BeEqualTo(expected);
         }
 
         [Theory]
@@ -55,7 +53,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Filtering.WhereAt
         public void Where_Sum_With_ValidData_Must_Succeed(int[] source, int skip, int take, Func<int, int, bool> predicate)
         {
             // Arrange
-            var (offset, count) = Utils.SkipTake(source.Length, skip, take);
+            var (offset, count) = Partition.SkipTake(source.Length, skip, take);
             var wrapped = new ArraySegment<int>(source, offset, count);
             var expected = Enumerable
                 .Where(wrapped, predicate)

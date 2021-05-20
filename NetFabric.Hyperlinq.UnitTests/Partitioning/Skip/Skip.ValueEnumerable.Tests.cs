@@ -2,9 +2,9 @@ using NetFabric.Assertive;
 using System.Linq;
 using Xunit;
 
-namespace NetFabric.Hyperlinq.UnitTests.Partitioning.Skip
+namespace NetFabric.Hyperlinq.UnitTests.Partitioning.Skip.ValueEnumerable
 {
-    public class ValueEnumerableTests
+    public class Tests
     {
         [Theory]
         [MemberData(nameof(TestData.SkipEmpty), MemberType = typeof(TestData))]
@@ -27,51 +27,21 @@ namespace NetFabric.Hyperlinq.UnitTests.Partitioning.Skip
                 .BeEnumerableOf<int>()
                 .BeEqualTo(expected);
         }
-
-        [Theory]
-        [MemberData(nameof(TestData.Skip_Skip), MemberType = typeof(TestData))]
-        public void Skip_Skip_With_ValidData_Must_Succeed(int[] source, int count0, int count1)
-        {
-            // Arrange
-            var wrapped = Wrap
-                .AsValueEnumerable(source);
-            var expected = source
-                .Skip(count0)
-                .Skip( count1);
-
-            // Act
-            var result = wrapped
-                .Skip<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int>(count0)
-                .Skip(count1);
-
-            // Assert
-            _ = result.Must()
-                .BeEnumerableOf<int>()
-                .BeEqualTo(expected);
-        }
-
-        [Theory]
-        [MemberData(nameof(TestData.SkipTakeEmpty), MemberType = typeof(TestData))]
-        [MemberData(nameof(TestData.SkipTakeSingle), MemberType = typeof(TestData))]
-        [MemberData(nameof(TestData.SkipTakeMultiple), MemberType = typeof(TestData))]
-        public void Skip_Take_With_ValidData_Must_Succeed(int[] source, int skip, int take)
-        {
-            // Arrange
-            var wrapped = Wrap
-                .AsValueEnumerable(source);
-            var expected = source
-                .Skip(skip)
-                .Take(take);
-
-            // Act
-            var result = wrapped
-                .Skip<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int>(skip)
-                .Take(take);
-
-            // Assert
-            _ = result.Must()
-                .BeEnumerableOf<int>()
-                .BeEqualTo(expected);
-        }
+    }
+        
+    public class SkipEnumerableTests
+        : ValueEnumerableTests<
+            ValueEnumerableExtensions.SkipEnumerable<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int>, 
+            ValueEnumerableExtensions.SkipEnumerable<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int>,
+            ValueEnumerableExtensions.SkipTakeEnumerable<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int>,
+            ValueEnumerableExtensions.WhereEnumerable<ValueEnumerableExtensions.SkipEnumerable<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int>, ValueEnumerableExtensions.SkipEnumerable<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int>.Enumerator, int, FunctionWrapper<int, bool>>,
+            ValueEnumerableExtensions.WhereAtEnumerable<ValueEnumerableExtensions.SkipEnumerable<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int>, ValueEnumerableExtensions.SkipEnumerable<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int>.Enumerator, int, FunctionWrapper<int, int, bool>>
+        >
+    {
+        public SkipEnumerableTests() 
+            : base(array => Wrap
+                .AsValueEnumerable(array)
+                .Skip<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int>(0))
+        {}
     }
 }

@@ -133,13 +133,13 @@ namespace NetFabric.Hyperlinq
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public RangeEnumerable Skip(int count)
             {
-                var (skipCount, takeCount) = Utils.Skip(this.count, count);
+                var (skipCount, takeCount) = Partition.Skip(this.count, count);
                 return Range(start + skipCount, takeCount);
             }
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public RangeEnumerable Take(int count)
-                => Range(start, Utils.Take(this.count, count));
+                => Range(start, Partition.Take(this.count, count));
 
 #pragma warning disable IDE0060 // Remove unused parameter
             public ValueTask<bool> ContainsAsync(int value, CancellationToken cancellationToken)

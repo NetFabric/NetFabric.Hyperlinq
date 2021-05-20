@@ -77,7 +77,7 @@ namespace NetFabric.Hyperlinq
             return source switch
             {
                 { Length: 0 } => false,
-                _ => Utils.IsValueType<TResult>()
+                _ => Utils.UseDefault(comparer)
                     ? ValueContains(source, value, selector)
                     : ReferenceContains(source, value, comparer, selector),
             };

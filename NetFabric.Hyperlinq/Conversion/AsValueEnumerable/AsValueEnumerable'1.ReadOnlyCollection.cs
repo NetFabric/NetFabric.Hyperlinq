@@ -77,10 +77,10 @@ namespace NetFabric.Hyperlinq
             
             #region Conversion
 
-            ValueEnumerable<TSource> AsValueEnumerable()
+            public ValueEnumerable<TSource> AsValueEnumerable()
                 => this;
 
-            IReadOnlyCollection<TSource> AsEnumerable()
+            public IReadOnlyCollection<TSource> AsEnumerable()
                 => source;
 
             #endregion

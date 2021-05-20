@@ -14,13 +14,11 @@ namespace NetFabric.Hyperlinq
             => source switch
             {
                 { Count: 0 } => new List<TSource>(),
-                _ => source switch
-                {
-                    // ReSharper disable once HeapView.PossibleBoxingAllocation
-                    ICollection<TSource> collection => new List<TSource>(collection),
 
-                    _ => ToArray<TEnumerable, TEnumerator, TSource>(source).AsList(),
-                }
+                // ReSharper disable once HeapView.PossibleBoxingAllocation
+                ICollection<TSource> collection => new List<TSource>(collection),
+
+                _ => ToArray<TEnumerable, TEnumerator, TSource>(source).AsList(),
             };
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

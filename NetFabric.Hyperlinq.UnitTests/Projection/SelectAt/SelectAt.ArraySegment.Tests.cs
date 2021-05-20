@@ -21,8 +21,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Projection.SelectAt
             // Assert
             _ = result.Must()
                 .BeEnumerableOf<string>()
-                .BeEqualTo(expected, testRefStructs: false);
-            _ = result.SequenceEqual(expected).Must().BeTrue();
+                .BeEqualTo(expected);
         }
 
         [Theory]
@@ -32,7 +31,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Projection.SelectAt
         public void Select_With_ValidData_Must_Succeed(int[] source, int skip, int take, Func<int, int, string> selector)
         {
             // Arrange
-            var (offset, count) = Utils.SkipTake(source.Length, skip, take);
+            var (offset, count) = Partition.SkipTake(source.Length, skip, take);
             var wrapped = new ArraySegment<int>(source, offset, count);
             var expected = wrapped
                 .Select(selector);
@@ -44,8 +43,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Projection.SelectAt
             // Assert
             _ = result.Must()
                 .BeEnumerableOf<string>()
-                .BeEqualTo(expected, testRefStructs: false);
-            _ = result.SequenceEqual(expected).Must().BeTrue();
+                .BeEqualTo(expected);
         }
         
         [Theory]
@@ -55,7 +53,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Projection.SelectAt
         public void Select_Sum_With_ValidData_Must_Succeed(int[] source, int skip, int take)
         {
             // Arrange
-            var (offset, count) = Utils.SkipTake(source.Length, skip, take);
+            var (offset, count) = Partition.SkipTake(source.Length, skip, take);
             var wrapped = new ArraySegment<int>(source, offset, count);
             var expected = wrapped
                 .Select((item, _) => item)

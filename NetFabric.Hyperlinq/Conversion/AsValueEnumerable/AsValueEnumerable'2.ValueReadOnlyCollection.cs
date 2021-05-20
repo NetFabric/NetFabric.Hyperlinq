@@ -12,13 +12,13 @@ namespace NetFabric.Hyperlinq
 
         [GeneratorIgnore]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static ValueEnumerable<TSource, TEnumerator> AsValueEnumerable<TSource, TEnumerator>(this IValueReadOnlyCollection<TSource, TEnumerator> source)
+        public static ValueEnumerable<TEnumerator, TSource> AsValueEnumerable<TEnumerator, TSource>(this IValueReadOnlyCollection<TSource, TEnumerator> source)
             where TEnumerator : struct, IEnumerator<TSource>
             => new(source);
 
         [GeneratorBindings(source: "source", sourceImplements: "IValueReadOnlyCollection`2,IValueEnumerable`2", enumerableType: "IValueReadOnlyCollection<TSource, TEnumerator>")]
         [StructLayout(LayoutKind.Auto)]
-        public readonly partial struct ValueEnumerable<TSource, TEnumerator>
+        public readonly partial struct ValueEnumerable<TEnumerator, TSource>
             : IValueReadOnlyCollection<TSource, TEnumerator>
             , ICollection<TSource>
             where TEnumerator : struct, IEnumerator<TSource>
@@ -82,68 +82,68 @@ namespace NetFabric.Hyperlinq
             
             #region Conversion
 
-            ValueEnumerable<TSource, TEnumerator> AsValueEnumerable()
+            public ValueEnumerable<TEnumerator, TSource> AsValueEnumerable()
                 => this;
 
-            IReadOnlyCollection<TSource> AsEnumerable()
+            public IReadOnlyCollection<TSource> AsEnumerable()
                 => source;
 
             #endregion
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static int Count<TSource, TEnumerator>(this ValueEnumerable<TSource, TEnumerator> source)
+        public static int Count<TEnumerator, TSource>(this ValueEnumerable<TEnumerator, TSource> source)
             where TEnumerator : struct, IEnumerator<TSource>
             => source.Count;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static int Sum<TEnumerator>(this ValueEnumerable<int, TEnumerator> source)
+        public static int Sum<TEnumerator>(this ValueEnumerable<TEnumerator, int> source)
             where TEnumerator : struct, IEnumerator<int>
-            => Sum<ValueEnumerable<int, TEnumerator>, TEnumerator, int, int>(source);
+            => Sum<ValueEnumerable<TEnumerator, int>, TEnumerator, int, int>(source);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static int Sum<TEnumerator>(this ValueEnumerable<int?, TEnumerator> source)
+        public static int Sum<TEnumerator>(this ValueEnumerable<TEnumerator, int?> source)
             where TEnumerator : struct, IEnumerator<int?>
-            => Sum<ValueEnumerable<int?, TEnumerator>, TEnumerator, int?, int>(source);
+            => Sum<ValueEnumerable<TEnumerator, int?>, TEnumerator, int?, int>(source);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static long Sum<TEnumerator>(this ValueEnumerable<long, TEnumerator> source)
+        public static long Sum<TEnumerator>(this ValueEnumerable<TEnumerator, long> source)
             where TEnumerator : struct, IEnumerator<long>
-            => Sum<ValueEnumerable<long, TEnumerator>, TEnumerator, long, long>(source);
+            => Sum<ValueEnumerable<TEnumerator, long>, TEnumerator, long, long>(source);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static long Sum<TEnumerator>(this ValueEnumerable<long?, TEnumerator> source)
+        public static long Sum<TEnumerator>(this ValueEnumerable<TEnumerator, long?> source)
             where TEnumerator : struct, IEnumerator<long?>
-            => Sum<ValueEnumerable<long?, TEnumerator>, TEnumerator, long?, long>(source);
+            => Sum<ValueEnumerable<TEnumerator, long?>, TEnumerator, long?, long>(source);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static float Sum<TEnumerator>(this ValueEnumerable<float, TEnumerator> source)
+        public static float Sum<TEnumerator>(this ValueEnumerable<TEnumerator, float> source)
             where TEnumerator : struct, IEnumerator<float>
-            => Sum<ValueEnumerable<float, TEnumerator>, TEnumerator, float, float>(source);
+            => Sum<ValueEnumerable<TEnumerator, float>, TEnumerator, float, float>(source);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static float Sum<TEnumerator>(this ValueEnumerable<float?, TEnumerator> source)
+        public static float Sum<TEnumerator>(this ValueEnumerable<TEnumerator, float?> source)
             where TEnumerator : struct, IEnumerator<float?>
-            => Sum<ValueEnumerable<float?, TEnumerator>, TEnumerator, float?, float>(source);
+            => Sum<ValueEnumerable<TEnumerator, float?>, TEnumerator, float?, float>(source);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static double Sum<TEnumerator>(this ValueEnumerable<double, TEnumerator> source)
+        public static double Sum<TEnumerator>(this ValueEnumerable<TEnumerator, double> source)
             where TEnumerator : struct, IEnumerator<double>
-            => Sum<ValueEnumerable<double, TEnumerator>, TEnumerator, double, double>(source);
+            => Sum<ValueEnumerable<TEnumerator, double>, TEnumerator, double, double>(source);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static double Sum<TEnumerator>(this ValueEnumerable<double?, TEnumerator> source)
+        public static double Sum<TEnumerator>(this ValueEnumerable<TEnumerator, double?> source)
             where TEnumerator : struct, IEnumerator<double?>
-            => Sum<ValueEnumerable<double?, TEnumerator>, TEnumerator, double?, double>(source);
+            => Sum<ValueEnumerable<TEnumerator, double?>, TEnumerator, double?, double>(source);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static decimal Sum<TEnumerator>(this ValueEnumerable<decimal, TEnumerator> source)
+        public static decimal Sum<TEnumerator>(this ValueEnumerable<TEnumerator, decimal> source)
             where TEnumerator : struct, IEnumerator<decimal>
-            => Sum<ValueEnumerable<decimal, TEnumerator>, TEnumerator, decimal, decimal>(source);
+            => Sum<ValueEnumerable<TEnumerator, decimal>, TEnumerator, decimal, decimal>(source);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static decimal Sum<TEnumerator>(this ValueEnumerable<decimal?, TEnumerator> source)
+        public static decimal Sum<TEnumerator>(this ValueEnumerable<TEnumerator, decimal?> source)
             where TEnumerator : struct, IEnumerator<decimal?>
-            => Sum<ValueEnumerable<decimal?, TEnumerator>, TEnumerator, decimal?, decimal>(source);
+            => Sum<ValueEnumerable<TEnumerator, decimal?>, TEnumerator, decimal?, decimal>(source);
     }
 }

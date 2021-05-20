@@ -86,6 +86,10 @@ namespace NetFabric.Hyperlinq
             }
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public SkipEnumerable<TEnumerable, TEnumerator, TSource> AsValueEnumerable()
+                => this;
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public SkipEnumerable<TEnumerable, TEnumerator, TSource> Skip(int count)
                 => source.Skip<TEnumerable, TEnumerator, TSource>(this.count + count);
 
@@ -93,5 +97,65 @@ namespace NetFabric.Hyperlinq
             public SkipTakeEnumerable<TEnumerable, TEnumerator, TSource> Take(int count)
                 => source.SkipTake<TEnumerable, TEnumerator, TSource>(this.count, count);
         }
+        
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int Sum<TEnumerable, TEnumerator>(this SkipEnumerable<TEnumerable, TEnumerator, int> source)
+            where TEnumerable : IValueEnumerable<int, TEnumerator>
+            where TEnumerator : struct, IEnumerator<int>
+            => source.Sum<SkipEnumerable<TEnumerable, TEnumerator, int>, SkipEnumerable<TEnumerable, TEnumerator, int>.Enumerator, int, int>();
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int Sum<TEnumerable, TEnumerator>(this SkipEnumerable<TEnumerable, TEnumerator, int?> source)
+            where TEnumerable : IValueEnumerable<int?, TEnumerator>
+            where TEnumerator : struct, IEnumerator<int?>
+            => source.Sum<SkipEnumerable<TEnumerable, TEnumerator, int?>, SkipEnumerable<TEnumerable, TEnumerator, int?>.Enumerator, int?, int>();
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static long Sum<TEnumerable, TEnumerator>(this SkipEnumerable<TEnumerable, TEnumerator, long> source)
+            where TEnumerable : IValueEnumerable<long, TEnumerator>
+            where TEnumerator : struct, IEnumerator<long>
+            => source.Sum<SkipEnumerable<TEnumerable, TEnumerator, long>, SkipEnumerable<TEnumerable, TEnumerator, long>.Enumerator, long, long>();
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static long Sum<TEnumerable, TEnumerator>(this SkipEnumerable<TEnumerable, TEnumerator, long?> source)
+            where TEnumerable : IValueEnumerable<long?, TEnumerator>
+            where TEnumerator : struct, IEnumerator<long?>
+            => source.Sum<SkipEnumerable<TEnumerable, TEnumerator, long?>, SkipEnumerable<TEnumerable, TEnumerator, long?>.Enumerator, long?, long>();
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static float Sum<TEnumerable, TEnumerator>(this SkipEnumerable<TEnumerable, TEnumerator, float> source)
+            where TEnumerable : IValueEnumerable<float, TEnumerator>
+            where TEnumerator : struct, IEnumerator<float>
+            => source.Sum<SkipEnumerable<TEnumerable, TEnumerator, float>, SkipEnumerable<TEnumerable, TEnumerator, float>.Enumerator, float, float>();
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static float Sum<TEnumerable, TEnumerator>(this SkipEnumerable<TEnumerable, TEnumerator, float?> source)
+            where TEnumerable : IValueEnumerable<float?, TEnumerator>
+            where TEnumerator : struct, IEnumerator<float?>
+            => source.Sum<SkipEnumerable<TEnumerable, TEnumerator, float?>, SkipEnumerable<TEnumerable, TEnumerator, float?>.Enumerator, float?, float>();
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static double Sum<TEnumerable, TEnumerator>(this SkipEnumerable<TEnumerable, TEnumerator, double> source)
+            where TEnumerable : IValueEnumerable<double, TEnumerator>
+            where TEnumerator : struct, IEnumerator<double>
+            => source.Sum<SkipEnumerable<TEnumerable, TEnumerator, double>, SkipEnumerable<TEnumerable, TEnumerator, double>.Enumerator, double, double>();
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static double Sum<TEnumerable, TEnumerator>(this SkipEnumerable<TEnumerable, TEnumerator, double?> source)
+            where TEnumerable : IValueEnumerable<double?, TEnumerator>
+            where TEnumerator : struct, IEnumerator<double?>
+            => source.Sum<SkipEnumerable<TEnumerable, TEnumerator, double?>, SkipEnumerable<TEnumerable, TEnumerator, double?>.Enumerator, double?, double>();
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static decimal Sum<TEnumerable, TEnumerator>(this SkipEnumerable<TEnumerable, TEnumerator, decimal> source)
+            where TEnumerable : IValueEnumerable<decimal, TEnumerator>
+            where TEnumerator : struct, IEnumerator<decimal>
+            => source.Sum<SkipEnumerable<TEnumerable, TEnumerator, decimal>, SkipEnumerable<TEnumerable, TEnumerator, decimal>.Enumerator, decimal, decimal>();
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static decimal Sum<TEnumerable, TEnumerator>(this SkipEnumerable<TEnumerable, TEnumerator, decimal?> source)
+            where TEnumerable : IValueEnumerable<decimal?, TEnumerator>
+            where TEnumerator : struct, IEnumerator<decimal?>
+            => source.Sum<SkipEnumerable<TEnumerable, TEnumerator, decimal?>, SkipEnumerable<TEnumerable, TEnumerator, decimal?>.Enumerator, decimal?, decimal>();
     }
 }

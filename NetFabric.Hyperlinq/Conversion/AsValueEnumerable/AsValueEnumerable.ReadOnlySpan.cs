@@ -24,20 +24,20 @@ namespace NetFabric.Hyperlinq
             internal SpanValueEnumerable(ReadOnlySpan<TSource> source)
                 => this.source = source;
 
-            public readonly int Count
+            public int Count
             {
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
                 get => source.Length;
             }
 
-            public readonly TSource this[int index]
+            public ref readonly TSource this[int index]
             {
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
-                get => source[index];
+                get => ref source[index];
             }
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public readonly SpanEnumerator<TSource> GetEnumerator()
+            public SpanEnumerator<TSource> GetEnumerator()
                 => new(source);
 
             #region Aggregation
@@ -87,13 +87,13 @@ namespace NetFabric.Hyperlinq
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public SpanValueEnumerable<TSource> Skip(int count)
             {
-                var (skipCount, takeCount) = Utils.Skip(source.Length, count);
+                var (skipCount, takeCount) = Partition.Skip(source.Length, count);
                 return new SpanValueEnumerable<TSource>(source.Slice(skipCount, takeCount));
             }
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public SpanValueEnumerable<TSource> Take(int count)
-                => new(source.Slice(0, Utils.Take(source.Length, count)));
+                => new(source.Slice(0, Partition.Take(source.Length, count)));
 
             #endregion
 
@@ -168,7 +168,7 @@ namespace NetFabric.Hyperlinq
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static int Count(this SpanValueEnumerable<int> source)
+        public static int Count<TSource>(this SpanValueEnumerable<TSource> source)
             => source.Count;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

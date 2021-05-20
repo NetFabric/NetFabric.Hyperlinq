@@ -83,7 +83,7 @@ namespace NetFabric.Hyperlinq
             where TEnumerator : struct, IEnumerator<TSource>
             where TSelector : struct, IFunction<TSource, int, TResult>
         {
-            return Utils.IsValueType<TResult>()
+            return Utils.UseDefault(comparer)
                 ? ValueContains(source, value, selector)
                 : ReferenceContains(source, value, comparer, selector);
 

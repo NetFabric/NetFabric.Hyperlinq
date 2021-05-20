@@ -175,22 +175,25 @@ namespace NetFabric.Hyperlinq
 
             #region Conversion
 
-            ValueEnumerable<TList, TSource> AsValueEnumerable()
+            public ValueEnumerable<TList, TSource> AsValueEnumerable()
                 => this;
 
-            ValueEnumerable<TList, TSource> AsEnumerable()
+            public ValueEnumerable<TList, TSource> AsEnumerable()
                 => this;
 
             #endregion
             #region Partitioning
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public ValueReadOnlyListExtensions.SkipTakeEnumerable<ValueEnumerable<TList, TSource>, TSource> Skip(int count)
-                => ValueReadOnlyListExtensions.Skip<ValueEnumerable<TList, TSource>, TSource>(this, count);
-
+            public ValueEnumerable<TList, TSource> Skip(int count)
+            {
+                var (skipCount, takeCount) = Partition.Skip(Count, count);
+                return new ValueEnumerable<TList, TSource>(source, offset + skipCount, takeCount);
+            }
+            
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public ValueReadOnlyListExtensions.SkipTakeEnumerable<ValueEnumerable<TList, TSource>, TSource> Take(int count)
-                => ValueReadOnlyListExtensions.Take<ValueEnumerable<TList, TSource>, TSource>(this, count);
+            public ValueEnumerable<TList, TSource> Take(int count)
+                => new(source, offset, Partition.Take(Count, count));
 
             #endregion
         }
