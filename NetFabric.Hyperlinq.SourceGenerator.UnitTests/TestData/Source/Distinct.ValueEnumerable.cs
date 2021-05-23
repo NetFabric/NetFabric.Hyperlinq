@@ -21,13 +21,18 @@ namespace NetFabric.Hyperlinq
             internal DistinctEnumerable(TEnumerable source)
                 => this.source = source;
 
-            public readonly Enumerator GetEnumerator()
+            public Enumerator GetEnumerator()
                 => new();
-            readonly DisposableEnumerator IValueEnumerable<TSource, DistinctEnumerable<TEnumerable, TEnumerator, TSource>.DisposableEnumerator>.GetEnumerator()
+
+            DisposableEnumerator IValueEnumerable<TSource, DisposableEnumerator>.GetEnumerator()
                 => new();
-            readonly IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator()
+
+            IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator()
+                // ReSharper disable once HeapView.BoxingAllocation
                 => new DisposableEnumerator();
-            readonly IEnumerator IEnumerable.GetEnumerator()
+
+            IEnumerator IEnumerable.GetEnumerator()
+                // ReSharper disable once HeapView.BoxingAllocation
                 => new DisposableEnumerator();
 
             public struct Enumerator

@@ -108,8 +108,6 @@ namespace NetFabric.Hyperlinq
                     [MethodImpl(MethodImplOptions.AggressiveInlining)]
                     get => selector.Invoke(enumerator.Current);
                 }
-                TResult IEnumerator<TResult>.Current 
-                    => selector.Invoke(enumerator.Current);
                 object? IEnumerator.Current
                     // ReSharper disable once HeapView.PossibleBoxingAllocation
                     => selector.Invoke(enumerator.Current);
@@ -119,6 +117,7 @@ namespace NetFabric.Hyperlinq
                     => enumerator.MoveNext();
 
                 [ExcludeFromCodeCoverage]
+                [DoesNotReturn]
                 public readonly void Reset() 
                     => Throw.NotSupportedException();
 

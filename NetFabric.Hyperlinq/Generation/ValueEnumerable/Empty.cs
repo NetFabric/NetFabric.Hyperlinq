@@ -82,32 +82,32 @@ namespace NetFabric.Hyperlinq
 
             public readonly struct Enumerator
             {
-                public readonly TSource Current
+                public TSource Current
                     => default!;
 
-                public readonly bool MoveNext() 
+                public bool MoveNext() 
                     => default;
             }
 
             public readonly struct DisposableEnumerator
                 : IEnumerator<TSource>
             {
-                public readonly TSource Current
+                public TSource Current
                     => default!;
 
-                readonly TSource IEnumerator<TSource>.Current
+                TSource IEnumerator<TSource>.Current
                     => default!;
 
-                readonly object? IEnumerator.Current 
+                object? IEnumerator.Current 
                     => default;
 
-                public readonly bool MoveNext()
+                public bool MoveNext()
                     => default;
 
                 [ExcludeFromCodeCoverage]
-                public readonly void Reset() { }
+                public void Reset() { }
 
-                public readonly void Dispose() { }
+                public void Dispose() { }
             }
         }
     }

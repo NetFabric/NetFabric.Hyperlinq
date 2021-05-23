@@ -17,46 +17,61 @@ namespace NetFabric.Hyperlinq
             if (count < 0)
                 Throw.ArgumentOutOfRangeException(nameof(count));
 
-            var end = 0;
             try
             {
-                end = checked(start + count);
+                _ = checked(start + count);
             }
             catch (OverflowException)
             {
                 Throw.ArgumentOutOfRangeException(nameof(count));
             }
 
-            return new RangeEnumerable(start, end);
+            return new RangeEnumerable(start, count);
         }
 
         [GeneratorMapping("TSource", "int", true)]
         [StructLayout(LayoutKind.Auto)]
         public readonly partial struct RangeEnumerable
-            : IValueReadOnlyCollection<int, RangeEnumerable.DisposableEnumerator>
-            , ICollection<int>
+            : IValueReadOnlyList<int, RangeEnumerable.DisposableEnumerator>
+            , IList<int>
         {
             readonly int start;
-            readonly int end;
 
-            internal RangeEnumerable(int start, int end)
-                => (this.start, this.end) = (start, end); 
+            internal RangeEnumerable(int start, int count)
+                => (this.start, Count) = (start, count); 
 
-            public readonly int Count
+            public int this[int index]
             {
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
-                get => end - start;
+                get
+                {
+                    ThrowIfArgument.OutOfRange(index, Count, nameof(index));
+                    return index + start;
+                }
             }
+
+            int IList<int>.this[int index]
+            {
+                get => this[index];
+                [DoesNotReturn]
+                // ReSharper disable once ValueParameterNotUsed
+                set => Throw.NotSupportedException();
+            }
+
+            public int Count { get; }
             
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public readonly Enumerator GetEnumerator()
+            public Enumerator GetEnumerator()
                 => new(in this);
-            readonly DisposableEnumerator IValueEnumerable<int, DisposableEnumerator>.GetEnumerator()
+
+            DisposableEnumerator IValueEnumerable<int, DisposableEnumerator>.GetEnumerator()
                 => new(in this);
-            readonly IEnumerator<int> IEnumerable<int>.GetEnumerator()
+
+            IEnumerator<int> IEnumerable<int>.GetEnumerator()
                 // ReSharper disable once HeapView.BoxingAllocation
                 => new DisposableEnumerator(in this);
-            readonly IEnumerator IEnumerable.GetEnumerator()
+
+            IEnumerator IEnumerable.GetEnumerator()
                 // ReSharper disable once HeapView.BoxingAllocation
                 => new DisposableEnumerator(in this);
 
@@ -78,7 +93,15 @@ namespace NetFabric.Hyperlinq
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public bool Contains(int value)
-                => value >= start && value < end;
+                => value >= start && value < start + Count;
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public int IndexOf(int value)
+            {
+                if (value < start || value >= start + Count)
+                    return -1;
+                return value - start;
+            }
 
             [ExcludeFromCodeCoverage]
             void ICollection<int>.Add(int item)
@@ -88,6 +111,12 @@ namespace NetFabric.Hyperlinq
                 => Throw.NotSupportedException();
             [ExcludeFromCodeCoverage]
             bool ICollection<int>.Remove(int item)
+                => Throw.NotSupportedException<bool>();
+            [ExcludeFromCodeCoverage]
+            void IList<int>.Insert(int index, int item)
+                => Throw.NotSupportedException<bool>();
+            [ExcludeFromCodeCoverage]
+            void IList<int>.RemoveAt(int index)
                 => Throw.NotSupportedException<bool>();
 
             [StructLayout(LayoutKind.Auto)]
@@ -140,6 +169,7 @@ namespace NetFabric.Hyperlinq
                     => ++current <= end;
 
                 [ExcludeFromCodeCoverage]
+                [DoesNotReturn]
                 public readonly void Reset()
                     => Throw.NotSupportedException();
 
@@ -151,8 +181,8 @@ namespace NetFabric.Hyperlinq
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public RangeEnumerable Skip(int count)
             {
-                var (skipCount, takeCount) = Utils.Skip(Count, count);
-                return Range(start + skipCount, takeCount);
+                var (newOffset, newCount) = Utils.Skip(Count, count);
+                return Range(start + newOffset, newCount);
             }
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -177,7 +207,9 @@ namespace NetFabric.Hyperlinq
                 if (Count is 0)
                     return false;
 
-                if (comparer is null || ReferenceEquals(comparer, EqualityComparer<int>.Default))
+                var end = start + Count;
+                
+                if (Utils.UseDefault(comparer))
                     return value >= start && value < end;
 
                 for (var item = start; item < end; item++)

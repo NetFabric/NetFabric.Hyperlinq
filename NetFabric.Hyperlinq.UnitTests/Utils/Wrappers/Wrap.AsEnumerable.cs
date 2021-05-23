@@ -27,10 +27,10 @@ namespace NetFabric.Hyperlinq
                 => new(source);
             IEnumerator<T> IEnumerable<T>.GetEnumerator() 
                 // ReSharper disable once HeapView.BoxingAllocation
-                => new Enumerator<T>(source);
+                => GetEnumerator();
             IEnumerator IEnumerable.GetEnumerator() 
                 // ReSharper disable once HeapView.BoxingAllocation
-                => new Enumerator<T>(source);
+                => GetEnumerator();
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public EnumerableExtensions.ValueEnumerable<EnumerableWrapper<T>, Enumerator<T>, Enumerator<T>, T, GetEnumeratorFunction, GetEnumeratorFunction> AsValueEnumerable()

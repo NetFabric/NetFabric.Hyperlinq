@@ -52,16 +52,6 @@ namespace NetFabric.Hyperlinq.SourceGenerator
             }
         }
 
-        bool ConsiderExtensionMethod(IMethodSymbol symbol, CompilationContext context)
-        {
-            var attribute = symbol.GetIgnoreAttribute(context);
-            return attribute switch
-            {
-                null => symbol.IsPublic(),
-                _ => !attribute.Value
-            };
-        }
-
         /// <summary>
         /// Collects all the extension methods defined
         /// </summary>
@@ -76,15 +66,19 @@ namespace NetFabric.Hyperlinq.SourceGenerator
                 .GetAllTypes()
                 .Where(typeSymbol =>
                     typeSymbol.IsStatic
-                    && typeSymbol.IsPublic())
+                    && typeSymbol.IsPublic()
+                )
                 .SelectMany(typeSymbol =>
                     typeSymbol.GetMembers()
                         .OfType<IMethodSymbol>()
                         .Where(methodSymbol =>
-                            methodSymbol.IsExtensionMethod 
-                            && ConsiderExtensionMethod(methodSymbol, context)));
+                            methodSymbol.IsExtensionMethod
+                            //&& methodSymbol.IsPublic()
+                            && !methodSymbol.ShouldIgnore(context)
+                        )
+                );
 
-            // go through all extension methods and store the ones where the extended type is a constrained generic parameter
+            // go through all extension methods
             foreach (var extensionMethod in extensionMethods)
             {
                 var extensionType = extensionMethod.Parameters[0].Type;
@@ -106,12 +100,14 @@ namespace NetFabric.Hyperlinq.SourceGenerator
                 }
                 else
                 {
+                    // the extended type is a constrained generic parameter
                     var extendingType = generic.ConstraintTypes[0];
                     var name = extendingType.OriginalDefinition.MetadataName;
                     switch (name)
                     {
                         case "IValueEnumerable`2":
                         case "IValueReadOnlyCollection`2":
+                        case "IValueReadOnlyList`2":
                         case "IReadOnlyList`1":
                         case "IAsyncValueEnumerable`2":
                             collectedExtensionMethods.Add(name, extensionMethod.GetInfo(context, 1));

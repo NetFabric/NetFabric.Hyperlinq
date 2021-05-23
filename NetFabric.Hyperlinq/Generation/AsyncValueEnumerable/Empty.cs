@@ -27,25 +27,26 @@ namespace NetFabric.Hyperlinq
 
             public readonly struct Enumerator
             {
-                public readonly TSource Current
+                public TSource Current
                     => default!;
 
-                public readonly ValueTask<bool> MoveNextAsync() 
+                public ValueTask<bool> MoveNextAsync() 
                     => default;
             }
 
             public readonly struct DisposableEnumerator
                 : IAsyncEnumerator<TSource>
             {
-                public readonly TSource Current
-                    => default!;
-                readonly TSource IAsyncEnumerator<TSource>.Current
+                public TSource Current
                     => default!;
 
-                public readonly ValueTask<bool> MoveNextAsync()
+                TSource IAsyncEnumerator<TSource>.Current
+                    => default!;
+
+                public ValueTask<bool> MoveNextAsync()
                     => default;
 
-                public readonly ValueTask DisposeAsync() 
+                public ValueTask DisposeAsync() 
                     => default;
             }
         }

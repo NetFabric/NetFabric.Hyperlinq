@@ -1,7 +1,5 @@
 ﻿using BenchmarkDotNet.Attributes;
-using BenchmarkDotNet.Jobs;
 using System;
-using System.Runtime.CompilerServices;
 
 namespace NetFabric.Hyperlinq.Benchmarks.Benchmarks
 {

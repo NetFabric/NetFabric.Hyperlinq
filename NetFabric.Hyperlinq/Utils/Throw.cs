@@ -7,36 +7,36 @@ namespace NetFabric.Hyperlinq
     static class Throw
     {
         [DoesNotReturn]
-        public static void ArgumentArraySegmentNullException(string? paramName)
-            => throw new ArgumentException(Resource.ArraySegmentNull, paramName);
+        public static void ArgumentArraySegmentNullException(string paramName)
+            => throw new ArgumentException(paramName: paramName, message: Resource.ArraySegmentNull);
 
         [DoesNotReturn]
-        public static void ArgumentException(string? message, string? paramName)
-            => throw new ArgumentException(message, paramName);
+        public static void ArgumentException(string paramName, string? message = default)
+            => throw new ArgumentException(paramName: paramName, message: message);
 
         [DoesNotReturn]
-        public static void ArgumentNullException(string? paramName)
-            => throw new ArgumentNullException(paramName);
+        public static void ArgumentNullException(string paramName, string? message = default)
+            => throw new ArgumentNullException(paramName: paramName, message: message);
 
         [DoesNotReturn]
-        public static T ArgumentNullException<T>(string? paramName)
-            => throw new ArgumentNullException(paramName);
+        public static T ArgumentNullException<T>(string paramName, string? message = default)
+            => throw new ArgumentNullException(paramName: paramName, message: message);
 
         [DoesNotReturn]
-        public static ref readonly T ArgumentNullExceptionRef<T>(string? paramName)
-            => throw new ArgumentNullException(paramName);
+        public static ref readonly T ArgumentNullExceptionRef<T>(string paramName, string? message = default)
+            => throw new ArgumentNullException(paramName: paramName, message: message);
 
         [DoesNotReturn]
-        public static void ArgumentOutOfRangeException(string? paramName)
-            => throw new ArgumentOutOfRangeException(paramName);
+        public static void ArgumentOutOfRangeException(string paramName, string? message = default)
+            => throw new ArgumentOutOfRangeException(paramName: paramName, message: message);
 
         [DoesNotReturn]
-        public static T ArgumentOutOfRangeException<T>(string? paramName)
-            => throw new ArgumentOutOfRangeException(paramName);
+        public static T ArgumentOutOfRangeException<T>(string paramName, string? message = default)
+            => throw new ArgumentOutOfRangeException(paramName: paramName, message: message);
 
         [DoesNotReturn]
-        public static ref readonly T ArgumentOutOfRangeExceptionRef<T>(string? paramName)
-            => throw new ArgumentOutOfRangeException(paramName);
+        public static ref readonly T ArgumentOutOfRangeExceptionRef<T>(string paramName, string? message = default)
+            => throw new ArgumentOutOfRangeException(paramName: paramName, message: message);
 
         [DoesNotReturn]
         public static void EmptySequence()
@@ -63,11 +63,7 @@ namespace NetFabric.Hyperlinq
             => throw new InvalidOperationException(Resource.NotSingleSequence);
 
         [DoesNotReturn]
-        public static void InvalidOperationException()
-            => throw new InvalidOperationException();
-
-        [DoesNotReturn]
-        public static void InvalidOperationException(string? message)
+        public static void InvalidOperationException(string? message = default)
             => throw new InvalidOperationException(message);
 
         [DoesNotReturn]
@@ -83,7 +79,7 @@ namespace NetFabric.Hyperlinq
             => throw new NotSupportedException();
 
         [DoesNotReturn]
-        public static void ObjectDisposedException(string? objectName)
+        public static void ObjectDisposedException(string objectName)
             => throw new ObjectDisposedException(objectName);
     }
 }

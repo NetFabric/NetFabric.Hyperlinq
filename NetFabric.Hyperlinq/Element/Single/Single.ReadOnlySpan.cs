@@ -5,7 +5,6 @@ namespace NetFabric.Hyperlinq
     public static partial class ArrayExtensions
     {
 
-        [GeneratorIgnore(false)]
         static Option<TSource> Single<TSource>(this ReadOnlySpan<TSource> source) 
             => source switch
             {
@@ -13,6 +12,7 @@ namespace NetFabric.Hyperlinq
                 _ => Option.None,
             };
 
+        [GeneratorIgnore]
         static Option<TSource> Single<TSource, TPredicate>(this ReadOnlySpan<TSource> source, TPredicate predicate)
             where TPredicate : struct, IFunction<TSource, bool>
         {
@@ -34,7 +34,8 @@ namespace NetFabric.Hyperlinq
             return Option.None;
         }
 
-        
+
+        [GeneratorIgnore]
         static Option<TSource> SingleAt<TSource, TPredicate>(this ReadOnlySpan<TSource> source, TPredicate predicate)
             where TPredicate : struct, IFunction<TSource, int, bool>
         {
@@ -56,7 +57,8 @@ namespace NetFabric.Hyperlinq
             return Option.None;
         }
 
-        
+
+        [GeneratorIgnore]
         static Option<TResult> Single<TSource, TResult, TSelector>(this ReadOnlySpan<TSource> source, TSelector selector)
             where TSelector : struct, IFunction<TSource, TResult>
             => source switch
@@ -65,7 +67,8 @@ namespace NetFabric.Hyperlinq
                 _ => Option.None,
             };
 
-        
+
+        [GeneratorIgnore]
         static Option<TResult> SingleAt<TSource, TResult, TSelector>(this ReadOnlySpan<TSource> source, TSelector selector)
             where TSelector : struct, IFunction<TSource, int, TResult>
             => source switch
@@ -74,7 +77,8 @@ namespace NetFabric.Hyperlinq
                 _ => Option.None,
             };
 
-        
+
+        [GeneratorIgnore]
         static Option<TResult> Single<TSource, TResult, TPredicate, TSelector>(this ReadOnlySpan<TSource> source, TPredicate predicate, TSelector selector)
             where TPredicate : struct, IFunction<TSource, bool>
             where TSelector : struct, IFunction<TSource, TResult>

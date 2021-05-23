@@ -24,20 +24,20 @@ namespace NetFabric.Hyperlinq
             internal SpanValueEnumerable(ReadOnlySpan<TSource> source)
                 => this.source = source;
 
-            public readonly int Count
+            public int Count
             {
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
                 get => source.Length;
             }
 
-            public readonly TSource this[int index]
+            public TSource this[int index]
             {
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
                 get => source[index];
             }
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public readonly SpanEnumerator<TSource> GetEnumerator()
+            public SpanEnumerator<TSource> GetEnumerator()
                 => new(source);
 
             #region Aggregation
@@ -87,8 +87,8 @@ namespace NetFabric.Hyperlinq
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public SpanValueEnumerable<TSource> Skip(int count)
             {
-                var (skipCount, takeCount) = Utils.Skip(source.Length, count);
-                return new SpanValueEnumerable<TSource>(source.Slice(skipCount, takeCount));
+                var (newOffset, newCount) = Utils.Skip(source.Length, count);
+                return new SpanValueEnumerable<TSource>(source.Slice(newOffset, newCount));
             }
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]

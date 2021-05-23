@@ -9,6 +9,7 @@ namespace NetFabric.Hyperlinq
     public static partial class ArrayExtensions
     {
 
+        [GeneratorIgnore]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static SpanWhereSelectEnumerable<TSource, TResult, TPredicate, TSelector> WhereSelect<TSource, TResult, TPredicate, TSelector>(
             this ReadOnlySpan<TSource> source, 
@@ -35,7 +36,7 @@ namespace NetFabric.Hyperlinq
                 this.selector = selector;
             }
             
-            public readonly WhereSelectEnumerator<TSource, TResult, TPredicate, TSelector> GetEnumerator() 
+            public WhereSelectEnumerator<TSource, TResult, TPredicate, TSelector> GetEnumerator() 
                 => new(source, predicate, selector);
 
             #region Aggregation

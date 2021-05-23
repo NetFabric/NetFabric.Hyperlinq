@@ -14,6 +14,7 @@ namespace NetFabric.Hyperlinq
             => source.ToArray<TEnumerable, TEnumerator, TSource>().AsList();
 
 
+        [GeneratorIgnore]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static List<TSource> ToList<TEnumerable, TEnumerator, TSource, TPredicate>(this TEnumerable source, TPredicate predicate)
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>
@@ -22,6 +23,7 @@ namespace NetFabric.Hyperlinq
             => source.ToArray<TEnumerable, TEnumerator, TSource, TPredicate>(predicate).AsList();
 
 
+        [GeneratorIgnore]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static List<TSource> ToListAt<TEnumerable, TEnumerator, TSource, TPredicate>(this TEnumerable source, TPredicate predicate)
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>
@@ -30,6 +32,7 @@ namespace NetFabric.Hyperlinq
             => source.ToArrayAt<TEnumerable, TEnumerator, TSource, TPredicate>(predicate).AsList();
 
 
+        [GeneratorIgnore]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static List<TResult> ToList<TEnumerable, TEnumerator, TSource, TResult, TSelector>(this TEnumerable source, TSelector selector)
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>
@@ -38,6 +41,7 @@ namespace NetFabric.Hyperlinq
             => source.ToArray<TEnumerable, TEnumerator, TSource, TResult, TSelector>(selector).AsList();
 
 
+        [GeneratorIgnore]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static List<TResult> ToListAt<TEnumerable, TEnumerator, TSource, TResult, TSelector>(this TEnumerable source, TSelector selector)
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>
@@ -45,6 +49,7 @@ namespace NetFabric.Hyperlinq
             where TSelector : struct, IFunction<TSource, int, TResult>
             => source.ToArrayAt<TEnumerable, TEnumerator, TSource, TResult, TSelector>(selector).AsList();
 
+        [GeneratorIgnore]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static List<TResult> ToList<TEnumerable, TEnumerator, TSource, TResult, TPredicate, TSelector>(this TEnumerable source, TPredicate predicate, TSelector selector)
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>

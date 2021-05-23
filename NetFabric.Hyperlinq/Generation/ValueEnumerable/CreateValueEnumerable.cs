@@ -24,12 +24,14 @@ namespace NetFabric.Hyperlinq
                 => this.getEnumerator = getEnumerator;
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public readonly TEnumerator GetEnumerator() 
+            public TEnumerator GetEnumerator() 
                 => getEnumerator();
-            readonly IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() 
+
+            IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() 
                 // ReSharper disable once HeapView.BoxingAllocation
                 => getEnumerator();
-            readonly IEnumerator IEnumerable.GetEnumerator() 
+
+            IEnumerator IEnumerable.GetEnumerator() 
                 // ReSharper disable once HeapView.BoxingAllocation
                 => getEnumerator();
         }

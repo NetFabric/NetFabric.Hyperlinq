@@ -31,12 +31,14 @@ namespace NetFabric.Hyperlinq
                 => (this.source, this.comparer) = (source, comparer);
             
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public readonly Enumerator GetEnumerator() 
+            public Enumerator GetEnumerator() 
                 => new(in this);
-            readonly IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() 
+
+            IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() 
                 // ReSharper disable once HeapView.BoxingAllocation
                 => new Enumerator(in this);
-            readonly IEnumerator IEnumerable.GetEnumerator() 
+
+            IEnumerator IEnumerable.GetEnumerator() 
                 // ReSharper disable once HeapView.BoxingAllocation
                 => new Enumerator(in this);
 
@@ -79,6 +81,7 @@ namespace NetFabric.Hyperlinq
                 }
 
                 [ExcludeFromCodeCoverage]
+                [DoesNotReturn]
                 public readonly void Reset() 
                     => Throw.NotSupportedException();
 
@@ -90,7 +93,7 @@ namespace NetFabric.Hyperlinq
             }
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            readonly Set<TSource> GetSet()
+            Set<TSource> GetSet()
             { 
                 using var set = new Set<TSource>(comparer);
                 using var enumerator = source.GetEnumerator();
@@ -100,15 +103,15 @@ namespace NetFabric.Hyperlinq
             }
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public readonly int Count()
+            public int Count()
                 => GetSet().Count;
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public readonly bool Any()
+            public bool Any()
                 => source.Any<TEnumerable, TEnumerator, TSource>();
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public readonly TSource[] ToArray()
+            public TSource[] ToArray()
                 => GetSet().ToArray();
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -116,7 +119,7 @@ namespace NetFabric.Hyperlinq
                 => GetSet().ToArray(pool, clearOnDispose);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public readonly List<TSource> ToList()
+            public List<TSource> ToList()
                 => GetSet().ToList();
         }
         

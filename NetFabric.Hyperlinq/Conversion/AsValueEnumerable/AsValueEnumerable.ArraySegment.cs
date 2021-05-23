@@ -28,24 +28,22 @@ namespace NetFabric.Hyperlinq
             internal ArraySegmentValueEnumerable(ArraySegment<TSource> source)
                 => this.source = source;
 
-            public readonly int Count
+            public int Count
             {
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
                 get => source.Count;
             }
 
-            public readonly TSource this[int index]
+            public TSource this[int index]
             {
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
                 get
                 {
-                    if ((uint)index >= (uint)Count) Throw.ArgumentOutOfRangeException<TSource>(nameof(index));
-
+                    ThrowIfArgument.OutOfRange(index, Count, nameof(index));
                     return source.Array![source.Offset + index];
                 }
             }
-            TSource IReadOnlyList<TSource>.this[int index]
-                => this[index];
+
             TSource IList<TSource>.this[int index]
             {
                 get => this[index];
@@ -56,14 +54,17 @@ namespace NetFabric.Hyperlinq
             }
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public readonly SpanEnumerator<TSource> GetEnumerator()
+            public SpanEnumerator<TSource> GetEnumerator()
                 => new(source);
-            readonly DisposableEnumerator IValueEnumerable<TSource, DisposableEnumerator>.GetEnumerator()
+
+            DisposableEnumerator IValueEnumerable<TSource, DisposableEnumerator>.GetEnumerator()
                 => new(source);
-            readonly IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator()
+
+            IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator()
                 // ReSharper disable once HeapView.BoxingAllocation
                 => new DisposableEnumerator(source);
-            readonly IEnumerator IEnumerable.GetEnumerator()
+
+            IEnumerator IEnumerable.GetEnumerator()
                 // ReSharper disable once HeapView.BoxingAllocation
                 => new DisposableEnumerator(source);
 
@@ -227,8 +228,8 @@ namespace NetFabric.Hyperlinq
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public ArraySegmentValueEnumerable<TSource> Skip(int count)
             {
-                var (skipCount, takeCount) = Utils.Skip(source.Count, count);
-                return new ArraySegmentValueEnumerable<TSource>(new ArraySegment<TSource>(source.Array!, source.Offset + skipCount, takeCount));
+                var (newOffset, newCount) = Utils.Skip(source.Count, count);
+                return new ArraySegmentValueEnumerable<TSource>(new ArraySegment<TSource>(source.Array!, source.Offset + newOffset, newCount));
             }
             
             [MethodImpl(MethodImplOptions.AggressiveInlining)]

@@ -98,8 +98,17 @@ namespace NetFabric.Hyperlinq
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public void CopyTo(TSource[] array, int arrayIndex)
-                => CopyTo(array.AsSpan().Slice(arrayIndex));
-
+            {
+                switch (source)
+                {
+                    case ICollection collection:
+                        collection.CopyTo(array, arrayIndex);
+                        break;
+                    default:
+                        CopyTo(array.AsSpan().Slice(arrayIndex));
+                        break;
+                }
+            }
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public bool Contains(TSource item)
@@ -117,10 +126,10 @@ namespace NetFabric.Hyperlinq
 
             #region Conversion
 
-            ValueEnumerable<TEnumerable, TEnumerator, TEnumerator2, TSource, TGetEnumerator, TGetEnumerator2> AsValueEnumerable()
+            public ValueEnumerable<TEnumerable, TEnumerator, TEnumerator2, TSource, TGetEnumerator, TGetEnumerator2> AsValueEnumerable()
                 => this;
 
-            TEnumerable AsEnumerable()
+            public TEnumerable AsEnumerable()
                 => source;
 
             #endregion

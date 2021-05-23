@@ -10,6 +10,6 @@ namespace NetFabric.Hyperlinq
         public static SkipTakeEnumerable<TEnumerable, TEnumerator, TSource> Skip<TEnumerable, TEnumerator, TSource>(this TEnumerable source, int count)
             where TEnumerable : IValueReadOnlyCollection<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
-            => source.SkipTake<TEnumerable, TEnumerator, TSource>(count, source.Count);
+            => new(in source, Utils.Skip(source.Count, count));
     }
 }

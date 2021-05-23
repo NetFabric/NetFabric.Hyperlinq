@@ -4,6 +4,7 @@ namespace NetFabric.Hyperlinq
 {
     public static partial class EnumerableExtensions
     {
+        [GeneratorIgnore]
         internal static bool Contains<TEnumerable, TSource>(this TEnumerable source, TSource value, IEqualityComparer<TSource>? comparer = default)
             where TEnumerable : IEnumerable<TSource>
         {
@@ -42,6 +43,7 @@ namespace NetFabric.Hyperlinq
             }
         }
 
+        [GeneratorIgnore]
         internal static bool Contains<TEnumerable, TEnumerator, TSource, TEnumeratorGenerator>(this TEnumerable source, TEnumeratorGenerator getEnumerator, TSource value, IEqualityComparer<TSource>? comparer = default)
             where TEnumerable : IEnumerable<TSource>
             where TEnumerator : struct, IEnumerator<TSource>

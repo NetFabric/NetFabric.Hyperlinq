@@ -18,17 +18,21 @@ namespace NetFabric.Hyperlinq
             public ValueWrapper(Dictionary<TKey, TValue> source) 
                 => this.source = source;
 
-            public readonly int Count
+            public int Count
                 => source.Count;
 
             
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public readonly Dictionary<TKey, TValue>.Enumerator GetEnumerator() 
+            public Dictionary<TKey, TValue>.Enumerator GetEnumerator() 
                 => source.GetEnumerator();
-            readonly IEnumerator<KeyValuePair<TKey, TValue>> IEnumerable<KeyValuePair<TKey, TValue>>.GetEnumerator() 
-                => source.GetEnumerator();
-            readonly IEnumerator IEnumerable.GetEnumerator() 
-                => source.GetEnumerator();
+
+            IEnumerator<KeyValuePair<TKey, TValue>> IEnumerable<KeyValuePair<TKey, TValue>>.GetEnumerator() 
+                // ReSharper disable once HeapView.BoxingAllocation
+                => GetEnumerator();
+
+            IEnumerator IEnumerable.GetEnumerator() 
+                // ReSharper disable once HeapView.BoxingAllocation
+                => GetEnumerator();
 
             bool ICollection<KeyValuePair<TKey, TValue>>.IsReadOnly  
                 => true;

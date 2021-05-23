@@ -40,12 +40,14 @@ namespace NetFabric.Hyperlinq
                 => (this.source, this.predicate) = (source, predicate);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public readonly Enumerator GetEnumerator() 
+            public Enumerator GetEnumerator() 
                 => new(in this);
-            readonly IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() 
+
+            IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() 
                 // ReSharper disable once HeapView.BoxingAllocation
                 => new Enumerator(in this);
-            readonly IEnumerator IEnumerable.GetEnumerator() 
+
+            IEnumerator IEnumerable.GetEnumerator() 
                 // ReSharper disable once HeapView.BoxingAllocation
                 => new Enumerator(in this);
 
@@ -86,10 +88,11 @@ namespace NetFabric.Hyperlinq
                 }
 
                 [ExcludeFromCodeCoverage]
+                [DoesNotReturn]
                 public readonly void Reset() 
                     => Throw.NotSupportedException();
 
-                public void Dispose() 
+                public void Dispose()
                     => enumerator.Dispose();
             }
 
@@ -102,10 +105,10 @@ namespace NetFabric.Hyperlinq
             #endregion
             #region Conversion
 
-            WhereEnumerable<TEnumerable, TEnumerator, TSource, TPredicate> AsValueEnumerable()
+            public WhereEnumerable<TEnumerable, TEnumerator, TSource, TPredicate> AsValueEnumerable()
                 => this;
 
-            WhereEnumerable<TEnumerable, TEnumerator, TSource, TPredicate> AsEnumerable()
+            public WhereEnumerable<TEnumerable, TEnumerator, TSource, TPredicate> AsEnumerable()
                 => this;
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]

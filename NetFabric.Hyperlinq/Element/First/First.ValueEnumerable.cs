@@ -17,7 +17,8 @@ namespace NetFabric.Hyperlinq
             };
         }
 
-        
+
+        [GeneratorIgnore]
         internal static Option<TSource> First<TEnumerable, TEnumerator, TSource, TPredicate>(this TEnumerable source, TPredicate predicate) 
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
@@ -34,7 +35,8 @@ namespace NetFabric.Hyperlinq
             return Option.None;
         }
 
-        
+
+        [GeneratorIgnore]
         internal static Option<TSource> FirstAt<TEnumerable, TEnumerator, TSource, TPredicate>(this TEnumerable source, TPredicate predicate) 
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
@@ -53,7 +55,8 @@ namespace NetFabric.Hyperlinq
             return Option.None;
         }
 
-        
+
+        [GeneratorIgnore]
         internal static Option<TResult> First<TEnumerable, TEnumerator, TSource, TResult, TSelector>(this TEnumerable source, TSelector selector) 
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
@@ -67,7 +70,8 @@ namespace NetFabric.Hyperlinq
             };
         }
 
-        
+
+        [GeneratorIgnore]
         internal static Option<TResult> FirstAt<TEnumerable, TEnumerator, TSource, TResult, TSelector>(this TEnumerable source, TSelector selector) 
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
@@ -81,7 +85,8 @@ namespace NetFabric.Hyperlinq
             };
         }
 
-        
+
+        [GeneratorIgnore]
         internal static Option<TResult> First<TEnumerable, TEnumerator, TSource, TResult, TPredicate, TSelector>(this TEnumerable source, TPredicate predicate, TSelector selector) 
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>

@@ -7,14 +7,8 @@ using System.Runtime.InteropServices;
 
 namespace NetFabric.Hyperlinq
 {
-    public static partial class ValueReadOnlyListExtensions
+    public static partial class ReadOnlyListExtensions
     {
-        
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        static SkipTakeEnumerable<TList, TSource> SkipTake<TList, TSource>(this TList source, int skipCount, int takeCount)
-            where TList : struct, IReadOnlyList<TSource>
-            => new(in source, skipCount, takeCount);
-
         [StructLayout(LayoutKind.Auto)]
         public readonly partial struct SkipTakeEnumerable<TList, TSource>
             : IValueReadOnlyList<TSource, SkipTakeEnumerable<TList, TSource>.DisposableEnumerator>
@@ -24,11 +18,11 @@ namespace NetFabric.Hyperlinq
             readonly TList source;
             readonly int offset;
 
-            internal SkipTakeEnumerable(in TList source, int skipCount, int takeCount)
-            {
-                this.source = source;
-                (this.offset, Count) = Utils.SkipTake(source.Count, skipCount, takeCount);
-            }
+            internal SkipTakeEnumerable(in TList source, int offset, int count)
+                => (this.source, this.offset, Count) = (source, offset, count);
+
+            internal SkipTakeEnumerable(in TList source, (int Offset, int Count) slice)
+                => (this.source, offset, Count) = (source, slice.Offset, slice.Count);
 
             public int Count { get; }
 
@@ -37,14 +31,10 @@ namespace NetFabric.Hyperlinq
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
                 get
                 {
-                    if ((uint)index >= (uint)Count) Throw.ArgumentOutOfRangeException(nameof(index));
-                    
+                    ThrowIfArgument.OutOfRange(index, Count, nameof(index));
                     return source[index + offset];
                 }
             }
-
-            TSource IReadOnlyList<TSource>.this[int index]
-                => this[index];
 
             TSource IList<TSource>.this[int index]
             {
@@ -63,9 +53,11 @@ namespace NetFabric.Hyperlinq
                 => new(in this);
 
             IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() 
+                // ReSharper disable once HeapView.BoxingAllocation
                 => new DisposableEnumerator(in this);
 
             IEnumerator IEnumerable.GetEnumerator() 
+                // ReSharper disable once HeapView.BoxingAllocation
                 => new DisposableEnumerator(in this);
 
             bool ICollection<TSource>.IsReadOnly  
@@ -97,7 +89,8 @@ namespace NetFabric.Hyperlinq
                 if (Count is 0)
                     return;
 
-                if (offset is 0 && Count == source.Count && source is ICollection<TSource> collection)
+                // ReSharper disable once HeapView.PossibleBoxingAllocation
+                if (offset is 0 && Count == source.Count && source is ICollection collection)
                     collection.CopyTo(array, arrayIndex);
                 else
                     CopyTo(array.AsSpan().Slice(arrayIndex));
@@ -107,7 +100,16 @@ namespace NetFabric.Hyperlinq
                 => Contains(item, EqualityComparer<TSource>.Default);
             
             public int IndexOf(TSource item)
-                => ValueReadOnlyListExtensions.IndexOf(source, item, offset, Count);
+            {
+                if (source.Count is 0)
+                    return -1;
+
+                // ReSharper disable once HeapView.PossibleBoxingAllocation
+                if (offset is 0 && Count == source.Count && source is IList<TSource> list)
+                    return list.IndexOf(item);
+
+                return ValueReadOnlyCollectionExtensions.IndexOf<SkipTakeEnumerable<TList, TSource>, DisposableEnumerator, TSource>(this, item);
+            }
 
             [ExcludeFromCodeCoverage]
             void ICollection<TSource>.Add(TSource item) 
@@ -180,12 +182,60 @@ namespace NetFabric.Hyperlinq
                     => ++index <= end;
                 
                 [ExcludeFromCodeCoverage]
+                [DoesNotReturn]
                 public readonly void Reset() 
                     => Throw.NotSupportedException();
 
-                public void Dispose()
-                { }           
+                public readonly void Dispose()
+                { }
             }
+
+            #region Partitioning
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public SkipTakeEnumerable<TList, TSource> Skip(int count)
+            {
+                var (newOffset, newCount) = Utils.Skip(Count, count);
+                return new SkipTakeEnumerable<TList, TSource>(source, offset + newOffset, newCount);
+            }
+            
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public SkipTakeEnumerable<TList, TSource> Take(int count)
+                => new(source, offset, Utils.Take(Count, count));
+            
+            #endregion
+
+            #region Conversion
+
+            public SkipTakeEnumerable<TList, TSource> AsValueEnumerable()
+                => this;
+
+            public SkipTakeEnumerable<TList, TSource> AsEnumerable()
+                => this;
+
+            #endregion
+            
+            #region Projection
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public ValueReadOnlyListExtensions.SelectEnumerable<SkipTakeEnumerable<TList, TSource>, DisposableEnumerator, TSource, TResult, FunctionWrapper<TSource, TResult>> Select<TResult>(Func<TSource, TResult> selector)
+                => ValueReadOnlyListExtensions.Select<SkipTakeEnumerable<TList, TSource>, DisposableEnumerator, TSource, TResult>(this, selector);
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public ValueReadOnlyListExtensions.SelectEnumerable<SkipTakeEnumerable<TList, TSource>, DisposableEnumerator, TSource, TResult, TSelector> Select<TResult, TSelector>(TSelector selector = default)
+                where TSelector : struct, IFunction<TSource, TResult>
+                => ValueReadOnlyListExtensions.Select<SkipTakeEnumerable<TList, TSource>, DisposableEnumerator, TSource, TResult, TSelector>(this, selector);
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public ValueReadOnlyListExtensions.SelectAtEnumerable<SkipTakeEnumerable<TList, TSource>, DisposableEnumerator, TSource, TResult, FunctionWrapper<TSource, int, TResult>> Select<TResult>(Func<TSource, int, TResult> selector)
+                => ValueReadOnlyListExtensions.Select<SkipTakeEnumerable<TList, TSource>, DisposableEnumerator, TSource, TResult>(this, selector);
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public ValueReadOnlyListExtensions.SelectAtEnumerable<SkipTakeEnumerable<TList, TSource>, DisposableEnumerator, TSource, TResult, TSelector> SelectAt<TResult, TSelector>(TSelector selector = default)
+                where TSelector : struct, IFunction<TSource, int, TResult>
+                => ValueReadOnlyListExtensions.SelectAt<SkipTakeEnumerable<TList, TSource>, DisposableEnumerator, TSource, TResult, TSelector>(this, selector);
+
+            #endregion
 
             public bool Contains(TSource value, IEqualityComparer<TSource>? comparer)
             {
@@ -226,10 +276,6 @@ namespace NetFabric.Hyperlinq
                     return false;
                 }
             }
-
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public SkipTakeEnumerable<TList, TSource> Take(int count)
-                => source.SkipTake<TList, TSource>(offset, Math.Min(Count, count));
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

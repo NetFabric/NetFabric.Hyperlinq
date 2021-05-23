@@ -58,9 +58,18 @@ namespace NetFabric.Hyperlinq
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public void CopyTo(TSource[] array, int arrayIndex)
-                => CopyTo(array.AsSpan().Slice(arrayIndex));
-
-
+            {
+                switch (source)
+                {
+                    case ICollection collection:
+                        collection.CopyTo(array, arrayIndex);
+                        break;
+                    default:
+                        CopyTo(array.AsSpan().Slice(arrayIndex));
+                        break;
+                }
+            }
+            
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public bool Contains(TSource item)
                 => Count is not 0 && source.Contains(item);
@@ -77,10 +86,10 @@ namespace NetFabric.Hyperlinq
             
             #region Conversion
 
-            ValueEnumerable<TSource> AsValueEnumerable()
+            public ValueEnumerable<TSource> AsValueEnumerable()
                 => this;
 
-            IReadOnlyCollection<TSource> AsEnumerable()
+            public IReadOnlyCollection<TSource> AsEnumerable()
                 => source;
 
             #endregion
@@ -99,42 +108,42 @@ namespace NetFabric.Hyperlinq
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int Sum(this ValueEnumerable<int> source)
-            => source.Sum<ValueEnumerable<int>, ValueEnumerator<int>, int, int>();
+            => ValueReadOnlyCollectionExtensions.Sum<ValueEnumerable<int>, ValueEnumerator<int>, int, int>(source);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int Sum(this ValueEnumerable<int?> source)
-            => source.Sum<ValueEnumerable<int?>, ValueEnumerator<int?>, int?, int>();
+            => ValueReadOnlyCollectionExtensions.Sum<ValueEnumerable<int?>, ValueEnumerator<int?>, int?, int>(source);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static long Sum(this ValueEnumerable<long> source)
-            => source.Sum<ValueEnumerable<long>, ValueEnumerator<long>, long, long>();
+            => ValueReadOnlyCollectionExtensions.Sum<ValueEnumerable<long>, ValueEnumerator<long>, long, long>(source);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static long Sum(this ValueEnumerable<long?> source)
-            => source.Sum<ValueEnumerable<long?>, ValueEnumerator<long?>, long?, long>();
+            => ValueReadOnlyCollectionExtensions.Sum<ValueEnumerable<long?>, ValueEnumerator<long?>, long?, long>(source);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float Sum(this ValueEnumerable<float> source)
-            => source.Sum<ValueEnumerable<float>, ValueEnumerator<float>, float, float>();
+            => ValueReadOnlyCollectionExtensions.Sum<ValueEnumerable<float>, ValueEnumerator<float>, float, float>(source);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float Sum(this ValueEnumerable<float?> source)
-            => source.Sum<ValueEnumerable<float?>, ValueEnumerator<float?>, float?, float>();
+            => ValueReadOnlyCollectionExtensions.Sum<ValueEnumerable<float?>, ValueEnumerator<float?>, float?, float>(source);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static double Sum(this ValueEnumerable<double> source)
-            => source.Sum<ValueEnumerable<double>, ValueEnumerator<double>, double, double>();
+            => ValueReadOnlyCollectionExtensions.Sum<ValueEnumerable<double>, ValueEnumerator<double>, double, double>(source);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static double Sum(this ValueEnumerable<double?> source)
-            => source.Sum<ValueEnumerable<double?>, ValueEnumerator<double?>, double?, double>();
+            => ValueReadOnlyCollectionExtensions.Sum<ValueEnumerable<double?>, ValueEnumerator<double?>, double?, double>(source);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static decimal Sum(this ValueEnumerable<decimal> source)
-            => source.Sum<ValueEnumerable<decimal>, ValueEnumerator<decimal>, decimal, decimal>();
+            => ValueReadOnlyCollectionExtensions.Sum<ValueEnumerable<decimal>, ValueEnumerator<decimal>, decimal, decimal>(source);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static decimal Sum(this ValueEnumerable<decimal?> source)
-            => source.Sum<ValueEnumerable<decimal?>, ValueEnumerator<decimal?>, decimal?, decimal>();
+            => ValueReadOnlyCollectionExtensions.Sum<ValueEnumerable<decimal?>, ValueEnumerator<decimal?>, decimal?, decimal>(source);
     }
 }

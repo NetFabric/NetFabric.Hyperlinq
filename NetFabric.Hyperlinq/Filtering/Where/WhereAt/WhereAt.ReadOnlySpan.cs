@@ -32,7 +32,7 @@ namespace NetFabric.Hyperlinq
                 this.predicate = predicate;
             }
 
-            public readonly WhereAtEnumerator<TSource, TPredicate> GetEnumerator() 
+            public WhereAtEnumerator<TSource, TPredicate> GetEnumerator() 
                 => new(source, predicate);
 
             #region Aggregation

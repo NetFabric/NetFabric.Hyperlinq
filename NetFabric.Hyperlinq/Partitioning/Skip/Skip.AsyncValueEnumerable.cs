@@ -24,18 +24,15 @@ namespace NetFabric.Hyperlinq
             where TEnumerator : struct, IAsyncEnumerator<TSource>
         {
             readonly TEnumerable source;
-            readonly int count;
+            readonly int offset;
 
-            internal SkipEnumerable(in TEnumerable source, int count)
-            {
-                this.source = source;
-                this.count = count;
-            }
+            internal SkipEnumerable(in TEnumerable source, int offset)
+                => (this.source, this.offset) = (source, offset);
 
-
-            public readonly Enumerator GetAsyncEnumerator(CancellationToken cancellationToken = default)
+            public Enumerator GetAsyncEnumerator(CancellationToken cancellationToken = default)
                 => new(in this, cancellationToken);
-            readonly IAsyncEnumerator<TSource> IAsyncEnumerable<TSource>.GetAsyncEnumerator(CancellationToken cancellationToken)
+
+            IAsyncEnumerator<TSource> IAsyncEnumerable<TSource>.GetAsyncEnumerator(CancellationToken cancellationToken)
                 => new Enumerator(in this, cancellationToken);
 
             [StructLayout(LayoutKind.Auto)]
@@ -56,7 +53,7 @@ namespace NetFabric.Hyperlinq
                 internal Enumerator(in SkipEnumerable<TEnumerable, TEnumerator, TSource> enumerable, CancellationToken cancellationToken)
                 {
                     enumerator = enumerable.source.GetAsyncEnumerator(cancellationToken);
-                    counter = enumerable.count;
+                    counter = enumerable.offset;
 
                     state = default;
                     builder = default;
@@ -170,11 +167,11 @@ namespace NetFabric.Hyperlinq
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public SkipEnumerable<TEnumerable, TEnumerator, TSource> Skip(int count)
-                => source.Skip<TEnumerable, TEnumerator, TSource>(this.count + count);
+                => new(source, offset + count);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public SkipTakeEnumerable<TEnumerable, TEnumerator, TSource> Take(int count)
-                => source.SkipTake<TEnumerable, TEnumerator, TSource>(this.count, count);
+                => new(source, offset, count);
         }
     }
 }

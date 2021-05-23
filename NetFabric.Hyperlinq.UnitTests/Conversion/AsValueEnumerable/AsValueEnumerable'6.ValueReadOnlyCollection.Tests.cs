@@ -1,6 +1,5 @@
 using System.Linq;
 using NetFabric.Assertive;
-using System.Collections.Generic;
 using Xunit;
 
 namespace NetFabric.Hyperlinq.UnitTests.Conversion.AsValueEnumerable

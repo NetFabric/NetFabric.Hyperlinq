@@ -9,6 +9,7 @@ namespace NetFabric.Hyperlinq
         static int SumRange(int start, int count)
             => count * (start + start + count) / 2;
         
+        [GeneratorIgnore]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static unsafe TResult SumRange<TResult, TVectorSelector, TSelector>(int start, int count, TVectorSelector vectorSelector, TSelector selector)
             where TVectorSelector : struct, IFunction<Vector<int>, Vector<TResult>>

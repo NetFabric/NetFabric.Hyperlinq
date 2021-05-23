@@ -26,18 +26,16 @@ namespace NetFabric.Hyperlinq
             readonly int count;
 
             internal TakeEnumerable(in TEnumerable source, int count)
-            {
-                this.source = source;
-                this.count = count;
-            }
-
+                => (this.source, this.count) = (source, count);
             
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public readonly Enumerator GetEnumerator() 
+            public Enumerator GetEnumerator() 
                 => new(in this);
-            readonly IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() 
+
+            IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() 
                 => new Enumerator(in this);
-            readonly IEnumerator IEnumerable.GetEnumerator() 
+
+            IEnumerator IEnumerable.GetEnumerator() 
                 => new Enumerator(in this);
 
             [StructLayout(LayoutKind.Auto)]
@@ -82,6 +80,7 @@ namespace NetFabric.Hyperlinq
                 }
 
                 [ExcludeFromCodeCoverage]
+                [DoesNotReturn]
                 public readonly void Reset() 
                     => Throw.NotSupportedException();
 
@@ -91,7 +90,7 @@ namespace NetFabric.Hyperlinq
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public TakeEnumerable<TEnumerable, TEnumerator, TSource> Take(int count)
-                => source.Take<TEnumerable, TEnumerator, TSource>(Math.Min(this.count, count));
+                => new(source, Utils.Take(this.count, count));
         }
     }
 }

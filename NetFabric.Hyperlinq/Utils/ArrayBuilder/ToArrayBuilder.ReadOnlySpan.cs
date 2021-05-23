@@ -6,6 +6,7 @@ namespace NetFabric.Hyperlinq
     public static partial class ArrayExtensions
     {
 
+        [GeneratorIgnore]
         static LargeArrayBuilder<TSource> ToArrayBuilder<TSource, TPredicate>(ReadOnlySpan<TSource> source, ArrayPool<TSource> arrayPool, bool clearOnDispose, TPredicate predicate)
             where TPredicate: struct, IFunction<TSource, bool>
         {
@@ -18,6 +19,7 @@ namespace NetFabric.Hyperlinq
             return builder;
         }
 
+        [GeneratorIgnore]
         static LargeArrayBuilder<TSource> ToArrayBuilderAt<TSource, TPredicate>(ReadOnlySpan<TSource> source, ArrayPool<TSource> arrayPool, bool clearOnDispose, TPredicate predicate)
             where TPredicate: struct, IFunction<TSource, int, bool>
         {
@@ -31,6 +33,7 @@ namespace NetFabric.Hyperlinq
             return builder;
         }
 
+        [GeneratorIgnore]
         static LargeArrayBuilder<TResult> ToArrayBuilder<TSource, TResult, TPredicate, TSelector>(ReadOnlySpan<TSource> source, ArrayPool<TResult> arrayPool, bool clearOnDispose, TPredicate predicate, TSelector selector)
             where TPredicate: struct, IFunction<TSource, bool>
             where TSelector: struct, IFunction<TSource, TResult>

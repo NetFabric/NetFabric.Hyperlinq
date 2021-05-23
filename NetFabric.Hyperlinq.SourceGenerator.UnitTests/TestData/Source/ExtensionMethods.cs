@@ -7,7 +7,6 @@ namespace NetFabric.Hyperlinq
     {
         public static void NotConstrainedExtensionMethod(this ArraySegment<int> _) { }
 
-        [GeneratorIgnore(false)]
         static void NotIgnoredExtensionMethod<TEnumerable, TEnumerator, TSource>(this TEnumerable _)
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>

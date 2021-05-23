@@ -33,9 +33,10 @@ namespace NetFabric.Hyperlinq
                 => (this.source, this.comparer) = (source, comparer);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public readonly Enumerator GetAsyncEnumerator(CancellationToken cancellationToken = default)
+            public Enumerator GetAsyncEnumerator(CancellationToken cancellationToken = default)
                 => new(in this, cancellationToken);
-            readonly IAsyncEnumerator<TSource> IAsyncEnumerable<TSource>.GetAsyncEnumerator(CancellationToken cancellationToken)
+
+            IAsyncEnumerator<TSource> IAsyncEnumerable<TSource>.GetAsyncEnumerator(CancellationToken cancellationToken)
                 // ReSharper disable once HeapView.BoxingAllocation
                 => new Enumerator(in this, cancellationToken);
 
@@ -171,7 +172,7 @@ namespace NetFabric.Hyperlinq
                 { }
             }
 
-            readonly async ValueTask<Set<TSource>> FillSetAsync(CancellationToken cancellationToken)
+            async ValueTask<Set<TSource>> FillSetAsync(CancellationToken cancellationToken)
             {
                 var set = new Set<TSource>(comparer);
                 var enumerator = source.GetAsyncEnumerator(cancellationToken);
@@ -187,25 +188,45 @@ namespace NetFabric.Hyperlinq
                 return set;
             }
 
+            #region Aggregation
+
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public readonly async ValueTask<int> CountAsync(CancellationToken cancellationToken = default)
+            public async ValueTask<int> CountAsync(CancellationToken cancellationToken = default)
                 => (await FillSetAsync(cancellationToken).ConfigureAwait(false)).Count;
+            
+            #endregion
+            
+            #region Quantifier
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public readonly ValueTask<bool> AnyAsync(CancellationToken cancellationToken = default)
+            public ValueTask<bool> AnyAsync(CancellationToken cancellationToken = default)
                 => source.AnyAsync<TEnumerable, TEnumerator, TSource>(cancellationToken);
+            
+            #endregion
+            
+            #region Conversion
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public readonly async ValueTask<TSource[]> ToArrayAsync(CancellationToken cancellationToken = default)
+            public DistinctEnumerable<TEnumerable, TEnumerator, TSource> AsValueEnumerable()
+                => this;
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public DistinctEnumerable<TEnumerable, TEnumerator, TSource> AsEnumerable()
+                => this;
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public async ValueTask<TSource[]> ToArrayAsync(CancellationToken cancellationToken = default)
                 => (await FillSetAsync(cancellationToken).ConfigureAwait(false)).ToArray();
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public readonly async ValueTask<ValueMemoryOwner<TSource>> ToArrayAsync(ArrayPool<TSource> pool, bool clearOnDispose, CancellationToken cancellationToken = default)
+            public async ValueTask<ValueMemoryOwner<TSource>> ToArrayAsync(ArrayPool<TSource> pool, bool clearOnDispose, CancellationToken cancellationToken = default)
                 => (await FillSetAsync(cancellationToken).ConfigureAwait(false)).ToArray(pool, clearOnDispose);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public readonly async ValueTask<List<TSource>> ToListAsync(CancellationToken cancellationToken = default)
+            public async ValueTask<List<TSource>> ToListAsync(CancellationToken cancellationToken = default)
                 => (await FillSetAsync(cancellationToken).ConfigureAwait(false)).ToList();
+            
+            #endregion
         }
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

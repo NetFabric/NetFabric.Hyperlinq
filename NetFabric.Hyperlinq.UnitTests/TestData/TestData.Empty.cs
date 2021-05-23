@@ -69,6 +69,34 @@ namespace NetFabric.Hyperlinq
                 { new[] { 1, 2, 3, 4, 5 }, 9, 9 }
             };
 
+        public static TheoryData<int[], int, int> TakeSkipEmpty =>
+            new()
+            {
+                { Array.Empty<int>(), -1, -1 },
+                { Array.Empty<int>(), -1, 0 },
+                { Array.Empty<int>(), 0, -1 },
+                { Array.Empty<int>(), 0, 0 },
+                { Array.Empty<int>(), 9, 0 },
+                { Array.Empty<int>(), 0, 1 },
+                { Array.Empty<int>(), 9, 1 },
+
+                { new[] { 1 }, -1, -1 },
+                { new[] { 1 }, -1, 0 },
+                { new[] { 1 }, 0, -1 },
+                { new[] { 1 }, 0, 0 },
+                { new[] { 1 }, 0, 1 },
+                { new[] { 1 }, 9, 1 },
+
+                { new[] { 1, 2, 3, 4, 5 }, -1, -1 },
+                { new[] { 1, 2, 3, 4, 5 }, -1, 0 },
+                { new[] { 1, 2, 3, 4, 5 }, 0, -1 },
+                { new[] { 1, 2, 3, 4, 5 }, -1, 2 },
+                { new[] { 1, 2, 3, 4, 5 }, 0, 0 },
+                { new[] { 1, 2, 3, 4, 5 }, 0, 2 },
+                { new[] { 1, 2, 3, 4, 5 }, 0, 9 },
+                { new[] { 1, 2, 3, 4, 5 }, 9, 9 }
+            };
+
         public static TheoryData<int[], Func<int, bool>> PredicateEmpty =>
             new()
             {

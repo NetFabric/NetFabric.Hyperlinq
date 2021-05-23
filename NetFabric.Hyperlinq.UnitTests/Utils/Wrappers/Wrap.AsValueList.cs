@@ -23,10 +23,10 @@ namespace NetFabric.Hyperlinq
             internal ValueListWrapper(T[] source)
                 => this.source = source;
 
-            public readonly int Count 
+            public int Count 
                 => source.Length;
 
-            public readonly T this[int index] 
+            public T this[int index] 
                 => source[index];
 
             T IList<T>.this[int index] 
@@ -35,14 +35,16 @@ namespace NetFabric.Hyperlinq
                 set => throw new NotSupportedException(); 
             }
 
-            public readonly Enumerator<T> GetEnumerator() 
+            public Enumerator<T> GetEnumerator() 
                 => new(source);
-            readonly IEnumerator<T> IEnumerable<T>.GetEnumerator() 
+
+            IEnumerator<T> IEnumerable<T>.GetEnumerator() 
                 // ReSharper disable once HeapView.BoxingAllocation
-                => new Enumerator<T>(source);
-            readonly IEnumerator IEnumerable.GetEnumerator() 
+                => GetEnumerator();
+
+            IEnumerator IEnumerable.GetEnumerator() 
                 // ReSharper disable once HeapView.BoxingAllocation
-                => new Enumerator<T>(source);
+                => GetEnumerator();
 
             public bool IsReadOnly => true;
 
@@ -68,8 +70,16 @@ namespace NetFabric.Hyperlinq
                 => throw new NotSupportedException();
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public ReadOnlyListExtensions.ValueEnumerable<ValueListWrapper<T>, T> AsValueEnumerable()
-                => this.AsValueEnumerable<ValueListWrapper<T>, T>();
+            public ValueReadOnlyListExtensions.ValueEnumerable<ValueListWrapper<T>, Enumerator<T>, Enumerator<T>, T, GetEnumeratorFunction, GetEnumeratorFunction> AsValueEnumerable()
+                => ValueReadOnlyListExtensions.AsValueEnumerable<ValueListWrapper<T>, Enumerator<T>, T, GetEnumeratorFunction>(this);
+            
+            public readonly struct GetEnumeratorFunction
+                : IFunction<ValueListWrapper<T>, Enumerator<T>>
+            {
+                [MethodImpl(MethodImplOptions.AggressiveInlining)]
+                public Enumerator<T> Invoke(ValueListWrapper<T> enumerable) 
+                    => enumerable.GetEnumerator();
+            }        
         }
     }
 }

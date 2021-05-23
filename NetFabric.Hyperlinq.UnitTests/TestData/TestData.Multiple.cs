@@ -43,6 +43,19 @@ namespace NetFabric.Hyperlinq
                 { new[] { 1, 2, 3, 4, 5 }, 2, 9 }
             };
 
+        public static TheoryData<int[], int, int> TakeSkipMultiple =>
+            new()
+            {
+                { new[] { 1, 2, 3, 4, 5 }, 2, -1 },
+                { new[] { 1, 2, 3, 4, 5 }, 2, 0 },
+                { new[] { 1, 2, 3, 4, 5 }, 5, -1 },
+                { new[] { 1, 2, 3, 4, 5 }, 5, 0 },
+                { new[] { 1, 2, 3, 4, 5 }, 5, 2 },
+                { new[] { 1, 2, 3, 4, 5 }, 9, -1 },
+                { new[] { 1, 2, 3, 4, 5 }, 9, 0 },
+                { new[] { 1, 2, 3, 4, 5 }, 9, 2 }
+            };
+
         public static TheoryData<int[], Func<int, bool>> PredicateMultiple =>
             new()
             {

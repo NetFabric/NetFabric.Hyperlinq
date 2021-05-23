@@ -3,9 +3,10 @@ using System.Collections.Generic;
 
 namespace NetFabric.Hyperlinq
 {
-    public static partial class ValueReadOnlyListExtensions
+    public static partial class ReadOnlyListExtensions
     {
 
+        [GeneratorIgnore]
         static LargeArrayBuilder<TSource> ToArrayBuilder<TList, TSource, TPredicate>(in TList source, ArrayPool<TSource> pool, bool clearOnDispose, TPredicate predicate, int offset, int count)
             where TList : struct, IReadOnlyList<TSource>
             where TPredicate: struct, IFunction<TSource, bool>
@@ -21,6 +22,7 @@ namespace NetFabric.Hyperlinq
             return builder;
         }
 
+        [GeneratorIgnore]
         static LargeArrayBuilder<TSource> ToArrayBuilderAt<TList, TSource, TPredicate>(in TList source, ArrayPool<TSource> pool, bool clearOnDispose, TPredicate predicate, int offset, int count)
             where TList : struct, IReadOnlyList<TSource>
             where TPredicate: struct, IFunction<TSource, int, bool>
@@ -48,6 +50,7 @@ namespace NetFabric.Hyperlinq
             return builder;
         }
 
+        [GeneratorIgnore]
         static LargeArrayBuilder<TResult> ToArrayBuilder<TList, TSource, TResult, TPredicate, TSelector>(in TList source, ArrayPool<TResult> pool, bool clearOnDispose, TPredicate predicate, TSelector selector, int offset, int count)
             where TList : struct, IReadOnlyList<TSource>
             where TSelector: struct, IFunction<TSource, TResult>

@@ -5,12 +5,10 @@ namespace NetFabric.Hyperlinq
 {
     public static partial class ArrayExtensions
     {
-        [GeneratorIgnore(false)]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static bool All<TSource>(this ReadOnlySpan<TSource> source, Func<TSource, bool> predicate)
             => source.All(new FunctionWrapper<TSource, bool>(predicate));
 
-        [GeneratorIgnore(false)]
         static bool All<TSource, TPredicate>(this ReadOnlySpan<TSource> source, TPredicate predicate = default)
             where TPredicate : struct, IFunction<TSource, bool>
         {
@@ -22,12 +20,10 @@ namespace NetFabric.Hyperlinq
             return true;
         }
 
-        [GeneratorIgnore(false)]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static bool All<TSource>(this ReadOnlySpan<TSource> source, Func<TSource, int, bool> predicate)
             => source.AllAt(new FunctionWrapper<TSource, int, bool>(predicate));
 
-        [GeneratorIgnore(false)]
         static bool AllAt<TSource, TPredicate>(this ReadOnlySpan<TSource> source, TPredicate predicate = default)
             where TPredicate : struct, IFunction<TSource, int, bool>
         {

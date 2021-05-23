@@ -7,12 +7,10 @@ namespace NetFabric.Hyperlinq
 {
     public static partial class ArrayExtensions
     {
-        [GeneratorIgnore(false)]
         [GeneratorMapping("TSelector", "NetFabric.Hyperlinq.FunctionWrapper<TSource, TResult>")]
         static ArraySegmentSelectEnumerable<TSource, TResult, FunctionWrapper<TSource, TResult>> Select<TSource, TResult>(this in ArraySegment<TSource> source, Func<TSource, TResult> selector)
             => Select<TSource, TResult, FunctionWrapper<TSource, TResult>>(source, new FunctionWrapper<TSource, TResult>(selector));
 
-        [GeneratorIgnore(false)]
         static ArraySegmentSelectEnumerable<TSource, TResult, TSelector> Select<TSource, TResult, TSelector>(this in ArraySegment<TSource> source, TSelector selector = default)
             where TSelector : struct, IFunction<TSource, TResult>
             => new(source, selector);
@@ -29,7 +27,7 @@ namespace NetFabric.Hyperlinq
             internal ArraySegmentSelectEnumerable(in ArraySegment<TSource> source, TSelector selector)
                 => (this.source, this.selector) = (source, selector);
 
-            public readonly int Count
+            public int Count
                 => 0;
 
             bool ICollection<TResult>.IsReadOnly
@@ -52,7 +50,7 @@ namespace NetFabric.Hyperlinq
             void IList<TResult>.RemoveAt(int index)
                 => throw new NotSupportedException();
 
-            public readonly TResult this[int index] 
+            public TResult this[int index] 
                 => default!;
             TResult IReadOnlyList<TResult>.this[int index]
                 => this[index];
@@ -62,13 +60,18 @@ namespace NetFabric.Hyperlinq
                 set => throw new NotSupportedException();
             }
 
-            public readonly Enumerator GetEnumerator()
+            public Enumerator GetEnumerator()
                 => new();
-            readonly DisposableEnumerator IValueEnumerable<TResult, ArraySegmentSelectEnumerable<TSource, TResult, TSelector>.DisposableEnumerator>.GetEnumerator()
+
+            DisposableEnumerator IValueEnumerable<TResult, DisposableEnumerator>.GetEnumerator()
                 => new();
-            readonly IEnumerator<TResult> IEnumerable<TResult>.GetEnumerator()
+
+            IEnumerator<TResult> IEnumerable<TResult>.GetEnumerator()
+                // ReSharper disable once HeapView.BoxingAllocation
                 => new DisposableEnumerator();
-            readonly IEnumerator IEnumerable.GetEnumerator()
+
+            IEnumerator IEnumerable.GetEnumerator()
+                // ReSharper disable once HeapView.BoxingAllocation
                 => new DisposableEnumerator();
 
             public struct Enumerator
@@ -79,7 +82,6 @@ namespace NetFabric.Hyperlinq
                 : IEnumerator<TResult>
             {
                 public readonly TResult Current => default!;
-                readonly TResult IEnumerator<TResult>.Current => default!;
                 readonly object IEnumerator.Current => default!;
 
                 public bool MoveNext()

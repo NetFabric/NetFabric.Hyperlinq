@@ -31,13 +31,18 @@ namespace NetFabric.Hyperlinq
             internal SelectEnumerable(TEnumerable source, TSelector selector)
                 => (this.source, this.selector) = (source, selector);
 
-            public readonly Enumerator GetEnumerator()
+            public Enumerator GetEnumerator()
                 => new();
-            readonly DisposableEnumerator IValueEnumerable<TResult, SelectEnumerable<TEnumerable, TEnumerator, TSource, TResult, TSelector>.DisposableEnumerator>.GetEnumerator()
+
+            DisposableEnumerator IValueEnumerable<TResult, DisposableEnumerator>.GetEnumerator()
                 => new();
-            readonly IEnumerator<TResult> IEnumerable<TResult>.GetEnumerator()
+
+            IEnumerator<TResult> IEnumerable<TResult>.GetEnumerator()
+                // ReSharper disable once HeapView.BoxingAllocation
                 => new DisposableEnumerator();
-            readonly IEnumerator IEnumerable.GetEnumerator()
+
+            IEnumerator IEnumerable.GetEnumerator()
+                // ReSharper disable once HeapView.BoxingAllocation
                 => new DisposableEnumerator();
 
             public struct Enumerator
@@ -48,7 +53,6 @@ namespace NetFabric.Hyperlinq
                 : IEnumerator<TResult>
             {
                 public readonly TResult Current => default!;
-                readonly TResult IEnumerator<TResult>.Current => default!;
                 readonly object IEnumerator.Current => default!;
 
                 public bool MoveNext()

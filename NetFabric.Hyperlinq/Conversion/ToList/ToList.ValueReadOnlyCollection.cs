@@ -14,15 +14,10 @@ namespace NetFabric.Hyperlinq
             => source switch
             {
                 { Count: 0 } => new List<TSource>(),
-                _ => source switch
-                {
-                    // ReSharper disable once HeapView.PossibleBoxingAllocation
-                    ICollection<TSource> collection => new List<TSource>(collection),
-
-                    _ => ToArray<TEnumerable, TEnumerator, TSource>(source).AsList(),
-                }
+                _ => ToArray<TEnumerable, TEnumerator, TSource>(source).AsList(),
             };
 
+        [GeneratorIgnore]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static List<TSource> ToList<TEnumerable, TEnumerator, TSource, TPredicate>(this TEnumerable source, TPredicate predicate)
             where TEnumerable : IValueReadOnlyCollection<TSource, TEnumerator>
@@ -30,6 +25,7 @@ namespace NetFabric.Hyperlinq
             where TPredicate : struct, IFunction<TSource, bool>
             => ToArray<TEnumerable, TEnumerator, TSource, TPredicate>(source, predicate).AsList(); 
 
+        [GeneratorIgnore]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static List<TSource> ToListAt<TEnumerable, TEnumerator, TSource, TPredicate>(this TEnumerable source, TPredicate predicate)
             where TEnumerable : IValueReadOnlyCollection<TSource, TEnumerator>
@@ -37,21 +33,23 @@ namespace NetFabric.Hyperlinq
             where TPredicate : struct, IFunction<TSource, int, bool>
             => ToArrayAt<TEnumerable, TEnumerator, TSource, TPredicate>(source, predicate).AsList(); 
 
+        [GeneratorIgnore]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        static List<TResult> ToList<TEnumerable, TEnumerator, TSource, TResult, TSelector>(this TEnumerable source,
-            TSelector selector)
+        internal static List<TResult> ToList<TEnumerable, TEnumerator, TSource, TResult, TSelector>(this TEnumerable source, TSelector selector)
             where TEnumerable : IValueReadOnlyCollection<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
             where TSelector : struct, IFunction<TSource, TResult>
             => ToArray<TEnumerable, TEnumerator, TSource, TResult, TSelector>(source, selector).AsList(); 
 
+        [GeneratorIgnore]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        static List<TResult> ToListAt<TEnumerable, TEnumerator, TSource, TResult, TSelector>(this TEnumerable source, TSelector selector)
+        internal static List<TResult> ToListAt<TEnumerable, TEnumerator, TSource, TResult, TSelector>(this TEnumerable source, TSelector selector)
             where TEnumerable : IValueReadOnlyCollection<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
             where TSelector : struct, IFunction<TSource, int, TResult>
             => ToArrayAt<TEnumerable, TEnumerator, TSource, TResult, TSelector>(source, selector).AsList(); 
 
+        [GeneratorIgnore]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static List<TResult> ToList<TEnumerable, TEnumerator, TSource, TResult, TPredicate, TSelector>(this TEnumerable source, TPredicate predicate, TSelector selector)
             where TEnumerable : IValueReadOnlyCollection<TSource, TEnumerator>

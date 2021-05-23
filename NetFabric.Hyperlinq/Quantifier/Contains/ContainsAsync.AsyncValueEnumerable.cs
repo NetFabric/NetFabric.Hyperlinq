@@ -11,13 +11,17 @@ namespace NetFabric.Hyperlinq
             where TEnumerator : struct, IAsyncEnumerator<TSource>
         {
             var enumerator = source.GetAsyncEnumerator();
-            await using (enumerator.ConfigureAwait(false))
+            try
             {
                 while (await enumerator.MoveNextAsync().ConfigureAwait(false))
                 {
                     if (EqualityComparer<TSource>.Default.Equals(enumerator.Current, value))
                         return true;
                 }
+            }
+            finally
+            {
+                await enumerator.DisposeAsync().ConfigureAwait(false);
             }
             return false;
         }
@@ -26,21 +30,24 @@ namespace NetFabric.Hyperlinq
             where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
         {
-            if (Utils.UseDefault(comparer))
-                return DefaultContainsAsync(source, value, cancellationToken);
-
-            return ComparerContainsAsync(source, value, comparer, cancellationToken);
+            return Utils.UseDefault(comparer)
+                ? DefaultContainsAsync(source, value, cancellationToken)
+                : ComparerContainsAsync(source, value, comparer, cancellationToken);
 
             static async ValueTask<bool> DefaultContainsAsync(TEnumerable source, TSource value, CancellationToken cancellationToken)
             {
                 var enumerator = source.GetAsyncEnumerator(cancellationToken);
-                await using (enumerator.ConfigureAwait(false))
+                try
                 {
                     while (await enumerator.MoveNextAsync().ConfigureAwait(false))
                     {
                         if (EqualityComparer<TSource>.Default.Equals(enumerator.Current, value))
                             return true;
                     }
+                }
+                finally
+                {
+                    await enumerator.DisposeAsync().ConfigureAwait(false);
                 }
                 return false;
             }
@@ -49,13 +56,17 @@ namespace NetFabric.Hyperlinq
             {
                 comparer ??= EqualityComparer<TSource>.Default;
                 var enumerator = source.GetAsyncEnumerator(cancellationToken);
-                await using (enumerator.ConfigureAwait(false))
+                try
                 {
                     while (await enumerator.MoveNextAsync().ConfigureAwait(false))
                     {
                         if (comparer.Equals(enumerator.Current, value))
                             return true;
                     }
+                }
+                finally
+                {
+                    await enumerator.DisposeAsync().ConfigureAwait(false);
                 }
                 return false;
             }

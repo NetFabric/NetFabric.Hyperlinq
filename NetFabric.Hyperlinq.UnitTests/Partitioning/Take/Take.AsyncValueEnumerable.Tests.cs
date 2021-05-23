@@ -49,5 +49,29 @@ namespace NetFabric.Hyperlinq.UnitTests.Partitioning.Take
                 .BeAsyncEnumerableOf<int>()
                 .BeEqualTo(expected);
         }
+
+        [Theory]
+        [MemberData(nameof(TestData.TakeSkipEmpty), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.TakeSkipSingle), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.TakeSkipMultiple), MemberType = typeof(TestData))]
+        public void Take_Skip_With_ValidData_Must_Succeed(int[] source, int take, int skip)
+        {
+            // Arrange
+            var wrapped = Wrap
+                .AsValueReadOnlyList(source);
+            var expected = source
+                .Take(take)
+                .Skip(skip);
+
+            // Act
+            var result = wrapped.AsValueEnumerable()
+                .Take(take)
+                .Skip(skip);
+
+            // Assert
+            _ = result.Must()
+                .BeEnumerableOf<int>()
+                .BeEqualTo(expected);
+        }
     }
 }

@@ -47,8 +47,7 @@ namespace NetFabric.Hyperlinq
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
                 get
                 {
-                    if ((uint)index >= (uint)Count) Throw.ArgumentOutOfRangeException<TSource>(nameof(index));
-
+                    ThrowIfArgument.OutOfRange(index, Count, nameof(index));
                     return selector.Invoke(source.Array![index + source.Offset], index);
                 }
             }
@@ -118,8 +117,6 @@ namespace NetFabric.Hyperlinq
 
                 public TResult Current
                     => selector.Invoke(source![index + offset], index);
-                TResult IEnumerator<TResult>.Current
-                    => selector.Invoke(source![index + offset], index);
                 object? IEnumerator.Current
                     // ReSharper disable once HeapView.PossibleBoxingAllocation
                     => selector.Invoke(source![index + offset], index);
@@ -129,10 +126,11 @@ namespace NetFabric.Hyperlinq
                     => ++index <= end;
 
                 [ExcludeFromCodeCoverage]
+                [DoesNotReturn]
                 public readonly void Reset()
                     => Throw.NotSupportedException();
 
-                public void Dispose() { }
+                public readonly void Dispose() { }
             }
 
             #region Aggregation
@@ -212,28 +210,6 @@ namespace NetFabric.Hyperlinq
                 => ((ReadOnlySpan<TSource>)source.AsSpan()).ToListAt<TSource, TResult, TSelector>(selector);
             
             #endregion
-
-            public bool SequenceEqual(IEnumerable<TResult> other, IEqualityComparer<TResult>? comparer = default)
-            {
-                comparer ??= EqualityComparer<TResult>.Default;
-
-                var enumerator = GetEnumerator();
-                using var otherEnumerator = other.GetEnumerator();
-                while (true)
-                {
-                    var thisEnded = !enumerator.MoveNext();
-                    var otherEnded = !otherEnumerator.MoveNext();
-
-                    if (thisEnded != otherEnded)
-                        return false;
-
-                    if (thisEnded)
-                        return true;
-
-                    if (!comparer.Equals(enumerator.Current!, otherEnumerator.Current))
-                        return false;
-                }
-            }
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

@@ -38,10 +38,10 @@ namespace NetFabric.Hyperlinq
             
             #region Conversion
 
-            ValueEnumerable<TEnumerator, TSource> AsValueEnumerable()
+            public ValueEnumerable<TEnumerator, TSource> AsValueEnumerable()
                 => this;
 
-            IEnumerable<TSource> AsEnumerable()
+            public IEnumerable<TSource> AsEnumerable()
                 => source;
 
             #endregion
