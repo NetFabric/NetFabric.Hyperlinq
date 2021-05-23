@@ -11,6 +11,7 @@ namespace NetFabric.Hyperlinq
     public static partial class ValueReadOnlyCollectionExtensions
     {
 
+        [GeneratorIgnore]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static WhereSelectEnumerable<TEnumerable, TEnumerator, TSource, TResult, TPredicate, TSelector> WhereSelect<TEnumerable, TEnumerator, TSource, TResult, TPredicate, TSelector>(
             this TEnumerable source, 
@@ -44,12 +45,14 @@ namespace NetFabric.Hyperlinq
 
             
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public readonly Enumerator GetEnumerator() => 
+            public Enumerator GetEnumerator() => 
                 new(in this);
-            readonly IEnumerator<TResult> IEnumerable<TResult>.GetEnumerator() 
+
+            IEnumerator<TResult> IEnumerable<TResult>.GetEnumerator() 
                 // ReSharper disable once HeapView.BoxingAllocation
                 => new Enumerator(in this);
-            readonly IEnumerator IEnumerable.GetEnumerator() 
+
+            IEnumerator IEnumerable.GetEnumerator() 
                 // ReSharper disable once HeapView.BoxingAllocation
                 => new Enumerator(in this);
 
@@ -74,8 +77,6 @@ namespace NetFabric.Hyperlinq
                     [MethodImpl(MethodImplOptions.AggressiveInlining)]
                     get => selector.Invoke(enumerator.Current);
                 }
-                TResult IEnumerator<TResult>.Current 
-                    => selector.Invoke(enumerator.Current);
                 object? IEnumerator.Current
                     // ReSharper disable once HeapView.PossibleBoxingAllocation
                     => selector.Invoke(enumerator.Current);
@@ -92,6 +93,7 @@ namespace NetFabric.Hyperlinq
                 }
 
                 [ExcludeFromCodeCoverage]
+                [DoesNotReturn]
                 public readonly void Reset() 
                     => Throw.NotSupportedException();
 

@@ -29,11 +29,11 @@ namespace NetFabric.Hyperlinq
             internal TakeEnumerable(in TEnumerable source, int count)
                 => (this.source, this.count) = (source, count);
 
-
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public readonly Enumerator GetAsyncEnumerator(CancellationToken cancellationToken = default)
+            public Enumerator GetAsyncEnumerator(CancellationToken cancellationToken = default)
                 => new(in this, cancellationToken);
-            readonly IAsyncEnumerator<TSource> IAsyncEnumerable<TSource>.GetAsyncEnumerator(CancellationToken cancellationToken)
+
+            IAsyncEnumerator<TSource> IAsyncEnumerable<TSource>.GetAsyncEnumerator(CancellationToken cancellationToken)
                 => new Enumerator(in this, cancellationToken);
 
             [StructLayout(LayoutKind.Auto)]
@@ -173,7 +173,7 @@ namespace NetFabric.Hyperlinq
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public TakeEnumerable<TEnumerable, TEnumerator, TSource> Take(int count)
-                => source.Take<TEnumerable, TEnumerator, TSource>(Math.Min(this.count, count));
+                => new(source, Utils.Take(this.count, count));
         }
     }
 }

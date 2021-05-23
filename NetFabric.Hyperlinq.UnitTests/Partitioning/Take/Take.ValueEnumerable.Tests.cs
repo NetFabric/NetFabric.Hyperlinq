@@ -19,8 +19,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Partitioning.Take
                 .Take(count);
 
             // Act
-            var result = wrapped
-                .Take<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int>(count);
+            var result = wrapped.AsValueEnumerable()
+                .Take(count);
 
             // Assert
             _ = result.Must()
@@ -39,9 +39,33 @@ namespace NetFabric.Hyperlinq.UnitTests.Partitioning.Take
                 .Take(count1);
 
             // Act
-            var result = wrapped
-                .Take<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int>(count0)
+            var result = wrapped.AsValueEnumerable()
+                .Take(count0)
                 .Take(count1);
+
+            // Assert
+            _ = result.Must()
+                .BeEnumerableOf<int>()
+                .BeEqualTo(expected);
+        }
+
+        [Theory]
+        [MemberData(nameof(TestData.TakeSkipEmpty), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.TakeSkipSingle), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.TakeSkipMultiple), MemberType = typeof(TestData))]
+        public void Take_Skip_With_ValidData_Must_Succeed(int[] source, int take, int skip)
+        {
+            // Arrange
+            var wrapped = Wrap
+                .AsValueReadOnlyList(source);
+            var expected = source
+                .Take(take)
+                .Skip(skip);
+
+            // Act
+            var result = wrapped.AsValueEnumerable()
+                .Take(take)
+                .Skip(skip);
 
             // Assert
             _ = result.Must()

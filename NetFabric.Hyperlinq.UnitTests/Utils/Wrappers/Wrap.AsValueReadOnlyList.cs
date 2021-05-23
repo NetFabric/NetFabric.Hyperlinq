@@ -22,24 +22,34 @@ namespace NetFabric.Hyperlinq
             internal ValueReadOnlyListWrapper(T[] source)
                 => this.source = source;
 
-            public readonly int Count 
+            public int Count 
                 => source.Length;
 
-            public readonly T this[int index] 
+            public T this[int index] 
                 => source[index];
 
-            public readonly Enumerator<T> GetEnumerator() 
+            public Enumerator<T> GetEnumerator() 
                 => new(source);
-            readonly IEnumerator<T> IEnumerable<T>.GetEnumerator() 
+
+            IEnumerator<T> IEnumerable<T>.GetEnumerator() 
                 // ReSharper disable once HeapView.BoxingAllocation
-                => new Enumerator<T>(source);
-            readonly IEnumerator IEnumerable.GetEnumerator() 
+                => GetEnumerator();
+
+            IEnumerator IEnumerable.GetEnumerator() 
                 // ReSharper disable once HeapView.BoxingAllocation
-                => new Enumerator<T>(source);
+                => GetEnumerator();
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public ReadOnlyListExtensions.ValueEnumerable<ValueReadOnlyListWrapper<T>, T> AsValueEnumerable()
-                => this.AsValueEnumerable<ValueReadOnlyListWrapper<T>, T>();
+            public ValueReadOnlyListExtensions.ValueEnumerable<ValueReadOnlyListWrapper<T>, Enumerator<T>, Enumerator<T>, T, GetEnumeratorFunction, GetEnumeratorFunction> AsValueEnumerable()
+                => ValueReadOnlyListExtensions.AsValueEnumerable<ValueReadOnlyListWrapper<T>, Enumerator<T>, T, GetEnumeratorFunction>(this);
+            
+            public readonly struct GetEnumeratorFunction
+                : IFunction<ValueReadOnlyListWrapper<T>, Enumerator<T>>
+            {
+                [MethodImpl(MethodImplOptions.AggressiveInlining)]
+                public Enumerator<T> Invoke(ValueReadOnlyListWrapper<T> enumerable) 
+                    => enumerable.GetEnumerator();
+            }        
         }
     }
 }

@@ -23,41 +23,43 @@ namespace NetFabric.Hyperlinq
                 => this.source = source;
             
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public readonly AsyncEnumerator GetAsyncEnumerator(CancellationToken cancellationToken = default) 
+            public AsyncEnumerator GetAsyncEnumerator(CancellationToken cancellationToken = default) 
                 => new(source, cancellationToken);
-            readonly IAsyncEnumerator<TSource> IAsyncEnumerable<TSource>.GetAsyncEnumerator(CancellationToken cancellationToken) 
+
+            IAsyncEnumerator<TSource> IAsyncEnumerable<TSource>.GetAsyncEnumerator(CancellationToken cancellationToken) 
                 // ReSharper disable once HeapView.BoxingAllocation
                 => new AsyncEnumerator(source, cancellationToken);
 
-            public struct AsyncEnumerator
+            public readonly struct AsyncEnumerator
                 : IAsyncEnumerator<TSource>
             {
-                IAsyncEnumerator<TSource> enumerator;
+                readonly IAsyncEnumerator<TSource> enumerator;
 
                 internal AsyncEnumerator(IAsyncEnumerable<TSource> enumerable, CancellationToken cancellationToken)
                     => enumerator = enumerable.GetAsyncEnumerator(cancellationToken);
 
-                public readonly TSource Current 
+                public TSource Current 
                     => enumerator.Current;
-                readonly TSource IAsyncEnumerator<TSource>.Current
+
+                TSource IAsyncEnumerator<TSource>.Current
                     => enumerator.Current;
 
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
-                public ValueTask<bool> MoveNextAsync() 
+                public ValueTask<bool> MoveNextAsync()
                     => enumerator.MoveNextAsync();
 
 
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
-                public ValueTask DisposeAsync() 
+                public ValueTask DisposeAsync()
                     => enumerator.DisposeAsync();
             }
             
             #region Conversion
 
-            AsyncValueEnumerable<TSource> AsAsyncValueEnumerable()
+            public AsyncValueEnumerable<TSource> AsAsyncValueEnumerable()
                 => this;
 
-            IAsyncEnumerable<TSource> AsAsyncEnumerable()
+            public IAsyncEnumerable<TSource> AsAsyncEnumerable()
                 => source;
 
             #endregion

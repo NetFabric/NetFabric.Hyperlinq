@@ -27,19 +27,18 @@ namespace NetFabric.Hyperlinq
             internal MemoryValueEnumerable(ReadOnlyMemory<TSource> source)
                 => this.source = source;
 
-            public readonly int Count
+            public int Count
             {
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
                 get => source.Length;
             }
 
-            public readonly TSource this[int index]
+            public TSource this[int index]
             {
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
                 get => source.Span[index];
             }
-            TSource IReadOnlyList<TSource>.this[int index]
-                => source.Span[index];
+
             TSource IList<TSource>.this[int index]
             {
                 get => source.Span[index];
@@ -50,14 +49,17 @@ namespace NetFabric.Hyperlinq
             }
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public readonly SpanEnumerator<TSource> GetEnumerator()
+            public SpanEnumerator<TSource> GetEnumerator()
                 => new(source.Span);
-            readonly DisposableEnumerator IValueEnumerable<TSource, DisposableEnumerator>.GetEnumerator()
+
+            DisposableEnumerator IValueEnumerable<TSource, DisposableEnumerator>.GetEnumerator()
                 => new(source);
-            readonly IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator()
+
+            IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator()
                 // ReSharper disable once HeapView.BoxingAllocation
                 => new DisposableEnumerator(source);
-            readonly IEnumerator IEnumerable.GetEnumerator()
+
+            IEnumerator IEnumerable.GetEnumerator()
                 // ReSharper disable once HeapView.BoxingAllocation
                 => new DisposableEnumerator(source);
 
@@ -180,8 +182,8 @@ namespace NetFabric.Hyperlinq
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public MemoryValueEnumerable<TSource> Skip(int count)
             {
-                var (skipCount, takeCount) = Utils.Skip(source.Length, count);
-                return new MemoryValueEnumerable<TSource>(source.Slice(skipCount, takeCount));
+                var (newOffset, newCount) = Utils.Skip(source.Length, count);
+                return new MemoryValueEnumerable<TSource>(source.Slice(newOffset, newCount));
             }
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -236,28 +238,6 @@ namespace NetFabric.Hyperlinq
                 => source.Distinct(comparer);
 
             #endregion
-
-            public bool SequenceEqual(IEnumerable<TSource> other, IEqualityComparer<TSource>? comparer = default)
-            {
-                comparer ??= EqualityComparer<TSource>.Default;
-
-                var enumerator = GetEnumerator();
-                using var otherEnumerator = other.GetEnumerator();
-                while (true)
-                {
-                    var thisEnded = !enumerator.MoveNext();
-                    var otherEnded = !otherEnumerator.MoveNext();
-
-                    if (thisEnded != otherEnded)
-                        return false;
-
-                    if (thisEnded)
-                        return true;
-
-                    if (!comparer.Equals(enumerator.Current, otherEnumerator.Current))
-                        return false;
-                }
-            }
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

@@ -23,11 +23,13 @@ namespace NetFabric.Hyperlinq
                 => this.value = value;
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public readonly Enumerator GetAsyncEnumerator() 
+            public Enumerator GetAsyncEnumerator() 
                 => new(in this);
-            readonly DisposableEnumerator IAsyncValueEnumerable<TSource, DisposableEnumerator>.GetAsyncEnumerator(CancellationToken _) 
+
+            DisposableEnumerator IAsyncValueEnumerable<TSource, DisposableEnumerator>.GetAsyncEnumerator(CancellationToken _) 
                 => new(in this);
-            readonly IAsyncEnumerator<TSource> IAsyncEnumerable<TSource>.GetAsyncEnumerator(CancellationToken _) 
+
+            IAsyncEnumerator<TSource> IAsyncEnumerable<TSource>.GetAsyncEnumerator(CancellationToken _) 
                 // ReSharper disable once HeapView.BoxingAllocation
                 => new DisposableEnumerator(in this);
 
@@ -42,7 +44,7 @@ namespace NetFabric.Hyperlinq
                     moveNext = true;
                 }
 
-                public readonly TSource Current { get; }
+                public TSource Current { get; }
 
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
                 public ValueTask<bool> MoveNextAsync()
@@ -65,7 +67,7 @@ namespace NetFabric.Hyperlinq
                     moveNext = true;
                 }
 
-                public readonly TSource Current { get; }
+                public TSource Current { get; }
                 readonly TSource IAsyncEnumerator<TSource>.Current 
                     => Current;
 

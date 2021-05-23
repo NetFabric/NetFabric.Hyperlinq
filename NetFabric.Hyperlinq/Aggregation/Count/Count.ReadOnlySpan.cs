@@ -5,11 +5,11 @@ namespace NetFabric.Hyperlinq
 {
     public static partial class ArrayExtensions
     {
-        [GeneratorIgnore(false)]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static int Count<TSource>(this ReadOnlySpan<TSource> source)
             => source.Length;
 
+        [GeneratorIgnore]
         static int Count<TSource, TPredicate>(this ReadOnlySpan<TSource> source, TPredicate predicate)
             where TPredicate: struct, IFunction<TSource, bool>
         {
@@ -21,6 +21,7 @@ namespace NetFabric.Hyperlinq
             return counter;
         }
 
+        [GeneratorIgnore]
         static int CountAt<TSource, TPredicate>(this ReadOnlySpan<TSource> source, TPredicate predicate)
             where TPredicate: struct, IFunction<TSource, int, bool>
         {

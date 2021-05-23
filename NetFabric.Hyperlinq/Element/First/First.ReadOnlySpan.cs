@@ -6,7 +6,6 @@ namespace NetFabric.Hyperlinq
     public static partial class ArrayExtensions
     {
 
-        [GeneratorIgnore(false)]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static Option<TSource> First<TSource>(this ReadOnlySpan<TSource> source) 
             => source switch
@@ -15,6 +14,7 @@ namespace NetFabric.Hyperlinq
                 _ => Option.Some(source[0])
             };
 
+        [GeneratorIgnore]
         static Option<TSource> First<TSource, TPredicate>(this ReadOnlySpan<TSource> source, TPredicate predicate)
             where TPredicate : struct, IFunction<TSource, bool>
         {
@@ -27,7 +27,8 @@ namespace NetFabric.Hyperlinq
             return Option.None;
         }
 
-        
+
+        [GeneratorIgnore]
         static Option<TSource> FirstAt<TSource, TPredicate>(this ReadOnlySpan<TSource> source, TPredicate predicate)
             where TPredicate : struct, IFunction<TSource, int, bool>
         {
@@ -40,7 +41,8 @@ namespace NetFabric.Hyperlinq
             return Option.None;
         }
 
-        
+
+        [GeneratorIgnore]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static Option<TResult> First<TSource, TResult, TSelector>(this ReadOnlySpan<TSource> source, TSelector selector)
             where TSelector : struct, IFunction<TSource, TResult>
@@ -50,7 +52,8 @@ namespace NetFabric.Hyperlinq
                 _ => Option.Some(selector.Invoke(source[0])),
             };
 
-        
+
+        [GeneratorIgnore]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static Option<TResult> FirstAt<TSource, TResult, TSelector>(this ReadOnlySpan<TSource> source, TSelector selector)
             where TSelector : struct, IFunction<TSource, int, TResult>
@@ -60,7 +63,8 @@ namespace NetFabric.Hyperlinq
                 _ => Option.Some(selector.Invoke(source[0], 0)),
             };
 
-        
+
+        [GeneratorIgnore]
         static Option<TResult> First<TSource, TResult, TPredicate, TSelector>(this ReadOnlySpan<TSource> source, TPredicate predicate, TSelector selector)
             where TPredicate : struct, IFunction<TSource, bool>
             where TSelector : struct, IFunction<TSource, TResult>

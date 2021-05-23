@@ -25,7 +25,6 @@ namespace NetFabric.Hyperlinq
             where TResult : struct
             => source.SelectVector<TSource, TResult, TSelector, TSelector>(selector, selector);
 
-        [GeneratorIgnore(false)]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static SpanSelectVectorContext<TSource, TResult, TVectorSelector, TSelector> SelectVector<TSource, TResult, TVectorSelector, TSelector>(this ReadOnlySpan<TSource> source, TVectorSelector vectorSelector = default, TSelector selector = default)
             where TVectorSelector : struct, IFunction<Vector<TSource>, Vector<TResult>>

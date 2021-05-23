@@ -24,16 +24,21 @@ namespace NetFabric.Hyperlinq
                 end = checked(start + count);
             }
 
-            public readonly int Count { get; }
+            public int Count { get; }
 
 
-            public readonly Enumerator GetEnumerator()
+            public Enumerator GetEnumerator()
                 => new();
-            readonly DisposableEnumerator IValueEnumerable<int, DisposableEnumerator>.GetEnumerator()
+
+            DisposableEnumerator IValueEnumerable<int, DisposableEnumerator>.GetEnumerator()
                 => new();
-            readonly IEnumerator<int> IEnumerable<int>.GetEnumerator()
+
+            IEnumerator<int> IEnumerable<int>.GetEnumerator()
+                // ReSharper disable once HeapView.BoxingAllocation
                 => new DisposableEnumerator();
-            readonly IEnumerator IEnumerable.GetEnumerator()
+
+            IEnumerator IEnumerable.GetEnumerator()
+                // ReSharper disable once HeapView.BoxingAllocation
                 => new DisposableEnumerator();
 
             bool ICollection<int>.IsReadOnly

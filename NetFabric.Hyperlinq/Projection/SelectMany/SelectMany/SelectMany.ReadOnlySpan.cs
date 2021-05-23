@@ -40,7 +40,7 @@ namespace NetFabric.Hyperlinq
             }
             
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public readonly Enumerator GetEnumerator() 
+            public Enumerator GetEnumerator() 
                 => new(this);
 
             [StructLayout(LayoutKind.Auto)]

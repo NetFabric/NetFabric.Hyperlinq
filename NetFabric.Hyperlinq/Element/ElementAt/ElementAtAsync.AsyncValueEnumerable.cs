@@ -35,6 +35,7 @@ namespace NetFabric.Hyperlinq
         }
 
         
+        [GeneratorIgnore]
         static ValueTask<Option<TSource>> ElementAtAsync<TEnumerable, TEnumerator, TSource, TPredicate>(this TEnumerable source, int index, CancellationToken cancellationToken, TPredicate predicate) 
             where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
@@ -64,6 +65,7 @@ namespace NetFabric.Hyperlinq
         }
 
         
+        [GeneratorIgnore]
         static ValueTask<Option<TSource>> ElementAtAtAsync<TEnumerable, TEnumerator, TSource, TPredicate>(this TEnumerable source, int index, CancellationToken cancellationToken, TPredicate predicate) 
             where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
@@ -96,6 +98,7 @@ namespace NetFabric.Hyperlinq
         }
 
         
+        [GeneratorIgnore]
         static ValueTask<Option<TResult>> ElementAtAsync<TEnumerable, TEnumerator, TSource, TResult, TSelector>(this TEnumerable source, int index, CancellationToken cancellationToken, TSelector selector) 
             where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
@@ -125,6 +128,7 @@ namespace NetFabric.Hyperlinq
         }
 
         
+        [GeneratorIgnore]
         static ValueTask<Option<TResult>> ElementAtAtAsync<TEnumerable, TEnumerator, TSource, TResult, TSelector>(this TEnumerable source, int index, CancellationToken cancellationToken, TSelector selector) 
             where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
@@ -157,6 +161,7 @@ namespace NetFabric.Hyperlinq
         }
 
         
+        [GeneratorIgnore]
         static ValueTask<Option<TResult>> ElementAtAsync<TEnumerable, TEnumerator, TSource, TResult, TPredicate, TSelector>(this TEnumerable source, int index, CancellationToken cancellationToken, TPredicate predicate, TSelector selector) 
             where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>

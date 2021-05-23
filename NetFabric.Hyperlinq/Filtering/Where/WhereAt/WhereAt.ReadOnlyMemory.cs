@@ -11,13 +11,11 @@ namespace NetFabric.Hyperlinq
     public static partial class ArrayExtensions
     {
 
-        [GeneratorIgnore(false)]
         [GeneratorMapping("TPredicate", "NetFabric.Hyperlinq.FunctionWrapper<TSource, int, bool>")]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static MemoryWhereAtEnumerable<TSource, FunctionWrapper<TSource, int, bool>> Where<TSource>(this ReadOnlyMemory<TSource> source, Func<TSource, int, bool> predicate) 
             => source.WhereAt(new FunctionWrapper<TSource, int, bool>(predicate));
 
-        [GeneratorIgnore(false)]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static MemoryWhereAtEnumerable<TSource, TPredicate> WhereAt<TSource, TPredicate>(this ReadOnlyMemory<TSource> source, TPredicate predicate = default) 
             where TPredicate : struct, IFunction<TSource, int, bool>
@@ -34,14 +32,17 @@ namespace NetFabric.Hyperlinq
             internal MemoryWhereAtEnumerable(ReadOnlyMemory<TSource> source, TPredicate predicate)
                 => (this.source, this.predicate) = (source, predicate);
             
-            public readonly WhereAtEnumerator<TSource, TPredicate> GetEnumerator() 
+            public WhereAtEnumerator<TSource, TPredicate> GetEnumerator() 
                 => new(source.Span, predicate);
-            readonly DisposableEnumerator IValueEnumerable<TSource, DisposableEnumerator>.GetEnumerator() 
+
+            DisposableEnumerator IValueEnumerable<TSource, DisposableEnumerator>.GetEnumerator() 
                 => new(in this);
-            readonly IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() 
+
+            IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() 
                 // ReSharper disable once HeapView.BoxingAllocation
                 => new DisposableEnumerator(in this);
-            readonly IEnumerator IEnumerable.GetEnumerator() 
+
+            IEnumerator IEnumerable.GetEnumerator() 
                 // ReSharper disable once HeapView.BoxingAllocation
                 => new DisposableEnumerator(in this);
 
@@ -88,7 +89,7 @@ namespace NetFabric.Hyperlinq
                 public readonly void Reset() 
                     => throw new NotSupportedException();
 
-                public void Dispose() { }
+                public readonly void Dispose() { }
             }
 
             #region Aggregation
@@ -215,28 +216,6 @@ namespace NetFabric.Hyperlinq
                 => source.Span.ToDictionaryAt<TSource, TKey, TElement, TKeySelector, TElementSelector, TPredicate>(keySelector, elementSelector, comparer, predicate);
             
             #endregion
-
-            public bool SequenceEqual(IEnumerable<TSource> other, IEqualityComparer<TSource>? comparer = default)
-            {
-                comparer ??= EqualityComparer<TSource>.Default;
-
-                var enumerator = GetEnumerator();
-                using var otherEnumerator = other.GetEnumerator();
-                while (true)
-                {
-                    var thisEnded = !enumerator.MoveNext();
-                    var otherEnded = !otherEnumerator.MoveNext();
-
-                    if (thisEnded != otherEnded)
-                        return false;
-
-                    if (thisEnded)
-                        return true;
-
-                    if (!comparer.Equals(enumerator.Current, otherEnumerator.Current))
-                        return false;
-                }
-            }
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

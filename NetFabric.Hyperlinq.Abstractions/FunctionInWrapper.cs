@@ -14,6 +14,9 @@ namespace NetFabric.Hyperlinq
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public TResult Invoke(in T arg)
             => function(arg);
+
+        public static implicit operator FunctionInWrapper<T, TResult>(FunctionIn<T, TResult> func)
+            => new(func);
     }
 
     public readonly struct FunctionInWrapper<T1, T2, TResult>
@@ -27,5 +30,8 @@ namespace NetFabric.Hyperlinq
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public TResult Invoke(in T1 arg1, T2 arg2)
             => function(arg1, arg2);
+
+        public static implicit operator FunctionInWrapper<T1, T2, TResult>(FunctionIn<T1, T2, TResult> func)
+            => new(func);
     }
 }

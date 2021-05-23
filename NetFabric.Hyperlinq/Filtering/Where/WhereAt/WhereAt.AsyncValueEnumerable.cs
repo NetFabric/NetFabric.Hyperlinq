@@ -44,9 +44,10 @@ namespace NetFabric.Hyperlinq
 
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public readonly Enumerator GetAsyncEnumerator(CancellationToken cancellationToken = default) 
+            public Enumerator GetAsyncEnumerator(CancellationToken cancellationToken = default) 
                 => new(in this, cancellationToken);
-            readonly IAsyncEnumerator<TSource> IAsyncEnumerable<TSource>.GetAsyncEnumerator(CancellationToken cancellationToken) 
+
+            IAsyncEnumerator<TSource> IAsyncEnumerable<TSource>.GetAsyncEnumerator(CancellationToken cancellationToken) 
                 // ReSharper disable once HeapView.BoxingAllocation
                 => new Enumerator(in this, cancellationToken);
 
@@ -194,7 +195,7 @@ namespace NetFabric.Hyperlinq
                     builder.SetResult(result);
                 }
 
-                void IAsyncStateMachine.SetStateMachine(IAsyncStateMachine stateMachine)
+                readonly void IAsyncStateMachine.SetStateMachine(IAsyncStateMachine stateMachine)
                 { }
             }
             

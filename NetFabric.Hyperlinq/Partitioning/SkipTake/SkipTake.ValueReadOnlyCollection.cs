@@ -9,12 +9,6 @@ namespace NetFabric.Hyperlinq
 {
     public static partial class ValueReadOnlyCollectionExtensions
     {
-        
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        static SkipTakeEnumerable<TEnumerable, TEnumerator, TSource> SkipTake<TEnumerable, TEnumerator, TSource>(this TEnumerable source, int skipCount, int takeCount)
-            where TEnumerable : IValueReadOnlyCollection<TSource, TEnumerator>
-            where TEnumerator : struct, IEnumerator<TSource>
-            => new(in source, skipCount, takeCount);
 
         [StructLayout(LayoutKind.Auto)]
         public readonly partial struct SkipTakeEnumerable<TEnumerable, TEnumerator, TSource>
@@ -24,23 +18,24 @@ namespace NetFabric.Hyperlinq
             where TEnumerator : struct, IEnumerator<TSource>
         {
             readonly TEnumerable source;
-            readonly int skipCount;
+            readonly int offset;
 
-            internal SkipTakeEnumerable(in TEnumerable source, int skipCount, int takeCount)
-            {
-                this.source = source;
-                (this.skipCount, Count) = Utils.SkipTake(source.Count, skipCount, takeCount);
-            }
+            internal SkipTakeEnumerable(in TEnumerable source, int offset, int count)
+                => (this.source, this.offset, Count) = (source, offset, count);
 
-            public readonly int Count { get; }
+            internal SkipTakeEnumerable(in TEnumerable source, (int Offset, int Count) slice)
+                => (this.source, offset, Count) = (source, slice.Offset, slice.Count);
 
-            
+            public int Count { get; }
+
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public readonly Enumerator GetEnumerator() 
+            public Enumerator GetEnumerator() 
                 => new(in this);
-            readonly IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() 
+
+            IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() 
                 => new Enumerator(in this);
-            readonly IEnumerator IEnumerable.GetEnumerator() 
+
+            IEnumerator IEnumerable.GetEnumerator() 
                 => new Enumerator(in this);
 
             bool ICollection<TSource>.IsReadOnly  
@@ -57,7 +52,7 @@ namespace NetFabric.Hyperlinq
                 using var enumerator = source.GetEnumerator();
 
                 // skip
-                for (var counter = 0; counter < skipCount; counter++)
+                for (var counter = 0; counter < offset; counter++)
                 {
                     if (!enumerator.MoveNext())
                         Throw.InvalidOperationException();
@@ -79,7 +74,7 @@ namespace NetFabric.Hyperlinq
                 if (Count is 0)
                     return;
 
-                if (skipCount is 0 && Count == source.Count && source is ICollection<TSource> collection)
+                if (offset is 0 && Count == source.Count && source is ICollection collection)
                     collection.CopyTo(array, arrayIndex);
                 else
                     CopyTo(array.AsSpan().Slice(arrayIndex));
@@ -111,7 +106,7 @@ namespace NetFabric.Hyperlinq
                 internal Enumerator(in SkipTakeEnumerable<TEnumerable, TEnumerator, TSource> enumerable)
                 {
                     enumerator = enumerable.source.GetEnumerator();
-                    skipCounter = enumerable.skipCount;
+                    skipCounter = enumerable.offset;
                     takeCounter = enumerable.Count;
                     state = takeCounter > 0 ? EnumeratorState.Uninitialized : EnumeratorState.Complete;
                 }
@@ -166,6 +161,7 @@ namespace NetFabric.Hyperlinq
                 }
 
                 [ExcludeFromCodeCoverage]
+                [DoesNotReturn]
                 public readonly void Reset() 
                     => Throw.NotSupportedException();
 
@@ -181,27 +177,27 @@ namespace NetFabric.Hyperlinq
                 if (Utils.UseDefault(comparer))
                 {
                     // ReSharper disable once HeapView.PossibleBoxingAllocation
-                    if (skipCount is 0 && Count == source.Count && source is ICollection<TSource> collection)
+                    if (offset is 0 && Count == source.Count && source is ICollection<TSource> collection)
                         return collection.Contains(value);
 
-                    return DefaultContains(source, value, skipCount, Count);
+                    return DefaultContains(source, value, offset, Count);
                 }
 
-                return ComparerContains(source, value, comparer, skipCount, Count);
+                return ComparerContains(source, value, comparer, offset, Count);
 
-                static bool DefaultContains(TEnumerable source, TSource value, int skipCount, int takeCount)
+                static bool DefaultContains(TEnumerable source, TSource value, int offset, int count)
                 {
                     using var enumerator = source.GetEnumerator();
 
                     // skip
-                    for (var counter = 0; counter < skipCount; counter++)
+                    for (var counter = 0; counter < offset; counter++)
                     {
                         if (!enumerator.MoveNext())
                             Throw.InvalidOperationException();
                     }
 
                     // take
-                    for (var counter = 0; counter < takeCount; counter++)
+                    for (var counter = 0; counter < count; counter++)
                     {
                         if (!enumerator.MoveNext())
                             Throw.InvalidOperationException();
@@ -212,20 +208,20 @@ namespace NetFabric.Hyperlinq
                     return false;
                 }
 
-                static bool ComparerContains(TEnumerable source, TSource value, IEqualityComparer<TSource>? comparer, int skipCount, int takeCount)
+                static bool ComparerContains(TEnumerable source, TSource value, IEqualityComparer<TSource>? comparer, int offset, int count)
                 {
                     comparer ??= EqualityComparer<TSource>.Default;
                     using var enumerator = source.GetEnumerator();
 
                     // skip
-                    for (var counter = 0; counter < skipCount; counter++)
+                    for (var counter = 0; counter < offset; counter++)
                     {
                         if (!enumerator.MoveNext())
                             Throw.InvalidOperationException();
                     }
 
                     // take
-                    for (var counter = 0; counter < takeCount; counter++)
+                    for (var counter = 0; counter < count; counter++)
                     {
                         if (!enumerator.MoveNext())
                             Throw.InvalidOperationException();
@@ -237,9 +233,20 @@ namespace NetFabric.Hyperlinq
                 }
             }
 
+            #region Partitioning
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public SkipTakeEnumerable<TEnumerable, TEnumerator, TSource> Skip(int count)
+            {
+                var (newOffset, newCount) = Utils.Skip(Count, count);
+                return new SkipTakeEnumerable<TEnumerable, TEnumerator, TSource>(source, offset + newOffset, newCount);
+            }
+
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public SkipTakeEnumerable<TEnumerable, TEnumerator, TSource> Take(int count)
-                => source.SkipTake<TEnumerable, TEnumerator, TSource>(skipCount, Math.Min(Count, count));
+                => new(source, offset, Utils.Take(Count, count));
+            
+            #endregion
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

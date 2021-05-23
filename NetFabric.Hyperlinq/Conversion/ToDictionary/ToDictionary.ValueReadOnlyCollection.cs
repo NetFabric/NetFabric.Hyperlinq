@@ -24,6 +24,7 @@ namespace NetFabric.Hyperlinq
                 ? new Dictionary<TKey, TSource>()
                 : ValueEnumerableExtensions.ToDictionary<TEnumerable, TEnumerator, TSource, TKey, TKeySelector>(source, keySelector, comparer);
 
+        [GeneratorIgnore]
         static Dictionary<TKey, TSource> ToDictionary<TEnumerable, TEnumerator, TSource, TKey, TKeySelector, TPredicate>(this TEnumerable source, TKeySelector keySelector, IEqualityComparer<TKey>? comparer, TPredicate predicate)
             where TEnumerable : IValueReadOnlyCollection<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
@@ -36,6 +37,7 @@ namespace NetFabric.Hyperlinq
                 : ValueEnumerableExtensions.ToDictionary<TEnumerable, TEnumerator, TSource, TKey, TKeySelector, TPredicate>(source, keySelector, comparer, predicate);
 
 
+        [GeneratorIgnore]
         static Dictionary<TKey, TSource> ToDictionaryAt<TEnumerable, TEnumerator, TSource, TKey, TKeySelector, TPredicate>(this TEnumerable source, TKeySelector keySelector, IEqualityComparer<TKey>? comparer, TPredicate predicate)
             where TEnumerable : IValueReadOnlyCollection<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
@@ -47,6 +49,7 @@ namespace NetFabric.Hyperlinq
                 ? new Dictionary<TKey, TSource>()
                 : ValueEnumerableExtensions.ToDictionaryAt<TEnumerable, TEnumerator, TSource, TKey, TKeySelector, TPredicate>(source, keySelector, comparer, predicate);
         
+        [GeneratorIgnore]
         static Dictionary<TKey, TResult> ToDictionary<TEnumerable, TEnumerator, TSource, TKey, TKeySelector, TResult, TPredicate, TSelector>(this TEnumerable source, TKeySelector keySelector, IEqualityComparer<TKey>? comparer, TPredicate predicate, TSelector selector)
             where TEnumerable : IValueReadOnlyCollection<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
@@ -81,6 +84,7 @@ namespace NetFabric.Hyperlinq
                 : ValueEnumerableExtensions.ToDictionary<TEnumerable, TEnumerator, TSource, TKey, TElement, TKeySelector, TElementSelector>(source, keySelector, elementSelector, comparer);
 
 
+        [GeneratorIgnore]
         static Dictionary<TKey, TElement> ToDictionary<TEnumerable, TEnumerator, TSource, TKey, TElement, TKeySelector, TElementSelector, TPredicate>(this TEnumerable source, TKeySelector keySelector, TElementSelector elementSelector, IEqualityComparer<TKey>? comparer, TPredicate predicate)
             where TEnumerable : IValueReadOnlyCollection<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
@@ -94,6 +98,7 @@ namespace NetFabric.Hyperlinq
                 : ValueEnumerableExtensions.ToDictionary<TEnumerable, TEnumerator, TSource, TKey, TElement, TKeySelector, TElementSelector, TPredicate>(source, keySelector, elementSelector, comparer, predicate);
 
 
+        [GeneratorIgnore]
         static Dictionary<TKey, TElement> ToDictionaryAt<TEnumerable, TEnumerator, TSource, TKey, TElement, TKeySelector, TElementSelector, TPredicate>(this TEnumerable source, TKeySelector keySelector, TElementSelector elementSelector, IEqualityComparer<TKey>? comparer, TPredicate predicate)
             where TEnumerable : IValueReadOnlyCollection<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
@@ -106,6 +111,7 @@ namespace NetFabric.Hyperlinq
                 ? new Dictionary<TKey, TElement>()
                 : ValueEnumerableExtensions.ToDictionaryAt<TEnumerable, TEnumerator, TSource, TKey, TElement, TKeySelector, TElementSelector, TPredicate>(source, keySelector, elementSelector, comparer, predicate);
         
+        [GeneratorIgnore]
         static Dictionary<TKey, TElement> ToDictionary<TEnumerable, TEnumerator, TSource, TKey, TElement, TKeySelector, TElementSelector, TResult, TPredicate, TSelector>(this TEnumerable source, TKeySelector keySelector, TElementSelector elementSelector, IEqualityComparer<TKey>? comparer, TPredicate predicate, TSelector selector)
             where TEnumerable : IValueReadOnlyCollection<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>

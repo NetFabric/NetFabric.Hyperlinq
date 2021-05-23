@@ -71,10 +71,10 @@ namespace NetFabric.Hyperlinq
 
             #region Conversion
 
-            AsyncValueEnumerable<TEnumerable, TEnumerator, TEnumerator2, TSource, TGetAsyncEnumerator, TGetAsyncEnumerator2> AsAsyncValueEnumerable()
+            public AsyncValueEnumerable<TEnumerable, TEnumerator, TEnumerator2, TSource, TGetAsyncEnumerator, TGetAsyncEnumerator2> AsAsyncValueEnumerable()
                 => this;
 
-            TEnumerable AsAsyncEnumerable()
+            public TEnumerable AsAsyncEnumerable()
                 => source;
 
             #endregion

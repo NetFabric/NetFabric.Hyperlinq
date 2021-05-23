@@ -44,6 +44,7 @@ namespace NetFabric.Hyperlinq
         }
 
 
+        [GeneratorIgnore]
         internal static bool Contains<TEnumerable, TEnumerator, TSource, TResult, TSelector>(this TEnumerable source, TResult value, IEqualityComparer<TResult>? comparer, TSelector selector)
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
@@ -78,6 +79,7 @@ namespace NetFabric.Hyperlinq
             }
         }
 
+        [GeneratorIgnore]
         internal static bool ContainsAt<TEnumerable, TEnumerator, TSource, TResult, TSelector>(this TEnumerable source, TResult value, IEqualityComparer<TResult>? comparer, TSelector selector)
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>

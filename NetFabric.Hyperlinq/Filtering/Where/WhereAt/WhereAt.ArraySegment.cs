@@ -35,14 +35,17 @@ namespace NetFabric.Hyperlinq
             }
 
 
-            public readonly WhereAtEnumerator<TSource, TPredicate> GetEnumerator()
+            public WhereAtEnumerator<TSource, TPredicate> GetEnumerator()
                 => new(source.AsSpan(), predicate);
-            readonly Enumerator IValueEnumerable<TSource, Enumerator>.GetEnumerator()
+
+            Enumerator IValueEnumerable<TSource, Enumerator>.GetEnumerator()
                 => new(in this);
-            readonly IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator()
+
+            IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator()
                 // ReSharper disable once HeapView.BoxingAllocation
                 => new Enumerator(in this);
-            readonly IEnumerator IEnumerable.GetEnumerator()
+
+            IEnumerator IEnumerable.GetEnumerator()
                 // ReSharper disable once HeapView.BoxingAllocation
                 => new Enumerator(in this);
 
@@ -91,7 +94,7 @@ namespace NetFabric.Hyperlinq
                 public readonly void Reset()
                     => throw new NotSupportedException();
 
-                public void Dispose() { }
+                public readonly void Dispose() { }
             }
 
             #region Aggregation

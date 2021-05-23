@@ -1,4 +1,5 @@
 ﻿using System.Buffers;
+using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 
@@ -13,11 +14,11 @@ namespace NetFabric.Hyperlinq
         {
             return source switch
             {
-                ICollection<TSource> collection => BuildArrayFromCollection(collection),
+                ICollection collection => BuildArrayFromCollection(collection),
                 _ => BuildArray(source)
             };
 
-            static TSource[] BuildArrayFromCollection(ICollection<TSource> collection)
+            static TSource[] BuildArrayFromCollection(ICollection collection)
             {
                 var result = Utils.AllocateUninitializedArray<TSource>(collection.Count);
                 collection.CopyTo(result, 0);
@@ -43,6 +44,7 @@ namespace NetFabric.Hyperlinq
         //////////////////////////////////////////////////////////////////////////////////////////////////
 
 
+        [GeneratorIgnore]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static TSource[] ToArray<TEnumerable, TEnumerator, TSource, TPredicate>(this TEnumerable source, TPredicate predicate)
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>
@@ -53,6 +55,7 @@ namespace NetFabric.Hyperlinq
             return arrayBuilder.ToArray();
         }
 
+        [GeneratorIgnore]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static ValueMemoryOwner<TSource> ToArray<TEnumerable, TEnumerator, TSource, TPredicate>(this TEnumerable source, ArrayPool<TSource> pool, bool clearOnDispose, TPredicate predicate)
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>
@@ -66,6 +69,7 @@ namespace NetFabric.Hyperlinq
         //////////////////////////////////////////////////////////////////////////////////////////////////
 
 
+        [GeneratorIgnore]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static TSource[] ToArrayAt<TEnumerable, TEnumerator, TSource, TPredicate>(this TEnumerable source, TPredicate predicate)
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>
@@ -76,6 +80,7 @@ namespace NetFabric.Hyperlinq
             return arrayBuilder.ToArray();
         }
 
+        [GeneratorIgnore]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static ValueMemoryOwner<TSource> ToArrayAt<TEnumerable, TEnumerator, TSource, TPredicate>(this TEnumerable source, ArrayPool<TSource> pool, bool clearOnDispose, TPredicate predicate)
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>
@@ -89,6 +94,7 @@ namespace NetFabric.Hyperlinq
         //////////////////////////////////////////////////////////////////////////////////////////////////
 
 
+        [GeneratorIgnore]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static TResult[] ToArray<TEnumerable, TEnumerator, TSource, TResult, TSelector>(this TEnumerable source, TSelector selector)
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>
@@ -99,6 +105,7 @@ namespace NetFabric.Hyperlinq
             return arrayBuilder.ToArray();
         }
 
+        [GeneratorIgnore]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static ValueMemoryOwner<TResult> ToArray<TEnumerable, TEnumerator, TSource, TResult, TSelector>(this TEnumerable source, ArrayPool<TResult> pool, bool clearOnDispose, TSelector selector)
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>
@@ -111,6 +118,7 @@ namespace NetFabric.Hyperlinq
 
         //////////////////////////////////////////////////////////////////////////////////////////////////
 
+        [GeneratorIgnore]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static TResult[] ToArrayAt<TEnumerable, TEnumerator, TSource, TResult, TSelector>(this TEnumerable source, TSelector selector)
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>
@@ -121,6 +129,7 @@ namespace NetFabric.Hyperlinq
             return arrayBuilder.ToArray();
         }
 
+        [GeneratorIgnore]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static ValueMemoryOwner<TResult> ToArrayAt<TEnumerable, TEnumerator, TSource, TResult, TSelector>(this TEnumerable source, ArrayPool<TResult> pool, bool clearOnDispose, TSelector selector)
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>
@@ -134,6 +143,7 @@ namespace NetFabric.Hyperlinq
         //////////////////////////////////////////////////////////////////////////////////////////////////
 
 
+        [GeneratorIgnore]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static TResult[] ToArray<TEnumerable, TEnumerator, TSource, TResult, TPredicate, TSelector>(this TEnumerable source, TPredicate predicate, TSelector selector)
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>
@@ -145,6 +155,7 @@ namespace NetFabric.Hyperlinq
             return arrayBuilder.ToArray();
         }
 
+        [GeneratorIgnore]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static ValueMemoryOwner<TResult> ToArray<TEnumerable, TEnumerator, TSource, TResult, TPredicate, TSelector>(this TEnumerable source, ArrayPool<TResult> pool, bool clearOnDispose, TPredicate predicate, TSelector selector)
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>

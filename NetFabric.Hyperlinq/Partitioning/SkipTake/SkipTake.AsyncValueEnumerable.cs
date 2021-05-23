@@ -11,12 +11,6 @@ namespace NetFabric.Hyperlinq
     public static partial class AsyncValueEnumerableExtensions
     {
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        static SkipTakeEnumerable<TEnumerable, TEnumerator, TSource> SkipTake<TEnumerable, TEnumerator, TSource>(this TEnumerable source, int skipCount, int takeCount)
-            where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
-            where TEnumerator : struct, IAsyncEnumerator<TSource>
-            => new(in source, skipCount, takeCount);
-
         [StructLayout(LayoutKind.Auto)]
         public readonly partial struct SkipTakeEnumerable<TEnumerable, TEnumerator, TSource>
             : IAsyncValueEnumerable<TSource, SkipTakeEnumerable<TEnumerable, TEnumerator, TSource>.Enumerator>
@@ -24,21 +18,20 @@ namespace NetFabric.Hyperlinq
             where TEnumerator : struct, IAsyncEnumerator<TSource>
         {
             readonly TEnumerable source;
-            readonly int skipCount;
-            readonly int takeCount;
+            readonly int offset;
+            readonly int count;
 
-            internal SkipTakeEnumerable(in TEnumerable source, int skipCount, int takeCount)
-            {
-                this.source = source;
-                this.skipCount = skipCount;
-                this.takeCount = takeCount;
-            }
+            internal SkipTakeEnumerable(in TEnumerable source, int offset, int count)
+                => (this.source, this.offset, this.count) = (source, offset, count);
 
+            internal SkipTakeEnumerable(in TEnumerable source, (int Offset, int Count) slice)
+                => (this.source, offset, count) = (source, slice.Offset, slice.Count);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public readonly Enumerator GetAsyncEnumerator(CancellationToken cancellationToken = default)
+            public Enumerator GetAsyncEnumerator(CancellationToken cancellationToken = default)
                 => new(in this, cancellationToken);
-            readonly IAsyncEnumerator<TSource> IAsyncEnumerable<TSource>.GetAsyncEnumerator(CancellationToken cancellationToken)
+
+            IAsyncEnumerator<TSource> IAsyncEnumerable<TSource>.GetAsyncEnumerator(CancellationToken cancellationToken)
                 => new Enumerator(in this, cancellationToken);
 
             [StructLayout(LayoutKind.Auto)]
@@ -61,8 +54,8 @@ namespace NetFabric.Hyperlinq
                 internal Enumerator(in SkipTakeEnumerable<TEnumerable, TEnumerator, TSource> enumerable, CancellationToken cancellationToken)
                 {
                     enumerator = enumerable.source.GetAsyncEnumerator(cancellationToken);
-                    skipCounter = enumerable.skipCount;
-                    takeCounter = enumerable.takeCount;
+                    skipCounter = enumerable.offset;
+                    takeCounter = enumerable.count;
 
                     state = default;
                     builder = default;
@@ -213,12 +206,21 @@ namespace NetFabric.Hyperlinq
                 }
 
                 void IAsyncStateMachine.SetStateMachine(IAsyncStateMachine stateMachine)
-                { }
+                {
+                }
             }
+
+            #region Partitioning
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public SkipTakeEnumerable<TEnumerable, TEnumerator, TSource> Skip(int count)
+                => new(source, Utils.Skip(this.count, offset + count));
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public SkipTakeEnumerable<TEnumerable, TEnumerator, TSource> Take(int count)
-                => source.SkipTake<TEnumerable, TEnumerator, TSource>(skipCount, Math.Min(takeCount, count));
+                => new(source, offset, Utils.Take(this.count, count));
+
+            #endregion
         }
     }
 }

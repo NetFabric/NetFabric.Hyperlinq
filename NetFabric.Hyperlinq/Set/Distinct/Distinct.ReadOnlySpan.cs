@@ -9,7 +9,6 @@ namespace NetFabric.Hyperlinq
     public static partial class ArrayExtensions
     {
 
-        [GeneratorIgnore(false)]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static SpanDistinctEnumerable<TSource> Distinct<TSource>(
             this ReadOnlySpan<TSource> source, 
@@ -30,7 +29,7 @@ namespace NetFabric.Hyperlinq
 
             
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public readonly Enumerator GetEnumerator() 
+            public Enumerator GetEnumerator() 
                 => new(in this);
 
             [StructLayout(LayoutKind.Auto)]
@@ -68,7 +67,7 @@ namespace NetFabric.Hyperlinq
                     => set.Dispose();
             }
 
-            readonly Set<TSource> GetSet() 
+            Set<TSource> GetSet() 
             {
                 var set = new Set<TSource>(comparer);
                 foreach (var t in source)
@@ -77,7 +76,7 @@ namespace NetFabric.Hyperlinq
             }
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public readonly int Count()
+            public int Count()
                 => source.Length switch
                 {
                     0 => 0,
@@ -85,11 +84,11 @@ namespace NetFabric.Hyperlinq
                 };
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public readonly bool Any()
+            public bool Any()
                 => source.Length is not 0;
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public readonly TSource[] ToArray()
+            public TSource[] ToArray()
                 => source.Length switch
                 {
                     0 => Array.Empty<TSource>(),
@@ -101,7 +100,7 @@ namespace NetFabric.Hyperlinq
                 => GetSet().ToArray(pool, clearOnDispose);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public readonly List<TSource> ToList()
+            public List<TSource> ToList()
                 => source.Length switch
                 {
                     // ReSharper disable once HeapView.ObjectAllocation.Evident
@@ -109,7 +108,7 @@ namespace NetFabric.Hyperlinq
                     _ => GetSet().ToList()
                 };
 
-            public readonly bool SequenceEqual(IEnumerable<TSource> other, IEqualityComparer<TSource>? comparer = default)
+            public bool SequenceEqual(IEnumerable<TSource> other, IEqualityComparer<TSource>? comparer = default)
             {
                 comparer ??= EqualityComparer<TSource>.Default;
 

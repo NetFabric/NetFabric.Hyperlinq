@@ -5,7 +5,6 @@ namespace NetFabric.Hyperlinq
 {
     public static partial class ArrayExtensions
     {
-        [GeneratorIgnore(false)]
         static bool Contains<TSource>(this ReadOnlySpan<TSource> source, TSource value, IEqualityComparer<TSource>? comparer = default)
         {
             return source switch
@@ -38,6 +37,7 @@ namespace NetFabric.Hyperlinq
             }
         }
 
+        [GeneratorIgnore]
         static bool Contains<TSource, TResult, TSelector>(this ReadOnlySpan<TSource> source, TResult value, IEqualityComparer<TResult>? comparer, TSelector selector)
             where TSelector : struct, IFunction<TSource, TResult>
         {
@@ -71,6 +71,7 @@ namespace NetFabric.Hyperlinq
             }
         }
 
+        [GeneratorIgnore]
         static bool ContainsAt<TSource, TResult, TSelector>(this ReadOnlySpan<TSource> source, TResult value, IEqualityComparer<TResult>? comparer, TSelector selector)
             where TSelector : struct, IFunction<TSource, int, TResult>
         {

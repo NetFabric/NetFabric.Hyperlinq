@@ -58,6 +58,7 @@ namespace NetFabric.Hyperlinq
         }
 
         
+        [GeneratorIgnore]
         static async ValueTask<Dictionary<TKey, TSource>> ToDictionaryAsync<TEnumerable, TEnumerator, TSource, TKey, TKeySelector, TPredicate>(
             this TEnumerable source, 
             TKeySelector keySelector, 
@@ -92,6 +93,7 @@ namespace NetFabric.Hyperlinq
         }
 
 
+        [GeneratorIgnore]
         static async ValueTask<Dictionary<TKey, TSource>> ToDictionaryAtAsync<TEnumerable, TEnumerator, TSource, TKey, TKeySelector, TPredicate>(
             this TEnumerable source, 
             TKeySelector keySelector, 
@@ -129,6 +131,7 @@ namespace NetFabric.Hyperlinq
             }
         }
 
+        [GeneratorIgnore]
         static async ValueTask<Dictionary<TKey, TResult>> ToDictionaryAsync<TEnumerable, TEnumerator, TSource, TKey, TKeySelector, TResult, TPredicate, TSelector>(
             this TEnumerable source, 
             TKeySelector keySelector, 
@@ -220,6 +223,7 @@ namespace NetFabric.Hyperlinq
         }
 
         
+        [GeneratorIgnore]
         static async ValueTask<Dictionary<TKey, TElement>> ToDictionaryAsync<TEnumerable, TEnumerator, TSource, TKey, TElement, TKeySelector, TElementSelector, TPredicate>(
             this TEnumerable source, 
             TKeySelector keySelector, 
@@ -256,6 +260,7 @@ namespace NetFabric.Hyperlinq
         }
 
         
+        [GeneratorIgnore]
         static async ValueTask<Dictionary<TKey, TElement>> ToDictionaryAtAsync<TEnumerable, TEnumerator, TSource, TKey, TElement, TKeySelector, TElementSelector, TPredicate>(
             this TEnumerable source, 
             TKeySelector keySelector, 
@@ -295,6 +300,7 @@ namespace NetFabric.Hyperlinq
         }
         
 
+        [GeneratorIgnore]
         static async ValueTask<Dictionary<TKey, TElement>> ToDictionaryAsync<TEnumerable, TEnumerator, TSource, TKey, TElement, TKeySelector, TElementSelector, TResult, TPredicate, TSelector>(
             this TEnumerable source, 
             TKeySelector keySelector, 

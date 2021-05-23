@@ -18,6 +18,7 @@ namespace NetFabric.Hyperlinq
             return counter;
         }
 
+        [GeneratorIgnore]
         internal static int Count<TEnumerable, TEnumerator, TSource, TPredicate>(this TEnumerable source, TPredicate predicate)
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
@@ -33,6 +34,7 @@ namespace NetFabric.Hyperlinq
             return counter;
         }
 
+        [GeneratorIgnore]
         internal static int CountAt<TEnumerable, TEnumerator, TSource, TPredicate>(this TEnumerable source, TPredicate predicate)
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>

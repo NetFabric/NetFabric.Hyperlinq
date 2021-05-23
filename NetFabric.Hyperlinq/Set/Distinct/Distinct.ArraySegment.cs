@@ -25,12 +25,14 @@ namespace NetFabric.Hyperlinq
                 => (this.source, this.comparer) = (source, comparer);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public readonly Enumerator GetEnumerator()
+            public Enumerator GetEnumerator()
                 => new(in this);
-            readonly IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator()
+
+            IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator()
                 // ReSharper disable once HeapView.BoxingAllocation
                 => new Enumerator(in this);
-            readonly IEnumerator IEnumerable.GetEnumerator()
+
+            IEnumerator IEnumerable.GetEnumerator()
                 // ReSharper disable once HeapView.BoxingAllocation
                 => new Enumerator(in this);
 
@@ -81,7 +83,7 @@ namespace NetFabric.Hyperlinq
                     => set.Dispose();
             }
 
-            readonly Set<TSource> GetSet()
+            Set<TSource> GetSet()
             {
                 var set = new Set<TSource>(comparer);
                 foreach (var item in source.AsSpan())
@@ -89,20 +91,38 @@ namespace NetFabric.Hyperlinq
                 return set;
             }
 
+            #region Aggregation
+            
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public readonly int Count()
+            public int Count()
                 => source switch
                 {
                     { Count: 0 } => 0,
                     _ => GetSet().Count
                 };
+            
+            #endregion
+            
+            #region Quantifier
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public readonly bool Any()
+            public bool Any()
                 => source.Count is not 0;
+            
+            #endregion
+            
+            #region Conversion
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public readonly TSource[] ToArray()
+            public ArraySegmentDistinctEnumerable<TSource> AsValueEnumerable()
+                => this;
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public ArraySegmentDistinctEnumerable<TSource> AsEnumerable()
+                => this;
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public TSource[] ToArray()
                 => source switch
                 {
                     { Count: 0 } => Array.Empty<TSource>(),
@@ -114,13 +134,15 @@ namespace NetFabric.Hyperlinq
                 => GetSet().ToArray(pool, clearOnDispose);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public readonly List<TSource> ToList()
+            public List<TSource> ToList()
                 => source switch
                 {
                     // ReSharper disable once HeapView.ObjectAllocation.Evident
                     { Count: 0 } => new List<TSource>(),
                     _ => GetSet().ToList()
                 };
+            
+            #endregion
         }
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

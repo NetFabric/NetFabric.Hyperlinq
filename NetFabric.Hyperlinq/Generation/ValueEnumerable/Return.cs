@@ -23,11 +23,11 @@ namespace NetFabric.Hyperlinq
             internal ReturnEnumerable(TSource value) 
                 => this.value = value;
 
-            public readonly int Count 
+            public int Count 
                 => 1;
 
             
-            public readonly TSource this[int index]
+            public TSource this[int index]
             {
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
                 get => index switch
@@ -36,8 +36,7 @@ namespace NetFabric.Hyperlinq
                     _ => Throw.ArgumentOutOfRangeException<TSource>(nameof(index))
                 };
             }
-            TSource IReadOnlyList<TSource>.this[int index]
-                => this[index];
+
             TSource IList<TSource>.this[int index]
             {
                 get => this[index];
@@ -48,14 +47,17 @@ namespace NetFabric.Hyperlinq
             }
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public readonly Enumerator GetEnumerator() 
+            public Enumerator GetEnumerator() 
                 => new(in this);
-            readonly DisposableEnumerator IValueEnumerable<TSource, DisposableEnumerator>.GetEnumerator() 
+
+            DisposableEnumerator IValueEnumerable<TSource, DisposableEnumerator>.GetEnumerator() 
                 => new(in this);
-            readonly IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() 
+
+            IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() 
                 // ReSharper disable once HeapView.BoxingAllocation
                 => new DisposableEnumerator(in this);
-            readonly IEnumerator IEnumerable.GetEnumerator() 
+
+            IEnumerator IEnumerable.GetEnumerator() 
                 // ReSharper disable once HeapView.BoxingAllocation
                 => new DisposableEnumerator(in this);
 
@@ -113,7 +115,7 @@ namespace NetFabric.Hyperlinq
                     => (Current, moveNext) = (enumerable.value, true);
 
                 
-                public readonly TSource Current { get; }
+                public TSource Current { get; }
 
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
                 public bool MoveNext()
@@ -137,7 +139,7 @@ namespace NetFabric.Hyperlinq
                 }
 
                 
-                public readonly TSource Current { get; }
+                public TSource Current { get; }
                 readonly TSource IEnumerator<TSource>.Current 
                     => Current;
                 readonly object? IEnumerator.Current

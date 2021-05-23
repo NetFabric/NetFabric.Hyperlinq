@@ -30,14 +30,17 @@ namespace NetFabric.Hyperlinq
             internal WhereEnumerable(TEnumerable source, TPredicate predicate)
                 => (this.source, this.predicate) = (source, predicate);
 
-            public readonly Enumerator GetEnumerator()
+            public Enumerator GetEnumerator()
                 => new();
-            readonly DisposableEnumerator IValueEnumerable<TSource, WhereEnumerable<TEnumerable, TEnumerator, TSource, TPredicate>.DisposableEnumerator>.GetEnumerator()
+
+            DisposableEnumerator IValueEnumerable<TSource, DisposableEnumerator>.GetEnumerator()
                 => new();
-            readonly IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator()
+
+            IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator()
                 // ReSharper disable once HeapView.BoxingAllocation
                 => new DisposableEnumerator();
-            readonly IEnumerator IEnumerable.GetEnumerator()
+
+            IEnumerator IEnumerable.GetEnumerator()
                 // ReSharper disable once HeapView.BoxingAllocation
                 => new DisposableEnumerator();
 

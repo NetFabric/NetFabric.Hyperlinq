@@ -18,6 +18,7 @@ namespace NetFabric.Hyperlinq
                     : Option.None
             };
 
+        [GeneratorIgnore]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static Option<TSource> ElementAt<TEnumerable, TEnumerator, TSource, TPredicate>(this TEnumerable source, int index, TPredicate predicate)
             where TEnumerable : IValueReadOnlyCollection<TSource, TEnumerator>
@@ -29,9 +30,9 @@ namespace NetFabric.Hyperlinq
                 _ => ValueEnumerableExtensions.ElementAt<TEnumerable, TEnumerator, TSource, TPredicate>(source, index, predicate)
             };
 
+        [GeneratorIgnore]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        static Option<TSource> ElementAtAt<TEnumerable, TEnumerator, TSource, TPredicate>(this TEnumerable source,
-            int index, TPredicate predicate)
+        static Option<TSource> ElementAtAt<TEnumerable, TEnumerator, TSource, TPredicate>(this TEnumerable source, int index, TPredicate predicate)
             where TEnumerable : IValueReadOnlyCollection<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
             where TPredicate : struct, IFunction<TSource, int, bool>
@@ -41,6 +42,7 @@ namespace NetFabric.Hyperlinq
                 _ => ValueEnumerableExtensions.ElementAtAt<TEnumerable, TEnumerator, TSource, TPredicate>(source, index, predicate)
             };
 
+        [GeneratorIgnore]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static Option<TResult> ElementAt<TEnumerable, TEnumerator, TSource, TResult, TSelector>(this TEnumerable source, int index, TSelector selector)
             where TEnumerable : IValueReadOnlyCollection<TSource, TEnumerator>
@@ -55,6 +57,7 @@ namespace NetFabric.Hyperlinq
             };
 
 
+        [GeneratorIgnore]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static Option<TResult> ElementAtAt<TEnumerable, TEnumerator, TSource, TResult, TSelector>(this TEnumerable source, int index, TSelector selector)
             where TEnumerable : IValueReadOnlyCollection<TSource, TEnumerator>
@@ -68,6 +71,7 @@ namespace NetFabric.Hyperlinq
                     : Option.None
             };
 
+        [GeneratorIgnore]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static Option<TResult> ElementAt<TEnumerable, TEnumerator, TSource, TResult, TPredicate, TSelector>(this TEnumerable source, int index, TPredicate predicate, TSelector selector)
             where TEnumerable : IValueReadOnlyCollection<TSource, TEnumerator>

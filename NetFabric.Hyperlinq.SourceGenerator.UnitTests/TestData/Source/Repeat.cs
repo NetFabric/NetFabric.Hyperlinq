@@ -32,18 +32,21 @@ namespace NetFabric.Hyperlinq
                 this.count = count;
             }
 
-            public readonly int Count 
+            public int Count 
                 => count;
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public readonly Enumerator GetEnumerator() 
+            public Enumerator GetEnumerator() 
                 => new(in this);
-            readonly DisposableEnumerator IValueEnumerable<TSource, DisposableEnumerator>.GetEnumerator() 
+
+            DisposableEnumerator IValueEnumerable<TSource, DisposableEnumerator>.GetEnumerator() 
                 => new(in this);
-            readonly IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() 
+
+            IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() 
                 // ReSharper disable once HeapView.BoxingAllocation
                 => new DisposableEnumerator(in this);
-            readonly IEnumerator IEnumerable.GetEnumerator() 
+
+            IEnumerator IEnumerable.GetEnumerator() 
                 // ReSharper disable once HeapView.BoxingAllocation
                 => new DisposableEnumerator(in this);
 
@@ -92,7 +95,7 @@ namespace NetFabric.Hyperlinq
                     end = counter + enumerable.Count;
                 }
 
-                public readonly TSource Current { get; }
+                public TSource Current { get; }
 
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
                 public bool MoveNext() 
@@ -113,7 +116,7 @@ namespace NetFabric.Hyperlinq
                     end = counter + enumerable.Count;
                 }
 
-                public readonly TSource Current { get; }
+                public TSource Current { get; }
                 readonly TSource IEnumerator<TSource>.Current 
                     => Current;
                 readonly object? IEnumerator.Current

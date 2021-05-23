@@ -19,8 +19,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Set.Distinct
                 .Distinct();
 
             // Act
-            var result = wrapped
-                .Distinct<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int>();
+            var result = wrapped.AsValueEnumerable()
+                .Distinct();
 
             // Assert
             _ = result.Must()
@@ -41,8 +41,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Set.Distinct
                 .ToArray();
 
             // Act
-            var result = wrapped
-                .Distinct<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int>()
+            var result = wrapped.AsValueEnumerable()
+                .Distinct()
                 .ToArray();
 
             // Assert
@@ -65,8 +65,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Set.Distinct
                 .ToArray();
 
             // Act
-            using var result = wrapped
-                .Distinct<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int>()
+            using var result = wrapped.AsValueEnumerable()
+                .Distinct()
                 .ToArray(pool);
 
             // Assert
@@ -87,8 +87,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Set.Distinct
                 .ToList();
 
             // Act
-            var result = wrapped
-                .Distinct<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int>()
+            var result = wrapped.AsValueEnumerable()
+                .Distinct()
                 .ToList();
 
             // Assert
@@ -110,8 +110,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Set.Distinct
                 .Sum();
 
             // Act
-            var result = wrapped
-                .Distinct<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int>()
+            var result = wrapped.AsValueEnumerable()
+                .Distinct()
                 .Sum();
 
             // Assert

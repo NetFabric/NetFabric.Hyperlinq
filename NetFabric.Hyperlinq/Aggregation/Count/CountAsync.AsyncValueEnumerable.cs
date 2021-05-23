@@ -27,6 +27,7 @@ namespace NetFabric.Hyperlinq
             return counter;
         }
 
+        [GeneratorIgnore]
         static async ValueTask<int> CountAsync<TEnumerable, TEnumerator, TSource, TPredicate>(this TEnumerable source, CancellationToken cancellationToken, TPredicate predicate)
             where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
@@ -52,6 +53,7 @@ namespace NetFabric.Hyperlinq
             return counter;
         }
 
+        [GeneratorIgnore]
         static async ValueTask<int> CountAtAsync<TEnumerable, TEnumerator, TSource, TPredicate>(this TEnumerable source, CancellationToken cancellationToken, TPredicate predicate)
             where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>

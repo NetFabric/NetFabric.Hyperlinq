@@ -20,8 +20,6 @@ namespace NetFabric.Hyperlinq
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             get => enumerator.Current;
         }
-        TSource IEnumerator<TSource>.Current
-            => enumerator.Current;
         object? IEnumerator.Current
             // ReSharper disable once HeapView.PossibleBoxingAllocation
             => enumerator.Current;

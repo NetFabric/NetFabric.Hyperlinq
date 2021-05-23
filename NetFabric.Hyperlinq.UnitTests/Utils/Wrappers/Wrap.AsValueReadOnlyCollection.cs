@@ -22,17 +22,19 @@ namespace NetFabric.Hyperlinq
             internal ValueReadOnlyCollectionWrapper(T[] source)
                 => this.source = source;
 
-            public readonly int Count 
+            public int Count 
                 => source.Length;
 
-            public readonly Enumerator<T> GetEnumerator() 
+            public Enumerator<T> GetEnumerator() 
                 => new(source);
-            readonly IEnumerator<T> IEnumerable<T>.GetEnumerator() 
+
+            IEnumerator<T> IEnumerable<T>.GetEnumerator() 
                 // ReSharper disable once HeapView.BoxingAllocation
-                => new Enumerator<T>(source);
-            readonly IEnumerator IEnumerable.GetEnumerator()
+                => GetEnumerator();
+
+            IEnumerator IEnumerable.GetEnumerator()
                 // ReSharper disable once HeapView.BoxingAllocation
-                => new Enumerator<T>(source);
+                => GetEnumerator();
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public ReadOnlyCollectionExtensions.ValueEnumerable<ValueReadOnlyCollectionWrapper<T>, Enumerator<T>, Enumerator<T>, T, GetEnumeratorFunction, GetEnumeratorFunction> AsValueEnumerable()

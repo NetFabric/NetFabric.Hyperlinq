@@ -12,7 +12,8 @@ namespace NetFabric.Hyperlinq
             where TEnumerator : struct, IEnumerator<TSource>
             => source.GetSingle<TEnumerable, TEnumerator, TSource>();
 
-        
+
+        [GeneratorIgnore]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static Option<TSource> Single<TEnumerable, TEnumerator, TSource, TPredicate>(this TEnumerable source, TPredicate predicate) 
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>
@@ -20,7 +21,8 @@ namespace NetFabric.Hyperlinq
             where TPredicate : struct, IFunction<TSource, bool>
             => source.GetSingle<TEnumerable, TEnumerator, TSource, TPredicate>(predicate);
 
-        
+
+        [GeneratorIgnore]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static Option<TSource> SingleAt<TEnumerable, TEnumerator, TSource, TPredicate>(this TEnumerable source, TPredicate predicate) 
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>
@@ -28,7 +30,8 @@ namespace NetFabric.Hyperlinq
             where TPredicate : struct, IFunction<TSource, int, bool>
             => source.GetSingleAt<TEnumerable, TEnumerator, TSource, TPredicate>(predicate);
 
-        
+
+        [GeneratorIgnore]
         static Option<TResult> Single<TEnumerable, TEnumerator, TSource, TResult, TSelector>(this TEnumerable source, TSelector selector) 
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
@@ -37,7 +40,8 @@ namespace NetFabric.Hyperlinq
                 .GetSingle<TEnumerable, TEnumerator, TSource>()
                 .Select<TResult, TSelector>(selector);
 
-        
+
+        [GeneratorIgnore]
         static Option<TResult> SingleAt<TEnumerable, TEnumerator, TSource, TResult, TSelector>(this TEnumerable source, TSelector selector) 
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
@@ -59,6 +63,7 @@ namespace NetFabric.Hyperlinq
                 => selector.Invoke(item, 0);
         }
 
+        [GeneratorIgnore]
         internal static Option<TResult> Single<TEnumerable, TEnumerator, TSource, TResult, TPredicate, TSelector>(this TEnumerable source, TPredicate predicate, TSelector selector) 
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
@@ -69,7 +74,8 @@ namespace NetFabric.Hyperlinq
         ////////////////////////////////
         // GetSingle 
 
-        
+
+        [GeneratorIgnore]
         static Option<TSource> GetSingle<TEnumerable, TEnumerator, TSource>(this TEnumerable source) 
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
@@ -86,7 +92,8 @@ namespace NetFabric.Hyperlinq
             return Option.None;
         }
 
-        
+
+        [GeneratorIgnore]
         static Option<TSource> GetSingle<TEnumerable, TEnumerator, TSource, TPredicate>(this TEnumerable source, TPredicate predicate) 
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
@@ -112,7 +119,8 @@ namespace NetFabric.Hyperlinq
             return Option.None;
         }
 
-        
+
+        [GeneratorIgnore]
         static Option<TSource> GetSingleAt<TEnumerable, TEnumerator, TSource, TPredicate>(this TEnumerable source, TPredicate predicate) 
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>

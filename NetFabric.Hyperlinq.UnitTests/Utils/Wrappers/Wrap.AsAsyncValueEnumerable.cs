@@ -22,11 +22,13 @@ namespace NetFabric.Hyperlinq
             internal AsyncValueEnumerableWrapper(T[] source)
                 => this.source = source;
 
-            public readonly AsyncEnumerator<T> GetAsyncEnumerator() 
+            public AsyncEnumerator<T> GetAsyncEnumerator() 
                 => new(source);
-            readonly AsyncEnumerator<T> IAsyncValueEnumerable<T, AsyncEnumerator<T>>.GetAsyncEnumerator(CancellationToken _) 
+
+            AsyncEnumerator<T> IAsyncValueEnumerable<T, AsyncEnumerator<T>>.GetAsyncEnumerator(CancellationToken _) 
                 => new(source);
-            readonly IAsyncEnumerator<T> IAsyncEnumerable<T>.GetAsyncEnumerator(CancellationToken _) 
+
+            IAsyncEnumerator<T> IAsyncEnumerable<T>.GetAsyncEnumerator(CancellationToken _) 
                 // ReSharper disable once HeapView.BoxingAllocation
                 => new AsyncEnumerator<T>(source);
 

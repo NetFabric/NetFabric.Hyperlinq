@@ -9,7 +9,7 @@ namespace NetFabric.Hyperlinq
         static bool ContainsVector<TSource>(this ReadOnlySpan<TSource> source, TSource value)
             where TSource : struct
         {
-            if (source.Length is 0)
+            if (source.IsEmpty)
                 return false;
             
             if (Vector.IsHardwareAccelerated && source.Length > Vector<TSource>.Count * 2)
@@ -42,13 +42,14 @@ namespace NetFabric.Hyperlinq
             return false;
         }
 
+        [GeneratorIgnore]
         static bool ContainsVector<TSource, TResult, TVectorSelector, TSelector>(this ReadOnlySpan<TSource> source, TResult value, TVectorSelector vectorSelector, TSelector selector)
             where TVectorSelector : struct, IFunction<Vector<TSource>, Vector<TResult>>
             where TSelector : struct, IFunction<TSource, TResult>
             where TSource : struct
             where TResult : struct
         {
-            if (source.Length is 0)
+            if (source.IsEmpty)
                 return false;
             
             if (Vector.IsHardwareAccelerated && source.Length > Vector<TSource>.Count * 2)

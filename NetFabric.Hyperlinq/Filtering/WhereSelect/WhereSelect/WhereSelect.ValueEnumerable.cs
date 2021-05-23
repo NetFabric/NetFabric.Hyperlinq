@@ -11,6 +11,7 @@ namespace NetFabric.Hyperlinq
     public static partial class ValueEnumerableExtensions
     {
 
+        [GeneratorIgnore]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static WhereSelectEnumerable<TEnumerable, TEnumerator, TSource, TResult, TPredicate, TSelector> WhereSelect<TEnumerable, TEnumerator, TSource, TResult, TPredicate, TSelector>(
             this TEnumerable source, 
@@ -44,12 +45,14 @@ namespace NetFabric.Hyperlinq
 
             
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public readonly Enumerator GetEnumerator() => 
+            public Enumerator GetEnumerator() => 
                 new(in this);
-            readonly IEnumerator<TResult> IEnumerable<TResult>.GetEnumerator() 
+
+            IEnumerator<TResult> IEnumerable<TResult>.GetEnumerator() 
                 // ReSharper disable once HeapView.BoxingAllocation
                 => new Enumerator(in this);
-            readonly IEnumerator IEnumerable.GetEnumerator() 
+
+            IEnumerator IEnumerable.GetEnumerator() 
                 // ReSharper disable once HeapView.BoxingAllocation
                 => new Enumerator(in this);
 
@@ -74,8 +77,6 @@ namespace NetFabric.Hyperlinq
                     [MethodImpl(MethodImplOptions.AggressiveInlining)]
                     get => selector.Invoke(enumerator.Current);
                 }
-                TResult IEnumerator<TResult>.Current 
-                    => selector.Invoke(enumerator.Current);
                 object? IEnumerator.Current
                     // ReSharper disable once HeapView.PossibleBoxingAllocation
                     => selector.Invoke(enumerator.Current);
@@ -92,6 +93,7 @@ namespace NetFabric.Hyperlinq
                 }
 
                 [ExcludeFromCodeCoverage]
+                [DoesNotReturn]
                 public readonly void Reset() 
                     => Throw.NotSupportedException();
 
@@ -186,13 +188,13 @@ namespace NetFabric.Hyperlinq
                 => source.WhereSelect<TEnumerable, TEnumerator, TSource, TResult2, TPredicate, SelectorSelectorCombination<TSelector, TSelector2, TSource, TResult, TResult2>>(predicate, new SelectorSelectorCombination<TSelector, TSelector2, TSource, TResult, TResult2>(this.selector, selector));
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public readonly SelectManyEnumerable<WhereSelectEnumerable<TEnumerable, TEnumerator, TSource, TResult, TPredicate, TSelector>, Enumerator, TResult, TSubEnumerable, TSubEnumerator, TResult2, FunctionWrapper<TResult, TSubEnumerable>> SelectMany<TSubEnumerable, TSubEnumerator, TResult2>(Func<TResult, TSubEnumerable> selector)
+            public SelectManyEnumerable<WhereSelectEnumerable<TEnumerable, TEnumerator, TSource, TResult, TPredicate, TSelector>, Enumerator, TResult, TSubEnumerable, TSubEnumerator, TResult2, FunctionWrapper<TResult, TSubEnumerable>> SelectMany<TSubEnumerable, TSubEnumerator, TResult2>(Func<TResult, TSubEnumerable> selector)
                 where TSubEnumerable : IValueEnumerable<TResult2, TSubEnumerator>
                 where TSubEnumerator : struct, IEnumerator<TResult2>
                 => this.SelectMany<WhereSelectEnumerable<TEnumerable, TEnumerator, TSource, TResult, TPredicate, TSelector>, Enumerator, TResult, TSubEnumerable, TSubEnumerator, TResult2>(selector);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public readonly SelectManyEnumerable<WhereSelectEnumerable<TEnumerable, TEnumerator, TSource, TResult, TPredicate, TSelector>, Enumerator, TResult, TSubEnumerable, TSubEnumerator, TResult2, TSelector2> SelectMany<TSubEnumerable, TSubEnumerator, TResult2, TSelector2>(TSelector2 selector = default)
+            public SelectManyEnumerable<WhereSelectEnumerable<TEnumerable, TEnumerator, TSource, TResult, TPredicate, TSelector>, Enumerator, TResult, TSubEnumerable, TSubEnumerator, TResult2, TSelector2> SelectMany<TSubEnumerable, TSubEnumerator, TResult2, TSelector2>(TSelector2 selector = default)
                 where TSubEnumerable : IValueEnumerable<TResult2, TSubEnumerator>
                 where TSubEnumerator : struct, IEnumerator<TResult2>
                 where TSelector2 : struct, IFunction<TResult, TSubEnumerable>

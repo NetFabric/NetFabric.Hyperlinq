@@ -214,22 +214,22 @@ namespace NetFabric.Hyperlinq
             => CopyTo(array.AsSpan().Slice(arrayIndex));
 
         [ExcludeFromCodeCoverage]
-        void ICollection<TElement>.Add(TElement item) 
+        readonly void ICollection<TElement>.Add(TElement item)
             => Throw.NotSupportedException();
         [ExcludeFromCodeCoverage]
-        void ICollection<TElement>.Clear() 
+        readonly void ICollection<TElement>.Clear() 
             => Throw.NotSupportedException();
         [ExcludeFromCodeCoverage]
-        bool ICollection<TElement>.Contains(TElement item) 
+        readonly bool ICollection<TElement>.Contains(TElement item)
             => Throw.NotSupportedException<bool>();
         [ExcludeFromCodeCoverage]
-        bool ICollection<TElement>.Remove(TElement item) 
+        readonly bool ICollection<TElement>.Remove(TElement item) 
             => Throw.NotSupportedException<bool>();
         [ExcludeFromCodeCoverage]
-        IEnumerator<TElement> IEnumerable<TElement>.GetEnumerator() 
+        readonly IEnumerator<TElement> IEnumerable<TElement>.GetEnumerator()
             => Throw.NotSupportedException<IEnumerator<TElement>>();
         [ExcludeFromCodeCoverage]
-        IEnumerator IEnumerable.GetEnumerator() 
+        readonly IEnumerator IEnumerable.GetEnumerator()
             => Throw.NotSupportedException<IEnumerator>();
 
         /// <summary>

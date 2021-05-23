@@ -46,11 +46,13 @@ namespace NetFabric.Hyperlinq
             }
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public readonly Enumerator GetEnumerator(CancellationToken cancellationToken = default) 
+            public Enumerator GetEnumerator(CancellationToken cancellationToken = default) 
                 => new(in this, cancellationToken);
-            readonly DisposableEnumerator IAsyncValueEnumerable<int, DisposableEnumerator>.GetAsyncEnumerator(CancellationToken cancellationToken) 
+
+            DisposableEnumerator IAsyncValueEnumerable<int, DisposableEnumerator>.GetAsyncEnumerator(CancellationToken cancellationToken) 
                 => new(in this, cancellationToken);
-            readonly IAsyncEnumerator<int> IAsyncEnumerable<int>.GetAsyncEnumerator(CancellationToken cancellationToken) 
+
+            IAsyncEnumerator<int> IAsyncEnumerable<int>.GetAsyncEnumerator(CancellationToken cancellationToken) 
                 // ReSharper disable once HeapView.BoxingAllocation
                 => new DisposableEnumerator(in this, cancellationToken);
 
@@ -133,8 +135,8 @@ namespace NetFabric.Hyperlinq
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public RangeEnumerable Skip(int count)
             {
-                var (skipCount, takeCount) = Utils.Skip(this.count, count);
-                return Range(start + skipCount, takeCount);
+                var (newOffset, newCount) = Utils.Skip(this.count, count);
+                return Range(start + newOffset, newCount);
             }
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]

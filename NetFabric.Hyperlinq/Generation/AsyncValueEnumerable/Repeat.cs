@@ -31,11 +31,13 @@ namespace NetFabric.Hyperlinq
                 => (this.value, this.count) = (value, count);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public readonly AsyncEnumerator GetAsyncEnumerator(CancellationToken cancellationToken = default) 
+            public AsyncEnumerator GetAsyncEnumerator(CancellationToken cancellationToken = default) 
                 => new(in this, cancellationToken);
-            readonly DisposableAsyncEnumerator IAsyncValueEnumerable<TSource, DisposableAsyncEnumerator>.GetAsyncEnumerator(CancellationToken cancellationToken) 
+
+            DisposableAsyncEnumerator IAsyncValueEnumerable<TSource, DisposableAsyncEnumerator>.GetAsyncEnumerator(CancellationToken cancellationToken) 
                 => new(in this, cancellationToken);
-            readonly IAsyncEnumerator<TSource> IAsyncEnumerable<TSource>.GetAsyncEnumerator(CancellationToken cancellationToken) 
+
+            IAsyncEnumerator<TSource> IAsyncEnumerable<TSource>.GetAsyncEnumerator(CancellationToken cancellationToken) 
                 // ReSharper disable once HeapView.BoxingAllocation
                 => new DisposableAsyncEnumerator(in this, cancellationToken);
 
@@ -54,7 +56,7 @@ namespace NetFabric.Hyperlinq
                     this.cancellationToken = cancellationToken;
                 }
 
-                public readonly TSource Current { get; }
+                public TSource Current { get; }
 
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
                 public ValueTask<bool> MoveNextAsync() 
@@ -80,7 +82,7 @@ namespace NetFabric.Hyperlinq
                     this.cancellationToken = cancellationToken;
                 }
                 
-                public readonly TSource Current { get; }
+                public TSource Current { get; }
                 readonly TSource IAsyncEnumerator<TSource>.Current
                     => Current;
 
@@ -109,7 +111,7 @@ namespace NetFabric.Hyperlinq
                     end = counter + enumerable.count;
                 }
                 
-                public readonly TSource Current { get; }
+                public TSource Current { get; }
                 readonly TSource IEnumerator<TSource>.Current
                     => Current;
                 readonly object? IEnumerator.Current
@@ -121,6 +123,7 @@ namespace NetFabric.Hyperlinq
                     => ++counter <= end;
 
                 [ExcludeFromCodeCoverage]
+                [DoesNotReturn]
                 public readonly void Reset() 
                     => Throw.NotSupportedException();
 

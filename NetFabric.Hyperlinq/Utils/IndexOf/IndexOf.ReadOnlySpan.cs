@@ -9,7 +9,7 @@ namespace NetFabric.Hyperlinq
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int IndexOf<TSource>(ReadOnlySpan<TSource> source, TSource item)
         {
-            if (source.Length is 0)
+            if (source.IsEmpty)
                 return -1;
 
             if (Utils.IsValueType<TSource>())
@@ -39,7 +39,7 @@ namespace NetFabric.Hyperlinq
         public static int IndexOf<TSource, TResult, TSelector>(ReadOnlySpan<TSource> source, TResult item, TSelector selector)
             where TSelector : struct, IFunction<TSource, TResult>
         {
-            if (source.Length is 0)
+            if (source.IsEmpty)
                 return -1;
 
             if (Utils.IsValueType<TSource>())
@@ -70,7 +70,7 @@ namespace NetFabric.Hyperlinq
         public static int IndexOfAt<TSource, TResult, TSelector>(ReadOnlySpan<TSource> source, TResult item, TSelector selector)
             where TSelector : struct, IFunction<TSource, int, TResult>
         {
-            if (source.Length is 0)
+            if (source.IsEmpty)
                 return -1;
 
             if (Utils.IsValueType<TSource>())

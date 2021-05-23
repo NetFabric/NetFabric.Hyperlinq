@@ -11,7 +11,6 @@ namespace NetFabric.Hyperlinq
     public static partial class ArrayExtensions
     {
 
-        [GeneratorIgnore(false)]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static MemoryDistinctEnumerable<TSource> Distinct<TSource>(
             this ReadOnlyMemory<TSource> source, 
@@ -29,12 +28,14 @@ namespace NetFabric.Hyperlinq
                 => (this.source, this.comparer) = (source, comparer);
             
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public readonly Enumerator GetEnumerator() 
+            public Enumerator GetEnumerator() 
                 => new(in this);
-            readonly IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() 
+
+            IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() 
                 // ReSharper disable once HeapView.BoxingAllocation
                 => new Enumerator(in this);
-            readonly IEnumerator IEnumerable.GetEnumerator() 
+
+            IEnumerator IEnumerable.GetEnumerator() 
                 // ReSharper disable once HeapView.BoxingAllocation
                 => new Enumerator(in this);
 
@@ -84,7 +85,7 @@ namespace NetFabric.Hyperlinq
                     => set.Dispose();
             }
 
-            readonly Set<TSource> GetSet() 
+            Set<TSource> GetSet() 
             {
                 var set = new Set<TSource>(comparer);
                 foreach (var t in source.Span)
@@ -92,20 +93,38 @@ namespace NetFabric.Hyperlinq
                 return set;
             }
 
+            #region Aggregation
+
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public readonly int Count()
+            public int Count()
                 => source switch
                 {
                     { Length: 0 } => 0,
                     _ => GetSet().Count
                 };
+            
+            #endregion
+            
+            #region Quantifier
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public readonly bool Any()
+            public bool Any()
                 => source.Length is not 0;
+            
+            #endregion
+            
+            #region Conversion
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public readonly TSource[] ToArray()
+            public MemoryDistinctEnumerable<TSource> AsValueEnumerable()
+                => this;
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public MemoryDistinctEnumerable<TSource> AsEnumerable()
+                => this;
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public TSource[] ToArray()
                 => source switch
                 {
                     { Length: 0 } => Array.Empty<TSource>(),
@@ -117,35 +136,15 @@ namespace NetFabric.Hyperlinq
                 => GetSet().ToArray(pool, clearOnDispose);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public readonly List<TSource> ToList()
+            public List<TSource> ToList()
                 => source switch
                 {
                     // ReSharper disable once HeapView.ObjectAllocation.Evident
                     { Length: 0 } => new List<TSource>(),
                     _ => GetSet().ToList()
                 };
-
-            public bool SequenceEqual(IEnumerable<TSource> other, IEqualityComparer<TSource>? comparer = default)
-            {
-                comparer ??= EqualityComparer<TSource>.Default;
-
-                using var enumerator = GetEnumerator();
-                using var otherEnumerator = other.GetEnumerator();
-                while (true)
-                {
-                    var thisEnded = !enumerator.MoveNext();
-                    var otherEnded = !otherEnumerator.MoveNext();
-
-                    if (thisEnded != otherEnded)
-                        return false;
-
-                    if (thisEnded)
-                        return true;
-
-                    if (!comparer.Equals(enumerator.Current!, otherEnumerator.Current))
-                        return false;
-                }
-            }
+            
+            #endregion
         }
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

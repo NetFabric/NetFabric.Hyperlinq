@@ -11,13 +11,11 @@ namespace NetFabric.Hyperlinq
     public static partial class ArrayExtensions
     {
 
-        [GeneratorIgnore(false)]
         [GeneratorMapping("TSelector", "NetFabric.Hyperlinq.FunctionWrapper<TSource, int, TResult>")]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static MemorySelectAtEnumerable<TSource, TResult, FunctionWrapper<TSource, int, TResult>> Select<TSource, TResult>(this ReadOnlyMemory<TSource> source, Func<TSource, int, TResult> selector)
             => source.SelectAt<TSource, TResult, FunctionWrapper<TSource, int, TResult>>(new FunctionWrapper<TSource, int, TResult>(selector));
 
-        [GeneratorIgnore(false)]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static MemorySelectAtEnumerable<TSource, TResult, TSelector> SelectAt<TSource, TResult, TSelector>(this ReadOnlyMemory<TSource> source, TSelector selector = default)
             where TSelector : struct, IFunction<TSource, int, TResult>
@@ -113,8 +111,6 @@ namespace NetFabric.Hyperlinq
                     [MethodImpl(MethodImplOptions.AggressiveInlining)]
                     get => selector.Invoke(source.Span[index], index);
                 }
-                TResult IEnumerator<TResult>.Current 
-                    => selector.Invoke(source.Span[index], index);
                 object? IEnumerator.Current
                     // ReSharper disable once HeapView.PossibleBoxingAllocation
                     => selector.Invoke(source.Span[index], index);
@@ -124,10 +120,11 @@ namespace NetFabric.Hyperlinq
                     => ++index < source.Length;
 
                 [ExcludeFromCodeCoverage]
+                [DoesNotReturn]
                 public readonly void Reset() 
                     => Throw.NotSupportedException();
 
-                public void Dispose() { }
+                public readonly void Dispose() { }
             }
 
             #region Aggregation
@@ -205,28 +202,6 @@ namespace NetFabric.Hyperlinq
                 => source.Span.ToListAt<TSource, TResult, TSelector>(selector);
             
             #endregion
-
-            public bool SequenceEqual(IEnumerable<TResult> other, IEqualityComparer<TResult>? comparer = default)
-            {
-                comparer ??= EqualityComparer<TResult>.Default;
-
-                var enumerator = GetEnumerator();
-                using var otherEnumerator = other.GetEnumerator();
-                while (true)
-                {
-                    var thisEnded = !enumerator.MoveNext();
-                    var otherEnded = !otherEnumerator.MoveNext();
-
-                    if (thisEnded != otherEnded)
-                        return false;
-
-                    if (thisEnded)
-                        return true;
-
-                    if (!comparer.Equals(enumerator.Current!, otherEnumerator.Current))
-                        return false;
-                }
-            }
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
