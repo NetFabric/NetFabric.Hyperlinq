@@ -113,8 +113,7 @@ namespace NetFabric.Hyperlinq
             {
                 switch (source)
                 {
-                    // ReSharper disable once SuspiciousTypeConversion.Global
-                    case ICollection collection:
+                    case ICollection<TSource> collection:
                         collection.CopyTo(array, arrayIndex);
                         break;
                     default:
@@ -125,7 +124,11 @@ namespace NetFabric.Hyperlinq
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public readonly bool Contains(TSource item)
-                => Count is not 0 && EnumerableExtensions.Contains(source, item);
+                => source switch
+                {
+                    ICollection<TSource> collection => collection.Contains(item),
+                    _ => Count is not 0 && source.Contains(item),
+                };
 
             public readonly int IndexOf(TSource item)
             {

@@ -20,10 +20,21 @@ namespace NetFabric.Hyperlinq
                 
                 // ReSharper disable once HeapView.PossibleBoxingAllocation
                 // ReSharper disable once SuspiciousTypeConversion.Global
+                ICollection<TSource> collection => BuildArrayFromCollectionOfTSource(collection),
+
+                // ReSharper disable once HeapView.PossibleBoxingAllocation
+                // ReSharper disable once SuspiciousTypeConversion.Global
                 ICollection collection => BuildArrayFromCollection(collection),
-                
+
                 _ => BuildArray(source)
             };
+
+            static TSource[] BuildArrayFromCollectionOfTSource(ICollection<TSource> collection)
+            {
+                var result = Utils.AllocateUninitializedArray<TSource>(collection.Count);
+                collection.CopyTo(result, 0);
+                return result;                
+            }
 
             static TSource[] BuildArrayFromCollection(ICollection collection)
             {

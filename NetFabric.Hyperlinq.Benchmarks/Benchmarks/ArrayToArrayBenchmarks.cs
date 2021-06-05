@@ -1,5 +1,6 @@
 ﻿using BenchmarkDotNet.Attributes;
 using System;
+using System.Collections.Generic;
 
 namespace NetFabric.Hyperlinq.Benchmarks.Benchmarks
 {
@@ -24,10 +25,18 @@ namespace NetFabric.Hyperlinq.Benchmarks.Benchmarks
             => array.AsSpan().ToArray();
         
         [Benchmark]
+        public int[] SpanCopyTo()
+        {
+            var result = GC.AllocateUninitializedArray<int>(Count);
+            array.AsSpan().CopyTo(result);
+            return result;
+        }
+        
+        [Benchmark]
         public int[] CollectionCopyTo()
         {
             var result = GC.AllocateUninitializedArray<int>(Count);
-            ((System.Collections.ICollection)array!).CopyTo(result, 0);
+            ((ICollection<int>)array!).CopyTo(result, 0);
             return result;
         }
     }

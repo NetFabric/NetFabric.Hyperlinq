@@ -30,6 +30,12 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public int[] Linq_List_Value()
             => listValue.ToArray();
 
+        [BenchmarkCategory("AsyncEnumerable_Value")]
+        [Benchmark(Baseline = true)]
+        public ValueTask<int[]> Linq_AsyncEnumerable_Value()
+            => asyncEnumerableValue
+                .ToArrayAsync();
+
         [BenchmarkCategory("Enumerable_Reference")]
         [Benchmark(Baseline = true)]
         public int[] Linq_Enumerable_Reference()
@@ -44,6 +50,12 @@ namespace NetFabric.Hyperlinq.Benchmarks
         [Benchmark(Baseline = true)]
         public int[] Linq_List_Reference()
             => listReference.ToArray();
+
+        [BenchmarkCategory("AsyncEnumerable_Reference")]
+        [Benchmark(Baseline = true)]
+        public ValueTask<int[]> Linq_AsyncEnumerable_Reference()
+            => asyncEnumerableReference
+                .ToArrayAsync();
 
         // ---------------------------------------------------------------------
 

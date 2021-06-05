@@ -78,19 +78,15 @@ namespace NetFabric.Hyperlinq
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public void CopyTo(TSource[] array, int arrayIndex)
-                => Copy(source, array.AsSpan().Slice(arrayIndex));
+                => ((ICollection<TSource>)source).CopyTo(array, arrayIndex);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public bool Contains(TSource item)
-                => source.Count switch
-                {
-                    0 => false,
-                    _ => Array.IndexOf(source.Array!, item, source.Offset, source.Count) >= 0
-                };
+                => ((ICollection<TSource>)source).Contains(item);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public int IndexOf(TSource item)
-                => ArrayExtensions.IndexOf(source.AsSpan(), item);
+                => ((IList<TSource>)source).IndexOf(item);
 
             [ExcludeFromCodeCoverage]
             void ICollection<TSource>.Add(TSource item)
@@ -161,7 +157,7 @@ namespace NetFabric.Hyperlinq
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public TSource[] ToArray()
-                => ((ReadOnlySpan<TSource>)source.AsSpan()).ToArray();
+                => source.AsSpan().ToArray();
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public Dictionary<TKey, TSource> ToDictionary<TKey>(Func<TSource, TKey> keySelector, IEqualityComparer<TKey>? comparer = default)

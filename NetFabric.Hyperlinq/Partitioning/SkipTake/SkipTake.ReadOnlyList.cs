@@ -90,7 +90,7 @@ namespace NetFabric.Hyperlinq
                     return;
 
                 // ReSharper disable once HeapView.PossibleBoxingAllocation
-                if (offset is 0 && Count == source.Count && source is ICollection collection)
+                if (offset is 0 && Count == source.Count && source is ICollection<TSource> collection)
                     collection.CopyTo(array, arrayIndex);
                 else
                     CopyTo(array.AsSpan().Slice(arrayIndex));

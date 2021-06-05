@@ -103,7 +103,11 @@ namespace NetFabric.Hyperlinq
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public bool Contains(TSource item)
-                => Count is not 0 && EnumerableExtensions.Contains(source, item);
+                => source switch
+                {
+                    ICollection<TSource> collection => collection.Contains(item),
+                    _ => Count is not 0 && source.Contains(item),
+                };
 
             [ExcludeFromCodeCoverage]
             void ICollection<TSource>.Add(TSource item) 
