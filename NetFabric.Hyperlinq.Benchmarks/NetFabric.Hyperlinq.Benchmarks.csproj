@@ -18,7 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="BenchmarkDotNet" Version="0.13.0.1552" />
+    <PackageReference Include="BenchmarkDotNet" Version="0.13.0.1555" />
     <PackageReference Include="LinqFaster.SIMD" Version="1.0.3" />
     <PackageReference Include="StructLinq" Version="0.26.0" />
     <PackageReference Include="System.Interactive" Version="5.0.0" />

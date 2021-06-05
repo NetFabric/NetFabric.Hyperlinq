@@ -14,22 +14,22 @@
 ### Results:
 ``` ini
 
-BenchmarkDotNet=v0.12.1.1521-nightly, OS=Windows 10.0.19043
+BenchmarkDotNet=v0.13.0.1555-nightly, OS=Windows 10.0.19043.1023 (21H1/May2021Update)
 Intel Core i7-7567U CPU 3.50GHz (Kaby Lake), 1 CPU, 4 logical and 2 physical cores
 .NET SDK=6.0.100-preview.4.21255.9
   [Host]     : .NET 6.0.0 (6.0.21.25307), X64 RyuJIT
-  Job-CGYYAC : .NET 6.0.0 (6.0.21.25307), X64 RyuJIT
+  Job-SUCOWF : .NET 6.0.0 (6.0.21.25307), X64 RyuJIT
 
 Runtime=.NET 6.0  
 
 ```
-|                       Method |   Count |       Mean |    Error |   StdDev | Ratio | RatioSD | Gen 0 | Gen 1 | Gen 2 | Allocated |
-|----------------------------- |-------- |-----------:|---------:|---------:|------:|--------:|------:|------:|------:|----------:|
-|                      Foreach | 1000000 |   454.5 μs |  3.61 μs |  3.37 μs |  1.00 |    0.00 |     - |     - |     - |         - |
-|                          For | 1000000 |   452.5 μs |  3.69 μs |  3.27 μs |  1.00 |    0.01 |     - |     - |     - |         - |
-|                   For_Unsafe | 1000000 |   450.1 μs |  2.38 μs |  1.98 μs |  0.99 |    0.01 |     - |     - |     - |         - |
-|                         Span | 1000000 |   452.9 μs |  2.16 μs |  1.91 μs |  1.00 |    0.01 |     - |     - |     - |         - |
-|         ArraySegment_Foreach | 1000000 | 2,882.3 μs | 18.69 μs | 16.57 μs |  6.34 |    0.05 |     - |     - |     - |       1 B |
-|             ArraySegment_For | 1000000 |   835.7 μs |  6.87 μs |  6.43 μs |  1.84 |    0.01 |     - |     - |     - |         - |
-|    ArraySegment_Expanded_For | 1000000 | 1,346.8 μs |  7.64 μs |  6.77 μs |  2.96 |    0.03 |     - |     - |     - |         - |
-| ArraySegment_Wrapper_Foreach | 1000000 | 1,492.8 μs |  8.99 μs |  7.51 μs |  3.29 |    0.03 |     - |     - |     - |         - |
+|                       Method |   Count |       Mean |    Error |   StdDev |     Median | Ratio | RatioSD | Gen 0 | Gen 1 | Gen 2 | Allocated |
+|----------------------------- |-------- |-----------:|---------:|---------:|-----------:|------:|--------:|------:|------:|------:|----------:|
+|                      Foreach | 1000000 |   450.5 μs | 12.65 μs | 37.29 μs |   424.6 μs |  1.00 |    0.00 |     - |     - |     - |         - |
+|                          For | 1000000 |   418.6 μs |  2.47 μs |  1.93 μs |   418.4 μs |  0.86 |    0.05 |     - |     - |     - |         - |
+|                   For_Unsafe | 1000000 |   498.8 μs |  4.77 μs |  4.46 μs |   496.8 μs |  1.02 |    0.06 |     - |     - |     - |         - |
+|                         Span | 1000000 |   421.8 μs |  2.60 μs |  2.43 μs |   421.8 μs |  0.86 |    0.05 |     - |     - |     - |         - |
+|         ArraySegment_Foreach | 1000000 | 2,816.0 μs |  5.71 μs |  5.06 μs | 2,816.0 μs |  5.78 |    0.30 |     - |     - |     - |       1 B |
+|             ArraySegment_For | 1000000 |   815.9 μs |  2.95 μs |  5.47 μs |   814.6 μs |  1.81 |    0.15 |     - |     - |     - |         - |
+|    ArraySegment_Expanded_For | 1000000 | 1,327.3 μs |  5.61 μs |  4.98 μs | 1,328.7 μs |  2.72 |    0.14 |     - |     - |     - |         - |
+| ArraySegment_Wrapper_Foreach | 1000000 | 1,577.4 μs |  5.57 μs |  5.21 μs | 1,577.6 μs |  3.23 |    0.16 |     - |     - |     - |         - |
