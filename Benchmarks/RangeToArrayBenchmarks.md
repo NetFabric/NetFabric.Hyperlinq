@@ -4,31 +4,31 @@
 [RangeToArrayBenchmarks.cs](../NetFabric.Hyperlinq.Benchmarks/Benchmarks/RangeToArrayBenchmarks.cs)
 
 ### References:
-- Linq: 6.0.0-preview.2.21154.6
+- Linq: 6.0.0-preview.4.21253.7
 - System.Linq.Async: [5.0.0](https://www.nuget.org/packages/System.Linq.Async/5.0.0)
 - System.Interactive: [5.0.0](https://www.nuget.org/packages/System.Interactive/5.0.0)
 - System.Interactive.Async: [5.0.0](https://www.nuget.org/packages/System.Interactive.Async/5.0.0)
-- StructLinq: [0.25.3](https://www.nuget.org/packages/StructLinq/0.25.3)
+- StructLinq: [0.26.0](https://www.nuget.org/packages/StructLinq/0.26.0)
 - NetFabric.Hyperlinq: [3.0.0-beta44](https://www.nuget.org/packages/NetFabric.Hyperlinq/3.0.0-beta44)
 
 ### Results:
 ``` ini
 
-BenchmarkDotNet=v0.12.1.1521-nightly, OS=Windows 10.0.19043
+BenchmarkDotNet=v0.13.0.1555-nightly, OS=Windows 10.0.19043.1023 (21H1/May2021Update)
 Intel Core i7-7567U CPU 3.50GHz (Kaby Lake), 1 CPU, 4 logical and 2 physical cores
-.NET SDK=6.0.100-preview.2.21155.3
-  [Host]     : .NET 6.0.0 (6.0.21.15406), X64 RyuJIT
-  Job-XHOKQA : .NET 6.0.0 (6.0.21.15406), X64 RyuJIT
+.NET SDK=6.0.100-preview.4.21255.9
+  [Host]     : .NET 6.0.0 (6.0.21.25307), X64 RyuJIT
+  Job-SUCOWF : .NET 6.0.0 (6.0.21.25307), X64 RyuJIT
 
 Runtime=.NET 6.0  
 
 ```
-|          Method |  Categories | Count |      Mean |    Error |   StdDev | Ratio |  Gen 0 | Gen 1 | Gen 2 | Allocated |
-|---------------- |------------ |------ |----------:|---------:|---------:|------:|-------:|------:|------:|----------:|
-|            Linq |       Range |   100 |  82.74 ns | 0.862 ns | 0.807 ns |  1.00 | 0.2218 |     - |     - |     464 B |
-|      StructLinq |       Range |   100 |  89.71 ns | 0.455 ns | 0.403 ns |  1.09 | 0.2142 |     - |     - |     448 B |
-| LinqFaster_SIMD |       Range |   100 |  36.82 ns | 0.408 ns | 0.382 ns |  0.45 | 0.2027 |     - |     - |     424 B |
-|       Hyperlinq |       Range |   100 |  45.49 ns | 0.218 ns | 0.170 ns |  0.55 | 0.2027 |     - |     - |     424 B |
-|                 |             |       |           |          |          |       |        |       |       |           |
-|      Linq_Async | Range_Async |   100 | 108.02 ns | 0.607 ns | 0.538 ns |  1.00 | 0.2257 |     - |     - |     472 B |
-| Hyperlinq_Async | Range_Async |   100 | 146.15 ns | 0.743 ns | 0.620 ns |  1.35 | 0.2027 |     - |     - |     424 B |
+|          Method |  Categories | Count |      Mean |    Error |   StdDev | Ratio | RatioSD |  Gen 0 | Gen 1 | Gen 2 | Allocated |
+|---------------- |------------ |------ |----------:|---------:|---------:|------:|--------:|-------:|------:|------:|----------:|
+|            Linq |       Range |   100 |  83.82 ns | 1.079 ns | 0.957 ns |  1.00 |    0.00 | 0.2218 |     - |     - |     464 B |
+|      StructLinq |       Range |   100 |  87.92 ns | 1.112 ns | 1.040 ns |  1.05 |    0.02 | 0.2142 |     - |     - |     448 B |
+| LinqFaster_SIMD |       Range |   100 |  44.87 ns | 0.414 ns | 0.388 ns |  0.54 |    0.01 | 0.2027 |     - |     - |     424 B |
+|       Hyperlinq |       Range |   100 |  45.34 ns | 0.845 ns | 0.791 ns |  0.54 |    0.01 | 0.2027 |     - |     - |     424 B |
+|                 |             |       |           |          |          |       |         |        |       |       |           |
+|      Linq_Async | Range_Async |   100 | 107.52 ns | 1.990 ns | 3.738 ns |  1.00 |    0.00 | 0.2257 |     - |     - |     472 B |
+| Hyperlinq_Async | Range_Async |   100 | 159.51 ns | 3.245 ns | 3.737 ns |  1.46 |    0.08 | 0.2027 |     - |     - |     424 B |
