@@ -51,7 +51,7 @@ namespace NetFabric.Hyperlinq
                 using var enumerator = GetEnumerator();
                 checked
                 {
-                    for (var index = 0; enumerator.MoveNext(); index++)
+                    for (var index = 0; enumerator.MoveNext() && index < span.Length; index++)
                         span[index] = enumerator.Current;
                 }
             }
@@ -61,7 +61,7 @@ namespace NetFabric.Hyperlinq
             {
                 switch (source)
                 {
-                    case ICollection collection:
+                    case ICollection<TSource> collection:
                         collection.CopyTo(array, arrayIndex);
                         break;
                     default:
@@ -72,7 +72,11 @@ namespace NetFabric.Hyperlinq
             
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public bool Contains(TSource item)
-                => Count is not 0 && source.Contains(item);
+                => source switch
+                {
+                    ICollection<TSource> collection => collection.Contains(item),
+                    _ => Count is not 0 && source.Contains(item),
+                };
 
             [ExcludeFromCodeCoverage]
             void ICollection<TSource>.Add(TSource item) 

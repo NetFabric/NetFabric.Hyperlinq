@@ -18,17 +18,17 @@ BenchmarkDotNet=v0.13.0.1555-nightly, OS=Windows 10.0.19043.1023 (21H1/May2021Up
 Intel Core i7-7567U CPU 3.50GHz (Kaby Lake), 1 CPU, 4 logical and 2 physical cores
 .NET SDK=6.0.100-preview.4.21255.9
   [Host]     : .NET 6.0.0 (6.0.21.25307), X64 RyuJIT
-  Job-SUCOWF : .NET 6.0.0 (6.0.21.25307), X64 RyuJIT
+  Job-DUCAQD : .NET 6.0.0 (6.0.21.25307), X64 RyuJIT
 
 Runtime=.NET 6.0  
 
 ```
 |          Method |  Categories | Count |      Mean |    Error |   StdDev | Ratio | RatioSD |  Gen 0 | Gen 1 | Gen 2 | Allocated |
 |---------------- |------------ |------ |----------:|---------:|---------:|------:|--------:|-------:|------:|------:|----------:|
-|            Linq |       Range |   100 |  83.82 ns | 1.079 ns | 0.957 ns |  1.00 |    0.00 | 0.2218 |     - |     - |     464 B |
-|      StructLinq |       Range |   100 |  87.92 ns | 1.112 ns | 1.040 ns |  1.05 |    0.02 | 0.2142 |     - |     - |     448 B |
-| LinqFaster_SIMD |       Range |   100 |  44.87 ns | 0.414 ns | 0.388 ns |  0.54 |    0.01 | 0.2027 |     - |     - |     424 B |
-|       Hyperlinq |       Range |   100 |  45.34 ns | 0.845 ns | 0.791 ns |  0.54 |    0.01 | 0.2027 |     - |     - |     424 B |
+|            Linq |       Range |   100 |  81.27 ns | 0.932 ns | 1.774 ns |  1.00 |    0.00 | 0.2218 |     - |     - |     464 B |
+|      StructLinq |       Range |   100 |  85.57 ns | 0.620 ns | 0.580 ns |  1.04 |    0.03 | 0.2142 |     - |     - |     448 B |
+| LinqFaster_SIMD |       Range |   100 |  36.20 ns | 0.377 ns | 0.352 ns |  0.44 |    0.01 | 0.2027 |     - |     - |     424 B |
+|       Hyperlinq |       Range |   100 |  41.93 ns | 0.655 ns | 0.580 ns |  0.51 |    0.02 | 0.2027 |     - |     - |     424 B |
 |                 |             |       |           |          |          |       |         |        |       |       |           |
-|      Linq_Async | Range_Async |   100 | 107.52 ns | 1.990 ns | 3.738 ns |  1.00 |    0.00 | 0.2257 |     - |     - |     472 B |
-| Hyperlinq_Async | Range_Async |   100 | 159.51 ns | 3.245 ns | 3.737 ns |  1.46 |    0.08 | 0.2027 |     - |     - |     424 B |
+|      Linq_Async | Range_Async |   100 | 105.20 ns | 1.541 ns | 1.366 ns |  1.00 |    0.00 | 0.2257 |     - |     - |     472 B |
+| Hyperlinq_Async | Range_Async |   100 | 146.42 ns | 1.256 ns | 1.175 ns |  1.39 |    0.02 | 0.2027 |     - |     - |     424 B |

@@ -85,4 +85,8 @@
     </EmbeddedResource>
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Utils\Contains\" />
+  </ItemGroup>
+
 </Project>

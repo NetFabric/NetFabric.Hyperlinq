@@ -82,7 +82,7 @@ namespace NetFabric.Hyperlinq
             {
                 switch (source)
                 {
-                    case ICollection collection:
+                    case ICollection<TSource> collection:
                         collection.CopyTo(array, arrayIndex);
                         break;
                     default:
