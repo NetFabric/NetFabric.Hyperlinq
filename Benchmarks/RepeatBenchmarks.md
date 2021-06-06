@@ -18,16 +18,16 @@ BenchmarkDotNet=v0.13.0.1555-nightly, OS=Windows 10.0.19043.1023 (21H1/May2021Up
 Intel Core i7-7567U CPU 3.50GHz (Kaby Lake), 1 CPU, 4 logical and 2 physical cores
 .NET SDK=6.0.100-preview.4.21255.9
   [Host]     : .NET 6.0.0 (6.0.21.25307), X64 RyuJIT
-  Job-SUCOWF : .NET 6.0.0 (6.0.21.25307), X64 RyuJIT
+  Job-FXRHUT : .NET 6.0.0 (6.0.21.25307), X64 RyuJIT
 
 Runtime=.NET 6.0  
 
 ```
 |          Method |   Categories | Count |        Mean |     Error |    StdDev | Ratio |  Gen 0 | Gen 1 | Gen 2 | Allocated |
 |---------------- |------------- |------ |------------:|----------:|----------:|------:|-------:|------:|------:|----------:|
-|            Linq |       Repeat |   100 |   388.03 ns |  2.670 ns |  2.367 ns |  1.00 | 0.0153 |     - |     - |      32 B |
-|      StructLinq |       Repeat |   100 |    44.37 ns |  0.187 ns |  0.146 ns |  0.11 |      - |     - |     - |         - |
-|       Hyperlinq |       Repeat |   100 |   147.12 ns |  0.422 ns |  0.395 ns |  0.38 |      - |     - |     - |         - |
+|            Linq |       Repeat |   100 |   393.35 ns |  1.375 ns |  1.219 ns |  1.00 | 0.0153 |     - |     - |      32 B |
+|      StructLinq |       Repeat |   100 |    44.33 ns |  0.164 ns |  0.154 ns |  0.11 |      - |     - |     - |         - |
+|       Hyperlinq |       Repeat |   100 |   147.06 ns |  0.308 ns |  0.288 ns |  0.37 |      - |     - |     - |         - |
 |                 |              |       |             |           |           |       |        |       |       |           |
-|      Linq_Async | Repeat_Async |   100 | 4,715.35 ns | 18.267 ns | 15.253 ns |  1.00 | 0.0229 |     - |     - |      48 B |
-| Hyperlinq_Async | Repeat_Async |   100 |   795.54 ns |  1.931 ns |  1.711 ns |  0.17 |      - |     - |     - |         - |
+|      Linq_Async | Repeat_Async |   100 | 4,710.88 ns | 21.558 ns | 20.165 ns |  1.00 | 0.0229 |     - |     - |      48 B |
+| Hyperlinq_Async | Repeat_Async |   100 |   770.99 ns |  4.354 ns |  3.636 ns |  0.16 |      - |     - |     - |         - |
