@@ -344,7 +344,10 @@ namespace NetFabric.Hyperlinq.SourceGenerator
 
             if (isExtensionMethod)
             {
-                _ = builder.AppendLine($"public static {methodReturnType} {methodName}{methodGenericParametersString}(this {methodExtensionType} source{methodParameters})");
+                var extraMethodParameter = methodParameters is { Length: 0 }
+                    ? string.Empty
+                    : $", {methodParameters}";
+                _ = builder.AppendLine($"public static {methodReturnType} {methodName}{methodGenericParametersString}(this {methodExtensionType} source{extraMethodParameter})");
 
                 firstCallParameter = bindingsAttribute is null 
                     ? "source"

@@ -101,6 +101,28 @@ namespace NetFabric.Hyperlinq
             => source.Count;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int Count<TSource, TEnumerator>(this ValueEnumerable<TSource, TEnumerator> source, Func<TSource, bool> predicate)
+            where TEnumerator : struct, IEnumerator<TSource>
+            => source.Count(predicate);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int Count<TSource, TEnumerator, TPredicate>(this ValueEnumerable<TSource, TEnumerator> source, TPredicate predicate = default)
+            where TEnumerator : struct, IEnumerator<TSource>
+            where TPredicate : struct, IFunction<TSource, bool>
+            => source.Count(predicate);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int Count<TSource, TEnumerator>(this ValueEnumerable<TSource, TEnumerator> source, Func<TSource, int, bool> predicate)
+            where TEnumerator : struct, IEnumerator<TSource>
+            => source.Count(predicate);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int CountAt<TSource, TEnumerator, TPredicate>(this ValueEnumerable<TSource, TEnumerator> source, TPredicate predicate = default)
+            where TEnumerator : struct, IEnumerator<TSource>
+            where TPredicate : struct, IFunction<TSource, int, bool>
+            => source.CountAt(predicate);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int Sum<TEnumerator>(this ValueEnumerable<int, TEnumerator> source)
             where TEnumerator : struct, IEnumerator<int>
             => Sum<ValueEnumerable<int, TEnumerator>, TEnumerator, int, int>(source);

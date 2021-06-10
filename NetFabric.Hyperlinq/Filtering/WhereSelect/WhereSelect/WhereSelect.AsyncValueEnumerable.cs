@@ -52,18 +52,21 @@ namespace NetFabric.Hyperlinq
                 : IAsyncEnumerator<TResult>
                 , IAsyncStateMachine
             {
-                [SuppressMessage("Style", "IDE0044:Add readonly modifier")]
-                TEnumerator enumerator; // do not make readonly
+#pragma warning disable IDE0044 // Add readonly modifier
+                TEnumerator enumerator;
                 TPredicate predicate;
                 TSelector selector;
+#pragma warning restore IDE0044 // Add readonly modifier
                 readonly CancellationToken cancellationToken;
 
                 int state;
                 AsyncValueTaskMethodBuilder<bool> builder;
                 TSource? item;
+#pragma warning disable IDE1006 // Naming Styles
                 bool s__2;
                 TResult? s__3;
                 bool s__4;
+#pragma warning restore IDE1006 // Naming Styles
                 ConfiguredValueTaskAwaitable<bool>.ConfiguredValueTaskAwaiter u__1;
                 ConfiguredValueTaskAwaitable<TResult>.ConfiguredValueTaskAwaiter u__2;
                 ConfiguredValueTaskAwaitable.ConfiguredValueTaskAwaiter u__3;
@@ -229,7 +232,25 @@ namespace NetFabric.Hyperlinq
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public ValueTask<int> CountAsync(CancellationToken cancellationToken = default)
-                => source.CountAsync<TEnumerable, TEnumerator, TSource, TPredicate>(cancellationToken, predicate);
+                => source.CountAsync<TEnumerable, TEnumerator, TSource, TPredicate>(predicate, cancellationToken);
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public ValueTask<int> CountAsync(Func<TResult, CancellationToken, ValueTask<bool>> predicate, CancellationToken cancellationToken = default)
+                => CountAsync(new AsyncFunctionWrapper<TResult, bool>(predicate), cancellationToken);
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public ValueTask<int> CountAsync<TPredicate2>(TPredicate2 predicate = default, CancellationToken cancellationToken = default)
+                where TPredicate2 : struct, IAsyncFunction<TResult, bool>
+                => AsyncValueEnumerableExtensions.CountAsync<WhereSelectEnumerable<TEnumerable, TEnumerator, TSource, TResult, TPredicate, TSelector>, Enumerator, TResult, TPredicate2>(this, predicate, cancellationToken);
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public ValueTask<int> CountAsync(Func<TResult, int, CancellationToken, ValueTask<bool>> predicate, CancellationToken cancellationToken = default)
+                => CountAtAsync(new AsyncFunctionWrapper<TResult, int, bool>(predicate), cancellationToken);
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public ValueTask<int> CountAtAsync<TPredicate2>(TPredicate2 predicate = default, CancellationToken cancellationToken = default)
+                where TPredicate2 : struct, IAsyncFunction<TResult, int, bool>
+                => AsyncValueEnumerableExtensions.CountAtAsync<WhereSelectEnumerable<TEnumerable, TEnumerator, TSource, TResult, TPredicate, TSelector>, Enumerator, TResult, TPredicate2>(this, predicate, cancellationToken);
 
             #endregion
             #region Quantifier

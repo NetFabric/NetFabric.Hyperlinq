@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net461;netcoreapp2.1;netcoreapp3.1;net6.0</TargetFrameworks>
+    <TargetFrameworks>net48;netcoreapp2.1;netcoreapp3.1;net6.0</TargetFrameworks>
     <IsPackable>false</IsPackable>
   </PropertyGroup>
   
@@ -24,7 +24,7 @@
     </PackageReference>
   </ItemGroup>
 
-  <ItemGroup Condition="'$(TargetFramework)'=='net461' Or '$(TargetFramework)'=='netcoreapp2.1'">
+  <ItemGroup Condition="'$(TargetFramework)'=='net48' Or '$(TargetFramework)'=='netcoreapp2.1'">
     <ProjectReference Include="..\NetFabric.Hyperlinq.Immutable\NetFabric.Hyperlinq.Immutable.csproj" />
     <PackageReference Include="Microsoft.Bcl.AsyncInterfaces" Version="5.0.0" />
   </ItemGroup>

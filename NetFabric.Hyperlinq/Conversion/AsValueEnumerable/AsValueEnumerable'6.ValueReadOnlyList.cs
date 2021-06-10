@@ -56,24 +56,25 @@ namespace NetFabric.Hyperlinq
             where TGetEnumerator2 : struct, IFunction<TEnumerable, TEnumerator2>
         {
             readonly TEnumerable source;
+#pragma warning disable IDE0044 // Add readonly modifier
             TGetEnumerator getEnumerator;
             TGetEnumerator2 getEnumerator2;
+#pragma warning restore IDE0044 // Add readonly modifier
 
             internal ValueEnumerable(TEnumerable source, TGetEnumerator getEnumerator, TGetEnumerator2 getEnumerator2)
                 => (this.source, this.getEnumerator, this.getEnumerator2) = (source, getEnumerator, getEnumerator2);
 
-            public TSource this[int index]
+            public readonly TSource this[int index]
             {
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
                 get => source[index];
             }
-
-            TSource IList<TSource>.this[int index]
+            readonly TSource IList<TSource>.this[int index]
             {
                 get => source[index];
                 set => Throw.NotSupportedException();
             }
-            
+
             public readonly int Count
                 => source.Count;
             
@@ -215,6 +216,44 @@ namespace NetFabric.Hyperlinq
             where TGetEnumerator : struct, IFunction<TEnumerable, TEnumerator>
             where TGetEnumerator2 : struct, IFunction<TEnumerable, TEnumerator2>
             => source.Count;
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int Count<TEnumerable, TEnumerator, TEnumerator2, TSource, TGetEnumerator, TGetEnumerator2>(this ValueEnumerable<TEnumerable, TEnumerator, TEnumerator2, TSource, TGetEnumerator, TGetEnumerator2> source, Func<TSource, bool> predicate)
+            where TEnumerable : IValueReadOnlyList<TSource, TEnumerator>
+            where TEnumerator : struct, IEnumerator<TSource>
+            where TEnumerator2 : struct
+            where TGetEnumerator : struct, IFunction<TEnumerable, TEnumerator>
+            where TGetEnumerator2 : struct, IFunction<TEnumerable, TEnumerator2>
+            => source.Count(predicate);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int Count<TEnumerable, TEnumerator, TEnumerator2, TSource, TGetEnumerator, TGetEnumerator2, TPredicate>(this ValueEnumerable<TEnumerable, TEnumerator, TEnumerator2, TSource, TGetEnumerator, TGetEnumerator2> source, TPredicate predicate = default)
+            where TEnumerable : IValueReadOnlyList<TSource, TEnumerator>
+            where TEnumerator : struct, IEnumerator<TSource>
+            where TEnumerator2 : struct
+            where TGetEnumerator : struct, IFunction<TEnumerable, TEnumerator>
+            where TGetEnumerator2 : struct, IFunction<TEnumerable, TEnumerator2>
+            where TPredicate : struct, IFunction<TSource, bool>
+            => source.Count(predicate);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int Count<TEnumerable, TEnumerator, TEnumerator2, TSource, TGetEnumerator, TGetEnumerator2>(this ValueEnumerable<TEnumerable, TEnumerator, TEnumerator2, TSource, TGetEnumerator, TGetEnumerator2> source, Func<TSource, int, bool> predicate)
+            where TEnumerable : IValueReadOnlyList<TSource, TEnumerator>
+            where TEnumerator : struct, IEnumerator<TSource>
+            where TEnumerator2 : struct
+            where TGetEnumerator : struct, IFunction<TEnumerable, TEnumerator>
+            where TGetEnumerator2 : struct, IFunction<TEnumerable, TEnumerator2>
+            => source.Count(predicate);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int CountAt<TEnumerable, TEnumerator, TEnumerator2, TSource, TGetEnumerator, TGetEnumerator2, TPredicate>(this ValueEnumerable<TEnumerable, TEnumerator, TEnumerator2, TSource, TGetEnumerator, TGetEnumerator2> source, TPredicate predicate = default)
+            where TEnumerable : IValueReadOnlyList<TSource, TEnumerator>
+            where TEnumerator : struct, IEnumerator<TSource>
+            where TEnumerator2 : struct
+            where TGetEnumerator : struct, IFunction<TEnumerable, TEnumerator>
+            where TGetEnumerator2 : struct, IFunction<TEnumerable, TEnumerator2>
+            where TPredicate : struct, IFunction<TSource, int, bool>
+            => source.CountAt(predicate);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int Sum<TEnumerable, TEnumerator, TEnumerator2, TGetEnumerator, TGetEnumerator2>(this ValueEnumerable<TEnumerable, TEnumerator, TEnumerator2, int, TGetEnumerator, TGetEnumerator2> source)

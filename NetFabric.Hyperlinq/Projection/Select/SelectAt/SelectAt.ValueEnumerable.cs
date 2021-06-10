@@ -55,9 +55,10 @@ namespace NetFabric.Hyperlinq
             public struct Enumerator
                 : IEnumerator<TResult>
             {
-                [SuppressMessage("Style", "IDE0044:Add readonly modifier")]
-                TEnumerator enumerator; // do not make readonly
+#pragma warning disable IDE0044 // Add readonly modifier
+                TEnumerator enumerator;
                 TSelector selector;
+#pragma warning restore IDE0044 // Add readonly modifier
                 int index;
 
                 internal Enumerator(in SelectAtEnumerable<TEnumerable, TEnumerator, TSource, TResult, TSelector> enumerable)

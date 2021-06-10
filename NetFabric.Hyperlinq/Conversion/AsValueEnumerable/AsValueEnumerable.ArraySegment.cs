@@ -331,6 +331,24 @@ namespace NetFabric.Hyperlinq
             => source.Count;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int Count<TSource>(this ArraySegmentValueEnumerable<TSource> source, Func<TSource, bool> predicate)
+            => source.Count(predicate);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int Count<TSource, TPredicate>(this ArraySegmentValueEnumerable<TSource> source, TPredicate predicate = default)
+            where TPredicate : struct, IFunction<TSource, bool>
+            => source.Count(predicate);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int Count<TSource>(this ArraySegmentValueEnumerable<TSource> source, Func<TSource, int, bool> predicate)
+            => source.Count(predicate);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int CountAt<TSource, TPredicate>(this ArraySegmentValueEnumerable<TSource> source, TPredicate predicate = default)
+            where TPredicate : struct, IFunction<TSource, int, bool>
+            => source.CountAt(predicate);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int Sum(this ArraySegmentValueEnumerable<int> source)
             => ((ReadOnlySpan<int>)source.source.AsSpan()).SumVector<int, int>();
 

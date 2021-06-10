@@ -168,8 +168,26 @@ namespace NetFabric.Hyperlinq
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static int Count(this SpanValueEnumerable<int> source)
+        public static int Count<TSource>(this SpanValueEnumerable<TSource> source)
             => source.Count;
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int Count<TSource>(this SpanValueEnumerable<TSource> source, Func<TSource, bool> predicate)
+            => source.Count(predicate);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int Count<TSource, TPredicate>(this SpanValueEnumerable<TSource> source, TPredicate predicate = default)
+            where TPredicate : struct, IFunction<TSource, bool>
+            => source.Count(predicate);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int Count<TSource>(this SpanValueEnumerable<TSource> source, Func<TSource, int, bool> predicate)
+            => source.Count(predicate);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int CountAt<TSource, TPredicate>(this SpanValueEnumerable<TSource> source, TPredicate predicate = default)
+            where TPredicate : struct, IFunction<TSource, int, bool>
+            => source.CountAt(predicate);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int Sum(this SpanValueEnumerable<int> source)

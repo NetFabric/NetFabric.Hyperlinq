@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -27,8 +29,13 @@ namespace NetFabric.Hyperlinq
             return counter;
         }
 
-        [GeneratorIgnore]
-        static async ValueTask<int> CountAsync<TEnumerable, TEnumerator, TSource, TPredicate>(this TEnumerable source, CancellationToken cancellationToken, TPredicate predicate)
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static ValueTask<int> CountAsync<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Func<TSource, CancellationToken, ValueTask<bool>> predicate, CancellationToken cancellationToken = default)
+            where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
+            where TEnumerator : struct, IAsyncEnumerator<TSource>
+            => source.CountAsync<TEnumerable, TEnumerator, TSource, AsyncFunctionWrapper<TSource, bool>>(new AsyncFunctionWrapper<TSource, bool>(predicate), cancellationToken);
+
+        public static async ValueTask<int> CountAsync<TEnumerable, TEnumerator, TSource, TPredicate>(this TEnumerable source, TPredicate predicate = default, CancellationToken cancellationToken = default)
             where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
             where TPredicate: struct, IAsyncFunction<TSource, bool>
@@ -53,8 +60,13 @@ namespace NetFabric.Hyperlinq
             return counter;
         }
 
-        [GeneratorIgnore]
-        static async ValueTask<int> CountAtAsync<TEnumerable, TEnumerator, TSource, TPredicate>(this TEnumerable source, CancellationToken cancellationToken, TPredicate predicate)
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static ValueTask<int> CountAsync<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Func<TSource, int, CancellationToken, ValueTask<bool>> predicate, CancellationToken cancellationToken = default)
+            where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
+            where TEnumerator : struct, IAsyncEnumerator<TSource>
+            => source.CountAtAsync<TEnumerable, TEnumerator, TSource, AsyncFunctionWrapper<TSource, int, bool>>(new AsyncFunctionWrapper<TSource, int, bool>(predicate), cancellationToken);
+
+        public static async ValueTask<int> CountAtAsync<TEnumerable, TEnumerator, TSource, TPredicate>(this TEnumerable source, TPredicate predicate = default, CancellationToken cancellationToken = default)
             where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
             where TPredicate: struct, IAsyncFunction<TSource, int, bool>

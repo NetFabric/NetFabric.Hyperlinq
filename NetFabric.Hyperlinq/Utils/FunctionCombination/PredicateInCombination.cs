@@ -8,13 +8,15 @@ namespace NetFabric.Hyperlinq
         where TPredicate1 : struct, IFunctionIn<TSource, bool>
         where TPredicate2 : struct, IFunctionIn<TSource, bool>
     {
+#pragma warning disable IDE0044 // Add readonly modifier
         TPredicate1 first;
         TPredicate2 second;
+#pragma warning restore IDE0044 // Add readonly modifier
 
         public PredicatePredicateCombinationIn(TPredicate1 first, TPredicate2 second)
             => (this.first, this.second) = (first, second);
 
-        public bool Invoke(in TSource item)
+        public readonly bool Invoke(in TSource item)
             => first.Invoke(in item) && second.Invoke(in item);
     }
     
@@ -24,13 +26,15 @@ namespace NetFabric.Hyperlinq
         where TPredicate1 : struct, IFunctionIn<TSource, bool>
         where TPredicate2 : struct, IFunctionIn<TSource, int, bool>
     {
+#pragma warning disable IDE0044 // Add readonly modifier
         TPredicate1 first;
         TPredicate2 second;
+#pragma warning restore IDE0044 // Add readonly modifier
 
         public PredicatePredicateAtCombinationIn(TPredicate1 first, TPredicate2 second)
             => (this.first, this.second) = (first, second);
 
-        public bool Invoke(in TSource item, int index)
+        public readonly bool Invoke(in TSource item, int index)
             => first.Invoke(in item) && second.Invoke(in item, index);
     }
     
@@ -40,13 +44,15 @@ namespace NetFabric.Hyperlinq
         where TPredicate1 : struct, IFunctionIn<TSource, int, bool>
         where TPredicate2 : struct, IFunctionIn<TSource, int, bool>
     {
+#pragma warning disable IDE0044 // Add readonly modifier
         TPredicate1 first;
         TPredicate2 second;
+#pragma warning restore IDE0044 // Add readonly modifier
 
         public PredicateAtPredicateAtCombinationIn(TPredicate1 first, TPredicate2 second)
             => (this.first, this.second) = (first, second);
 
-        public bool Invoke(in TSource item, int index)
+        public readonly bool Invoke(in TSource item, int index)
             => first.Invoke(in item, index) && second.Invoke(in item, index);
     }
 }

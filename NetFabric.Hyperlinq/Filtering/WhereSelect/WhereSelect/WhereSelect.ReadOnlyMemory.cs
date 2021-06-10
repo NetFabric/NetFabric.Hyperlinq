@@ -56,8 +56,10 @@ namespace NetFabric.Hyperlinq
                 : IEnumerator<TResult>
             {
                 readonly ReadOnlyMemory<TSource> source;
+#pragma warning disable IDE0044 // Add readonly modifier
                 TPredicate predicate;
                 TSelector selector;
+#pragma warning restore IDE0044 // Add readonly modifier
                 int index;
 
                 internal Enumerator(in MemoryWhereSelectEnumerable<TSource, TResult, TPredicate, TSelector> enumerable)
@@ -103,6 +105,24 @@ namespace NetFabric.Hyperlinq
             public int Count()
                 => source.Span.Count(predicate);
 
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public int Count(Func<TResult, bool> predicate)
+                => Count(new FunctionWrapper<TResult, bool>(predicate));
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public int Count<TPredicate2>(TPredicate2 predicate = default)
+                where TPredicate2 : struct, IFunction<TResult, bool>
+                => ValueEnumerableExtensions.Count<MemoryWhereSelectEnumerable<TSource, TResult, TPredicate, TSelector>, Enumerator, TResult, TPredicate2>(this, predicate);
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public int Count(Func<TResult, int, bool> predicate)
+                => CountAt(new FunctionWrapper<TResult, int, bool>(predicate));
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public int CountAt<TPredicate2>(TPredicate2 predicate = default)
+                where TPredicate2 : struct, IFunction<TResult, int, bool>
+                => ValueEnumerableExtensions.CountAt<MemoryWhereSelectEnumerable<TSource, TResult, TPredicate, TSelector>, Enumerator, TResult, TPredicate2>(this, predicate);
+
             #endregion
             #region Quantifier
 
@@ -115,7 +135,7 @@ namespace NetFabric.Hyperlinq
                 => All(new FunctionWrapper<TResult, bool>(predicate));
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public bool All<TPredicate2>(TPredicate2 predicate)
+            public bool All<TPredicate2>(TPredicate2 predicate = default)
                 where TPredicate2 : struct, IFunction<TResult, bool>
                 => this.All<MemoryWhereSelectEnumerable<TSource, TResult, TPredicate, TSelector>, Enumerator, TResult, TPredicate2>(predicate);
 
@@ -124,7 +144,7 @@ namespace NetFabric.Hyperlinq
                 => AllAt(new FunctionWrapper<TResult, int, bool>(predicate));
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public bool AllAt<TPredicate2>(TPredicate2 predicate)
+            public bool AllAt<TPredicate2>(TPredicate2 predicate = default)
                 where TPredicate2 : struct, IFunction<TResult, int, bool>
                 => this.AllAt<MemoryWhereSelectEnumerable<TSource, TResult, TPredicate, TSelector>, Enumerator, TResult, TPredicate2>(predicate);
 
@@ -137,7 +157,7 @@ namespace NetFabric.Hyperlinq
                 => Any(new FunctionWrapper<TResult, bool>(predicate));
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public bool Any<TPredicate2>(TPredicate2 predicate)
+            public bool Any<TPredicate2>(TPredicate2 predicate = default)
                 where TPredicate2 : struct, IFunction<TResult, bool>
                 => this.Any<MemoryWhereSelectEnumerable<TSource, TResult, TPredicate, TSelector>, Enumerator, TResult, TPredicate2>(predicate);
 
@@ -146,7 +166,7 @@ namespace NetFabric.Hyperlinq
                 => AnyAt(new FunctionWrapper<TResult, int, bool>(predicate));
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public bool AnyAt<TPredicate2>(TPredicate2 predicate)
+            public bool AnyAt<TPredicate2>(TPredicate2 predicate = default)
                 where TPredicate2 : struct, IFunction<TResult, int, bool>
                 => this.AnyAt<MemoryWhereSelectEnumerable<TSource, TResult, TPredicate, TSelector>, Enumerator, TResult, TPredicate2>(predicate);
 

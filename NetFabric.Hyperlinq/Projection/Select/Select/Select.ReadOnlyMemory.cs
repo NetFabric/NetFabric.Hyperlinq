@@ -105,7 +105,9 @@ namespace NetFabric.Hyperlinq
                 : IEnumerator<TResult>
             {
                 readonly ReadOnlyMemory<TSource> source;
+#pragma warning disable IDE0044 // Add readonly modifier
                 TSelector selector;
+#pragma warning restore IDE0044 // Add readonly modifier
                 int index;
 
                 internal Enumerator(in MemorySelectEnumerable<TSource, TResult, TSelector> enumerable)
@@ -217,6 +219,28 @@ namespace NetFabric.Hyperlinq
         public static int Count<TSource, TResult, TSelector>(this MemorySelectEnumerable<TSource, TResult, TSelector> source)
             where TSelector : struct, IFunction<TSource, TResult>
             => source.Count;
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int Count<TSource, TResult, TSelector>(this MemorySelectEnumerable<TSource, TResult, TSelector> source, Func<TResult, bool> predicate)
+            where TSelector : struct, IFunction<TSource, TResult>
+            => ValueReadOnlyCollectionExtensions.Count<MemorySelectEnumerable<TSource, TResult, TSelector>, MemorySelectEnumerable<TSource, TResult, TSelector>.Enumerator, TResult>(source, predicate);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int Count<TSource, TResult, TSelector, TPredicate>(this MemorySelectEnumerable<TSource, TResult, TSelector> source, TPredicate predicate = default)
+            where TSelector : struct, IFunction<TSource, TResult>
+            where TPredicate : struct, IFunction<TResult, bool>
+            => ValueReadOnlyCollectionExtensions.Count<MemorySelectEnumerable<TSource, TResult, TSelector>, MemorySelectEnumerable<TSource, TResult, TSelector>.Enumerator, TResult, TPredicate>(source, predicate);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int Count<TSource, TResult, TSelector>(this MemorySelectEnumerable<TSource, TResult, TSelector> source, Func<TResult, int, bool> predicate)
+            where TSelector : struct, IFunction<TSource, TResult>
+            => ValueReadOnlyCollectionExtensions.Count<MemorySelectEnumerable<TSource, TResult, TSelector>, MemorySelectEnumerable<TSource, TResult, TSelector>.Enumerator, TResult>(source, predicate);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int CountAt<TSource, TResult, TSelector, TPredicate>(this MemorySelectEnumerable<TSource, TResult, TSelector> source, TPredicate predicate = default)
+            where TSelector : struct, IFunction<TSource, TResult>
+            where TPredicate : struct, IFunction<TResult, int, bool>
+            => ValueReadOnlyCollectionExtensions.CountAt<MemorySelectEnumerable<TSource, TResult, TSelector>, MemorySelectEnumerable<TSource, TResult, TSelector>.Enumerator, TResult, TPredicate>(source, predicate);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int Sum<TSource, TSelector>(this MemorySelectEnumerable<TSource, int, TSelector> source)

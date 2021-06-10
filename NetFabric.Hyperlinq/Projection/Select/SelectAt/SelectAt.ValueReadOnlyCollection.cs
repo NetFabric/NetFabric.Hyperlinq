@@ -93,9 +93,10 @@ namespace NetFabric.Hyperlinq
             public struct Enumerator
                 : IEnumerator<TResult>
             {
-                [SuppressMessage("Style", "IDE0044:Add readonly modifier")]
-                TEnumerator enumerator; // do not make readonly
+#pragma warning disable IDE0044 // Add readonly modifier
+                TEnumerator enumerator;
                 TSelector selector;
+#pragma warning restore IDE0044 // Add readonly modifier
                 int index;
 
                 internal Enumerator(in SelectAtEnumerable<TEnumerable, TEnumerator, TSource, TResult, TSelector> enumerable)
@@ -219,7 +220,37 @@ namespace NetFabric.Hyperlinq
             where TEnumerator : struct, IEnumerator<TSource>
             where TSelector : struct, IFunction<TSource, int, TResult>
             => source.Count;
-        
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int Count<TEnumerable, TEnumerator, TSource, TResult, TSelector>(this SelectAtEnumerable<TEnumerable, TEnumerator, TSource, TResult, TSelector> source, Func<TResult, bool> predicate)
+            where TEnumerable : IValueReadOnlyCollection<TSource, TEnumerator>
+            where TEnumerator : struct, IEnumerator<TSource>
+            where TSelector : struct, IFunction<TSource, int, TResult>
+            => Count<SelectAtEnumerable<TEnumerable, TEnumerator, TSource, TResult, TSelector>, SelectAtEnumerable<TEnumerable, TEnumerator, TSource, TResult, TSelector>.Enumerator, TResult>(source, predicate);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int Count<TEnumerable, TEnumerator, TSource, TResult, TSelector, TPredicate>(this SelectAtEnumerable<TEnumerable, TEnumerator, TSource, TResult, TSelector> source, TPredicate predicate = default)
+            where TEnumerable : IValueReadOnlyCollection<TSource, TEnumerator>
+            where TEnumerator : struct, IEnumerator<TSource>
+            where TSelector : struct, IFunction<TSource, int, TResult>
+            where TPredicate : struct, IFunction<TResult, bool>
+            => Count<SelectAtEnumerable<TEnumerable, TEnumerator, TSource, TResult, TSelector>, SelectAtEnumerable<TEnumerable, TEnumerator, TSource, TResult, TSelector>.Enumerator, TResult, TPredicate>(source, predicate);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int Count<TEnumerable, TEnumerator, TSource, TResult, TSelector>(this SelectAtEnumerable<TEnumerable, TEnumerator, TSource, TResult, TSelector> source, Func<TResult, int, bool> predicate)
+            where TEnumerable : IValueReadOnlyCollection<TSource, TEnumerator>
+            where TEnumerator : struct, IEnumerator<TSource>
+            where TSelector : struct, IFunction<TSource, int, TResult>
+            => Count<SelectAtEnumerable<TEnumerable, TEnumerator, TSource, TResult, TSelector>, SelectAtEnumerable<TEnumerable, TEnumerator, TSource, TResult, TSelector>.Enumerator, TResult>(source, predicate);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int CountAt<TEnumerable, TEnumerator, TSource, TResult, TSelector, TPredicate>(this SelectAtEnumerable<TEnumerable, TEnumerator, TSource, TResult, TSelector> source, TPredicate predicate = default)
+            where TEnumerable : IValueReadOnlyCollection<TSource, TEnumerator>
+            where TEnumerator : struct, IEnumerator<TSource>
+            where TSelector : struct, IFunction<TSource, int, TResult>
+            where TPredicate : struct, IFunction<TResult, int, bool>
+            => CountAt<SelectAtEnumerable<TEnumerable, TEnumerator, TSource, TResult, TSelector>, SelectAtEnumerable<TEnumerable, TEnumerator, TSource, TResult, TSelector>.Enumerator, TResult, TPredicate>(source, predicate);
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int Sum<TEnumerable, TEnumerator, TSource, TSelector>(this SelectAtEnumerable<TEnumerable, TEnumerator, TSource, int, TSelector> source)
             where TEnumerable : IValueReadOnlyCollection<TSource, TEnumerator>

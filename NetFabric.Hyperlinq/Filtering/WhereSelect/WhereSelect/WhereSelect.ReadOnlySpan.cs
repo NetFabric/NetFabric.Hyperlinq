@@ -45,6 +45,24 @@ namespace NetFabric.Hyperlinq
             public int Count()
                 => source.Count(predicate);
 
+            //[MethodImpl(MethodImplOptions.AggressiveInlining)]
+            //public int Count(Func<TResult, bool> predicate)
+            //    => Count(new FunctionWrapper<TResult, bool>(predicate));
+
+            //[MethodImpl(MethodImplOptions.AggressiveInlining)]
+            //public int Count<TPredicate2>(TPredicate2 predicate = default)
+            //    where TPredicate2 : struct, IFunction<TResult, bool>
+            //    => ValueEnumerableExtensions.Count<SpanWhereSelectEnumerable<TSource, TResult, TPredicate, TSelector>, WhereSelectEnumerator<TSource, TResult, TPredicate, TSelector>, TResult, TPredicate2>(this, predicate);
+
+            //[MethodImpl(MethodImplOptions.AggressiveInlining)]
+            //public int Count(Func<TResult, int, bool> predicate)
+            //    => CountAt(new FunctionWrapper<TResult, int, bool>(predicate));
+
+            //[MethodImpl(MethodImplOptions.AggressiveInlining)]
+            //public int CountAt<TPredicate2>(TPredicate2 predicate = default)
+            //    where TPredicate2 : struct, IFunction<TResult, int, bool>
+            //    => ValueEnumerableExtensions.CountAt<SpanWhereSelectEnumerable<TSource, TResult, TPredicate, TSelector>, WhereSelectEnumerator<TSource, TResult, TPredicate, TSelector>, TResult, TPredicate2>(this, predicate);
+
             #endregion
             #region Quantifier
 

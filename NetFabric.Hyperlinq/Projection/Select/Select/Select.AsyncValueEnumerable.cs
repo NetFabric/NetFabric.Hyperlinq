@@ -53,15 +53,18 @@ namespace NetFabric.Hyperlinq
                 : IAsyncEnumerator<TResult>
                 , IAsyncStateMachine
             {
-                [SuppressMessage("Style", "IDE0044:Add readonly modifier")]
-                TEnumerator enumerator; // do not make readonly
+#pragma warning disable IDE0044 // Add readonly modifier
+                TEnumerator enumerator;
                 TSelector selector;
+#pragma warning restore IDE0044 // Add readonly modifier
                 readonly CancellationToken cancellationToken;
 
                 int state;
                 AsyncValueTaskMethodBuilder<bool> builder;
+#pragma warning disable IDE1006 // Naming Styles
                 bool s__1;
                 TResult? s__2;
+#pragma warning restore IDE1006 // Naming Styles
                 ConfiguredValueTaskAwaitable<bool>.ConfiguredValueTaskAwaiter u__1;
                 ConfiguredValueTaskAwaitable<TResult>.ConfiguredValueTaskAwaiter u__2;
                 ConfiguredValueTaskAwaitable.ConfiguredValueTaskAwaiter u__3;
