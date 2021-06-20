@@ -35,10 +35,11 @@ namespace NetFabric.Hyperlinq.Benchmarks.Benchmarks
         public int For()
         {
             var source = array!;
+            var len = array!.Length - 1;
             var sum = 0;
             // ReSharper disable once ForCanBeConvertedToForeach
             // ReSharper disable once LoopCanBeConvertedToQuery
-            for (var index = 0; index < source.Length; index++)
+            for (var index = 0; index <= len; index++)
             {
                 var item = source[index];
                 sum += item;
@@ -49,11 +50,11 @@ namespace NetFabric.Hyperlinq.Benchmarks.Benchmarks
         [Benchmark]
         public unsafe int For_Unsafe()
         {
-            var end = array!.Length;
+            var len = array!.Length - 1;
             var sum = 0;
             fixed (int* source = array)
             {
-                for (var index = 0; index < end; index++)
+                for (var index = 0; index < len; index++)
                 {
                     var item = source[index];
                     sum += item;
@@ -62,14 +63,14 @@ namespace NetFabric.Hyperlinq.Benchmarks.Benchmarks
             return sum;
         }
         
-        // [Benchmark]
+        [Benchmark]
         public int ForAdamczewski()
         {
             var source = array!;
-            var len = source.Length;
+            var len = source.Length - 1;
             var sum1 = 0;
             var sum2 = 0;
-            for (var index = 0; index < len; index += 2)
+            for (var index = 0; index <= len; index += 2)
             {
                 long i1 = index + 0;
                 long i2 = index + 1;
@@ -87,10 +88,10 @@ namespace NetFabric.Hyperlinq.Benchmarks.Benchmarks
         {
             fixed (int* source = array)
             {
-                var len = array!.Length;
+                var len = array!.Length - 1;
                 var sum1 = 0;
                 var sum2 = 0;
-                for (var index = 0; index < len; index += 2)
+                for (var index = 0; index <= len; index += 2)
                 {
                     long i1 = index + 0;
                     long i2 = index + 1;
@@ -153,10 +154,11 @@ namespace NetFabric.Hyperlinq.Benchmarks.Benchmarks
         public int ArraySegment_AsArray()
         {
             var source = segment.Array!;
+            var len = array!.Length - 1;
             var start = segment.Offset;
             var end = start + segment.Count;
             var sum = 0;
-            for (var index = start; index < end && index < source.Length; index++)
+            for (var index = start; index < end && index <= len; index++)
                 sum += source[index];
             return sum;
         }
