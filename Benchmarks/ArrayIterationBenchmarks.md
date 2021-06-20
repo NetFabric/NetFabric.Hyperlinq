@@ -18,19 +18,20 @@ BenchmarkDotNet=v0.13.0.1555-nightly, OS=Windows 10.0.19043.1081 (21H1/May2021Up
 Intel Core i7-7567U CPU 3.50GHz (Kaby Lake), 1 CPU, 4 logical and 2 physical cores
 .NET SDK=6.0.100-preview.5.21302.13
   [Host]     : .NET 6.0.0 (6.0.21.30105), X64 RyuJIT
-  Job-VMNIKZ : .NET 6.0.0 (6.0.21.30105), X64 RyuJIT
+  Job-XVAVUK : .NET 6.0.0 (6.0.21.30105), X64 RyuJIT
 
 Runtime=.NET 6.0  
 
 ```
 |               Method |   Count |       Mean |   Error |  StdDev |        Ratio | RatioSD | Gen 0 | Gen 1 | Gen 2 | Allocated |
 |--------------------- |-------- |-----------:|--------:|--------:|-------------:|--------:|------:|------:|------:|----------:|
-|              Foreach | 1000000 |   410.6 μs | 2.11 μs | 1.65 μs |     baseline |         |     - |     - |     - |         - |
-|                  For | 1000000 |   413.4 μs | 1.94 μs | 1.81 μs | 1.01x slower |   0.01x |     - |     - |     - |         - |
-|           For_Unsafe | 1000000 |   410.5 μs | 1.62 μs | 1.51 μs | 1.00x faster |   0.00x |     - |     - |     - |         - |
-| ForAdamczewskiUnsafe | 1000000 |   350.6 μs | 1.82 μs | 1.52 μs | 1.17x faster |   0.01x |     - |     - |     - |         - |
-|                 Span | 1000000 |   408.3 μs | 1.73 μs | 1.53 μs | 1.01x faster |   0.01x |     - |     - |     - |         - |
-| ArraySegment_Foreach | 1000000 | 2,784.3 μs | 7.78 μs | 6.50 μs | 6.78x slower |   0.03x |     - |     - |     - |       1 B |
-|     ArraySegment_For | 1000000 |   800.8 μs | 3.75 μs | 3.13 μs | 1.95x slower |   0.01x |     - |     - |     - |         - |
-|  ArraySegment_AsSpan | 1000000 |   409.3 μs | 1.34 μs | 1.25 μs | 1.00x faster |   0.00x |     - |     - |     - |         - |
-| ArraySegment_AsArray | 1000000 | 1,054.0 μs | 2.24 μs | 2.09 μs | 2.57x slower |   0.01x |     - |     - |     - |         - |
+|              Foreach | 1000000 |   412.6 μs | 2.14 μs | 1.67 μs |     baseline |         |     - |     - |     - |         - |
+|                  For | 1000000 |   429.4 μs | 2.29 μs | 2.03 μs | 1.04x slower |   0.01x |     - |     - |     - |         - |
+|           For_Unsafe | 1000000 |   413.0 μs | 3.60 μs | 2.81 μs | 1.00x slower |   0.01x |     - |     - |     - |         - |
+|       ForAdamczewski | 1000000 |   408.5 μs | 2.42 μs | 2.14 μs | 1.01x faster |   0.01x |     - |     - |     - |         - |
+| ForAdamczewskiUnsafe | 1000000 |   352.8 μs | 1.71 μs | 1.52 μs | 1.17x faster |   0.01x |     - |     - |     - |         - |
+|                 Span | 1000000 |   413.7 μs | 3.02 μs | 2.82 μs | 1.00x slower |   0.01x |     - |     - |     - |         - |
+| ArraySegment_Foreach | 1000000 | 2,796.4 μs | 7.48 μs | 7.00 μs | 6.78x slower |   0.04x |     - |     - |     - |       1 B |
+|     ArraySegment_For | 1000000 |   805.3 μs | 4.55 μs | 3.55 μs | 1.95x slower |   0.01x |     - |     - |     - |         - |
+|  ArraySegment_AsSpan | 1000000 |   412.9 μs | 2.45 μs | 2.29 μs | 1.00x slower |   0.01x |     - |     - |     - |         - |
+| ArraySegment_AsArray | 1000000 |   802.6 μs | 4.70 μs | 4.17 μs | 1.94x slower |   0.01x |     - |     - |     - |         - |
