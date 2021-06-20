@@ -63,51 +63,51 @@ namespace NetFabric.Hyperlinq.Benchmarks.Benchmarks
         }
         
         // [Benchmark]
-        // public int ForAdamczewski()
-        // {
-        //     var source = array!;
-        //     var len = source.Length;
-        //     var sum1 = 0;
-        //     var sum2 = 0;
-        //     for (var index = 0; index < len; index += 2)
-        //     {
-        //         long i1 = index + 0;
-        //         long i2 = index + 1;
-        //         var c = source[i1];
-        //         var d = source[i2];
-        //
-        //         sum1 += c;
-        //         sum2 += d;
-        //     }
-        //     return sum1 + sum2;
-        // }
-        //
-        // [Benchmark]
-        // public unsafe int ForAdamczewskiUnsafe()
-        // {
-        //     fixed (int* source = array)
-        //     {
-        //         var len = array!.Length;
-        //         var sum1 = 0;
-        //         var sum2 = 0;
-        //         for (var index = 0; index < len; index += 2)
-        //         {
-        //             long i1 = index + 0;
-        //             long i2 = index + 1;
-        //             var c = source[i1];
-        //             var d = source[i2];
-        //
-        //             sum1 += c;
-        //             sum2 += d;
-        //         }
-        //         return sum1 + sum2;
-        //     }
-        // }
+        public int ForAdamczewski()
+        {
+            var source = array!;
+            var len = source.Length;
+            var sum1 = 0;
+            var sum2 = 0;
+            for (var index = 0; index < len; index += 2)
+            {
+                long i1 = index + 0;
+                long i2 = index + 1;
+                var c = source[i1];
+                var d = source[i2];
+        
+                sum1 += c;
+                sum2 += d;
+            }
+            return sum1 + sum2;
+        }
+        
+        [Benchmark]
+        public unsafe int ForAdamczewskiUnsafe()
+        {
+            fixed (int* source = array)
+            {
+                var len = array!.Length;
+                var sum1 = 0;
+                var sum2 = 0;
+                for (var index = 0; index < len; index += 2)
+                {
+                    long i1 = index + 0;
+                    long i2 = index + 1;
+                    var c = source[i1];
+                    var d = source[i2];
+        
+                    sum1 += c;
+                    sum2 += d;
+                }
+                return sum1 + sum2;
+            }
+        }
         
         [Benchmark]
         public int Span()
         {
-            var source = array!.AsSpan();
+            var source = array.AsSpan();
             var sum = 0;
             foreach (var item in source)
                 sum += item;
@@ -129,72 +129,36 @@ namespace NetFabric.Hyperlinq.Benchmarks.Benchmarks
         {
             var source = segment;
             var sum = 0;
-            for (var index = 0; index < source!.Count; index++)
-            {
-                var item = source![index];
-                sum += item;
-            }
-            return sum;
-        }
-        
-        [Benchmark]
-        public int ArraySegment_Expanded_For()
-        {
-            var source = segment.Array!;
-            var start = segment.Offset;
-            var end = start + segment.Count;
-            var sum = 0;
-            for (var index = start; index < end && index < source.Length; index++)
+            // ReSharper disable once LoopCanBeConvertedToQuery
+            // ReSharper disable once ForCanBeConvertedToForeach
+            for (var index = 0; index < source.Count; index++)
             {
                 var item = source[index];
                 sum += item;
             }
             return sum;
         }
-
+        
         [Benchmark]
-        public int ArraySegment_Wrapper_Foreach()
+        public int ArraySegment_AsSpan()
         {
-            var source = new ArraySegmentWrapper<int>(segment);
             var sum = 0;
-            foreach (var item in source)
+            // ReSharper disable once ForeachCanBeConvertedToQueryUsingAnotherGetEnumerator
+            foreach (var item in segment.AsSpan())
                 sum += item;
             return sum;
         }
-
-        readonly struct ArraySegmentWrapper<TSource>
+        
+        [Benchmark]
+        public int ArraySegment_AsArray()
         {
-            readonly ArraySegment<TSource> source;
-
-            public ArraySegmentWrapper(in ArraySegment<TSource> source)
-                => this.source = source;
-
-            public Enumerator GetEnumerator()
-                => new(source.Array.AsSpan().Slice(source.Offset, source.Count));
-
-            public ref struct Enumerator
-            {
-                readonly ReadOnlySpan<TSource> source;
-                readonly int end;
-                int index;
-
-                public Enumerator(ReadOnlySpan<TSource> source)
-                {
-                    this.source = source;
-                    index = -1;
-                    end = index + source.Length;
-                }
-
-                public readonly TSource Current
-                {
-                    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-                    get => source[index];
-                }
-
-                [MethodImpl(MethodImplOptions.AggressiveInlining)]
-                public bool MoveNext()
-                    => ++index <= end;
-            }
+            var source = segment.Array!;
+            var start = segment.Offset;
+            var end = start + segment.Count;
+            var sum = 0;
+            for (var index = start; index < end && index < source.Length; index++)
+                sum += source[index];
+            return sum;
         }
 
     }

@@ -1,4 +1,5 @@
-﻿using BenchmarkDotNet.Configs;
+﻿using BenchmarkDotNet.Columns;
+using BenchmarkDotNet.Configs;
 using BenchmarkDotNet.Diagnosers;
 using BenchmarkDotNet.Environments;
 using System;
@@ -20,6 +21,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         static void Main(string[] args)
         {
             var config = DefaultConfig.Instance
+                .WithSummaryStyle(SummaryStyle.Default.WithRatioStyle(RatioStyle.Trend))
                 .AddJob(Job.Default.WithRuntime(CoreRuntime.Core60))
                 .AddDiagnoser(MemoryDiagnoser.Default);
                 
