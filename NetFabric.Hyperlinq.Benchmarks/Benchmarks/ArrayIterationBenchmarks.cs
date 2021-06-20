@@ -54,7 +54,7 @@ namespace NetFabric.Hyperlinq.Benchmarks.Benchmarks
             var sum = 0;
             fixed (int* source = array)
             {
-                for (var index = 0; index < len; index++)
+                for (var index = 0; index <= len; index++)
                 {
                     var item = source[index];
                     sum += item;
