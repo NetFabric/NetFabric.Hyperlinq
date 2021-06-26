@@ -72,10 +72,8 @@ namespace NetFabric.Hyperlinq.Benchmarks.Benchmarks
             var sum2 = 0;
             for (var index = 0; index <= source.Length - 2; index += 2)
             {
-                long i1 = index + 0;
-                long i2 = index + 1;
-                var c = source[i1];
-                var d = source[i2];
+                var c = source[index + 0];
+                var d = source[index + 1];
 
                 sum1 += c;
                 sum2 += d;
@@ -97,10 +95,8 @@ namespace NetFabric.Hyperlinq.Benchmarks.Benchmarks
                 var sum2 = 0;
                 for (var index = 0; index <= len; index += 2)
                 {
-                    long i1 = index + 0;
-                    long i2 = index + 1;
-                    var c = source[i1];
-                    var d = source[i2];
+                    var c = source[index + 0];
+                    var d = source[index + 1];
         
                     sum1 += c;
                     sum2 += d;

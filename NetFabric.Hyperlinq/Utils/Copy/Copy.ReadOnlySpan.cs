@@ -22,7 +22,7 @@ namespace NetFabric.Hyperlinq
         {
             Debug.Assert(destination.Length >= source.Length);
 
-            for (var index = 0; index < source.Length && index < destination.Length; index++)
+            for (var index = 0; index < source.Length; index++)
             {
                 var item = source[index];
                 destination[index] = selector.Invoke(item);
@@ -50,7 +50,7 @@ namespace NetFabric.Hyperlinq
                     destinationVectors[index] = vectorSelector.Invoke(sourceVector);
                 }
 
-                for (var index = source.Length - (source.Length % Vector<TSource>.Count); index < source.Length && index < destination.Length; index++)
+                for (var index = source.Length - (source.Length % Vector<TSource>.Count); index < source.Length; index++)
                 {
                     var item = source[index];
                     destination[index] = selector.Invoke(item);
@@ -58,7 +58,7 @@ namespace NetFabric.Hyperlinq
             }
             else
             {
-                for (var index = 0; index < source.Length && index < destination.Length; index++)
+                for (var index = 0; index < source.Length; index++)
                 {
                     var item = source[index];
                     destination[index] = selector.Invoke(item);
@@ -72,7 +72,7 @@ namespace NetFabric.Hyperlinq
         {
             Debug.Assert(destination.Length >= source.Length);
 
-            for (var index = 0; index < source.Length && index < destination.Length; index++)
+            for (var index = 0; index < source.Length; index++)
             {
                 var item = source[index];
                 destination[index] = selector.Invoke(item, index);

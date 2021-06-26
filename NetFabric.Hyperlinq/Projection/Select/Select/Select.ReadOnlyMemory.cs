@@ -83,7 +83,7 @@ namespace NetFabric.Hyperlinq
             }
 
             void ICollection<TResult>.CopyTo(TResult[] array, int arrayIndex)
-                => CopyTo(array.AsSpan().Slice(arrayIndex));
+                => CopyTo(array.AsSpan(arrayIndex));
             
             void ICollection<TResult>.Add(TResult item) 
                 => Throw.NotSupportedException();

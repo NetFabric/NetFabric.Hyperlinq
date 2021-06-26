@@ -74,7 +74,7 @@ namespace NetFabric.Hyperlinq
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public void CopyTo(TResult[] array, int arrayIndex)
-                => CopyTo(array.AsSpan().Slice(arrayIndex));
+                => CopyTo(array.AsSpan(arrayIndex));
 
             public bool Contains(TResult item)
                 => ContainsAt<TEnumerable, TEnumerator, TSource, TResult, TSelector>(source, item, default, selector);

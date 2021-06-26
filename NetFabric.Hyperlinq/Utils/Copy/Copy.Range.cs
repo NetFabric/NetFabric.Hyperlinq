@@ -21,12 +21,12 @@ namespace NetFabric.Hyperlinq
 
                 if (start is 0)
                 {
-                    for (var index = 0; index < Vector<int>.Count && index < destination.Length; index++)
+                    for (var index = 0; index < Vector<int>.Count; index++)
                         destination[index] = index;
                 }
                 else
                 {
-                    for (var index = 0; index < Vector<int>.Count && index < destination.Length; index++)
+                    for (var index = 0; index < Vector<int>.Count; index++)
                         destination[index] = index + start;
                 }
 

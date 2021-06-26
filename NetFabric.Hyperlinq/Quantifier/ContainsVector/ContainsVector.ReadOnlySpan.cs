@@ -23,22 +23,14 @@ namespace NetFabric.Hyperlinq
                         return true;
                 }
 
-                for (var index = source.Length - (source.Length % Vector<TSource>.Count); index < source.Length; index++)
-                {
-                    var item = source[index];
-                    if (GenericsOperator.Equals(item, value))
-                        return true;
-                }           
+                var count = source.Length % Vector<TSource>.Count;
+                source = source.Slice(source.Length - count, count);
             }
-            else
+            foreach (var item in source)
             {
-                foreach (var item in source)
-                {
-                    if (GenericsOperator.Equals(item, value))
-                        return true;
-                }           
-            }
-
+                if (GenericsOperator.Equals(item, value))
+                    return true;
+            }           
             return false;
         }
 
@@ -63,22 +55,14 @@ namespace NetFabric.Hyperlinq
                         return true;
                 }
 
-                for (var index = source.Length - (source.Length % Vector<TSource>.Count); index < source.Length; index++)
-                {
-                    var item = source[index];
-                    if (GenericsOperator.Equals(selector.Invoke(item), value))
-                        return true;
-                }
+                var count = source.Length % Vector<TSource>.Count;
+                source = source.Slice(source.Length - count, count);
             }
-            else
+            foreach (var item in source)
             {
-                foreach (var item in source)
-                {
-                    if (GenericsOperator.Equals(selector.Invoke(item), value))
-                        return true;
-                }
+                if (GenericsOperator.Equals(selector.Invoke(item), value))
+                    return true;
             }
-
             return false;
         }
     }

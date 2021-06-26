@@ -64,7 +64,7 @@ namespace NetFabric.Hyperlinq
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public void CopyTo(TSource[] array, int arrayIndex)
-                => CopyTo(array.AsSpan().Slice(arrayIndex));
+                => CopyTo(array.AsSpan(arrayIndex));
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public bool Contains(TSource item)
@@ -217,7 +217,7 @@ namespace NetFabric.Hyperlinq
                 for (var index = 0; index < destinationVectors.Length; index++)
                     destinationVectors[index] = vector;
 
-                for (var index = count - (count % Vector<TSource>.Count); index < count && index < destination.Length; index++)
+                for (var index = count - (count % Vector<TSource>.Count); index < count; index++)
                     destination[index] = value;
             }
             else

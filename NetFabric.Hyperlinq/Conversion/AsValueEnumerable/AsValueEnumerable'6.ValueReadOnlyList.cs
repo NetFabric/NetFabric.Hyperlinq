@@ -117,7 +117,7 @@ namespace NetFabric.Hyperlinq
                         collection.CopyTo(array, arrayIndex);
                         break;
                     default:
-                        CopyTo(array.AsSpan().Slice(arrayIndex));
+                        CopyTo(array.AsSpan(arrayIndex));
                         break;
                 }
             }

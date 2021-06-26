@@ -107,7 +107,7 @@ namespace NetFabric.Hyperlinq
         /// <param name="array">The destination array.</param>
         /// <param name="arrayIndex">The index in <paramref name="array"/> to start copying to.</param>
         public readonly void CopyTo(T[] array, int arrayIndex)
-            => CopyTo(array.AsSpan().Slice(arrayIndex));
+            => CopyTo(array.AsSpan(arrayIndex));
 
         public readonly void CopyTo(Span<T> span)
         {
@@ -122,7 +122,7 @@ namespace NetFabric.Hyperlinq
             if (arrayIndex < Count)
             {
                 var length = Count - arrayIndex;
-                current.AsSpan().Slice(0, length).CopyTo(span.Slice(arrayIndex, length));
+                current.AsSpan(0, length).CopyTo(span.Slice(arrayIndex, length));
             }
         }
 
