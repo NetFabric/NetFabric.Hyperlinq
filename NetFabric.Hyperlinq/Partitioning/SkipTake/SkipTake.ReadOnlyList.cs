@@ -73,12 +73,12 @@ namespace NetFabric.Hyperlinq
 
                 if (offset is 0)
                 {
-                    for(var index = 0; index < Count && index < span.Length; index++)
+                    for(var index = 0; index < Count; index++)
                         span[index] = source[index];
                 }
                 else
                 {
-                    for(var index = 0; index < Count && index < span.Length; index++)
+                    for(var index = 0; index < Count; index++)
                         span[index] = source[index + offset];
                 }
             }
@@ -93,7 +93,7 @@ namespace NetFabric.Hyperlinq
                 if (offset is 0 && Count == source.Count && source is ICollection<TSource> collection)
                     collection.CopyTo(array, arrayIndex);
                 else
-                    CopyTo(array.AsSpan().Slice(arrayIndex));
+                    CopyTo(array.AsSpan(arrayIndex));
             }
 
             public bool Contains(TSource item)

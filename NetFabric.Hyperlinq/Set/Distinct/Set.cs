@@ -142,7 +142,7 @@ namespace NetFabric.Hyperlinq
                 Array.Clear(newSlots, Count, newSlots.Length - Count);
 
                 Array.Clear(newBuckets, 0, newBuckets.Length);
-                for (var index = 0; index < Count && index < newSlots.Length; index++)
+                for (var index = 0; index < Count; index++)
                 {
                     var bucket = newSlots[index].HashCode % newSize;
                     newSlots[index].Next = newBuckets[bucket] - 1;
@@ -202,8 +202,8 @@ namespace NetFabric.Hyperlinq
             if (Count is 0)
                 return;
 
-            var source = slots!.AsSpan().Slice(0, Count);
-            for (var index = 0; index < source.Length && index < span.Length; index++)
+            var source = slots!.AsSpan(0, Count);
+            for (var index = 0; index < source.Length; index++)
             {
                 ref readonly var slot = ref source[index];
                 span[index] = slot.Value;
@@ -211,7 +211,7 @@ namespace NetFabric.Hyperlinq
         }
 
         public readonly void CopyTo(TElement[] array, int arrayIndex)
-            => CopyTo(array.AsSpan().Slice(arrayIndex));
+            => CopyTo(array.AsSpan(arrayIndex));
 
         [ExcludeFromCodeCoverage]
         readonly void ICollection<TElement>.Add(TElement item)

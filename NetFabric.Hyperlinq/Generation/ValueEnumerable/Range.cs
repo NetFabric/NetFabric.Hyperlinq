@@ -88,7 +88,7 @@ namespace NetFabric.Hyperlinq
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public void CopyTo(int[] array, int arrayIndex)
-                => CopyTo(array.AsSpan().Slice(arrayIndex));
+                => CopyTo(array.AsSpan(arrayIndex));
 
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]

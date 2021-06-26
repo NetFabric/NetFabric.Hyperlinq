@@ -51,7 +51,7 @@ namespace NetFabric.Hyperlinq
                 using var enumerator = GetEnumerator();
                 checked
                 {
-                    for (var index = 0; enumerator.MoveNext() && index < span.Length; index++)
+                    for (var index = 0; enumerator.MoveNext(); index++)
                         span[index] = enumerator.Current;
                 }
             }
@@ -65,7 +65,7 @@ namespace NetFabric.Hyperlinq
                         collection.CopyTo(array, arrayIndex);
                         break;
                     default:
-                        CopyTo(array.AsSpan().Slice(arrayIndex));
+                        CopyTo(array.AsSpan(arrayIndex));
                         break;
                 }
             }

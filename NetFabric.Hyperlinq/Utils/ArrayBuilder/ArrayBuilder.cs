@@ -70,7 +70,7 @@ namespace NetFabric.Hyperlinq
         // }
 
         public readonly Span<T> AsSpan()
-            => buffer!.AsSpan().Slice(0, Count);
+            => buffer!.AsSpan(0, Count);
 
         /// <summary>
         /// Adds an item to the backing array, resizing it if necessary.

@@ -24,18 +24,11 @@ namespace NetFabric.Hyperlinq
                 for (var index = 0; index < Vector<TSource>.Count; index++)
                     sum = GenericsOperator.Add(vectorSum[index], sum);
 
-                for (var index = source.Length - (source.Length % Vector<TSource>.Count); index < source.Length; index++)
-                {
-                    var item = source[index];
-                    sum = GenericsOperator.Add(item, sum);
-                }
+                var count = source.Length % Vector<TSource>.Count;
+                source = source.Slice(source.Length - count, count);
             }
-            else
-            { 
-                foreach (var item in source)
-                    sum = GenericsOperator.Add(item, sum);
-            }
-
+            foreach (var item in source)
+                sum = GenericsOperator.Add(item, sum);
             return sum;
         }
 
@@ -59,17 +52,11 @@ namespace NetFabric.Hyperlinq
                 for (var index = 0; index < Vector<TResult>.Count; index++)
                     sum = GenericsOperator.Add(vectorSum[index], sum);
 
-                for (var index = source.Length - (source.Length % Vector<TSource>.Count); index < source.Length; index++)
-                {
-                    var item = source[index];
-                    sum = GenericsOperator.Add(selector.Invoke(item), sum);
-                }
+                var count = source.Length % Vector<TSource>.Count;
+                source = source.Slice(source.Length - count, count);
             }
-            else
-            {
-                foreach (var item in source)
-                    sum = GenericsOperator.Add(selector.Invoke(item), sum);
-            }
+            foreach (var item in source)
+                sum = GenericsOperator.Add(selector.Invoke(item), sum);
             return sum;
         }
         
@@ -77,10 +64,8 @@ namespace NetFabric.Hyperlinq
             where TSum : struct
         {
             var sum = default(TSum);
-
             foreach (var item in source)
                 sum = GenericsOperator.AddNullable(item, sum);
-
             return sum;
         }
 
