@@ -109,6 +109,18 @@ namespace NetFabric.Hyperlinq
             where TVectorSelector : struct, IFunction<Vector<int>, Vector<int>>
             where TSelector : struct, IFunction<int, int>
             => SumRange<int, TVectorSelector, TSelector>(source.start, source.count, source.vectorSelector, source.selector);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static nint Sum<TVectorSelector, TSelector>(this RangeSelectVectorContext<nint, TVectorSelector, TSelector> source)
+            where TVectorSelector : struct, IFunction<Vector<int>, Vector<nint>>
+            where TSelector : struct, IFunction<int, nint>
+            => SumRange<nint, TVectorSelector, TSelector>(source.start, source.count, source.vectorSelector, source.selector);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static nuint Sum<TVectorSelector, TSelector>(this RangeSelectVectorContext<nuint, TVectorSelector, TSelector> source)
+            where TVectorSelector : struct, IFunction<Vector<int>, Vector<nuint>>
+            where TSelector : struct, IFunction<int, nuint>
+            => SumRange<nuint, TVectorSelector, TSelector>(source.start, source.count, source.vectorSelector, source.selector);
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static long Sum<TVectorSelector, TSelector>(this RangeSelectVectorContext<long, TVectorSelector, TSelector> source)

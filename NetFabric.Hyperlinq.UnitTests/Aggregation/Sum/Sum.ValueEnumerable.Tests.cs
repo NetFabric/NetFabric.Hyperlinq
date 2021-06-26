@@ -8,8 +8,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Aggregation.Sum
     public class ValueEnumerableTests
     {
         [Theory]
-        [MemberData(nameof(TestData.Sum), MemberType = typeof(TestData))]
-        public void Sum_With_ValidData_Must_Succeed(double[] source)
+        [MemberData(nameof(TestData.SumDouble), MemberType = typeof(TestData))]
+        public void Sum_With_Double_Must_Succeed(double[] source)
         {
             // Arrange
             var wrapped = Wrap.AsValueEnumerable(source);
@@ -17,8 +17,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Aggregation.Sum
                 .Sum();
 
             // Act
-            var result = wrapped
-                .Sum<Wrap.ValueEnumerableWrapper<double>, Wrap.Enumerator<double>, double, double>();
+            var result = wrapped.AsValueEnumerable()
+                .Sum();
 
             // Assert
             _ = result.Must()
@@ -26,8 +26,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Aggregation.Sum
         }
 
         [Theory]
-        [MemberData(nameof(TestData.NullableSum), MemberType = typeof(TestData))]
-        public void Sum_With_Nullable_ValidData_Must_Succeed(double?[] source)
+        [MemberData(nameof(TestData.SumNullableDouble), MemberType = typeof(TestData))]
+        public void Sum_With_NullableDouble_Must_Succeed(double?[] source)
         {
             // Arrange
             var wrapped = Wrap.AsValueEnumerable(source);
@@ -35,8 +35,44 @@ namespace NetFabric.Hyperlinq.UnitTests.Aggregation.Sum
                 .Sum();
 
             // Act
-            var result = wrapped
-                .Sum<Wrap.ValueEnumerableWrapper<double?>, Wrap.Enumerator<double?>, double?, double>();
+            var result = wrapped.AsValueEnumerable()
+                .Sum();
+
+            // Assert
+            _ = result.Must()
+                .BeEqualTo(expected!.Value);
+        }
+        
+        [Theory]
+        [MemberData(nameof(TestData.SumDecimal), MemberType = typeof(TestData))]
+        public void Sum_With_Decimal_Must_Succeed(decimal[] source)
+        {
+            // Arrange
+            var wrapped = Wrap.AsValueEnumerable(source);
+            var expected = source
+                .Sum();
+
+            // Act
+            var result = wrapped.AsValueEnumerable()
+                .Sum();
+
+            // Assert
+            _ = result.Must()
+                .BeEqualTo(expected);
+        }
+
+        [Theory]
+        [MemberData(nameof(TestData.SumNullableDecimal), MemberType = typeof(TestData))]
+        public void Sum_With_NullableDecimal_Must_Succeed(decimal?[] source)
+        {
+            // Arrange
+            var wrapped = Wrap.AsValueEnumerable(source);
+            var expected = source
+                .Sum();
+
+            // Act
+            var result = wrapped.AsValueEnumerable()
+                .Sum();
 
             // Assert
             _ = result.Must()

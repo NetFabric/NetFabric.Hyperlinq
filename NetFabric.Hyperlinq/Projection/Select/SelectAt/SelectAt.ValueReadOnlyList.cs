@@ -266,6 +266,34 @@ namespace NetFabric.Hyperlinq
             where TEnumerator : struct, IEnumerator<TSource>
             where TSelector : struct, IFunction<TSource, int, int?>
             => ValueReadOnlyCollectionExtensions.SumAt<TEnumerable, TEnumerator, TSource, int?, int, TSelector>(source.source, source.selector);
+        
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static nint Sum<TEnumerable, TEnumerator, TSource, TSelector>(this SelectAtEnumerable<TEnumerable, TEnumerator, TSource, nint, TSelector> source)
+            where TEnumerable : struct, IValueReadOnlyList<TSource, TEnumerator>
+            where TEnumerator : struct, IEnumerator<TSource>
+            where TSelector : struct, IFunction<TSource, int, nint>
+            => ValueReadOnlyCollectionExtensions.SumAt<TEnumerable, TEnumerator, TSource, nint, nint, TSelector>(source.source, source.selector);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static nint Sum<TEnumerable, TEnumerator, TSource, TSelector>(this SelectAtEnumerable<TEnumerable, TEnumerator, TSource, nint?, TSelector> source)
+            where TEnumerable : struct, IValueReadOnlyList<TSource, TEnumerator>
+            where TEnumerator : struct, IEnumerator<TSource>
+            where TSelector : struct, IFunction<TSource, int, nint?>
+            => ValueReadOnlyCollectionExtensions.SumAt<TEnumerable, TEnumerator, TSource, nint?, nint, TSelector>(source.source, source.selector);
+        
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static nuint Sum<TEnumerable, TEnumerator, TSource, TSelector>(this SelectAtEnumerable<TEnumerable, TEnumerator, TSource, nuint, TSelector> source)
+            where TEnumerable : struct, IValueReadOnlyList<TSource, TEnumerator>
+            where TEnumerator : struct, IEnumerator<TSource>
+            where TSelector : struct, IFunction<TSource, int, nuint>
+            => ValueReadOnlyCollectionExtensions.SumAt<TEnumerable, TEnumerator, TSource, nuint, nuint, TSelector>(source.source, source.selector);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static nuint Sum<TEnumerable, TEnumerator, TSource, TSelector>(this SelectAtEnumerable<TEnumerable, TEnumerator, TSource, nuint?, TSelector> source)
+            where TEnumerable : struct, IValueReadOnlyList<TSource, TEnumerator>
+            where TEnumerator : struct, IEnumerator<TSource>
+            where TSelector : struct, IFunction<TSource, int, nuint?>
+            => ValueReadOnlyCollectionExtensions.SumAt<TEnumerable, TEnumerator, TSource, nuint?, nuint, TSelector>(source.source, source.selector);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static long Sum<TEnumerable, TEnumerator, TSource, TSelector>(this SelectAtEnumerable<TEnumerable, TEnumerator, TSource, long, TSelector> source)

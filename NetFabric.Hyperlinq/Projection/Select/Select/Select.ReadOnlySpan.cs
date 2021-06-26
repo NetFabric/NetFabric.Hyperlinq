@@ -138,6 +138,26 @@ namespace NetFabric.Hyperlinq
             => source.Count;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static nint Sum<TSource, TSelector>(this SpanSelectEnumerable<TSource, nint, TSelector> source)
+            where TSelector : struct, IFunction<TSource, nint>
+            => source.source.Sum<TSource, nint, nint, TSelector>(source.selector);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static nint Sum<TSource, TSelector>(this SpanSelectEnumerable<TSource, nint?, TSelector> source)
+            where TSelector : struct, IFunction<TSource, nint?>
+            => source.source.Sum<TSource, nint?, nint, TSelector>(source.selector);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static nuint Sum<TSource, TSelector>(this SpanSelectEnumerable<TSource, nuint, TSelector> source)
+            where TSelector : struct, IFunction<TSource, nuint>
+            => source.source.Sum<TSource, nuint, nuint, TSelector>(source.selector);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static nuint Sum<TSource, TSelector>(this SpanSelectEnumerable<TSource, nuint?, TSelector> source)
+            where TSelector : struct, IFunction<TSource, nuint?>
+            => source.source.Sum<TSource, nuint?, nuint, TSelector>(source.selector);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int Sum<TSource, TSelector>(this SpanSelectEnumerable<TSource, int, TSelector> source)
             where TSelector : struct, IFunction<TSource, int>
             => source.source.Sum<TSource, int, int, TSelector>(source.selector);

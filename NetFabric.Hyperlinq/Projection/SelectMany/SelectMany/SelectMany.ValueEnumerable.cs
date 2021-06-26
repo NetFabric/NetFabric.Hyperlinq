@@ -248,6 +248,42 @@ namespace NetFabric.Hyperlinq
             where TSubEnumerator : struct, IEnumerator<int?>
             where TSelector : struct, IFunction<TSource, TSubEnumerable>
             => source.Sum<SelectManyEnumerable<TEnumerable, TEnumerator, TSource, TSubEnumerable, TSubEnumerator, int?, TSelector>, SelectManyEnumerable<TEnumerable, TEnumerator, TSource, TSubEnumerable, TSubEnumerator, int?, TSelector>.Enumerator, int?, int>();
+        
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static nint Sum<TEnumerable, TEnumerator, TSource, TSubEnumerable, TSubEnumerator, TSelector>(this SelectManyEnumerable<TEnumerable, TEnumerator, TSource, TSubEnumerable, TSubEnumerator, nint, TSelector> source)
+            where TEnumerable : IValueEnumerable<TSource, TEnumerator>
+            where TEnumerator : struct, IEnumerator<TSource>
+            where TSubEnumerable : IValueEnumerable<nint, TSubEnumerator>
+            where TSubEnumerator : struct, IEnumerator<nint>
+            where TSelector : struct, IFunction<TSource, TSubEnumerable>
+            => source.Sum<SelectManyEnumerable<TEnumerable, TEnumerator, TSource, TSubEnumerable, TSubEnumerator, nint, TSelector>, SelectManyEnumerable<TEnumerable, TEnumerator, TSource, TSubEnumerable, TSubEnumerator, nint, TSelector>.Enumerator, nint, nint>();
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static nint Sum<TEnumerable, TEnumerator, TSource, TSubEnumerable, TSubEnumerator, TSelector>(this SelectManyEnumerable<TEnumerable, TEnumerator, TSource, TSubEnumerable, TSubEnumerator, nint?, TSelector> source)
+            where TEnumerable : IValueEnumerable<TSource, TEnumerator>
+            where TEnumerator : struct, IEnumerator<TSource>
+            where TSubEnumerable : IValueEnumerable<nint?, TSubEnumerator>
+            where TSubEnumerator : struct, IEnumerator<nint?>
+            where TSelector : struct, IFunction<TSource, TSubEnumerable>
+            => source.Sum<SelectManyEnumerable<TEnumerable, TEnumerator, TSource, TSubEnumerable, TSubEnumerator, nint?, TSelector>, SelectManyEnumerable<TEnumerable, TEnumerator, TSource, TSubEnumerable, TSubEnumerator, nint?, TSelector>.Enumerator, nint?, nint>();
+        
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static nuint Sum<TEnumerable, TEnumerator, TSource, TSubEnumerable, TSubEnumerator, TSelector>(this SelectManyEnumerable<TEnumerable, TEnumerator, TSource, TSubEnumerable, TSubEnumerator, nuint, TSelector> source)
+            where TEnumerable : IValueEnumerable<TSource, TEnumerator>
+            where TEnumerator : struct, IEnumerator<TSource>
+            where TSubEnumerable : IValueEnumerable<nuint, TSubEnumerator>
+            where TSubEnumerator : struct, IEnumerator<nuint>
+            where TSelector : struct, IFunction<TSource, TSubEnumerable>
+            => source.Sum<SelectManyEnumerable<TEnumerable, TEnumerator, TSource, TSubEnumerable, TSubEnumerator, nuint, TSelector>, SelectManyEnumerable<TEnumerable, TEnumerator, TSource, TSubEnumerable, TSubEnumerator, nuint, TSelector>.Enumerator, nuint, nuint>();
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static nuint Sum<TEnumerable, TEnumerator, TSource, TSubEnumerable, TSubEnumerator, TSelector>(this SelectManyEnumerable<TEnumerable, TEnumerator, TSource, TSubEnumerable, TSubEnumerator, nuint?, TSelector> source)
+            where TEnumerable : IValueEnumerable<TSource, TEnumerator>
+            where TEnumerator : struct, IEnumerator<TSource>
+            where TSubEnumerable : IValueEnumerable<nuint?, TSubEnumerator>
+            where TSubEnumerator : struct, IEnumerator<nuint?>
+            where TSelector : struct, IFunction<TSource, TSubEnumerable>
+            => source.Sum<SelectManyEnumerable<TEnumerable, TEnumerator, TSource, TSubEnumerable, TSubEnumerator, nuint?, TSelector>, SelectManyEnumerable<TEnumerable, TEnumerator, TSource, TSubEnumerable, TSubEnumerator, nuint?, TSelector>.Enumerator, nuint?, nuint>();
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static long Sum<TEnumerable, TEnumerator, TSource, TSubEnumerable, TSubEnumerator, TSelector>(this SelectManyEnumerable<TEnumerable, TEnumerator, TSource, TSubEnumerable, TSubEnumerator, long, TSelector> source)

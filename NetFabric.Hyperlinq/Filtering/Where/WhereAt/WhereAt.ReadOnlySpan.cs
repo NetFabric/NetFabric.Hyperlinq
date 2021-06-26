@@ -194,6 +194,26 @@ namespace NetFabric.Hyperlinq
             => source.source.SumAt<int?, int, TPredicate>(source.predicate);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static nint Sum<TPredicate>(this SpanWhereAtEnumerable<nint, TPredicate> source)
+            where TPredicate : struct, IFunction<nint, int, bool>
+            => source.source.SumAt<nint, nint, TPredicate>(source.predicate);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static nint Sum<TPredicate>(this SpanWhereAtEnumerable<nint?, TPredicate> source)
+            where TPredicate : struct, IFunction<nint?, int, bool>
+            => source.source.SumAt<nint?, nint, TPredicate>(source.predicate);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static nuint Sum<TPredicate>(this SpanWhereAtEnumerable<nuint, TPredicate> source)
+            where TPredicate : struct, IFunction<nuint, int, bool>
+            => source.source.SumAt<nuint, nuint, TPredicate>(source.predicate);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static nuint Sum<TPredicate>(this SpanWhereAtEnumerable<nuint?, TPredicate> source)
+            where TPredicate : struct, IFunction<nuint?, int, bool>
+            => source.source.SumAt<nuint?, nuint, TPredicate>(source.predicate);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static long Sum<TPredicate>(this SpanWhereAtEnumerable<long, TPredicate> source)
             where TPredicate : struct, IFunction<long, int, bool>
             => source.source.SumAt<long, long, TPredicate>(source.predicate);

@@ -55,6 +55,26 @@ namespace NetFabric.Hyperlinq
             => source.SumAsync<AsyncValueEnumerable<TEnumerator, int?>, TEnumerator, int?, int>(cancellationToken);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static ValueTask<nint> SumAsync<TEnumerator>(this AsyncValueEnumerable<TEnumerator, nint> source, CancellationToken cancellationToken = default)
+            where TEnumerator : struct, IAsyncEnumerator<nint>
+            => source.SumAsync<AsyncValueEnumerable<TEnumerator, nint>, TEnumerator, nint, nint>(cancellationToken);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static ValueTask<nint> SumAsync<TEnumerator>(this AsyncValueEnumerable<TEnumerator, nint?> source, CancellationToken cancellationToken = default)
+            where TEnumerator : struct, IAsyncEnumerator<nint?>
+            => source.SumAsync<AsyncValueEnumerable<TEnumerator, nint?>, TEnumerator, nint?, nint>(cancellationToken);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static ValueTask<nuint> SumAsync<TEnumerator>(this AsyncValueEnumerable<TEnumerator, nuint> source, CancellationToken cancellationToken = default)
+            where TEnumerator : struct, IAsyncEnumerator<nuint>
+            => source.SumAsync<AsyncValueEnumerable<TEnumerator, nuint>, TEnumerator, nuint, nuint>(cancellationToken);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static ValueTask<nuint> SumAsync<TEnumerator>(this AsyncValueEnumerable<TEnumerator, nuint?> source, CancellationToken cancellationToken = default)
+            where TEnumerator : struct, IAsyncEnumerator<nuint?>
+            => source.SumAsync<AsyncValueEnumerable<TEnumerator, nuint?>, TEnumerator, nuint?, nuint>(cancellationToken);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ValueTask<long> SumAsync<TEnumerator>(this AsyncValueEnumerable<TEnumerator, long> source, CancellationToken cancellationToken = default)
             where TEnumerator : struct, IAsyncEnumerator<long>
             => source.SumAsync<AsyncValueEnumerable<TEnumerator, long>, TEnumerator, long, long>(cancellationToken);

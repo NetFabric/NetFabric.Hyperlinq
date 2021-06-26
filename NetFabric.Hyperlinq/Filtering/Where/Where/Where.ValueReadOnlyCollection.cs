@@ -254,6 +254,34 @@ namespace NetFabric.Hyperlinq
             => Sum<TEnumerable, TEnumerator, int?, int, TPredicate>(source.source, source.predicate);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static nint Sum<TEnumerable, TEnumerator, TPredicate>(this WhereEnumerable<TEnumerable, TEnumerator, nint, TPredicate> source)
+            where TEnumerable : IValueReadOnlyCollection<nint, TEnumerator>
+            where TEnumerator : struct, IEnumerator<nint>
+            where TPredicate : struct, IFunction<nint, bool>
+            => Sum<TEnumerable, TEnumerator, nint, nint, TPredicate>(source.source, source.predicate);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static nint Sum<TEnumerable, TEnumerator, TPredicate>(this WhereEnumerable<TEnumerable, TEnumerator, nint?, TPredicate> source)
+            where TEnumerable : IValueReadOnlyCollection<nint?, TEnumerator>
+            where TEnumerator : struct, IEnumerator<nint?>
+            where TPredicate : struct, IFunction<nint?, bool>
+            => Sum<TEnumerable, TEnumerator, nint?, nint, TPredicate>(source.source, source.predicate);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static nuint Sum<TEnumerable, TEnumerator, TPredicate>(this WhereEnumerable<TEnumerable, TEnumerator, nuint, TPredicate> source)
+            where TEnumerable : IValueReadOnlyCollection<nuint, TEnumerator>
+            where TEnumerator : struct, IEnumerator<nuint>
+            where TPredicate : struct, IFunction<nuint, bool>
+            => Sum<TEnumerable, TEnumerator, nuint, nuint, TPredicate>(source.source, source.predicate);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static nuint Sum<TEnumerable, TEnumerator, TPredicate>(this WhereEnumerable<TEnumerable, TEnumerator, nuint?, TPredicate> source)
+            where TEnumerable : IValueReadOnlyCollection<nuint?, TEnumerator>
+            where TEnumerator : struct, IEnumerator<nuint?>
+            where TPredicate : struct, IFunction<nuint?, bool>
+            => Sum<TEnumerable, TEnumerator, nuint?, nuint, TPredicate>(source.source, source.predicate);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static long Sum<TEnumerable, TEnumerator, TPredicate>(this WhereEnumerable<TEnumerable, TEnumerator, long, TPredicate> source)
             where TEnumerable : IValueReadOnlyCollection<long, TEnumerator>
             where TEnumerator : struct, IEnumerator<long>

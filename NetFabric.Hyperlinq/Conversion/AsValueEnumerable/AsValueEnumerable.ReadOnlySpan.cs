@@ -173,15 +173,31 @@ namespace NetFabric.Hyperlinq
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int Sum(this SpanValueEnumerable<int> source)
-            => source.source.Sum();
+            => source.source.SumVector<int, int>();
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int Sum(this SpanValueEnumerable<int?> source)
             => source.source.Sum<int?, int>();
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static nint Sum(this SpanValueEnumerable<nint> source)
+            => source.source.SumVector<nint, nint>();
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static nint Sum(this SpanValueEnumerable<nint?> source)
+            => source.source.Sum<nint?, nint>();
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static nuint Sum(this SpanValueEnumerable<nuint> source)
+            => source.source.SumVector<nuint, nuint>();
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static nuint Sum(this SpanValueEnumerable<nuint?> source)
+            => source.source.Sum<nuint?, nuint>();
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static long Sum(this SpanValueEnumerable<long> source)
-            => source.source.Sum();
+            => source.source.SumVector<long, long>();
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static long Sum(this SpanValueEnumerable<long?> source)
@@ -189,7 +205,7 @@ namespace NetFabric.Hyperlinq
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float Sum(this SpanValueEnumerable<float> source)
-            => source.source.Sum();
+            => source.source.SumVector<float, float>();
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float Sum(this SpanValueEnumerable<float?> source)
@@ -197,7 +213,7 @@ namespace NetFabric.Hyperlinq
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static double Sum(this SpanValueEnumerable<double> source)
-            => source.source.Sum();
+            => source.source.SumVector<double, double>();
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static double Sum(this SpanValueEnumerable<double?> source)
@@ -205,7 +221,7 @@ namespace NetFabric.Hyperlinq
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static decimal Sum(this SpanValueEnumerable<decimal> source)
-            => source.source.Sum();
+            => source.source.Sum<decimal, decimal>();
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static decimal Sum(this SpanValueEnumerable<decimal?> source)

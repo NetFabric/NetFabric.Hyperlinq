@@ -158,6 +158,42 @@ namespace NetFabric.Hyperlinq
             => ValueReadOnlyCollectionExtensions.Sum<ValueEnumerable<TEnumerable, TEnumerator, TEnumerator2, int?, TGetEnumerator, TGetEnumerator2>, TEnumerator, int?, int>(source);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static nint Sum<TEnumerable, TEnumerator, TEnumerator2, TGetEnumerator, TGetEnumerator2>(this ValueEnumerable<TEnumerable, TEnumerator, TEnumerator2, nint, TGetEnumerator, TGetEnumerator2> source)
+            where TEnumerable : IReadOnlyCollection<nint>
+            where TEnumerator : struct, IEnumerator<nint>
+            where TEnumerator2 : struct
+            where TGetEnumerator : struct, IFunction<TEnumerable, TEnumerator>
+            where TGetEnumerator2 : struct, IFunction<TEnumerable, TEnumerator2>
+            => ValueReadOnlyCollectionExtensions.Sum<ValueEnumerable<TEnumerable, TEnumerator, TEnumerator2, nint, TGetEnumerator, TGetEnumerator2>, TEnumerator, nint, nint>(source);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static nint Sum<TEnumerable, TEnumerator, TEnumerator2, TGetEnumerator, TGetEnumerator2>(this ValueEnumerable<TEnumerable, TEnumerator, TEnumerator2, nint?, TGetEnumerator, TGetEnumerator2> source)
+            where TEnumerable : IReadOnlyCollection<nint?>
+            where TEnumerator : struct, IEnumerator<nint?>
+            where TEnumerator2 : struct
+            where TGetEnumerator : struct, IFunction<TEnumerable, TEnumerator>
+            where TGetEnumerator2 : struct, IFunction<TEnumerable, TEnumerator2>
+            => ValueReadOnlyCollectionExtensions.Sum<ValueEnumerable<TEnumerable, TEnumerator, TEnumerator2, nint?, TGetEnumerator, TGetEnumerator2>, TEnumerator, nint?, nint>(source);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static nuint Sum<TEnumerable, TEnumerator, TEnumerator2, TGetEnumerator, TGetEnumerator2>(this ValueEnumerable<TEnumerable, TEnumerator, TEnumerator2, nuint, TGetEnumerator, TGetEnumerator2> source)
+            where TEnumerable : IReadOnlyCollection<nuint>
+            where TEnumerator : struct, IEnumerator<nuint>
+            where TEnumerator2 : struct
+            where TGetEnumerator : struct, IFunction<TEnumerable, TEnumerator>
+            where TGetEnumerator2 : struct, IFunction<TEnumerable, TEnumerator2>
+            => ValueReadOnlyCollectionExtensions.Sum<ValueEnumerable<TEnumerable, TEnumerator, TEnumerator2, nuint, TGetEnumerator, TGetEnumerator2>, TEnumerator, nuint, nuint>(source);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static nuint Sum<TEnumerable, TEnumerator, TEnumerator2, TGetEnumerator, TGetEnumerator2>(this ValueEnumerable<TEnumerable, TEnumerator, TEnumerator2, nuint?, TGetEnumerator, TGetEnumerator2> source)
+            where TEnumerable : IReadOnlyCollection<nuint?>
+            where TEnumerator : struct, IEnumerator<nuint?>
+            where TEnumerator2 : struct
+            where TGetEnumerator : struct, IFunction<TEnumerable, TEnumerator>
+            where TGetEnumerator2 : struct, IFunction<TEnumerable, TEnumerator2>
+            => ValueReadOnlyCollectionExtensions.Sum<ValueEnumerable<TEnumerable, TEnumerator, TEnumerator2, nuint?, TGetEnumerator, TGetEnumerator2>, TEnumerator, nuint?, nuint>(source);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static long Sum<TEnumerable, TEnumerator, TEnumerator2, TGetEnumerator, TGetEnumerator2>(this ValueEnumerable<TEnumerable, TEnumerator, TEnumerator2, long, TGetEnumerator, TGetEnumerator2> source)
             where TEnumerable : IReadOnlyCollection<long>
             where TEnumerator : struct, IEnumerator<long>

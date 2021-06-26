@@ -51,6 +51,22 @@ namespace NetFabric.Hyperlinq
             => source.Sum<ValueEnumerable<int?>, ValueEnumerator<int?>, int?, int>();
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static nint Sum(this ValueEnumerable<nint> source)
+            => source.Sum<ValueEnumerable<nint>, ValueEnumerator<nint>, nint, nint>();
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static nint Sum(this ValueEnumerable<nint?> source)
+            => source.Sum<ValueEnumerable<nint?>, ValueEnumerator<nint?>, nint?, nint>();
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static nuint Sum(this ValueEnumerable<nuint> source)
+            => source.Sum<ValueEnumerable<nuint>, ValueEnumerator<nuint>, nuint, nuint>();
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static nuint Sum(this ValueEnumerable<nuint?> source)
+            => source.Sum<ValueEnumerable<nuint?>, ValueEnumerator<nuint?>, nuint?, nuint>();
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static long Sum(this ValueEnumerable<long> source)
             => source.Sum<ValueEnumerable<long>, ValueEnumerator<long>, long, long>();
 

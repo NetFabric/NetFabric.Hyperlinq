@@ -152,6 +152,22 @@ namespace NetFabric.Hyperlinq
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int Sum(this ArraySegmentDistinctEnumerable<int?> source)
             => source.Sum<ArraySegmentDistinctEnumerable<int?>, ArraySegmentDistinctEnumerable<int?>.Enumerator, int?, int>();
+        
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static nint Sum(this ArraySegmentDistinctEnumerable<nint> source)
+            => source.Sum<ArraySegmentDistinctEnumerable<nint>, ArraySegmentDistinctEnumerable<nint>.Enumerator, nint, nint>();
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static nint Sum(this ArraySegmentDistinctEnumerable<nint?> source)
+            => source.Sum<ArraySegmentDistinctEnumerable<nint?>, ArraySegmentDistinctEnumerable<nint?>.Enumerator, nint?, nint>();
+        
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static nuint Sum(this ArraySegmentDistinctEnumerable<nuint> source)
+            => source.Sum<ArraySegmentDistinctEnumerable<nuint>, ArraySegmentDistinctEnumerable<nuint>.Enumerator, nuint, nuint>();
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static nuint Sum(this ArraySegmentDistinctEnumerable<nuint?> source)
+            => source.Sum<ArraySegmentDistinctEnumerable<nuint?>, ArraySegmentDistinctEnumerable<nuint?>.Enumerator, nuint?, nuint>();
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static long Sum(this ArraySegmentDistinctEnumerable<long> source)
