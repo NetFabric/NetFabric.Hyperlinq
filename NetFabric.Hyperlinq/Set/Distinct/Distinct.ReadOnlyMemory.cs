@@ -154,6 +154,22 @@ namespace NetFabric.Hyperlinq
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int Sum(this MemoryDistinctEnumerable<int?> source)
             => source.Sum<MemoryDistinctEnumerable<int?>, MemoryDistinctEnumerable<int?>.Enumerator, int?, int>();
+        
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static nint Sum(this MemoryDistinctEnumerable<nint> source)
+            => source.Sum<MemoryDistinctEnumerable<nint>, MemoryDistinctEnumerable<nint>.Enumerator, nint, nint>();
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static nint Sum(this MemoryDistinctEnumerable<nint?> source)
+            => source.Sum<MemoryDistinctEnumerable<nint?>, MemoryDistinctEnumerable<nint?>.Enumerator, nint?, nint>();
+        
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static nuint Sum(this MemoryDistinctEnumerable<nuint> source)
+            => source.Sum<MemoryDistinctEnumerable<nuint>, MemoryDistinctEnumerable<nuint>.Enumerator, nuint, nuint>();
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static nuint Sum(this MemoryDistinctEnumerable<nuint?> source)
+            => source.Sum<MemoryDistinctEnumerable<nuint?>, MemoryDistinctEnumerable<nuint?>.Enumerator, nuint?, nuint>();
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static long Sum(this MemoryDistinctEnumerable<long> source)

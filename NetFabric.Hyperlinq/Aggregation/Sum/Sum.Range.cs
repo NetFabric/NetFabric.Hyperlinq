@@ -43,18 +43,18 @@ namespace NetFabric.Hyperlinq
                 }
 
                 for (index = 0; index < Vector<TResult>.Count; index++)
-                    sum = GenericsOperator.Add(vectorSum[index], sum);
+                    sum = Scalar.Add(vectorSum[index], sum);
             }
 
             if (start is 0)
             {
                 for (; index < count; index++)
-                    sum = GenericsOperator.Add(selector.Invoke(index), sum);
+                    sum = Scalar.Add(selector.Invoke(index), sum);
             }
             else
             {
                 for (; index < count; index++)
-                    sum = GenericsOperator.Add(selector.Invoke(index + start), sum);
+                    sum = Scalar.Add(selector.Invoke(index + start), sum);
             }
 
             return sum;

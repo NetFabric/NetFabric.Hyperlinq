@@ -17,7 +17,7 @@ namespace NetFabric.Hyperlinq
             try
             {
                 while (await enumerator.MoveNextAsync().ConfigureAwait(false))
-                    sum = GenericsOperator.AddNullable(enumerator.Current, sum);
+                    sum = Scalar.Add(enumerator.Current, sum);
             }
             finally
             {
@@ -41,7 +41,7 @@ namespace NetFabric.Hyperlinq
                 {
                     var item = enumerator.Current;
                     if (await predicate.InvokeAsync(item, cancellationToken).ConfigureAwait(false))
-                        sum = GenericsOperator.AddNullable(item, sum);
+                        sum = Scalar.Add(item, sum);
                 }
             }
             finally
@@ -66,7 +66,7 @@ namespace NetFabric.Hyperlinq
                 {
                     var item = enumerator.Current;
                     if (await predicate.InvokeAsync(item, index, cancellationToken).ConfigureAwait(false))
-                        sum = GenericsOperator.AddNullable(item, sum);
+                        sum = Scalar.Add(item, sum);
                 }
             }
             finally
@@ -90,7 +90,7 @@ namespace NetFabric.Hyperlinq
                 while (await enumerator.MoveNextAsync().ConfigureAwait(false))
                 {
                     var item = enumerator.Current;
-                    sum = GenericsOperator.AddNullable(await selector.InvokeAsync(item, cancellationToken).ConfigureAwait(false), sum);
+                    sum = Scalar.Add(await selector.InvokeAsync(item, cancellationToken).ConfigureAwait(false), sum);
                 }
             }
             finally
@@ -114,7 +114,7 @@ namespace NetFabric.Hyperlinq
                 for (var index = 0; await enumerator.MoveNextAsync().ConfigureAwait(false); index++)
                 {
                     var item = enumerator.Current;
-                    sum = GenericsOperator.AddNullable(await selector.InvokeAsync(item, index, cancellationToken).ConfigureAwait(false), sum);
+                    sum = Scalar.Add(await selector.InvokeAsync(item, index, cancellationToken).ConfigureAwait(false), sum);
                 }
             }
             finally
@@ -140,7 +140,7 @@ namespace NetFabric.Hyperlinq
                 {
                     var item = enumerator.Current;
                     if (await predicate.InvokeAsync(item, cancellationToken).ConfigureAwait(false))
-                        sum = GenericsOperator.AddNullable(await selector.InvokeAsync(item, cancellationToken).ConfigureAwait(false), sum);
+                        sum = Scalar.Add(await selector.InvokeAsync(item, cancellationToken).ConfigureAwait(false), sum);
                 }
             }
             finally

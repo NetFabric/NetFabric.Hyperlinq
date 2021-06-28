@@ -228,6 +228,26 @@ namespace NetFabric.Hyperlinq
             => ((ReadOnlySpan<TSource>)source.source.AsSpan()).SumAt<TSource, int?, int, TSelector>(source.selector);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static nint Sum<TSource, TSelector>(this ArraySegmentSelectAtEnumerable<TSource, nint, TSelector> source)
+            where TSelector : struct, IFunction<TSource, int, nint>
+            => ((ReadOnlySpan<TSource>)source.source.AsSpan()).SumAt<TSource, nint, nint, TSelector>(source.selector);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static nint Sum<TSource, TSelector>(this ArraySegmentSelectAtEnumerable<TSource, nint?, TSelector> source)
+            where TSelector : struct, IFunction<TSource, int, nint?>
+            => ((ReadOnlySpan<TSource>)source.source.AsSpan()).SumAt<TSource, nint?, nint, TSelector>(source.selector);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static nuint Sum<TSource, TSelector>(this ArraySegmentSelectAtEnumerable<TSource, nuint, TSelector> source)
+            where TSelector : struct, IFunction<TSource, int, nuint>
+            => ((ReadOnlySpan<TSource>)source.source.AsSpan()).SumAt<TSource, nuint, nuint, TSelector>(source.selector);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static nuint Sum<TSource, TSelector>(this ArraySegmentSelectAtEnumerable<TSource, nuint?, TSelector> source)
+            where TSelector : struct, IFunction<TSource, int, nuint?>
+            => ((ReadOnlySpan<TSource>)source.source.AsSpan()).SumAt<TSource, nuint?, nuint, TSelector>(source.selector);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static long Sum<TSource, TSelector>(this ArraySegmentSelectAtEnumerable<TSource, long, TSelector> source)
             where TSelector : struct, IFunction<TSource, int, long>
             => ((ReadOnlySpan<TSource>)source.source.AsSpan()).SumAt<TSource, long, long, TSelector>(source.selector);

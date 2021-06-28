@@ -261,6 +261,30 @@ namespace NetFabric.Hyperlinq
             => ((ReadOnlySpan<TSource>)source.source.AsSpan()).Sum<TSource, int?, int, TPredicate, TSelector>(source.predicate, source.selector);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static nint Sum<TSource, TPredicate, TSelector>(this ArraySegmentWhereSelectEnumerable<TSource, nint, TPredicate, TSelector> source)
+            where TPredicate : struct, IFunction<TSource, bool>
+            where TSelector : struct, IFunction<TSource, nint>
+            => ((ReadOnlySpan<TSource>)source.source.AsSpan()).Sum<TSource, nint, nint, TPredicate, TSelector>(source.predicate, source.selector);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static nint Sum<TSource, TPredicate, TSelector>(this ArraySegmentWhereSelectEnumerable<TSource, nint?, TPredicate, TSelector> source)
+            where TPredicate : struct, IFunction<TSource, bool>
+            where TSelector : struct, IFunction<TSource, nint?>
+            => ((ReadOnlySpan<TSource>)source.source.AsSpan()).Sum<TSource, nint?, nint, TPredicate, TSelector>(source.predicate, source.selector);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static nuint Sum<TSource, TPredicate, TSelector>(this ArraySegmentWhereSelectEnumerable<TSource, nuint, TPredicate, TSelector> source)
+            where TPredicate : struct, IFunction<TSource, bool>
+            where TSelector : struct, IFunction<TSource, nuint>
+            => ((ReadOnlySpan<TSource>)source.source.AsSpan()).Sum<TSource, nuint, nuint, TPredicate, TSelector>(source.predicate, source.selector);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static nuint Sum<TSource, TPredicate, TSelector>(this ArraySegmentWhereSelectEnumerable<TSource, nuint?, TPredicate, TSelector> source)
+            where TPredicate : struct, IFunction<TSource, bool>
+            where TSelector : struct, IFunction<TSource, nuint?>
+            => ((ReadOnlySpan<TSource>)source.source.AsSpan()).Sum<TSource, nuint?, nuint, TPredicate, TSelector>(source.predicate, source.selector);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static long Sum<TSource, TPredicate, TSelector>(this ArraySegmentWhereSelectEnumerable<TSource, long, TPredicate, TSelector> source)
             where TPredicate : struct, IFunction<TSource, bool>
             where TSelector : struct, IFunction<TSource, long>

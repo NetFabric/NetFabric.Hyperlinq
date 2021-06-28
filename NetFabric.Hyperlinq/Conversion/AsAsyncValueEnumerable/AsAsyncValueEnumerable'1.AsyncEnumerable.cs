@@ -74,6 +74,22 @@ namespace NetFabric.Hyperlinq
             => source.SumAsync<AsyncValueEnumerable<int?>, AsyncValueEnumerable<int?>.AsyncEnumerator, int?, int>(cancellationToken);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static ValueTask<nint> SumAsync(this AsyncValueEnumerable<nint> source, CancellationToken cancellationToken = default)
+            => source.SumAsync<AsyncValueEnumerable<nint>, AsyncValueEnumerable<nint>.AsyncEnumerator, nint, nint>(cancellationToken);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static ValueTask<nint> SumAsync(this AsyncValueEnumerable<nint?> source, CancellationToken cancellationToken = default)
+            => source.SumAsync<AsyncValueEnumerable<nint?>, AsyncValueEnumerable<nint?>.AsyncEnumerator, nint?, nint>(cancellationToken);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static ValueTask<nuint> SumAsync(this AsyncValueEnumerable<nuint> source, CancellationToken cancellationToken = default)
+            => source.SumAsync<AsyncValueEnumerable<nuint>, AsyncValueEnumerable<nuint>.AsyncEnumerator, nuint, nuint>(cancellationToken);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static ValueTask<nuint> SumAsync(this AsyncValueEnumerable<nuint?> source, CancellationToken cancellationToken = default)
+            => source.SumAsync<AsyncValueEnumerable<nuint?>, AsyncValueEnumerable<nuint?>.AsyncEnumerator, nuint?, nuint>(cancellationToken);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ValueTask<long> SumAsync(this AsyncValueEnumerable<long> source, CancellationToken cancellationToken = default)
             => source.SumAsync<AsyncValueEnumerable<long>, AsyncValueEnumerable<long>.AsyncEnumerator, long, long>(cancellationToken);
 

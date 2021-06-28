@@ -102,36 +102,42 @@ namespace NetFabric.Hyperlinq
             where TVectorSelector : struct, IFunction<Vector<TSource>, Vector<int>>
             where TSelector : struct, IFunction<TSource, int>
             where TSource : struct
-            => source.source.Sum<TSource, int, TVectorSelector, TSelector>(source.vectorSelector, source.selector);
+            => source.source.SumVector<TSource, int, int, TVectorSelector, TSelector>(source.vectorSelector, source.selector);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static long Sum<TSource, TVectorSelector, TSelector>(this SpanSelectVectorContext<TSource, long, TVectorSelector, TSelector> source)
             where TVectorSelector : struct, IFunction<Vector<TSource>, Vector<long>>
             where TSelector : struct, IFunction<TSource, long>
             where TSource : struct
-            => source.source.Sum<TSource, long, TVectorSelector, TSelector>(source.vectorSelector, source.selector);
+            => source.source.SumVector<TSource, long, long, TVectorSelector, TSelector>(source.vectorSelector, source.selector);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float Sum<TSource, TVectorSelector, TSelector>(this SpanSelectVectorContext<TSource, float, TVectorSelector, TSelector> source)
             where TVectorSelector : struct, IFunction<Vector<TSource>, Vector<float>>
             where TSelector : struct, IFunction<TSource, float>
             where TSource : struct
-            => source.source.Sum<TSource, float, TVectorSelector, TSelector>(source.vectorSelector, source.selector);
+            => source.source.SumVector<TSource, float, float, TVectorSelector, TSelector>(source.vectorSelector, source.selector);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static double Sum<TSource, TVectorSelector, TSelector>(this SpanSelectVectorContext<TSource, double, TVectorSelector, TSelector> source)
             where TVectorSelector : struct, IFunction<Vector<TSource>, Vector<double>>
             where TSelector : struct, IFunction<TSource, double>
             where TSource : struct
-            => source.source.Sum<TSource, double, TVectorSelector, TSelector>(source.vectorSelector, source.selector);
-
+            => source.source.SumVector<TSource, double, double, TVectorSelector, TSelector>(source.vectorSelector, source.selector);
+        
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static decimal Sum<TSource, TVectorSelector, TSelector>(this SpanSelectVectorContext<TSource, decimal, TVectorSelector, TSelector> source)
-            where TVectorSelector : struct, IFunction<Vector<TSource>, Vector<decimal>>
-            where TSelector : struct, IFunction<TSource, decimal>
+        public static nuint Sum<TSource, TVectorSelector, TSelector>(this SpanSelectVectorContext<TSource, nuint, TVectorSelector, TSelector> source)
+            where TVectorSelector : struct, IFunction<Vector<TSource>, Vector<nuint>>
+            where TSelector : struct, IFunction<TSource, nuint>
             where TSource : struct
-            => source.source.Sum<TSource, decimal, TVectorSelector, TSelector>(source.vectorSelector, source.selector);
-
+            => source.source.SumVector<TSource, nuint, nuint, TVectorSelector, TSelector>(source.vectorSelector, source.selector);
+        
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static nint Sum<TSource, TVectorSelector, TSelector>(this SpanSelectVectorContext<TSource, nint, TVectorSelector, TSelector> source)
+            where TVectorSelector : struct, IFunction<Vector<TSource>, Vector<nint>>
+            where TSelector : struct, IFunction<TSource, nint>
+            where TSource : struct
+            => source.source.SumVector<TSource, nint, nint, TVectorSelector, TSelector>(source.vectorSelector, source.selector);
     }
 }
 

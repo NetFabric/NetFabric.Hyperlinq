@@ -134,6 +134,30 @@ namespace NetFabric.Hyperlinq
             where TEnumerable : IValueEnumerable<int?, TEnumerator>
             where TEnumerator : struct, IEnumerator<int?>
             => source.Sum<DistinctEnumerable<TEnumerable, TEnumerator, int?>, DistinctEnumerable<TEnumerable, TEnumerator, int?>.Enumerator, int?, int>();
+        
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static nint Sum<TEnumerable, TEnumerator>(this DistinctEnumerable<TEnumerable, TEnumerator, nint> source)
+            where TEnumerable : IValueEnumerable<nint, TEnumerator>
+            where TEnumerator : struct, IEnumerator<nint>
+            => source.Sum<DistinctEnumerable<TEnumerable, TEnumerator, nint>, DistinctEnumerable<TEnumerable, TEnumerator, nint>.Enumerator, nint, nint>();
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static nint Sum<TEnumerable, TEnumerator>(this DistinctEnumerable<TEnumerable, TEnumerator, nint?> source)
+            where TEnumerable : IValueEnumerable<nint?, TEnumerator>
+            where TEnumerator : struct, IEnumerator<nint?>
+            => source.Sum<DistinctEnumerable<TEnumerable, TEnumerator, nint?>, DistinctEnumerable<TEnumerable, TEnumerator, nint?>.Enumerator, nint?, nint>();
+        
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static nuint Sum<TEnumerable, TEnumerator>(this DistinctEnumerable<TEnumerable, TEnumerator, nuint> source)
+            where TEnumerable : IValueEnumerable<nuint, TEnumerator>
+            where TEnumerator : struct, IEnumerator<nuint>
+            => source.Sum<DistinctEnumerable<TEnumerable, TEnumerator, nuint>, DistinctEnumerable<TEnumerable, TEnumerator, nuint>.Enumerator, nuint, nuint>();
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static nuint Sum<TEnumerable, TEnumerator>(this DistinctEnumerable<TEnumerable, TEnumerator, nuint?> source)
+            where TEnumerable : IValueEnumerable<nuint?, TEnumerator>
+            where TEnumerator : struct, IEnumerator<nuint?>
+            => source.Sum<DistinctEnumerable<TEnumerable, TEnumerator, nuint?>, DistinctEnumerable<TEnumerable, TEnumerator, nuint?>.Enumerator, nuint?, nuint>();
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static long Sum<TEnumerable, TEnumerator>(this DistinctEnumerable<TEnumerable, TEnumerator, long> source)

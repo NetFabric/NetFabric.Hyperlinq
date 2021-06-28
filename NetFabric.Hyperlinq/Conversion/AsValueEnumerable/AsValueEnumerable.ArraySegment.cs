@@ -332,15 +332,31 @@ namespace NetFabric.Hyperlinq
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int Sum(this ArraySegmentValueEnumerable<int> source)
-            => ((ReadOnlySpan<int>)source.source.AsSpan()).Sum();
+            => ((ReadOnlySpan<int>)source.source.AsSpan()).SumVector<int, int>();
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int Sum(this ArraySegmentValueEnumerable<int?> source)
             => ((ReadOnlySpan<int?>)source.source.AsSpan()).Sum<int?, int>();
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static nint Sum(this ArraySegmentValueEnumerable<nint> source)
+            => ((ReadOnlySpan<nint>)source.source.AsSpan()).SumVector<nint, nint>();
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static nint Sum(this ArraySegmentValueEnumerable<nint?> source)
+            => ((ReadOnlySpan<nint?>)source.source.AsSpan()).Sum<nint?, nint>();
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static nuint Sum(this ArraySegmentValueEnumerable<nuint> source)
+            => ((ReadOnlySpan<nuint>)source.source.AsSpan()).SumVector<nuint, nuint>();
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static nuint Sum(this ArraySegmentValueEnumerable<nuint?> source)
+            => ((ReadOnlySpan<nuint?>)source.source.AsSpan()).Sum<nuint?, nuint>();
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static long Sum(this ArraySegmentValueEnumerable<long> source)
-            => ((ReadOnlySpan<long>)source.source.AsSpan()).Sum();
+            => ((ReadOnlySpan<long>)source.source.AsSpan()).SumVector<long, long>();
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static long Sum(this ArraySegmentValueEnumerable<long?> source)
@@ -348,7 +364,7 @@ namespace NetFabric.Hyperlinq
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float Sum(this ArraySegmentValueEnumerable<float> source)
-            => ((ReadOnlySpan<float>)source.source.AsSpan()).Sum();
+            => ((ReadOnlySpan<float>)source.source.AsSpan()).SumVector<float, float>();
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float Sum(this ArraySegmentValueEnumerable<float?> source)
@@ -356,7 +372,7 @@ namespace NetFabric.Hyperlinq
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static double Sum(this ArraySegmentValueEnumerable<double> source)
-            => ((ReadOnlySpan<double>)source.source.AsSpan()).Sum();
+            => ((ReadOnlySpan<double>)source.source.AsSpan()).SumVector<double, double>();
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static double Sum(this ArraySegmentValueEnumerable<double?> source)
@@ -364,11 +380,11 @@ namespace NetFabric.Hyperlinq
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static decimal Sum(this ArraySegmentValueEnumerable<decimal> source)
-            => ((ReadOnlySpan<decimal>)source.source.AsSpan()).Sum();
+            => ((ReadOnlySpan<decimal>)source.source.AsSpan()).Sum<decimal, decimal>();
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static decimal Sum(this ArraySegmentValueEnumerable<decimal?> source)
-            => ((ReadOnlySpan<decimal?>)source.source.AsSpan()).Sum<decimal?, int>();
+            => ((ReadOnlySpan<decimal?>)source.source.AsSpan()).Sum<decimal?, decimal>();
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool ContainsVector<TSource>(this ArraySegmentValueEnumerable<TSource> source, TSource value)

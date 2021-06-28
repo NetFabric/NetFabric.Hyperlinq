@@ -193,6 +193,26 @@ namespace NetFabric.Hyperlinq
             => ValueReadOnlyCollectionExtensions.Sum<ValueEnumerable<TList, int?>, ValueEnumerator<int?>, int?, int>(source);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static nint Sum<TList>(this ValueEnumerable<TList, nint> source)
+            where TList : IReadOnlyList<nint>
+            => ValueReadOnlyCollectionExtensions.Sum<ValueEnumerable<TList, nint>, ValueEnumerator<nint>, nint, nint>(source);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static nint Sum<TList>(this ValueEnumerable<TList, nint?> source)
+            where TList : IReadOnlyList<nint?>
+            => ValueReadOnlyCollectionExtensions.Sum<ValueEnumerable<TList, nint?>, ValueEnumerator<nint?>, nint?, nint>(source);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static nuint Sum<TList>(this ValueEnumerable<TList, nuint> source)
+            where TList : IReadOnlyList<nuint>
+            => ValueReadOnlyCollectionExtensions.Sum<ValueEnumerable<TList, nuint>, ValueEnumerator<nuint>, nuint, nuint>(source);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static nuint Sum<TList>(this ValueEnumerable<TList, nuint?> source)
+            where TList : IReadOnlyList<nuint?>
+            => ValueReadOnlyCollectionExtensions.Sum<ValueEnumerable<TList, nuint?>, ValueEnumerator<nuint?>, nuint?, nuint>(source);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static long Sum<TList>(this ValueEnumerable<TList, long> source)
             where TList : IReadOnlyList<long>
             => ValueReadOnlyCollectionExtensions.Sum<ValueEnumerable<TList, long>, ValueEnumerator<long>, long, long>(source);

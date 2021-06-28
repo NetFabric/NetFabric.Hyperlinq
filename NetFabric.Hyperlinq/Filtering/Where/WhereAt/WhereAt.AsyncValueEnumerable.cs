@@ -349,6 +349,34 @@ namespace NetFabric.Hyperlinq
             => source.source.SumAtAsync<TEnumerable, TEnumerator, int?, int, TPredicate>(cancellationToken, source.predicate);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static ValueTask<nint> SumAsync<TEnumerable, TEnumerator, TPredicate>(this WhereAtEnumerable<TEnumerable, TEnumerator, nint, TPredicate> source, CancellationToken cancellationToken = default)
+            where TEnumerable : IAsyncValueEnumerable<nint, TEnumerator>
+            where TEnumerator : struct, IAsyncEnumerator<nint>
+            where TPredicate : struct, IAsyncFunction<nint, int, bool>
+            => source.source.SumAtAsync<TEnumerable, TEnumerator, nint, nint, TPredicate>(cancellationToken, source.predicate);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static ValueTask<nint> SumAsync<TEnumerable, TEnumerator, TPredicate>(this WhereAtEnumerable<TEnumerable, TEnumerator, nint?, TPredicate> source, CancellationToken cancellationToken = default)
+            where TEnumerable : IAsyncValueEnumerable<nint?, TEnumerator>
+            where TEnumerator : struct, IAsyncEnumerator<nint?>
+            where TPredicate : struct, IAsyncFunction<nint?, int, bool>
+            => source.source.SumAtAsync<TEnumerable, TEnumerator, nint?, nint, TPredicate>(cancellationToken, source.predicate);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static ValueTask<nuint> SumAsync<TEnumerable, TEnumerator, TPredicate>(this WhereAtEnumerable<TEnumerable, TEnumerator, nuint, TPredicate> source, CancellationToken cancellationToken = default)
+            where TEnumerable : IAsyncValueEnumerable<nuint, TEnumerator>
+            where TEnumerator : struct, IAsyncEnumerator<nuint>
+            where TPredicate : struct, IAsyncFunction<nuint, int, bool>
+            => source.source.SumAtAsync<TEnumerable, TEnumerator, nuint, nuint, TPredicate>(cancellationToken, source.predicate);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static ValueTask<nuint> SumAsync<TEnumerable, TEnumerator, TPredicate>(this WhereAtEnumerable<TEnumerable, TEnumerator, nuint?, TPredicate> source, CancellationToken cancellationToken = default)
+            where TEnumerable : IAsyncValueEnumerable<nuint?, TEnumerator>
+            where TEnumerator : struct, IAsyncEnumerator<nuint?>
+            where TPredicate : struct, IAsyncFunction<nuint?, int, bool>
+            => source.source.SumAtAsync<TEnumerable, TEnumerator, nuint?, nuint, TPredicate>(cancellationToken, source.predicate);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ValueTask<long> SumAsync<TEnumerable, TEnumerator, TPredicate>(this WhereAtEnumerable<TEnumerable, TEnumerator, long, TPredicate> source, CancellationToken cancellationToken = default)
             where TEnumerable : IAsyncValueEnumerable<long, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<long>

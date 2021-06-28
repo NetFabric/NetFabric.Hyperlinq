@@ -58,6 +58,26 @@ namespace NetFabric.Hyperlinq
             => source.Sum<ValueEnumerable<TEnumerator, int?>, TEnumerator, int?, int>();
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static nint Sum<TEnumerator>(this ValueEnumerable<TEnumerator, nint> source)
+            where TEnumerator : struct, IEnumerator<nint>
+            => source.Sum<ValueEnumerable<TEnumerator, nint>, TEnumerator, nint, nint>();
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static nint Sum<TEnumerator>(this ValueEnumerable<TEnumerator, nint?> source)
+            where TEnumerator : struct, IEnumerator<nint?>
+            => source.Sum<ValueEnumerable<TEnumerator, nint?>, TEnumerator, nint?, nint>();
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static nuint Sum<TEnumerator>(this ValueEnumerable<TEnumerator, nuint> source)
+            where TEnumerator : struct, IEnumerator<nuint>
+            => source.Sum<ValueEnumerable<TEnumerator, nuint>, TEnumerator, nuint, nuint>();
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static nuint Sum<TEnumerator>(this ValueEnumerable<TEnumerator, nuint?> source)
+            where TEnumerator : struct, IEnumerator<nuint?>
+            => source.Sum<ValueEnumerable<TEnumerator, nuint?>, TEnumerator, nuint?, nuint>();
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static long Sum<TEnumerator>(this ValueEnumerable<TEnumerator, long> source)
             where TEnumerator : struct, IEnumerator<long>
             => source.Sum<ValueEnumerable<TEnumerator, long>, TEnumerator, long, long>();

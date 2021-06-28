@@ -119,6 +119,22 @@ namespace NetFabric.Hyperlinq
             => ValueReadOnlyCollectionExtensions.Sum<ValueEnumerable<int?>, ValueEnumerator<int?>, int?, int>(source);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static nint Sum(this ValueEnumerable<nint> source)
+            => ValueReadOnlyCollectionExtensions.Sum<ValueEnumerable<nint>, ValueEnumerator<nint>, nint, nint>(source);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static nint Sum(this ValueEnumerable<nint?> source)
+            => ValueReadOnlyCollectionExtensions.Sum<ValueEnumerable<nint?>, ValueEnumerator<nint?>, nint?, nint>(source);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static nuint Sum(this ValueEnumerable<nuint> source)
+            => ValueReadOnlyCollectionExtensions.Sum<ValueEnumerable<nuint>, ValueEnumerator<nuint>, nuint, nuint>(source);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static nuint Sum(this ValueEnumerable<nuint?> source)
+            => ValueReadOnlyCollectionExtensions.Sum<ValueEnumerable<nuint?>, ValueEnumerator<nuint?>, nuint?, nuint>(source);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static long Sum(this ValueEnumerable<long> source)
             => ValueReadOnlyCollectionExtensions.Sum<ValueEnumerable<long>, ValueEnumerator<long>, long, long>(source);
 

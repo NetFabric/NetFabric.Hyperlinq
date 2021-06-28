@@ -246,6 +246,26 @@ namespace NetFabric.Hyperlinq
             => ((ReadOnlySpan<int?>)source.source.AsSpan()).Sum<int?, int, TPredicate>(source.predicate);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static nint Sum<TPredicate>(this ArraySegmentWhereEnumerable<nint, TPredicate> source)
+            where TPredicate : struct, IFunction<nint, bool>
+            => ((ReadOnlySpan<nint>)source.source.AsSpan()).Sum<nint, nint, TPredicate>(source.predicate);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static nint Sum<TPredicate>(this ArraySegmentWhereEnumerable<nint?, TPredicate> source)
+            where TPredicate : struct, IFunction<nint?, bool>
+            => ((ReadOnlySpan<nint?>)source.source.AsSpan()).Sum<nint?, nint, TPredicate>(source.predicate);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static nuint Sum<TPredicate>(this ArraySegmentWhereEnumerable<nuint, TPredicate> source)
+            where TPredicate : struct, IFunction<nuint, bool>
+            => ((ReadOnlySpan<nuint>)source.source.AsSpan()).Sum<nuint, nuint, TPredicate>(source.predicate);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static nuint Sum<TPredicate>(this ArraySegmentWhereEnumerable<nuint?, TPredicate> source)
+            where TPredicate : struct, IFunction<nuint?, bool>
+            => ((ReadOnlySpan<nuint?>)source.source.AsSpan()).Sum<nuint?, nuint, TPredicate>(source.predicate);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static long Sum<TPredicate>(this ArraySegmentWhereEnumerable<long, TPredicate> source)
             where TPredicate : struct, IFunction<long, bool>
             => ((ReadOnlySpan<long>)source.source.AsSpan()).Sum<long, long, TPredicate>(source.predicate);

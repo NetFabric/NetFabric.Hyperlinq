@@ -28,7 +28,7 @@ namespace NetFabric.Hyperlinq
             }
             foreach (var item in source)
             {
-                if (GenericsOperator.Equals(item, value))
+                if (Scalar.Equals(item, value))
                     return true;
             }           
             return false;
@@ -60,7 +60,7 @@ namespace NetFabric.Hyperlinq
             }
             foreach (var item in source)
             {
-                if (GenericsOperator.Equals(selector.Invoke(item), value))
+                if (Scalar.Equals(selector.Invoke(item), value))
                     return true;
             }
             return false;

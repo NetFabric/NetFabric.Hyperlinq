@@ -13,7 +13,7 @@ namespace NetFabric.Hyperlinq
             var sum = default(TSum);
             using var enumerator = source.GetEnumerator();
             while (enumerator.MoveNext())
-                sum = GenericsOperator.AddNullable(enumerator.Current, sum);
+                sum = Scalar.Add(enumerator.Current, sum);
             return sum;
         }
 
@@ -29,8 +29,7 @@ namespace NetFabric.Hyperlinq
             while (enumerator.MoveNext())
             {
                 var item = enumerator.Current;
-                if (predicate.Invoke(item))
-                    sum = GenericsOperator.AddNullable(item, sum);
+                sum = Scalar.Add(Scalar.GetValueOrDefault(predicate, item), sum);
             }
             return sum;
         }
@@ -47,8 +46,7 @@ namespace NetFabric.Hyperlinq
             for (var index = 0; enumerator.MoveNext(); index++)
             {
                 var item = enumerator.Current;
-                if (predicate.Invoke(item, index))
-                    sum = GenericsOperator.AddNullable(item, sum);
+                sum = Scalar.Add(Scalar.GetValueOrDefault(predicate, item, index), sum);
             }
             return sum;
         }
@@ -65,7 +63,7 @@ namespace NetFabric.Hyperlinq
             while (enumerator.MoveNext())
             {
                 var item = enumerator.Current;
-                sum = GenericsOperator.AddNullable(selector.Invoke(item), sum);
+                sum = Scalar.Add(selector.Invoke(item), sum);
             }
             return sum;
         }
@@ -82,7 +80,7 @@ namespace NetFabric.Hyperlinq
             for (var index = 0; enumerator.MoveNext(); index++)
             {
                 var item = enumerator.Current;
-                sum = GenericsOperator.AddNullable(selector.Invoke(item, index), sum);
+                sum = Scalar.Add(selector.Invoke(item, index), sum);
             }
             return sum;
         }
@@ -101,7 +99,7 @@ namespace NetFabric.Hyperlinq
             {
                 var item = enumerator.Current;
                 if (predicate.Invoke(item))
-                    sum = GenericsOperator.AddNullable(selector.Invoke(item), sum);
+                    sum = Scalar.Add(selector.Invoke(item), sum);
             }
             return sum;
         }
