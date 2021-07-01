@@ -54,7 +54,9 @@ namespace NetFabric.Hyperlinq
                 : IEnumerator<TSource>
             {
                 readonly TSource[]? source;
+#pragma warning disable IDE0044 // Add readonly modifier
                 TPredicate predicate;
+#pragma warning restore IDE0044 // Add readonly modifier
                 readonly int offset;
                 readonly int end;
                 int index;
@@ -103,6 +105,24 @@ namespace NetFabric.Hyperlinq
             public int Count()
                 => ((ReadOnlySpan<TSource>)source.AsSpan()).CountAt(predicate);
 
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public int Count(Func<TSource, bool> predicate)
+                => Count(new FunctionWrapper<TSource, bool>(predicate));
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public int Count<TPredicate2>(TPredicate2 predicate = default)
+                where TPredicate2 : struct, IFunction<TSource, bool>
+                => ((ReadOnlySpan<TSource>)source.AsSpan()).CountAt(new PredicatePredicateAtCombination<TPredicate2, TPredicate, TSource>(predicate, this.predicate));
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public int Count(Func<TSource, int, bool> predicate)
+                => CountAt(new FunctionWrapper<TSource, int, bool>(predicate));
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public int CountAt<TPredicate2>(TPredicate2 predicate = default)
+                where TPredicate2 : struct, IFunction<TSource, int, bool>
+                => ((ReadOnlySpan<TSource>)source.AsSpan()).CountAt(new PredicateAtPredicateAtCombination<TPredicate, TPredicate2, TSource>(this.predicate, predicate));
+
             #endregion
             #region Quantifier
 
@@ -116,7 +136,7 @@ namespace NetFabric.Hyperlinq
                 => All(new FunctionWrapper<TSource, bool>(predicate));
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public bool All<TPredicate2>(TPredicate2 predicate)
+            public bool All<TPredicate2>(TPredicate2 predicate = default)
                 where TPredicate2 : struct, IFunction<TSource, bool>
                 => ((ReadOnlySpan<TSource>)source.AsSpan()).AllAt(new PredicatePredicateAtCombination<TPredicate2, TPredicate, TSource>(predicate, this.predicate));
 
@@ -125,7 +145,7 @@ namespace NetFabric.Hyperlinq
                 => AllAt(new FunctionWrapper<TSource, int, bool>(predicate));
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public bool AllAt<TPredicate2>(TPredicate2 predicate)
+            public bool AllAt<TPredicate2>(TPredicate2 predicate = default)
                 where TPredicate2 : struct, IFunction<TSource, int, bool>
                 => ((ReadOnlySpan<TSource>)source.AsSpan()).AllAt(new PredicateAtPredicateAtCombination<TPredicate, TPredicate2, TSource>(this.predicate, predicate));
 
@@ -138,7 +158,7 @@ namespace NetFabric.Hyperlinq
                 => Any(new FunctionWrapper<TSource, bool>(predicate));
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public bool Any<TPredicate2>(TPredicate2 predicate)
+            public bool Any<TPredicate2>(TPredicate2 predicate = default)
                 where TPredicate2 : struct, IFunction<TSource, bool>
                 => ((ReadOnlySpan<TSource>)source.AsSpan()).AnyAt(new PredicatePredicateAtCombination<TPredicate2, TPredicate, TSource>(predicate, this.predicate));
 
@@ -147,7 +167,7 @@ namespace NetFabric.Hyperlinq
                 => AnyAt(new FunctionWrapper<TSource, int, bool>(predicate));
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public bool AnyAt<TPredicate2>(TPredicate2 predicate)
+            public bool AnyAt<TPredicate2>(TPredicate2 predicate = default)
                 where TPredicate2 : struct, IFunction<TSource, int, bool>
                 => ((ReadOnlySpan<TSource>)source.AsSpan()).AnyAt(new PredicateAtPredicateAtCombination<TPredicate, TPredicate2, TSource>(this.predicate, predicate));
 

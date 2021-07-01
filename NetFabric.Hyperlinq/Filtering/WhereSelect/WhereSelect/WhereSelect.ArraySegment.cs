@@ -54,8 +54,10 @@ namespace NetFabric.Hyperlinq
                 : IEnumerator<TResult>
             {
                 readonly TSource[]? source;
+#pragma warning disable IDE0044 // Add readonly modifier
                 TPredicate predicate;
                 TSelector selector;
+#pragma warning restore IDE0044 // Add readonly modifier
                 readonly int end;
                 int index;
 
@@ -68,9 +70,12 @@ namespace NetFabric.Hyperlinq
                     end = index + enumerable.source.Count;
                 }
 
-                public TResult Current 
-                    => selector.Invoke(source![index]);
-                object? IEnumerator.Current
+                public readonly TResult Current
+                {
+                    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+                    get => selector.Invoke(source![index]);
+                }
+                readonly object? IEnumerator.Current
                     // ReSharper disable once HeapView.PossibleBoxingAllocation
                     => selector.Invoke(source![index]);
 
@@ -98,6 +103,24 @@ namespace NetFabric.Hyperlinq
             public int Count()
                 => ((ReadOnlySpan<TSource>)source.AsSpan()).Count(predicate);
 
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public int Count(Func<TResult, bool> predicate)
+                => Count(new FunctionWrapper<TResult, bool>(predicate));
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public int Count<TPredicate2>(TPredicate2 predicate = default)
+                where TPredicate2 : struct, IFunction<TResult, bool>
+                => ValueEnumerableExtensions.Count<ArraySegmentWhereSelectEnumerable<TSource, TResult, TPredicate, TSelector>, Enumerator, TResult, TPredicate2>(this, predicate);
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public int Count(Func<TResult, int, bool> predicate)
+                => CountAt(new FunctionWrapper<TResult, int, bool>(predicate));
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public int CountAt<TPredicate2>(TPredicate2 predicate = default)
+                where TPredicate2 : struct, IFunction<TResult, int, bool>
+                => ValueEnumerableExtensions.CountAt<ArraySegmentWhereSelectEnumerable<TSource, TResult, TPredicate, TSelector>, Enumerator, TResult, TPredicate2>(this, predicate);
+
             #endregion
             #region Quantifier
 
@@ -111,7 +134,7 @@ namespace NetFabric.Hyperlinq
                 => All(new FunctionWrapper<TResult, bool>(predicate));
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public bool All<TPredicate2>(TPredicate2 predicate)
+            public bool All<TPredicate2>(TPredicate2 predicate = default)
                 where TPredicate2 : struct, IFunction<TResult, bool>
                 => this.All<ArraySegmentWhereSelectEnumerable<TSource, TResult, TPredicate, TSelector>, Enumerator, TResult, TPredicate2>(predicate);
 
@@ -120,7 +143,7 @@ namespace NetFabric.Hyperlinq
                 => AllAt(new FunctionWrapper<TResult, int, bool>(predicate));
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public bool AllAt<TPredicate2>(TPredicate2 predicate)
+            public bool AllAt<TPredicate2>(TPredicate2 predicate = default)
                 where TPredicate2 : struct, IFunction<TResult, int, bool>
                 => this.AllAt<ArraySegmentWhereSelectEnumerable<TSource, TResult, TPredicate, TSelector>, Enumerator, TResult, TPredicate2>(predicate);
 
@@ -133,7 +156,7 @@ namespace NetFabric.Hyperlinq
                 => Any(new FunctionWrapper<TResult, bool>(predicate));
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public bool Any<TPredicate2>(TPredicate2 predicate)
+            public bool Any<TPredicate2>(TPredicate2 predicate = default)
                 where TPredicate2 : struct, IFunction<TResult, bool>
                 => this.Any<ArraySegmentWhereSelectEnumerable<TSource, TResult, TPredicate, TSelector>, Enumerator, TResult, TPredicate2>(predicate);
 
@@ -142,7 +165,7 @@ namespace NetFabric.Hyperlinq
                 => AnyAt(new FunctionWrapper<TResult, int, bool>(predicate));
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public bool AnyAt<TPredicate2>(TPredicate2 predicate)
+            public bool AnyAt<TPredicate2>(TPredicate2 predicate = default)
                 where TPredicate2 : struct, IFunction<TResult, int, bool>
                 => this.AnyAt<ArraySegmentWhereSelectEnumerable<TSource, TResult, TPredicate, TSelector>, Enumerator, TResult, TPredicate2>(predicate);
 

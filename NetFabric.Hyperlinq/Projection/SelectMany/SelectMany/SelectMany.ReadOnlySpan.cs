@@ -47,12 +47,13 @@ namespace NetFabric.Hyperlinq
             public ref struct Enumerator
             {
                 readonly ReadOnlySpan<TSource> source;
+#pragma warning disable IDE0044 // Add readonly modifier
                 TSelector selector;
+                TSubEnumerator subEnumerator;
+#pragma warning restore IDE0044 // Add readonly modifier
                 readonly int end;
                 EnumeratorState state;
                 int sourceIndex;
-                [SuppressMessage("Style", "IDE0044:Add readonly modifier")]
-                TSubEnumerator subEnumerator; // do not make readonly
 
                 internal Enumerator(SpanSelectManyEnumerable<TSource, TSubEnumerable, TSubEnumerator, TResult, TSelector> enumerable)
                 {

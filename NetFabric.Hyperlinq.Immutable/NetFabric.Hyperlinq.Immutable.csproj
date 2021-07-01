@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net461;netstandard2.0</TargetFrameworks>
+    <TargetFrameworks>netstandard2.0</TargetFrameworks>
     <PackageId>NetFabric.Hyperlinq.Immutable</PackageId>
     <Title>NetFabric.Hyperlinq.Immutable</Title>
     <Description> High performance LINQ implementation with minimal heap allocations. Supports all collections in System.Collections.Immutable.</Description>
@@ -36,7 +36,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Meziantou.Analyzer" Version="1.0.663">
+    <PackageReference Include="Meziantou.Analyzer" Version="1.0.667">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>

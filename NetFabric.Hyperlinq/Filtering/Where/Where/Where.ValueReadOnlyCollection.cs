@@ -54,9 +54,10 @@ namespace NetFabric.Hyperlinq
             public struct Enumerator
                 : IEnumerator<TSource>
             {
-                [SuppressMessage("Style", "IDE0044:Add readonly modifier")]
-                TEnumerator enumerator; // do not make readonly
+#pragma warning disable IDE0044 // Add readonly modifier
+                TEnumerator enumerator;
                 TPredicate predicate;
+#pragma warning restore IDE0044 // Add readonly modifier
 
                 internal Enumerator(in WhereEnumerable<TEnumerable, TEnumerator, TSource, TPredicate> enumerable)
                 {
@@ -101,6 +102,24 @@ namespace NetFabric.Hyperlinq
             public int Count()
                 => ValueReadOnlyCollectionExtensions.Count<TEnumerable, TEnumerator, TSource, TPredicate>(source, predicate);
 
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public int Count(Func<TSource, bool> predicate)
+                => Count(new FunctionWrapper<TSource, bool>(predicate));
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public int Count<TPredicate2>(TPredicate2 predicate = default)
+                where TPredicate2 : struct, IFunction<TSource, bool>
+                => ValueReadOnlyCollectionExtensions.Count<TEnumerable, TEnumerator, TSource, PredicatePredicateCombination<TPredicate, TPredicate2, TSource>>(source, new PredicatePredicateCombination<TPredicate, TPredicate2, TSource>(this.predicate, predicate));
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public int Count(Func<TSource, int, bool> predicate)
+                => CountAt(new FunctionWrapper<TSource, int, bool>(predicate));
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public int CountAt<TPredicate2>(TPredicate2 predicate = default)
+                where TPredicate2 : struct, IFunction<TSource, int, bool>
+                => ValueReadOnlyCollectionExtensions.CountAt<TEnumerable, TEnumerator, TSource, PredicatePredicateAtCombination<TPredicate, TPredicate2, TSource>>(source, new PredicatePredicateAtCombination<TPredicate, TPredicate2, TSource>(this.predicate, predicate));
+
             #endregion
             #region Quantifier
 
@@ -113,7 +132,7 @@ namespace NetFabric.Hyperlinq
                 => All(new FunctionWrapper<TSource, bool>(predicate));
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public bool All<TPredicate2>(TPredicate2 predicate)
+            public bool All<TPredicate2>(TPredicate2 predicate = default)
                 where TPredicate2 : struct, IFunction<TSource, bool>
                 => ValueReadOnlyCollectionExtensions.All<TEnumerable, TEnumerator, TSource, PredicatePredicateCombination<TPredicate, TPredicate2, TSource>>(source, new PredicatePredicateCombination<TPredicate, TPredicate2, TSource>(this.predicate, predicate));
 
@@ -122,7 +141,7 @@ namespace NetFabric.Hyperlinq
                 => AllAt(new FunctionWrapper<TSource, int, bool>(predicate));
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public bool AllAt<TPredicate2>(TPredicate2 predicate)
+            public bool AllAt<TPredicate2>(TPredicate2 predicate = default)
                 where TPredicate2 : struct, IFunction<TSource, int, bool>
                 => ValueReadOnlyCollectionExtensions.AllAt<TEnumerable, TEnumerator, TSource, PredicatePredicateAtCombination<TPredicate, TPredicate2, TSource>>(source, new PredicatePredicateAtCombination<TPredicate, TPredicate2, TSource>(this.predicate, predicate));
 
@@ -135,7 +154,7 @@ namespace NetFabric.Hyperlinq
                 => Any(new FunctionWrapper<TSource, bool>(predicate));
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public bool Any<TPredicate2>(TPredicate2 predicate)
+            public bool Any<TPredicate2>(TPredicate2 predicate = default)
                 where TPredicate2 : struct, IFunction<TSource, bool>
                 => ValueReadOnlyCollectionExtensions.Any<TEnumerable, TEnumerator, TSource, PredicatePredicateCombination<TPredicate, TPredicate2, TSource>>(source, new PredicatePredicateCombination<TPredicate, TPredicate2, TSource>(this.predicate, predicate));
 
@@ -144,7 +163,7 @@ namespace NetFabric.Hyperlinq
                 => AnyAt(new FunctionWrapper<TSource, int, bool>(predicate));
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public bool AnyAt<TPredicate2>(TPredicate2 predicate)
+            public bool AnyAt<TPredicate2>(TPredicate2 predicate = default)
                 where TPredicate2 : struct, IFunction<TSource, int, bool>
                 => ValueReadOnlyCollectionExtensions.AnyAt<TEnumerable, TEnumerator, TSource, PredicatePredicateAtCombination<TPredicate, TPredicate2, TSource>>(source, new PredicatePredicateAtCombination<TPredicate, TPredicate2, TSource>(this.predicate, predicate));
 

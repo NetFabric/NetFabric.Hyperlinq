@@ -183,6 +183,28 @@ namespace NetFabric.Hyperlinq
             => source.Count;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int Count<TList, TSource>(this ValueEnumerable<TList, TSource> source, Func<TSource, bool> predicate)
+            where TList : IReadOnlyList<TSource>
+            => source.Count(predicate);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int Count<TList, TSource, TPredicate>(this ValueEnumerable<TList, TSource> source, TPredicate predicate = default)
+            where TList : IReadOnlyList<TSource>
+            where TPredicate : struct, IFunction<TSource, bool>
+            => source.Count(predicate);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int Count<TList, TSource>(this ValueEnumerable<TList, TSource> source, Func<TSource, int, bool> predicate)
+            where TList : IReadOnlyList<TSource>
+            => source.Count(predicate);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int CountAt<TList, TSource, TPredicate>(this ValueEnumerable<TList, TSource> source, TPredicate predicate = default)
+            where TList : IReadOnlyList<TSource>
+            where TPredicate : struct, IFunction<TSource, int, bool>
+            => source.CountAt(predicate);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int Sum<TList>(this ValueEnumerable<TList, int> source)
             where TList : IReadOnlyList<int>
             => ValueReadOnlyCollectionExtensions.Sum<ValueEnumerable<TList, int>, ValueEnumerator<int>, int, int>(source);

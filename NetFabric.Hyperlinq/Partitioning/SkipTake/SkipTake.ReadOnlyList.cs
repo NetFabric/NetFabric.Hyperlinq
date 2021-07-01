@@ -282,5 +282,27 @@ namespace NetFabric.Hyperlinq
         public static int Count<TList, TSource>(this in SkipTakeEnumerable<TList, TSource> source)
             where TList : struct, IReadOnlyList<TSource>
             => source.Count;
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int Count<TList, TSource>(this SkipTakeEnumerable<TList, TSource> source, Func<TSource, bool> predicate)
+            where TList : struct, IReadOnlyList<TSource>
+            => source.Count(predicate);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int Count<TList, TSource, TPredicate>(this SkipTakeEnumerable<TList, TSource> source, TPredicate predicate = default)
+            where TList : struct, IReadOnlyList<TSource>
+            where TPredicate : struct, IFunction<TSource, bool>
+            => source.Count(predicate);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int Count<TList, TSource>(this SkipTakeEnumerable<TList, TSource> source, Func<TSource, int, bool> predicate)
+            where TList : struct, IReadOnlyList<TSource>
+            => source.Count(predicate);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int CountAt<TList, TSource, TPredicate>(this SkipTakeEnumerable<TList, TSource> source, TPredicate predicate = default)
+            where TList : struct, IReadOnlyList<TSource>
+            where TPredicate : struct, IFunction<TSource, int, bool>
+            => source.CountAt(predicate);
     }
 }

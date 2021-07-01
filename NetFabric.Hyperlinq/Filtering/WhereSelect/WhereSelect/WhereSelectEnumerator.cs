@@ -10,8 +10,10 @@ namespace NetFabric.Hyperlinq
         where TSelector : struct, IFunction<TSource, TResult>
     {
         readonly ReadOnlySpan<TSource> source;
+#pragma warning disable IDE0044 // Add readonly modifier
         TPredicate predicate;
         TSelector selector;
+#pragma warning restore IDE0044 // Add readonly modifier
         int index;
 
         internal WhereSelectEnumerator(ReadOnlySpan<TSource> source, TPredicate predicate, TSelector selector)

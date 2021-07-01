@@ -55,12 +55,13 @@ namespace NetFabric.Hyperlinq
                 : IEnumerator<TResult>
             {
                 readonly ReadOnlyMemory<TSource> source;
+#pragma warning disable IDE0044 // Add readonly modifier
                 TSelector selector;
+                TSubEnumerator subEnumerator;
+#pragma warning restore IDE0044 // Add readonly modifier
                 readonly int end;
                 EnumeratorState state;
                 int sourceIndex;
-                [SuppressMessage("Style", "IDE0044:Add readonly modifier")]
-                TSubEnumerator subEnumerator; // do not make readonly
 
                 internal Enumerator(in MemorySelectManyEnumerable<TSource, TSubEnumerable, TSubEnumerator, TResult, TSelector> enumerable)
                 {

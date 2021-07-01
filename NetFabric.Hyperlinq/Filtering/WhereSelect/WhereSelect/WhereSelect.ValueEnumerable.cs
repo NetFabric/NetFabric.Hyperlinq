@@ -60,10 +60,11 @@ namespace NetFabric.Hyperlinq
             public struct Enumerator
                 : IEnumerator<TResult>
             {
-                [SuppressMessage("Style", "IDE0044:Add readonly modifier")]
-                TEnumerator enumerator; // do not make readonly
+#pragma warning disable IDE0044 // Add readonly modifier
+                TEnumerator enumerator;
                 TPredicate predicate;
                 TSelector selector;
+#pragma warning restore IDE0044 // Add readonly modifier
 
                 internal Enumerator(in WhereSelectEnumerable<TEnumerable, TEnumerator, TSource, TResult, TPredicate, TSelector> enumerable)
                 {
@@ -107,6 +108,24 @@ namespace NetFabric.Hyperlinq
             public int Count()
                 => source.Count<TEnumerable, TEnumerator, TSource, TPredicate>(predicate);
 
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public int Count(Func<TResult, bool> predicate)
+                => Count(new FunctionWrapper<TResult, bool>(predicate));
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public int Count<TPredicate2>(TPredicate2 predicate = default)
+                where TPredicate2 : struct, IFunction<TResult, bool>
+                => ValueEnumerableExtensions.Count<WhereSelectEnumerable<TEnumerable, TEnumerator, TSource, TResult, TPredicate, TSelector>, Enumerator, TResult, TPredicate2>(this, predicate);
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public int Count(Func<TResult, int, bool> predicate)
+                => CountAt(new FunctionWrapper<TResult, int, bool>(predicate));
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public int CountAt<TPredicate2>(TPredicate2 predicate = default)
+                where TPredicate2 : struct, IFunction<TResult, int, bool>
+                => ValueEnumerableExtensions.CountAt<WhereSelectEnumerable<TEnumerable, TEnumerator, TSource, TResult, TPredicate, TSelector>, Enumerator, TResult, TPredicate2>(this, predicate);
+
             #endregion
             #region Quantifier
 
@@ -119,7 +138,7 @@ namespace NetFabric.Hyperlinq
                 => All(new FunctionWrapper<TResult, bool>(predicate));
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public bool All<TPredicate2>(TPredicate2 predicate)
+            public bool All<TPredicate2>(TPredicate2 predicate = default)
                 where TPredicate2 : struct, IFunction<TResult, bool>
                 => this.All<WhereSelectEnumerable<TEnumerable, TEnumerator, TSource, TResult, TPredicate, TSelector>, Enumerator, TResult, TPredicate2>(predicate);
 
@@ -128,7 +147,7 @@ namespace NetFabric.Hyperlinq
                 => AllAt(new FunctionWrapper<TResult, int, bool>(predicate));
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public bool AllAt<TPredicate2>(TPredicate2 predicate)
+            public bool AllAt<TPredicate2>(TPredicate2 predicate = default)
                 where TPredicate2 : struct, IFunction<TResult, int, bool>
                 => this.AllAt<WhereSelectEnumerable<TEnumerable, TEnumerator, TSource, TResult, TPredicate, TSelector>, Enumerator, TResult, TPredicate2>(predicate);
 
@@ -141,7 +160,7 @@ namespace NetFabric.Hyperlinq
                 => Any(new FunctionWrapper<TResult, bool>(predicate));
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public bool Any<TPredicate2>(TPredicate2 predicate)
+            public bool Any<TPredicate2>(TPredicate2 predicate = default)
                 where TPredicate2 : struct, IFunction<TResult, bool>
                 => this.Any<WhereSelectEnumerable<TEnumerable, TEnumerator, TSource, TResult, TPredicate, TSelector>, Enumerator, TResult, TPredicate2>(predicate);
 
@@ -150,7 +169,7 @@ namespace NetFabric.Hyperlinq
                 => AnyAt(new FunctionWrapper<TResult, int, bool>(predicate));
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public bool AnyAt<TPredicate2>(TPredicate2 predicate)
+            public bool AnyAt<TPredicate2>(TPredicate2 predicate = default)
                 where TPredicate2 : struct, IFunction<TResult, int, bool>
                 => this.AnyAt<WhereSelectEnumerable<TEnumerable, TEnumerator, TSource, TResult, TPredicate, TSelector>, Enumerator, TResult, TPredicate2>(predicate);
 

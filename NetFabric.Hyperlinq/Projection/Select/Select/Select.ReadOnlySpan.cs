@@ -137,6 +137,28 @@ namespace NetFabric.Hyperlinq
             where TSelector : struct, IFunction<TSource, TResult>
             => source.Count;
 
+        // [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        // public static int Count<TSource, TResult, TSelector>(this SpanSelectEnumerable<TSource, TResult, TSelector> source, Func<TResult, bool> predicate)
+        //     where TSelector : struct, IFunction<TSource, TResult>
+        //     => ValueReadOnlyCollectionExtensions.Count<SpanSelectEnumerable<TSource, TResult, TSelector>, SpanSelectEnumerable<TSource, TResult, TSelector>.Enumerator, TResult>(source, predicate);
+        //
+        // [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        // public static int Count<TSource, TResult, TSelector, TPredicate>(this SpanSelectEnumerable<TSource, TResult, TSelector> source, TPredicate predicate = default)
+        //     where TSelector : struct, IFunction<TSource, TResult>
+        //     where TPredicate : struct, IFunction<TResult, bool>
+        //     => ValueReadOnlyCollectionExtensions.Count<SpanSelectEnumerable<TSource, TResult, TSelector>, SpanSelectEnumerable<TSource, TResult, TSelector>.Enumerator, TResult, TPredicate>(source, predicate);
+        //
+        // [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        // public static int Count<TSource, TResult, TSelector>(this SpanSelectEnumerable<TSource, TResult, TSelector> source, Func<TResult, int, bool> predicate)
+        //     where TSelector : struct, IFunction<TSource, TResult>
+        //     => ValueReadOnlyCollectionExtensions.Count<SpanSelectEnumerable<TSource, TResult, TSelector>, SpanSelectEnumerable<TSource, TResult, TSelector>.Enumerator, TResult>(source, predicate);
+        //
+        // [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        // public static int CountAt<TSource, TResult, TSelector, TPredicate>(this SpanSelectEnumerable<TSource, TResult, TSelector> source, TPredicate predicate = default)
+        //     where TSelector : struct, IFunction<TSource, TResult>
+        //     where TPredicate : struct, IFunction<TResult, int, bool>
+        //     => ValueReadOnlyCollectionExtensions.CountAt<SpanSelectEnumerable<TSource, TResult, TSelector>, SpanSelectEnumerable<TSource, TResult, TSelector>.Enumerator, TResult, TPredicate>(source, predicate);
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static nint Sum<TSource, TSelector>(this SpanSelectEnumerable<TSource, nint, TSelector> source)
             where TSelector : struct, IFunction<TSource, nint>

@@ -93,9 +93,10 @@ namespace NetFabric.Hyperlinq
             public struct Enumerator
                 : IEnumerator<TResult>
             {
-                [SuppressMessage("Style", "IDE0044:Add readonly modifier")]
-                TEnumerator enumerator; // do not make readonly
+#pragma warning disable IDE0044 // Add readonly modifier
+                TEnumerator enumerator;
                 TSelector selector;
+#pragma warning restore IDE0044 // Add readonly modifier
 
                 internal Enumerator(in SelectEnumerable<TEnumerable, TEnumerator, TSource, TResult, TSelector> enumerable)
                 {
@@ -210,104 +211,134 @@ namespace NetFabric.Hyperlinq
             where TEnumerator : struct, IEnumerator<TSource>
             where TSelector : struct, IFunction<TSource, TResult>
             => source.Count;
-        
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int Count<TEnumerable, TEnumerator, TSource, TResult, TSelector>(this SelectEnumerable<TEnumerable, TEnumerator, TSource, TResult, TSelector> source, Func<TResult, bool> predicate)
+            where TEnumerable : IValueReadOnlyCollection<TSource, TEnumerator>
+            where TEnumerator : struct, IEnumerator<TSource>
+            where TSelector : struct, IFunction<TSource, TResult>
+            => Count<SelectEnumerable<TEnumerable, TEnumerator, TSource, TResult, TSelector>, SelectEnumerable<TEnumerable, TEnumerator, TSource, TResult, TSelector>.Enumerator, TResult>(source, predicate);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int Count<TEnumerable, TEnumerator, TSource, TResult, TSelector, TPredicate>(this SelectEnumerable<TEnumerable, TEnumerator, TSource, TResult, TSelector> source, TPredicate predicate = default)
+            where TEnumerable : IValueReadOnlyCollection<TSource, TEnumerator>
+            where TEnumerator : struct, IEnumerator<TSource>
+            where TSelector : struct, IFunction<TSource, TResult>
+            where TPredicate : struct, IFunction<TResult, bool>
+            => Count<SelectEnumerable<TEnumerable, TEnumerator, TSource, TResult, TSelector>, SelectEnumerable<TEnumerable, TEnumerator, TSource, TResult, TSelector>.Enumerator, TResult, TPredicate>(source, predicate);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int Count<TEnumerable, TEnumerator, TSource, TResult, TSelector>(this SelectEnumerable<TEnumerable, TEnumerator, TSource, TResult, TSelector> source, Func<TResult, int, bool> predicate)
+            where TEnumerable : IValueReadOnlyCollection<TSource, TEnumerator>
+            where TEnumerator : struct, IEnumerator<TSource>
+            where TSelector : struct, IFunction<TSource, TResult>
+            => Count<SelectEnumerable<TEnumerable, TEnumerator, TSource, TResult, TSelector>, SelectEnumerable<TEnumerable, TEnumerator, TSource, TResult, TSelector>.Enumerator, TResult>(source, predicate);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int CountAt<TEnumerable, TEnumerator, TSource, TResult, TSelector, TPredicate>(this SelectEnumerable<TEnumerable, TEnumerator, TSource, TResult, TSelector> source, TPredicate predicate = default)
+            where TEnumerable : IValueReadOnlyCollection<TSource, TEnumerator>
+            where TEnumerator : struct, IEnumerator<TSource>
+            where TSelector : struct, IFunction<TSource, TResult>
+            where TPredicate : struct, IFunction<TResult, int, bool>
+            => CountAt<SelectEnumerable<TEnumerable, TEnumerator, TSource, TResult, TSelector>, SelectEnumerable<TEnumerable, TEnumerator, TSource, TResult, TSelector>.Enumerator, TResult, TPredicate>(source, predicate);
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int Sum<TEnumerable, TEnumerator, TSource, TSelector>(this SelectEnumerable<TEnumerable, TEnumerator, TSource, int, TSelector> source)
             where TEnumerable : IValueReadOnlyCollection<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
             where TSelector : struct, IFunction<TSource, int>
-            => ValueReadOnlyCollectionExtensions.Sum<TEnumerable, TEnumerator, TSource, int, int, TSelector>(source.source, source.selector);
+            => Sum<TEnumerable, TEnumerator, TSource, int, int, TSelector>(source.source, source.selector);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int Sum<TEnumerable, TEnumerator, TSource, TSelector>(this SelectEnumerable<TEnumerable, TEnumerator, TSource, int?, TSelector> source)
             where TEnumerable : IValueReadOnlyCollection<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
             where TSelector : struct, IFunction<TSource, int?>
-            => ValueReadOnlyCollectionExtensions.Sum<TEnumerable, TEnumerator, TSource, int?, int, TSelector>(source.source, source.selector);
+            => Sum<TEnumerable, TEnumerator, TSource, int?, int, TSelector>(source.source, source.selector);
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static nint Sum<TEnumerable, TEnumerator, TSource, TSelector>(this SelectEnumerable<TEnumerable, TEnumerator, TSource, nint, TSelector> source)
             where TEnumerable : IValueReadOnlyCollection<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
             where TSelector : struct, IFunction<TSource, nint>
-            => ValueReadOnlyCollectionExtensions.Sum<TEnumerable, TEnumerator, TSource, nint, nint, TSelector>(source.source, source.selector);
+            => Sum<TEnumerable, TEnumerator, TSource, nint, nint, TSelector>(source.source, source.selector);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static nint Sum<TEnumerable, TEnumerator, TSource, TSelector>(this SelectEnumerable<TEnumerable, TEnumerator, TSource, nint?, TSelector> source)
             where TEnumerable : IValueReadOnlyCollection<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
             where TSelector : struct, IFunction<TSource, nint?>
-            => ValueReadOnlyCollectionExtensions.Sum<TEnumerable, TEnumerator, TSource, nint?, nint, TSelector>(source.source, source.selector);
+            => Sum<TEnumerable, TEnumerator, TSource, nint?, nint, TSelector>(source.source, source.selector);
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static nuint Sum<TEnumerable, TEnumerator, TSource, TSelector>(this SelectEnumerable<TEnumerable, TEnumerator, TSource, nuint, TSelector> source)
             where TEnumerable : IValueReadOnlyCollection<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
             where TSelector : struct, IFunction<TSource, nuint>
-            => ValueReadOnlyCollectionExtensions.Sum<TEnumerable, TEnumerator, TSource, nuint, nuint, TSelector>(source.source, source.selector);
+            => Sum<TEnumerable, TEnumerator, TSource, nuint, nuint, TSelector>(source.source, source.selector);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static nuint Sum<TEnumerable, TEnumerator, TSource, TSelector>(this SelectEnumerable<TEnumerable, TEnumerator, TSource, nuint?, TSelector> source)
             where TEnumerable : IValueReadOnlyCollection<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
             where TSelector : struct, IFunction<TSource, nuint?>
-            => ValueReadOnlyCollectionExtensions.Sum<TEnumerable, TEnumerator, TSource, nuint?, nuint, TSelector>(source.source, source.selector);
+            => Sum<TEnumerable, TEnumerator, TSource, nuint?, nuint, TSelector>(source.source, source.selector);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static long Sum<TEnumerable, TEnumerator, TSource, TSelector>(this SelectEnumerable<TEnumerable, TEnumerator, TSource, long, TSelector> source)
             where TEnumerable : IValueReadOnlyCollection<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
             where TSelector : struct, IFunction<TSource, long>
-            => ValueReadOnlyCollectionExtensions.Sum<TEnumerable, TEnumerator, TSource, long, long, TSelector>(source.source, source.selector);
+            => Sum<TEnumerable, TEnumerator, TSource, long, long, TSelector>(source.source, source.selector);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static long Sum<TEnumerable, TEnumerator, TSource, TSelector>(this SelectEnumerable<TEnumerable, TEnumerator, TSource, long?, TSelector> source)
             where TEnumerable : IValueReadOnlyCollection<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
             where TSelector : struct, IFunction<TSource, long?>
-            => ValueReadOnlyCollectionExtensions.Sum<TEnumerable, TEnumerator, TSource, long?, long, TSelector>(source.source, source.selector);
+            => Sum<TEnumerable, TEnumerator, TSource, long?, long, TSelector>(source.source, source.selector);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float Sum<TEnumerable, TEnumerator, TSource, TSelector>(this SelectEnumerable<TEnumerable, TEnumerator, TSource, float, TSelector> source)
             where TEnumerable : IValueReadOnlyCollection<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
             where TSelector : struct, IFunction<TSource, float>
-            => ValueReadOnlyCollectionExtensions.Sum<TEnumerable, TEnumerator, TSource, float, float, TSelector>(source.source, source.selector);
+            => Sum<TEnumerable, TEnumerator, TSource, float, float, TSelector>(source.source, source.selector);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float Sum<TEnumerable, TEnumerator, TSource, TSelector>(this SelectEnumerable<TEnumerable, TEnumerator, TSource, float?, TSelector> source)
             where TEnumerable : IValueReadOnlyCollection<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
             where TSelector : struct, IFunction<TSource, float?>
-            => ValueReadOnlyCollectionExtensions.Sum<TEnumerable, TEnumerator, TSource, float?, float, TSelector>(source.source, source.selector);
+            => Sum<TEnumerable, TEnumerator, TSource, float?, float, TSelector>(source.source, source.selector);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static double Sum<TEnumerable, TEnumerator, TSource, TSelector>(this SelectEnumerable<TEnumerable, TEnumerator, TSource, double, TSelector> source)
             where TEnumerable : IValueReadOnlyCollection<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
             where TSelector : struct, IFunction<TSource, double>
-            => ValueReadOnlyCollectionExtensions.Sum<TEnumerable, TEnumerator, TSource, double, double, TSelector>(source.source, source.selector);
+            => Sum<TEnumerable, TEnumerator, TSource, double, double, TSelector>(source.source, source.selector);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static double Sum<TEnumerable, TEnumerator, TSource, TSelector>(this SelectEnumerable<TEnumerable, TEnumerator, TSource, double?, TSelector> source)
             where TEnumerable : IValueReadOnlyCollection<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
             where TSelector : struct, IFunction<TSource, double?>
-            => ValueReadOnlyCollectionExtensions.Sum<TEnumerable, TEnumerator, TSource, double?, double, TSelector>(source.source, source.selector);
+            => Sum<TEnumerable, TEnumerator, TSource, double?, double, TSelector>(source.source, source.selector);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static decimal Sum<TEnumerable, TEnumerator, TSource, TSelector>(this SelectEnumerable<TEnumerable, TEnumerator, TSource, decimal, TSelector> source)
             where TEnumerable : IValueReadOnlyCollection<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
             where TSelector : struct, IFunction<TSource, decimal>
-            => ValueReadOnlyCollectionExtensions.Sum<TEnumerable, TEnumerator, TSource, decimal, decimal, TSelector>(source.source, source.selector);
+            => Sum<TEnumerable, TEnumerator, TSource, decimal, decimal, TSelector>(source.source, source.selector);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static decimal Sum<TEnumerable, TEnumerator, TSource, TSelector>(this SelectEnumerable<TEnumerable, TEnumerator, TSource, decimal?, TSelector> source)
             where TEnumerable : IValueReadOnlyCollection<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
             where TSelector : struct, IFunction<TSource, decimal?>
-            => ValueReadOnlyCollectionExtensions.Sum<TEnumerable, TEnumerator, TSource, decimal?, decimal, TSelector>(source.source, source.selector);
+            => Sum<TEnumerable, TEnumerator, TSource, decimal?, decimal, TSelector>(source.source, source.selector);
     }
 }
 

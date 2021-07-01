@@ -241,8 +241,26 @@ namespace NetFabric.Hyperlinq
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static int Count(this MemoryValueEnumerable<int> source)
+        public static int Count<TSource>(this MemoryValueEnumerable<TSource> source)
             => source.Count;
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int Count<TSource>(this MemoryValueEnumerable<TSource> source, Func<TSource, bool> predicate)
+            => source.Count(predicate);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int Count<TSource, TPredicate>(this MemoryValueEnumerable<TSource> source, TPredicate predicate = default)
+            where TPredicate : struct, IFunction<TSource, bool>
+            => source.Count(predicate);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int Count<TSource>(this MemoryValueEnumerable<TSource> source, Func<TSource, int, bool> predicate)
+            => source.Count(predicate);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int CountAt<TSource, TPredicate>(this MemoryValueEnumerable<TSource> source, TPredicate predicate = default)
+            where TPredicate : struct, IFunction<TSource, int, bool>
+            => source.CountAt(predicate);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int Sum(this MemoryValueEnumerable<int> source)
