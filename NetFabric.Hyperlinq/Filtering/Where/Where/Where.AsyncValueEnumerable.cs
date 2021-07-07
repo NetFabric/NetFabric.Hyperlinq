@@ -12,7 +12,6 @@ namespace NetFabric.Hyperlinq
     public static partial class AsyncValueEnumerableExtensions
     {
 
-        [GeneratorMapping("TPredicate", "NetFabric.Hyperlinq.AsyncFunctionWrapper<TSource, bool>")]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static WhereEnumerable<TEnumerable, TEnumerator, TSource, AsyncFunctionWrapper<TSource, bool>> Where<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Func<TSource, CancellationToken, ValueTask<bool>> predicate)
             where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>

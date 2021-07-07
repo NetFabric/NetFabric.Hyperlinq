@@ -222,7 +222,6 @@ namespace NetFabric.Hyperlinq
             }; 
 
 
-        [GeneratorMapping("TSource", "TResult")]
         [StructLayout(LayoutKind.Auto)]
         public readonly partial struct SelectManyEnumerable<TSubEnumerable, TSubEnumerator, TResult, TSelector>
             : IValueEnumerable<TResult, SelectManyEnumerable<TSubEnumerable, TSubEnumerator, TResult, TSelector>.Enumerator>

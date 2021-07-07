@@ -10,7 +10,7 @@ namespace NetFabric.Hyperlinq
 {
     public static partial class ArrayExtensions
     {
-        [GeneratorMapping("TSelector", "NetFabric.Hyperlinq.FunctionWrapper<TSource, int, TResult>")]
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static ArraySegmentSelectAtEnumerable<TSource, TResult, FunctionWrapper<TSource, int, TResult>> Select<TSource, TResult>(this in ArraySegment<TSource> source, Func<TSource, int, TResult> selector)
             => source.SelectAt<TSource, TResult, FunctionWrapper<TSource, int, TResult>>(new FunctionWrapper<TSource, int, TResult>(selector));
@@ -20,7 +20,6 @@ namespace NetFabric.Hyperlinq
             where TSelector : struct, IFunction<TSource, int, TResult>
             => new(in source, selector);
 
-        [GeneratorMapping("TSource", "TResult")]
         [StructLayout(LayoutKind.Auto)]
         public partial struct ArraySegmentSelectAtEnumerable<TSource, TResult, TSelector>
             : IValueReadOnlyList<TResult, ArraySegmentSelectAtEnumerable<TSource, TResult, TSelector>.Enumerator>
@@ -85,7 +84,7 @@ namespace NetFabric.Hyperlinq
             void ICollection<TResult>.Clear()
                 => Throw.NotSupportedException();
             public bool Contains(TResult item)
-                => ((ReadOnlySpan<TSource>)source.AsSpan()).ContainsAt(item, default, selector);
+                => source.AsReadOnlySpan().ContainsAt(item, default, selector);
             bool ICollection<TResult>.Remove(TResult item)
                 => Throw.NotSupportedException<bool>();
             int IList<TResult>.IndexOf(TResult item)
@@ -186,30 +185,30 @@ namespace NetFabric.Hyperlinq
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public Option<TResult> ElementAt(int index)
-                => ((ReadOnlySpan<TSource>)source.AsSpan()).ElementAtAt<TSource, TResult, TSelector>(index, selector);
+                => source.AsReadOnlySpan().ElementAtAt<TSource, TResult, TSelector>(index, selector);
             
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public Option<TResult> First()
-                => ((ReadOnlySpan<TSource>)source.AsSpan()).FirstAt<TSource, TResult, TSelector>(selector);
+                => source.AsReadOnlySpan().FirstAt<TSource, TResult, TSelector>(selector);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public Option<TResult> Single()
-                => ((ReadOnlySpan<TSource>)source.AsSpan()).SingleAt<TSource, TResult, TSelector>(selector);
+                => source.AsReadOnlySpan().SingleAt<TSource, TResult, TSelector>(selector);
             
             #endregion
             #region Conversion
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public TResult[] ToArray()
-                => ((ReadOnlySpan<TSource>)source.AsSpan()).ToArrayAt<TSource, TResult, TSelector>(selector);
+                => source.AsReadOnlySpan().ToArrayAt<TSource, TResult, TSelector>(selector);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public ValueMemoryOwner<TResult> ToArray(ArrayPool<TResult> pool, bool clearOnDispose = default)
-                => ((ReadOnlySpan<TSource>)source.AsSpan()).ToArrayAt(pool, clearOnDispose, selector);
+                => source.AsReadOnlySpan().ToArrayAt(pool, clearOnDispose, selector);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public List<TResult> ToList()
-                => ((ReadOnlySpan<TSource>)source.AsSpan()).ToListAt<TSource, TResult, TSelector>(selector);
+                => source.AsReadOnlySpan().ToListAt<TSource, TResult, TSelector>(selector);
             
             #endregion
         }

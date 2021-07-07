@@ -6,11 +6,11 @@ namespace NetFabric.Hyperlinq
     public static partial class ArrayExtensions
     {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        static int Count<TSource>(this ReadOnlySpan<TSource> source)
+        public static int Count<TSource>(ReadOnlySpan<TSource> source)
             => source.Length;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        static int Count<TSource>(this ReadOnlySpan<TSource> source, Func<TSource, bool> predicate)
+        public static int Count<TSource>(ReadOnlySpan<TSource> source, Func<TSource, bool> predicate)
             => source.Count(new FunctionWrapper<TSource, bool>(predicate));
 
         static int Count<TSource, TPredicate>(this ReadOnlySpan<TSource> source, TPredicate predicate = default)

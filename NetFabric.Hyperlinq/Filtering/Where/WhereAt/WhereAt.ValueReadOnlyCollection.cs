@@ -11,7 +11,6 @@ namespace NetFabric.Hyperlinq
     public static partial class ValueReadOnlyCollectionExtensions
     {
 
-        [GeneratorMapping("TPredicate", "NetFabric.Hyperlinq.FunctionWrapper<TSource, bool>")]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static WhereAtEnumerable<TEnumerable, TEnumerator, TSource, FunctionWrapper<TSource, int, bool>> Where<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Func<TSource, int, bool> predicate)
             where TEnumerable : IValueReadOnlyCollection<TSource, TEnumerator>

@@ -9,7 +9,6 @@ namespace NetFabric.Hyperlinq
     public static partial class ArrayExtensions
     {
 
-        [GeneratorMapping("TSelector", "NetFabric.Hyperlinq.FunctionWrapper<TSource, TSubEnumerable>")]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static SpanSelectManyEnumerable<TSource, TSubEnumerable, TSubEnumerator, TResult, FunctionWrapper<TSource, TSubEnumerable>> SelectMany<TSource, TSubEnumerable, TSubEnumerator, TResult>(this ReadOnlySpan<TSource> source, Func<TSource, TSubEnumerable> selector)
             where TSubEnumerable : IValueEnumerable<TResult, TSubEnumerator>
@@ -23,7 +22,7 @@ namespace NetFabric.Hyperlinq
             where TSelector : struct, IFunction<TSource, TSubEnumerable>
             => new(source, selector);
 
-        [GeneratorIgnore]
+
         [StructLayout(LayoutKind.Auto)]
         public readonly ref struct SpanSelectManyEnumerable<TSource, TSubEnumerable, TSubEnumerator, TResult, TSelector>
             where TSubEnumerable : IValueEnumerable<TResult, TSubEnumerator>

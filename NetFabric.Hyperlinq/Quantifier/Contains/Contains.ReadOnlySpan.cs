@@ -37,7 +37,7 @@ namespace NetFabric.Hyperlinq
             }
         }
 
-        [GeneratorIgnore]
+
         static bool Contains<TSource, TResult, TSelector>(this ReadOnlySpan<TSource> source, TResult value, IEqualityComparer<TResult>? comparer, TSelector selector)
             where TSelector : struct, IFunction<TSource, TResult>
         {
@@ -71,7 +71,7 @@ namespace NetFabric.Hyperlinq
             }
         }
 
-        [GeneratorIgnore]
+
         static bool ContainsAt<TSource, TResult, TSelector>(this ReadOnlySpan<TSource> source, TResult value, IEqualityComparer<TResult>? comparer, TSelector selector)
             where TSelector : struct, IFunction<TSource, int, TResult>
         {

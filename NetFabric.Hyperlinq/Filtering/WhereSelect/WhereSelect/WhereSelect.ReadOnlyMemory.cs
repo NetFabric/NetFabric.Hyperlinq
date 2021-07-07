@@ -11,7 +11,7 @@ namespace NetFabric.Hyperlinq
     public static partial class ArrayExtensions
     {
 
-        [GeneratorIgnore]
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static MemoryWhereSelectEnumerable<TSource, TResult, TPredicate, TSelector> WhereSelect<TSource, TResult, TPredicate, TSelector>(
             this ReadOnlyMemory<TSource> source, 
@@ -21,7 +21,6 @@ namespace NetFabric.Hyperlinq
             where TSelector : struct, IFunction<TSource, TResult>
             => new(source, predicate, selector);
 
-        [GeneratorMapping("TSource", "TResult")]
         [StructLayout(LayoutKind.Auto)]
         public readonly partial struct MemoryWhereSelectEnumerable<TSource, TResult, TPredicate, TSelector>
             : IValueEnumerable<TResult, MemoryWhereSelectEnumerable<TSource, TResult, TPredicate, TSelector>.Enumerator>

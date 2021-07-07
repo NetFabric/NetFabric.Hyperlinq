@@ -9,7 +9,7 @@ namespace NetFabric.Hyperlinq
     public static partial class ArrayExtensions
     {
 
-        [GeneratorIgnore]
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static SpanWhereSelectEnumerable<TSource, TResult, TPredicate, TSelector> WhereSelect<TSource, TResult, TPredicate, TSelector>(
             this ReadOnlySpan<TSource> source, 
@@ -19,7 +19,6 @@ namespace NetFabric.Hyperlinq
             where TSelector : struct, IFunction<TSource, TResult>
             => new(source, predicate, selector);
 
-        [GeneratorMapping("TSource", "TResult")]
         [StructLayout(LayoutKind.Auto)]
         public readonly ref struct SpanWhereSelectEnumerable<TSource, TResult, TPredicate, TSelector>
             where TPredicate : struct, IFunction<TSource, bool>

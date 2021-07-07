@@ -18,6 +18,12 @@ namespace NetFabric.Hyperlinq.SourceGenerator
             return builder;
         }
 
+        public CodeBuilder Append(CodeBuilder builder)
+        {
+            _ = builder.AppendLine();
+            return this;
+        }
+
         public CodeBuilder AppendLine()
         {
             _ = builder.AppendLine();

@@ -10,7 +10,6 @@ namespace NetFabric.Hyperlinq
 {
     public static partial class ArrayExtensions
     {
-        [GeneratorMapping("TPredicate", "NetFabric.Hyperlinq.FunctionWrapper<TSource, int, bool>")]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static ArraySegmentWhereAtEnumerable<TSource, FunctionWrapper<TSource, int, bool>> Where<TSource>(this in ArraySegment<TSource> source, Func<TSource, int, bool> predicate)
             => source.WhereAt(new FunctionWrapper<TSource, int, bool>(predicate));
@@ -103,7 +102,7 @@ namespace NetFabric.Hyperlinq
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public int Count()
-                => ((ReadOnlySpan<TSource>)source.AsSpan()).CountAt(predicate);
+                => source.AsReadOnlySpan().CountAt(predicate);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public int Count(Func<TSource, bool> predicate)
@@ -112,7 +111,7 @@ namespace NetFabric.Hyperlinq
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public int Count<TPredicate2>(TPredicate2 predicate = default)
                 where TPredicate2 : struct, IFunction<TSource, bool>
-                => ((ReadOnlySpan<TSource>)source.AsSpan()).CountAt(new PredicatePredicateAtCombination<TPredicate2, TPredicate, TSource>(predicate, this.predicate));
+                => source.AsReadOnlySpan().CountAt(new PredicatePredicateAtCombination<TPredicate2, TPredicate, TSource>(predicate, this.predicate));
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public int Count(Func<TSource, int, bool> predicate)
@@ -121,7 +120,7 @@ namespace NetFabric.Hyperlinq
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public int CountAt<TPredicate2>(TPredicate2 predicate = default)
                 where TPredicate2 : struct, IFunction<TSource, int, bool>
-                => ((ReadOnlySpan<TSource>)source.AsSpan()).CountAt(new PredicateAtPredicateAtCombination<TPredicate, TPredicate2, TSource>(this.predicate, predicate));
+                => source.AsReadOnlySpan().CountAt(new PredicateAtPredicateAtCombination<TPredicate, TPredicate2, TSource>(this.predicate, predicate));
 
             #endregion
             #region Quantifier
@@ -129,7 +128,7 @@ namespace NetFabric.Hyperlinq
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public bool All()
-                => ((ReadOnlySpan<TSource>)source.AsSpan()).AllAt(predicate);
+                => source.AsReadOnlySpan().AllAt(predicate);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public bool All(Func<TSource, bool> predicate)
@@ -138,7 +137,7 @@ namespace NetFabric.Hyperlinq
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public bool All<TPredicate2>(TPredicate2 predicate = default)
                 where TPredicate2 : struct, IFunction<TSource, bool>
-                => ((ReadOnlySpan<TSource>)source.AsSpan()).AllAt(new PredicatePredicateAtCombination<TPredicate2, TPredicate, TSource>(predicate, this.predicate));
+                => source.AsReadOnlySpan().AllAt(new PredicatePredicateAtCombination<TPredicate2, TPredicate, TSource>(predicate, this.predicate));
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public bool All(Func<TSource, int, bool> predicate)
@@ -147,11 +146,11 @@ namespace NetFabric.Hyperlinq
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public bool AllAt<TPredicate2>(TPredicate2 predicate = default)
                 where TPredicate2 : struct, IFunction<TSource, int, bool>
-                => ((ReadOnlySpan<TSource>)source.AsSpan()).AllAt(new PredicateAtPredicateAtCombination<TPredicate, TPredicate2, TSource>(this.predicate, predicate));
+                => source.AsReadOnlySpan().AllAt(new PredicateAtPredicateAtCombination<TPredicate, TPredicate2, TSource>(this.predicate, predicate));
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public bool Any()
-                => ((ReadOnlySpan<TSource>)source.AsSpan()).AnyAt(predicate);
+                => source.AsReadOnlySpan().AnyAt(predicate);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public bool Any(Func<TSource, bool> predicate)
@@ -160,7 +159,7 @@ namespace NetFabric.Hyperlinq
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public bool Any<TPredicate2>(TPredicate2 predicate = default)
                 where TPredicate2 : struct, IFunction<TSource, bool>
-                => ((ReadOnlySpan<TSource>)source.AsSpan()).AnyAt(new PredicatePredicateAtCombination<TPredicate2, TPredicate, TSource>(predicate, this.predicate));
+                => source.AsReadOnlySpan().AnyAt(new PredicatePredicateAtCombination<TPredicate2, TPredicate, TSource>(predicate, this.predicate));
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public bool Any(Func<TSource, int, bool> predicate)
@@ -169,7 +168,7 @@ namespace NetFabric.Hyperlinq
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public bool AnyAt<TPredicate2>(TPredicate2 predicate = default)
                 where TPredicate2 : struct, IFunction<TSource, int, bool>
-                => ((ReadOnlySpan<TSource>)source.AsSpan()).AnyAt(new PredicateAtPredicateAtCombination<TPredicate, TPredicate2, TSource>(this.predicate, predicate));
+                => source.AsReadOnlySpan().AnyAt(new PredicateAtPredicateAtCombination<TPredicate, TPredicate2, TSource>(this.predicate, predicate));
 
             #endregion
             #region Filtering
@@ -200,16 +199,16 @@ namespace NetFabric.Hyperlinq
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public Option<TSource> ElementAt(int index)
-                => ((ReadOnlySpan<TSource>)source.AsSpan()).ElementAtAt(index, predicate);
+                => source.AsReadOnlySpan().ElementAtAt(index, predicate);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public Option<TSource> First()
-                => ((ReadOnlySpan<TSource>)source.AsSpan()).FirstAt(predicate);
+                => source.AsReadOnlySpan().FirstAt(predicate);
 
 #pragma warning disable HLQ005 // Avoid Single() and SingleOrDefault()
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public Option<TSource> Single()
-                => ((ReadOnlySpan<TSource>)source.AsSpan()).SingleAt(predicate);
+                => source.AsReadOnlySpan().SingleAt(predicate);
 #pragma warning restore HLQ005 // Avoid Single() and SingleOrDefault()
             
             #endregion
@@ -217,15 +216,15 @@ namespace NetFabric.Hyperlinq
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public TSource[] ToArray()
-                => ((ReadOnlySpan<TSource>)source.AsSpan()).ToArrayAt(predicate);
+                => source.AsReadOnlySpan().ToArrayAt(predicate);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public ValueMemoryOwner<TSource> ToArray(ArrayPool<TSource> pool, bool clearOnDispose = default)
-                => ((ReadOnlySpan<TSource>)source.AsSpan()).ToArrayAt(pool, clearOnDispose, predicate);
+                => source.AsReadOnlySpan().ToArrayAt(pool, clearOnDispose, predicate);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public List<TSource> ToList()
-                => ((ReadOnlySpan<TSource>)source.AsSpan()).ToListAt(predicate);
+                => source.AsReadOnlySpan().ToListAt(predicate);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public Dictionary<TKey, TSource> ToDictionary<TKey>(Func<TSource, TKey> keySelector, IEqualityComparer<TKey>? comparer = default)
@@ -236,7 +235,7 @@ namespace NetFabric.Hyperlinq
             public Dictionary<TKey, TSource> ToDictionary<TKey, TKeySelector>(TKeySelector keySelector, IEqualityComparer<TKey>? comparer = default)
                 where TKey : notnull
                 where TKeySelector : struct, IFunction<TSource, TKey>
-                => ((ReadOnlySpan<TSource>)source.AsSpan()).ToDictionaryAt(keySelector, comparer, predicate);
+                => source.AsReadOnlySpan().ToDictionaryAt(keySelector, comparer, predicate);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public Dictionary<TKey, TElement> ToDictionary<TKey, TElement>(Func<TSource, TKey> keySelector, Func<TSource, TElement> elementSelector, IEqualityComparer<TKey>? comparer = default)
@@ -248,7 +247,7 @@ namespace NetFabric.Hyperlinq
                 where TKey : notnull
                 where TKeySelector : struct, IFunction<TSource, TKey>
                 where TElementSelector : struct, IFunction<TSource, TElement>
-                => ((ReadOnlySpan<TSource>)source.AsSpan()).ToDictionaryAt<TSource, TKey, TElement, TKeySelector, TElementSelector, TPredicate>(keySelector, elementSelector, comparer, predicate);
+                => source.AsReadOnlySpan().ToDictionaryAt<TSource, TKey, TElement, TKeySelector, TElementSelector, TPredicate>(keySelector, elementSelector, comparer, predicate);
             
             #endregion
         }
@@ -256,72 +255,72 @@ namespace NetFabric.Hyperlinq
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int Sum<TPredicate>(this ArraySegmentWhereAtEnumerable<int, TPredicate> source)
             where TPredicate : struct, IFunction<int, int, bool>
-            => ((ReadOnlySpan<int>)source.source.AsSpan()).SumAt<int, int, TPredicate>(source.predicate);
+            => source.source.AsReadOnlySpan().SumAt<int, int, TPredicate>(source.predicate);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int Sum<TPredicate>(this ArraySegmentWhereAtEnumerable<int?, TPredicate> source)
             where TPredicate : struct, IFunction<int?, int, bool>
-            => ((ReadOnlySpan<int?>)source.source.AsSpan()).SumAt<int?, int, TPredicate>(source.predicate);
+            => source.source.AsReadOnlySpan().SumAt<int?, int, TPredicate>(source.predicate);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static nint Sum<TPredicate>(this ArraySegmentWhereAtEnumerable<nint, TPredicate> source)
             where TPredicate : struct, IFunction<nint, int, bool>
-            => ((ReadOnlySpan<nint>)source.source.AsSpan()).SumAt<nint, nint, TPredicate>(source.predicate);
+            => source.source.AsReadOnlySpan().SumAt<nint, nint, TPredicate>(source.predicate);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static nint Sum<TPredicate>(this ArraySegmentWhereAtEnumerable<nint?, TPredicate> source)
             where TPredicate : struct, IFunction<nint?, int, bool>
-            => ((ReadOnlySpan<nint?>)source.source.AsSpan()).SumAt<nint?, nint, TPredicate>(source.predicate);
+            => source.source.AsReadOnlySpan().SumAt<nint?, nint, TPredicate>(source.predicate);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static nuint Sum<TPredicate>(this ArraySegmentWhereAtEnumerable<nuint, TPredicate> source)
             where TPredicate : struct, IFunction<nuint, int, bool>
-            => ((ReadOnlySpan<nuint>)source.source.AsSpan()).SumAt<nuint, nuint, TPredicate>(source.predicate);
+            => source.source.AsReadOnlySpan().SumAt<nuint, nuint, TPredicate>(source.predicate);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static nuint Sum<TPredicate>(this ArraySegmentWhereAtEnumerable<nuint?, TPredicate> source)
             where TPredicate : struct, IFunction<nuint?, int, bool>
-            => ((ReadOnlySpan<nuint?>)source.source.AsSpan()).SumAt<nuint?, nuint, TPredicate>(source.predicate);
+            => source.source.AsReadOnlySpan().SumAt<nuint?, nuint, TPredicate>(source.predicate);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static long Sum<TPredicate>(this ArraySegmentWhereAtEnumerable<long, TPredicate> source)
             where TPredicate : struct, IFunction<long, int, bool>
-            => ((ReadOnlySpan<long>)source.source.AsSpan()).SumAt<long, long, TPredicate>(source.predicate);
+            => source.source.AsReadOnlySpan().SumAt<long, long, TPredicate>(source.predicate);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static long Sum<TPredicate>(this ArraySegmentWhereAtEnumerable<long?, TPredicate> source)
             where TPredicate : struct, IFunction<long?, int, bool>
-            => ((ReadOnlySpan<long?>)source.source.AsSpan()).SumAt<long?, long, TPredicate>(source.predicate);
+            => source.source.AsReadOnlySpan().SumAt<long?, long, TPredicate>(source.predicate);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float Sum<TPredicate>(this ArraySegmentWhereAtEnumerable<float, TPredicate> source)
             where TPredicate : struct, IFunction<float, int, bool>
-            => ((ReadOnlySpan<float>)source.source.AsSpan()).SumAt<float, float, TPredicate>(source.predicate);
+            => source.source.AsReadOnlySpan().SumAt<float, float, TPredicate>(source.predicate);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float Sum<TPredicate>(this ArraySegmentWhereAtEnumerable<float?, TPredicate> source)
             where TPredicate : struct, IFunction<float?, int, bool>
-            => ((ReadOnlySpan<float?>)source.source.AsSpan()).SumAt<float?, float, TPredicate>(source.predicate);
+            => source.source.AsReadOnlySpan().SumAt<float?, float, TPredicate>(source.predicate);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static double Sum<TPredicate>(this ArraySegmentWhereAtEnumerable<double, TPredicate> source)
             where TPredicate : struct, IFunction<double, int, bool>
-            => ((ReadOnlySpan<double>)source.source.AsSpan()).SumAt<double, double, TPredicate>(source.predicate);
+            => source.source.AsReadOnlySpan().SumAt<double, double, TPredicate>(source.predicate);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static double Sum<TPredicate>(this ArraySegmentWhereAtEnumerable<double?, TPredicate> source)
             where TPredicate : struct, IFunction<double?, int, bool>
-            => ((ReadOnlySpan<double?>)source.source.AsSpan()).SumAt<double?, double, TPredicate>(source.predicate);
+            => source.source.AsReadOnlySpan().SumAt<double?, double, TPredicate>(source.predicate);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static decimal Sum<TPredicate>(this ArraySegmentWhereAtEnumerable<decimal, TPredicate> source)
             where TPredicate : struct, IFunction<decimal, int, bool>
-            => ((ReadOnlySpan<decimal>)source.source.AsSpan()).SumAt<decimal, decimal, TPredicate>(source.predicate);
+            => source.source.AsReadOnlySpan().SumAt<decimal, decimal, TPredicate>(source.predicate);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static decimal Sum<TPredicate>(this ArraySegmentWhereAtEnumerable<decimal?, TPredicate> source)
             where TPredicate : struct, IFunction<decimal?, int, bool>
-            => ((ReadOnlySpan<decimal?>)source.source.AsSpan()).SumAt<decimal?, decimal, TPredicate>(source.predicate);
+            => source.source.AsReadOnlySpan().SumAt<decimal?, decimal, TPredicate>(source.predicate);
     }
 }
 

@@ -11,7 +11,6 @@ namespace NetFabric.Hyperlinq
     public static partial class ArrayExtensions
     {
 
-        [GeneratorMapping("TSelector", "NetFabric.Hyperlinq.FunctionWrapper<TSource, TResult>")]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static MemorySelectEnumerable<TSource, TResult, FunctionWrapper<TSource, TResult>> Select<TSource, TResult>(this ReadOnlyMemory<TSource> source, Func<TSource, TResult> selector)
             => source.Select<TSource, TResult, FunctionWrapper<TSource, TResult>>(new FunctionWrapper<TSource, TResult>(selector));
@@ -21,7 +20,6 @@ namespace NetFabric.Hyperlinq
             where TSelector : struct, IFunction<TSource, TResult>
             => new(source, selector);
 
-        [GeneratorMapping("TSource", "TResult")]
         [StructLayout(LayoutKind.Auto)]
         public partial struct MemorySelectEnumerable<TSource, TResult, TSelector>
             : IValueReadOnlyList<TResult, MemorySelectEnumerable<TSource, TResult, TSelector>.Enumerator>

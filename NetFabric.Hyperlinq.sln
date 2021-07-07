@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.28516.95
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31423.177
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetFabric.Hyperlinq", "NetFabric.Hyperlinq\NetFabric.Hyperlinq.csproj", "{EEEAA31B-434E-4849-A3E5-FA9664F5CE9B}"
 EndProject
@@ -29,8 +29,6 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetFabric.Hyperlinq.SourceGenerator.UnitTests", "NetFabric.Hyperlinq.SourceGenerator.UnitTests\NetFabric.Hyperlinq.SourceGenerator.UnitTests.csproj", "{12F96462-A2F8-4FBE-B4F5-29BA6A6DB4D9}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetFabric.Hyperlinq.Abstractions", "NetFabric.Hyperlinq.Abstractions\NetFabric.Hyperlinq.Abstractions.csproj", "{6981E761-E698-437D-AF63-0E80844B7D41}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetFabric.Hyperlinq.Immutable", "NetFabric.Hyperlinq.Immutable\NetFabric.Hyperlinq.Immutable.csproj", "{6CB7E269-91CB-47CC-BF9F-67956D5E0F7E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -62,10 +60,6 @@ Global
 		{6981E761-E698-437D-AF63-0E80844B7D41}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6981E761-E698-437D-AF63-0E80844B7D41}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6981E761-E698-437D-AF63-0E80844B7D41}.Release|Any CPU.Build.0 = Release|Any CPU
-		{6CB7E269-91CB-47CC-BF9F-67956D5E0F7E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{6CB7E269-91CB-47CC-BF9F-67956D5E0F7E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{6CB7E269-91CB-47CC-BF9F-67956D5E0F7E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{6CB7E269-91CB-47CC-BF9F-67956D5E0F7E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

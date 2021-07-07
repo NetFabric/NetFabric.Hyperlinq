@@ -6,7 +6,7 @@ namespace NetFabric.Hyperlinq
     public static partial class ReadOnlyListExtensions
     {
 
-        [GeneratorIgnore]
+
         static Option<TSource> Single<TList, TSource>(this TList source) 
             where TList : struct, IReadOnlyList<TSource>
             => source switch
@@ -15,7 +15,7 @@ namespace NetFabric.Hyperlinq
                 _ => Option.None,
             };
         
-        [GeneratorIgnore]
+
         internal static Option<TResult> Single<TList, TSource, TResult, TSelector>(this TList source, TSelector selector)
             where TList : struct, IReadOnlyList<TSource>
             where TSelector : struct, IFunction<TSource, TResult>
@@ -26,7 +26,7 @@ namespace NetFabric.Hyperlinq
             };
 
         
-        [GeneratorIgnore]
+
         internal static Option<TResult> SingleAt<TList, TSource, TResult, TSelector>(this TList source, TSelector selector)
             where TList : struct, IReadOnlyList<TSource>
             where TSelector : struct, IFunction<TSource, int, TResult>

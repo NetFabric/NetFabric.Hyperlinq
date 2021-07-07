@@ -9,7 +9,6 @@ namespace NetFabric.Hyperlinq
 {
     public static partial class ArrayExtensions
     {
-        [GeneratorMapping("TSelector", "NetFabric.Hyperlinq.FunctionWrapper<TSource, TSubEnumerable>")]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static ArraySegmentSelectManyEnumerable<TSource, TSubEnumerable, TSubEnumerator, TResult, FunctionWrapper<TSource, TSubEnumerable>> SelectMany<TSource, TSubEnumerable, TSubEnumerator, TResult>(this in ArraySegment<TSource> source, Func<TSource, TSubEnumerable> selector)
             where TSubEnumerable : IValueEnumerable<TResult, TSubEnumerator>
@@ -23,7 +22,7 @@ namespace NetFabric.Hyperlinq
             where TSelector : struct, IFunction<TSource, TSubEnumerable>
             => new(source, selector);
 
-        [GeneratorIgnore]
+
         [StructLayout(LayoutKind.Auto)]
         public readonly partial struct ArraySegmentSelectManyEnumerable<TSource, TSubEnumerable, TSubEnumerator, TResult, TSelector>
             : IValueEnumerable<TResult, ArraySegmentSelectManyEnumerable<TSource, TSubEnumerable, TSubEnumerator, TResult, TSelector>.Enumerator>

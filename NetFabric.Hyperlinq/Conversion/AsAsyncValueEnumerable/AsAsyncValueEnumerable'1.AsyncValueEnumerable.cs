@@ -14,7 +14,6 @@ namespace NetFabric.Hyperlinq
             where TEnumerator : struct, IAsyncEnumerator<TSource>
             => new(source);
 
-        [GeneratorBindings(source: "source", sourceImplements: "IAsyncValueEnumerable`2", enumerableType: "IAsyncValueEnumerable<TSource, TEnumerator>")]
         [StructLayout(LayoutKind.Auto)]
         public readonly partial struct AsyncValueEnumerable<TEnumerator, TSource>
             : IAsyncValueEnumerable<TSource, TEnumerator>

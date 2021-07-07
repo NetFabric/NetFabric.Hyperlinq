@@ -24,7 +24,7 @@ using System.Collections.Generic;
             return dictionary;
         }
 
-        [GeneratorIgnore]
+
         static Dictionary<TKey, TSource> ToDictionary<TSource, TKey, TKeySelector, TPredicate>(this ReadOnlySpan<TSource> source, TKeySelector keySelector, IEqualityComparer<TKey>? comparer, TPredicate predicate)
             where TKey : notnull
             where TKeySelector : struct, IFunction<TSource, TKey>
@@ -40,7 +40,7 @@ using System.Collections.Generic;
             return dictionary;
         }
 
-        [GeneratorIgnore]
+
         static Dictionary<TKey, TSource> ToDictionaryAt<TSource, TKey, TKeySelector, TPredicate>(this ReadOnlySpan<TSource> source, TKeySelector keySelector, IEqualityComparer<TKey>? comparer, TPredicate predicate)
             where TKey : notnull
             where TKeySelector : struct, IFunction<TSource, TKey>
@@ -57,7 +57,7 @@ using System.Collections.Generic;
             return dictionary;
         }
 
-        [GeneratorIgnore]
+
         static Dictionary<TKey, TResult> ToDictionary<TSource, TKey, TKeySelector, TResult, TPredicate, TSelector>(this ReadOnlySpan<TSource> source, TKeySelector keySelector, IEqualityComparer<TKey>? comparer, TPredicate predicate, TSelector selector)
             where TKey : notnull
             where TKeySelector : struct, IFunction<TResult, TKey>
@@ -98,7 +98,7 @@ using System.Collections.Generic;
             return dictionary;
         }
 
-        [GeneratorIgnore]
+
         static Dictionary<TKey, TElement>
             ToDictionary<TSource, TKey, TElement, TKeySelector, TElementSelector, TPredicate>(
                 this ReadOnlySpan<TSource> source, TKeySelector keySelector, TElementSelector elementSelector,
@@ -118,7 +118,7 @@ using System.Collections.Generic;
             return dictionary;
         }
         
-        [GeneratorIgnore]
+
         static Dictionary<TKey, TElement>
             ToDictionaryAt<TSource, TKey, TElement, TKeySelector, TElementSelector, TPredicate>(
                 this ReadOnlySpan<TSource> source, TKeySelector keySelector, TElementSelector elementSelector,
@@ -140,7 +140,7 @@ using System.Collections.Generic;
             return dictionary;
         }
 
-        [GeneratorIgnore]
+
         static Dictionary<TKey, TElement> ToDictionary<TSource, TKey, TElement, TKeySelector, TElementSelector, TResult, TPredicate, TSelector>(this ReadOnlySpan<TSource> source, TKeySelector keySelector, TElementSelector elementSelector, IEqualityComparer<TKey>? comparer, TPredicate predicate, TSelector selector)
             where TKey : notnull
             where TKeySelector : struct, IFunction<TResult, TKey>

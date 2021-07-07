@@ -10,12 +10,10 @@ namespace NetFabric.Hyperlinq
     public static partial class ArrayExtensions
     {
 
-        [GeneratorIgnore]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static SpanValueEnumerable<TSource> AsValueEnumerable<TSource>(this ReadOnlySpan<TSource> source)
             => new(source);
 
-        [GeneratorBindings(source: "source", sourceImplements: "ReadOnlySpan`1")]
         [StructLayout(LayoutKind.Auto)]
         public readonly ref partial struct SpanValueEnumerable<TSource>
         {
@@ -23,6 +21,12 @@ namespace NetFabric.Hyperlinq
 
             internal SpanValueEnumerable(ReadOnlySpan<TSource> source)
                 => this.source = source;
+
+            public ReadOnlySpan<TSource> Span
+            {
+                [MethodImpl(MethodImplOptions.AggressiveInlining)]
+                get => source;
+            }
 
             public int Count
             {
@@ -39,48 +43,6 @@ namespace NetFabric.Hyperlinq
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public SpanEnumerator<TSource> GetEnumerator()
                 => new(source);
-
-            #region Aggregation
-
-            #endregion
-
-            #region Conversion
-
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public SpanValueEnumerable<TSource> AsEnumerable()
-                => this;
-
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public SpanValueEnumerable<TSource> AsValueEnumerable()
-                => this;
-
-            #endregion
-
-            #region Element
-
-            #endregion
-            
-            #region Filtering
-
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public SpanWhereEnumerable<TSource, FunctionWrapper<TSource, bool>> Where(Func<TSource, bool> predicate)
-                => source.Where(predicate);
-
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public SpanWhereEnumerable<TSource, TPredicate> Where<TPredicate>(TPredicate predicate = default)
-                where TPredicate : struct, IFunction<TSource, bool>
-                => source.Where(predicate);
-
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public SpanWhereAtEnumerable<TSource, FunctionWrapper<TSource, int, bool>> Where(Func<TSource, int, bool> predicate)
-                => source.Where(predicate);
-
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public SpanWhereAtEnumerable<TSource, TPredicate> WhereAt<TPredicate>(TPredicate predicate = default)
-                where TPredicate : struct, IFunction<TSource, int, bool>
-                => source.WhereAt(predicate);
-
-            #endregion
              
             #region Partitioning
 
@@ -94,53 +56,6 @@ namespace NetFabric.Hyperlinq
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public SpanValueEnumerable<TSource> Take(int count)
                 => new(source.Slice(0, Utils.Take(source.Length, count)));
-
-            #endregion
-
-            #region Projection
-
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public SpanSelectEnumerable<TSource, TResult, FunctionWrapper<TSource, TResult>> Select<TResult>(Func<TSource, TResult> selector)
-                => source.Select(selector);
-
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public SpanSelectEnumerable<TSource, TResult, TSelector> Select<TResult, TSelector>(TSelector selector = default)
-                where TSelector : struct, IFunction<TSource, TResult>
-                => source.Select<TSource, TResult, TSelector>(selector);
-
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public SpanSelectAtEnumerable<TSource, TResult, FunctionWrapper<TSource, int, TResult>> Select<TResult>(Func<TSource, int, TResult> selector)
-                => source.Select(selector);
-
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public SpanSelectAtEnumerable<TSource, TResult, TSelector> SelectAt<TResult, TSelector>(TSelector selector = default)
-                where TSelector : struct, IFunction<TSource, int, TResult>
-                => source.SelectAt<TSource, TResult, TSelector>(selector);
-
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public SpanSelectManyEnumerable<TSource, TSubEnumerable, TSubEnumerator, TResult, FunctionWrapper<TSource, TSubEnumerable>> SelectMany<TSubEnumerable, TSubEnumerator, TResult>(Func<TSource, TSubEnumerable> selector)
-                where TSubEnumerable : IValueEnumerable<TResult, TSubEnumerator>
-                where TSubEnumerator : struct, IEnumerator<TResult>
-                => source.SelectMany<TSource, TSubEnumerable, TSubEnumerator, TResult>(selector);
-
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public SpanSelectManyEnumerable<TSource, TSubEnumerable, TSubEnumerator, TResult, TSelector> SelectMany<TSubEnumerable, TSubEnumerator, TResult, TSelector>(TSelector selector = default)
-                where TSubEnumerable : IValueEnumerable<TResult, TSubEnumerator>
-                where TSubEnumerator : struct, IEnumerator<TResult>
-                where TSelector : struct, IFunction<TSource, TSubEnumerable>
-                => source.SelectMany<TSource, TSubEnumerable, TSubEnumerator, TResult, TSelector>(selector);
-
-            #endregion
-
-            #region Quantifier
-
-            #endregion
-
-            #region Set
-
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public SpanDistinctEnumerable<TSource> Distinct(IEqualityComparer<TSource>? comparer = default)
-                => source.Distinct(comparer);
 
             #endregion
 
@@ -170,24 +85,6 @@ namespace NetFabric.Hyperlinq
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int Count<TSource>(this SpanValueEnumerable<TSource> source)
             => source.Count;
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static int Count<TSource>(this SpanValueEnumerable<TSource> source, Func<TSource, bool> predicate)
-            => source.Count(predicate);
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static int Count<TSource, TPredicate>(this SpanValueEnumerable<TSource> source, TPredicate predicate = default)
-            where TPredicate : struct, IFunction<TSource, bool>
-            => source.Count(predicate);
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static int Count<TSource>(this SpanValueEnumerable<TSource> source, Func<TSource, int, bool> predicate)
-            => source.Count(predicate);
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static int CountAt<TSource, TPredicate>(this SpanValueEnumerable<TSource> source, TPredicate predicate = default)
-            where TPredicate : struct, IFunction<TSource, int, bool>
-            => source.CountAt(predicate);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int Sum(this SpanValueEnumerable<int> source)

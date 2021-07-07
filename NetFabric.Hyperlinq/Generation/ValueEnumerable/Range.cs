@@ -29,7 +29,6 @@ namespace NetFabric.Hyperlinq
             return new RangeEnumerable(start, count);
         }
 
-        [GeneratorMapping("TSource", "int", true)]
         [StructLayout(LayoutKind.Auto)]
         public readonly partial struct RangeEnumerable
             : IValueReadOnlyList<int, RangeEnumerable.DisposableEnumerator>
@@ -123,23 +122,20 @@ namespace NetFabric.Hyperlinq
             public struct Enumerator
             {
                 readonly int end;
-                int current;
 
                 internal Enumerator(in RangeEnumerable enumerable)
                 {
-                    current = enumerable.start - 1;
-                    end = current + enumerable.Count;
+                    Current = enumerable.start - 1;
+                    end = Current + enumerable.Count;
                 }
 
-                public int Current
-                {
-                    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-                    get => current;
+                public int Current { [MethodImpl(MethodImplOptions.AggressiveInlining)]
+                    get; private set;
                 }
 
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
                 public bool MoveNext()
-                    => ++current <= end;
+                    => ++Current <= end;
             }
 
             [StructLayout(LayoutKind.Auto)]
@@ -147,26 +143,23 @@ namespace NetFabric.Hyperlinq
                 : IEnumerator<int>
             {
                 readonly int end;
-                int current;
 
                 internal DisposableEnumerator(in RangeEnumerable enumerable)
                 {
-                    current = enumerable.start - 1;
-                    end = current + enumerable.Count;
+                    Current = enumerable.start - 1;
+                    end = Current + enumerable.Count;
                 }
 
-                public int Current
-                {
-                    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-                    get => current;
+                public int Current { [MethodImpl(MethodImplOptions.AggressiveInlining)]
+                    get; private set;
                 }
                 object? IEnumerator.Current
                     // ReSharper disable once HeapView.BoxingAllocation
-                    => current;
+                    => Current;
 
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
                 public bool MoveNext()
-                    => ++current <= end;
+                    => ++Current <= end;
 
                 [ExcludeFromCodeCoverage]
                 [DoesNotReturn]

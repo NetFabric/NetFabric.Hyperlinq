@@ -11,7 +11,7 @@ namespace NetFabric.Hyperlinq
             where TEnumerator : struct, IEnumerator<TSource>
             => source.Count is not 0 && ValueEnumerableExtensions.Contains<TEnumerable, TEnumerator, TSource>(source, value, comparer);
 
-        [GeneratorIgnore]
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static bool Contains<TEnumerable, TEnumerator, TSource, TResult, TSelector>(this TEnumerable source, TResult value, IEqualityComparer<TResult>? comparer, TSelector selector)
             where TEnumerable : IValueReadOnlyCollection<TSource, TEnumerator>
@@ -19,7 +19,7 @@ namespace NetFabric.Hyperlinq
             where TSelector : struct, IFunction<TSource, TResult>
             => source.Count is not 0 && ValueEnumerableExtensions.Contains<TEnumerable, TEnumerator, TSource, TResult, TSelector>(source, value, comparer, selector);
 
-        [GeneratorIgnore]
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static bool ContainsAt<TEnumerable, TEnumerator, TSource, TResult, TSelector>(this TEnumerable source, TResult value, IEqualityComparer<TResult>? comparer, TSelector selector)
             where TEnumerable : IValueReadOnlyCollection<TSource, TEnumerator>

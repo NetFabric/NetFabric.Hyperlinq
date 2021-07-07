@@ -4,6 +4,7 @@
     <TargetFrameworks>net6.0</TargetFrameworks>
     <IsPackable>false</IsPackable>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
   </PropertyGroup>
 
   <PropertyGroup>
@@ -15,6 +16,7 @@
   <ItemGroup>
     <ProjectReference Include="..\NetFabric.Hyperlinq\NetFabric.Hyperlinq.csproj" />
     <ProjectReference Include="..\NetFabric.Hyperlinq.UnitTests\NetFabric.Hyperlinq.UnitTests.csproj" />
+    <ProjectReference Include="..\NetFabric.Hyperlinq.SourceGenerator\NetFabric.Hyperlinq.SourceGenerator.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
   </ItemGroup>
 
   <ItemGroup>

@@ -11,7 +11,6 @@ namespace NetFabric.Hyperlinq
     public static partial class ValueReadOnlyCollectionExtensions
     {
 
-        [GeneratorMapping("TSelector", "NetFabric.Hyperlinq.FunctionWrapper<TSource, TResult>")]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static SelectEnumerable<TEnumerable, TEnumerator, TSource, TResult, FunctionWrapper<TSource, TResult>> Select<TEnumerable, TEnumerator, TSource, TResult>(this TEnumerable source, Func<TSource, TResult> selector)
             where TEnumerable : IValueReadOnlyCollection<TSource, TEnumerator>
@@ -25,7 +24,6 @@ namespace NetFabric.Hyperlinq
             where TSelector : struct, IFunction<TSource, TResult>
             => new(in source, selector);
 
-        [GeneratorMapping("TSource", "TResult")]
         [StructLayout(LayoutKind.Auto)]
         public partial struct SelectEnumerable<TEnumerable, TEnumerator, TSource, TResult, TSelector>
             : IValueReadOnlyCollection<TResult, SelectEnumerable<TEnumerable, TEnumerator, TSource, TResult, TSelector>.Enumerator>

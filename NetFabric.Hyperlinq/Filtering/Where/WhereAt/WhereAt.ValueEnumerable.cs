@@ -11,7 +11,6 @@ namespace NetFabric.Hyperlinq
     public static partial class ValueEnumerableExtensions
     {
 
-        [GeneratorMapping("TPredicate", "NetFabric.Hyperlinq.FunctionWrapper<TSource, int, bool>")]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static WhereAtEnumerable<TEnumerable, TEnumerator, TSource, FunctionWrapper<TSource, int, bool>> Where<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Func<TSource, int, bool> predicate)
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>

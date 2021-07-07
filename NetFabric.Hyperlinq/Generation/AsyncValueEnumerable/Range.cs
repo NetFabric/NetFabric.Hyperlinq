@@ -29,7 +29,6 @@ namespace NetFabric.Hyperlinq
             return new RangeEnumerable(start, count, end);
         }
 
-        [GeneratorMapping("TSource", "int", true)]
         [StructLayout(LayoutKind.Auto)]
         public readonly partial struct RangeEnumerable
             : IAsyncValueEnumerable<int, RangeEnumerable.DisposableEnumerator>

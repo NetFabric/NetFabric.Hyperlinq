@@ -12,7 +12,6 @@ namespace NetFabric.Hyperlinq
     public static partial class AsyncValueEnumerableExtensions
     {
 
-        [GeneratorMapping("TSelector", "NetFabric.Hyperlinq.AsyncFunctionWrapper<TSource, TResult>")]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static SelectEnumerable<TEnumerable, TEnumerator, TSource, TResult, AsyncFunctionWrapper<TSource, TResult>> Select<TEnumerable, TEnumerator, TSource, TResult>(this TEnumerable source, Func<TSource, CancellationToken, ValueTask<TResult>> selector)
             where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
@@ -26,7 +25,6 @@ namespace NetFabric.Hyperlinq
             where TSelector : struct, IAsyncFunction<TSource, TResult>
             => new(in source, selector);
 
-        [GeneratorMapping("TSource", "TResult")]
         [StructLayout(LayoutKind.Auto)]
         public readonly partial struct SelectEnumerable<TEnumerable, TEnumerator, TSource, TResult, TSelector>
             : IAsyncValueEnumerable<TResult, SelectEnumerable<TEnumerable, TEnumerator, TSource, TResult, TSelector>.Enumerator>

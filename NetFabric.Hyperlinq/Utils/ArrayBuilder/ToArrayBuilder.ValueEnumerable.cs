@@ -6,7 +6,7 @@ namespace NetFabric.Hyperlinq
     public static partial class ValueEnumerableExtensions
     {
 
-        [GeneratorIgnore]
+
         static LargeArrayBuilder<TSource> ToArrayBuilder<TEnumerable, TEnumerator, TSource>(TEnumerable source, ArrayPool<TSource> arrayPool, bool clearOnDispose)
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
@@ -18,7 +18,7 @@ namespace NetFabric.Hyperlinq
             return builder;
         }
 
-        [GeneratorIgnore]
+
         static LargeArrayBuilder<TSource> ToArrayBuilder<TEnumerable, TEnumerator, TSource, TPredicate>(TEnumerable source, ArrayPool<TSource> arrayPool, bool clearOnDispose, TPredicate predicate)
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
@@ -35,7 +35,7 @@ namespace NetFabric.Hyperlinq
             return builder;
         }
 
-        [GeneratorIgnore]
+
         static LargeArrayBuilder<TSource> ToArrayBuilderAt<TEnumerable, TEnumerator, TSource, TPredicate>(TEnumerable source, ArrayPool<TSource> arrayPool, bool clearOnDispose, TPredicate predicate)
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
@@ -52,7 +52,7 @@ namespace NetFabric.Hyperlinq
             return builder;
         }
 
-        [GeneratorIgnore]
+
         static LargeArrayBuilder<TResult> ToArrayBuilder<TEnumerable, TEnumerator, TSource, TResult, TSelector>(TEnumerable source, ArrayPool<TResult> arrayPool, bool clearOnDispose, TSelector selector)
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
@@ -65,7 +65,7 @@ namespace NetFabric.Hyperlinq
             return builder;
         }
 
-        [GeneratorIgnore]
+
         static LargeArrayBuilder<TResult> ToArrayBuilderAt<TEnumerable, TEnumerator, TSource, TResult, TSelector>(TEnumerable source, ArrayPool<TResult> arrayPool, bool clearOnDispose, TSelector selector)
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
@@ -81,7 +81,7 @@ namespace NetFabric.Hyperlinq
             return builder;
         }
 
-        [GeneratorIgnore]
+
         static LargeArrayBuilder<TResult> ToArrayBuilder<TEnumerable, TEnumerator, TSource, TResult, TPredicate, TSelector>(TEnumerable source, ArrayPool<TResult> arrayPool, bool clearOnDispose, TPredicate predicate, TSelector selector)
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
