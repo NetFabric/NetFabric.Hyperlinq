@@ -1,0 +1,36 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>net48;netcoreapp2.1;netcoreapp3.1;net6.0</TargetFrameworks>
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+  
+  <ItemGroup>
+    <PackageReference Include="coverlet.msbuild" Version="3.0.3">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.10.0" />
+    <PackageReference Include="NetFabric.Assertive" Version="3.0.1" />
+    <PackageReference Include="NetFabric.Hyperlinq.Analyzer" Version="2.0.3">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="System.Collections.Immutable" Version="5.0.0" />
+    <PackageReference Include="System.Interactive" Version="5.0.0" />
+    <PackageReference Include="xunit" Version="2.4.1" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.4.3">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\NetFabric.Hyperlinq.Core\NetFabric.Hyperlinq.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <DotNetCliToolReference Include="dotnet-reportgenerator-cli" Version="4.3.8" />
+  </ItemGroup>
+
+</Project>
