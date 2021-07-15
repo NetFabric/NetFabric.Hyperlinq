@@ -42,6 +42,22 @@ namespace NetFabric.Hyperlinq.SourceGenerator.UnitTests
                     "TestData/Results/AsValueEnumerable.TestEnumerableWithInterfacelessPublicEnumerator.cs"
                 },
                 {
+                    new[] { "TestData/Source/AsValueEnumerable.TestCollection.cs" },
+                    "TestData/Results/AsValueEnumerable.TestCollection.cs"
+                },
+                {
+                    new[] { "TestData/Source/AsValueEnumerable.TestReadOnlyCollection.cs" },
+                    "TestData/Results/AsValueEnumerable.TestReadOnlyCollection.cs"
+                },
+                {
+                    new[] { "TestData/Source/AsValueEnumerable.TestList.cs" },
+                    "TestData/Results/AsValueEnumerable.TestList.cs"
+                },
+                {
+                    new[] { "TestData/Source/AsValueEnumerable.TestReadOnlyList.cs" },
+                    "TestData/Results/AsValueEnumerable.TestReadOnlyList.cs"
+                },
+                {
                     new[] { "TestData/Source/AsValueEnumerable.TestValueEnumerable.cs" },
                     "TestData/Results/AsValueEnumerable.TestValueEnumerable.cs"
                 },

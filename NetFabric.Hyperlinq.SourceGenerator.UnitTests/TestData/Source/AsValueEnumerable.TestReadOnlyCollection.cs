@@ -2,10 +2,10 @@ using NetFabric.Hyperlinq;
 
 partial class TestsSource
 {
-    static void AsValueEnumerable_ValueEnumerable()
+    static void AsValueEnumerable_ReadOnlyCollection()
     {
         // test calling AsValueEnumerable() on an IValueEnumerable
-        _ = new TestValueEnumerable().AsValueEnumerable();
+        _ = new TestReadOnlyCollection().AsValueEnumerable();
     }
 }
 

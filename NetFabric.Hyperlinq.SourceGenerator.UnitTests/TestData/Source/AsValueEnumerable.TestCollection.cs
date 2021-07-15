@@ -1,0 +1,15 @@
+using NetFabric.Hyperlinq;
+
+partial class TestsSource
+{
+    static void AsValueEnumerable_Collection()
+    {
+        // test calling AsValueEnumerable() on an ICollection
+        _ = new TestCollection().AsValueEnumerable();
+    }
+}
+
+
+
+
+

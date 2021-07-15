@@ -43,7 +43,7 @@ namespace NetFabric.Hyperlinq.SourceGenerator
             }
 
 
-            // Receiver type is an enumerable that is none of the above
+            // Receiver type is an enumerable
 
             if (receiverTypeSymbol.IsEnumerable(compilation, out var enumerableSymbols))
             {
@@ -56,10 +56,27 @@ namespace NetFabric.Hyperlinq.SourceGenerator
                 var getEnumeratorReturnType = enumerableSymbols.GetEnumerator.ReturnType;
                 var getEnumeratorReturnTypeString = getEnumeratorReturnType.ToDisplayString();
 
+                // Check what interfaces the enumerable implements, minimizing the calls to ImplementsInterface()
                 string enumeratorTypeString;
-                var enumerableImplementsInterface = false;
-                var enumeratorImplementsInterface = getEnumeratorReturnType.ImplementsInterface(SpecialType.System_Collections_Generic_IEnumerator_T, out var _);
-                if (enumeratorImplementsInterface)
+                var enumerableImplementsIEnumerable = receiverTypeSymbol.ImplementsInterface(SpecialType.System_Collections_Generic_IEnumerable_T, out var _);
+                var enumerableImplementsICollection = false;
+                var enumerableImplementsIReadOnlyCollection = false;
+                var enumerableImplementsIList = false;
+                var enumerableImplementsIReadOnlyList = false;
+                if (enumerableImplementsIEnumerable)
+                {
+                    enumerableImplementsICollection = receiverTypeSymbol.ImplementsInterface(SpecialType.System_Collections_Generic_ICollection_T, out var _);
+                    if (enumerableImplementsICollection)
+                        enumerableImplementsIList = receiverTypeSymbol.ImplementsInterface(SpecialType.System_Collections_Generic_IList_T, out var _);
+
+                    enumerableImplementsIReadOnlyCollection = receiverTypeSymbol.ImplementsInterface(SpecialType.System_Collections_Generic_IReadOnlyCollection_T, out var _);
+                    if (enumerableImplementsIReadOnlyCollection)
+                        enumerableImplementsIReadOnlyList = receiverTypeSymbol.ImplementsInterface(SpecialType.System_Collections_Generic_IReadOnlyList_T, out var _);
+                }
+
+
+                var enumeratorImplementsIEnumerator = getEnumeratorReturnType.ImplementsInterface(SpecialType.System_Collections_Generic_IEnumerator_T, out var _);
+                if (enumeratorImplementsIEnumerator)
                 {
                     if (getEnumeratorReturnType.IsValueType)
                     {
@@ -74,23 +91,19 @@ namespace NetFabric.Hyperlinq.SourceGenerator
                 }
                 else
                 {
-                    if (receiverTypeSymbol.ImplementsInterface(SpecialType.System_Collections_Generic_IEnumerable_T, out var _))
-                    {
-                        enumerableImplementsInterface = true;
-                        enumeratorTypeString = $"ValueEnumerator<{itemTypeString}>";
-                    }
-                    else
-                    {
-                        enumeratorTypeString = $"{enumerableTypeString}.Enumerator";
-                    }
+                    enumeratorTypeString = enumerableImplementsIEnumerable
+                        ? $"ValueEnumerator<{itemTypeString}>" 
+                        : $"{enumerableTypeString}.Enumerator";
                 }
 
+                // Generate the method
                 _ = builder
                     .AppendLine()
                     .AppendLine("[MethodImpl(MethodImplOptions.AggressiveInlining)]")
                     .AppendLine($"public static {enumerableTypeString} AsValueEnumerable(this {receiverTypeString} source) => new(source);")
                     .AppendLine();
 
+                // Generate the value enumerable wrapper
                 using (builder.AppendBlock($"public readonly struct {enumerableTypeString}: IValueEnumerable<{itemType.ToDisplayString()}, {enumeratorTypeString}>"))
                 {
                     _ = builder
@@ -110,7 +123,19 @@ namespace NetFabric.Hyperlinq.SourceGenerator
                             .AppendLine()
                             .AppendLine($"IEnumerator IEnumerable.GetEnumerator() => source.GetEnumerator();");
                     }
-                    else if(enumerableImplementsInterface)
+                    else if (enumeratorImplementsIEnumerator)
+                    {
+                        // Use the ValueEnumerator<> wrapper
+                        _ = builder
+                            .AppendLine()
+                            .AppendLine("[MethodImpl(MethodImplOptions.AggressiveInlining)]")
+                            .AppendLine($"public {enumeratorTypeString} GetEnumerator() => new(source.GetEnumerator());")
+                            .AppendLine()
+                            .AppendLine($"IEnumerator<{itemTypeString}> IEnumerable<{itemTypeString}>.GetEnumerator() => source.GetEnumerator();")
+                            .AppendLine()
+                            .AppendLine($"IEnumerator IEnumerable.GetEnumerator() => source.GetEnumerator();");
+                    }
+                    else if (enumerableImplementsIEnumerable)
                     {
                         // Use the ValueEnumerator<> wrapper but need to cast to call GetEnumerator()
                         _ = builder
@@ -124,18 +149,6 @@ namespace NetFabric.Hyperlinq.SourceGenerator
                             .AppendLine($"IEnumerator<{itemTypeString}> IEnumerable<{itemTypeString}>.GetEnumerator() => ((IEnumerable<{itemTypeString}>)source).GetEnumerator();")
                             .AppendLine()
                             .AppendLine($"IEnumerator IEnumerable.GetEnumerator() => ((IEnumerable<{itemTypeString}>)source).GetEnumerator();");
-                    }
-                    else if (enumeratorImplementsInterface)
-                    {
-                        // Use the ValueEnumerator<> wrapper
-                        _ = builder
-                            .AppendLine()
-                            .AppendLine("[MethodImpl(MethodImplOptions.AggressiveInlining)]")
-                            .AppendLine($"public {enumeratorTypeString} GetEnumerator() => new(source.GetEnumerator());")
-                            .AppendLine()
-                            .AppendLine($"IEnumerator<{itemTypeString}> IEnumerable<{itemTypeString}>.GetEnumerator() => source.GetEnumerator();")
-                            .AppendLine()
-                            .AppendLine($"IEnumerator IEnumerable.GetEnumerator() => source.GetEnumerator();");
                     }
                     else
                     {
@@ -177,6 +190,62 @@ namespace NetFabric.Hyperlinq.SourceGenerator
                             _ = enumerableSymbols.EnumeratorSymbols.Dispose is null
                                 ? builder.AppendLine("public void Dispose() { }")
                                 : builder.AppendLine("public void Dispose() => source.Dispose();");
+                        }
+                    }
+
+                    if (enumerableImplementsICollection || enumerableImplementsIReadOnlyCollection)
+                    {
+                        _ = builder
+                            .AppendLine()
+                            .AppendLine("public int Count => source.Count;")
+                            .AppendLine()
+                            .AppendLine("public bool IsReadOnly => true;")
+                            .AppendLine()
+                            .AppendLine($"void ICollection<{itemTypeString}>.Add({itemTypeString} item) => throw new NotSupportedException();")
+                            .AppendLine()
+                            .AppendLine($"bool ICollection<{itemTypeString}>.Remove({itemTypeString} item) => throw new NotSupportedException();")
+                            .AppendLine()
+                            .AppendLine($"void ICollection<{itemTypeString}>.Clear() => throw new NotSupportedException();");
+
+                        _ = enumerableImplementsICollection
+                            ? builder
+                                .AppendLine()
+                                .AppendLine($"public bool Contains({itemTypeString} item) => source.Contains(item);")
+                                .AppendLine()
+                                .AppendLine($"public void CopyTo({itemTypeString}[] array, int arrayIndex) => source.CopyTo(array, arrayIndex);")
+                            : builder
+                                .AppendLine()
+                                .AppendLine($"public bool Contains({itemTypeString} item) => source.Contains(item);")
+                                .AppendLine()
+                                .AppendLine($"public void CopyTo({itemTypeString}[] array, int arrayIndex) => source.CopyTo(array, arrayIndex);");
+
+                        if (enumerableImplementsIList || enumerableImplementsIReadOnlyList)
+                        {
+                            _ = builder
+                                .AppendLine()
+                                .AppendLine($"public {itemTypeString} this[int index] => source[index];")
+                                .AppendLine();
+
+                            using (builder.AppendBlock($"{itemTypeString} IList<{itemTypeString}>.this[int index]"))
+                            {
+                                _ = builder
+                                    .AppendLine("get => source[index];")
+                                    .AppendLine("set => throw new NotSupportedException();");
+                            }
+
+                            _ = builder
+                                .AppendLine()
+                                .AppendLine($"void IList<{itemTypeString}>.Insert(int index, {itemTypeString} item) => throw new NotSupportedException();")
+                                .AppendLine()
+                                .AppendLine($"void IList<{itemTypeString}>.RemoveAt(int index) => throw new NotSupportedException();");
+
+                            _ = enumerableImplementsIList
+                                ? builder
+                                    .AppendLine()
+                                    .AppendLine($"public int IndexOf({itemTypeString} item) => source.IndexOf(item);")
+                                : builder
+                                    .AppendLine()
+                                    .AppendLine($"public int IndexOf({itemTypeString} item) => source.IndexOf(item);");
                         }
                     }
 
