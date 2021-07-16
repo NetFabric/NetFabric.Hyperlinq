@@ -164,7 +164,7 @@ namespace NetFabric.Hyperlinq.SourceGenerator
                             .AppendLine()
                             .AppendLine($"IEnumerator IEnumerable.GetEnumerator() => ((IEnumerable<{itemTypeString}>)source).GetEnumerator();");
                     }
-                    else
+                    else if (!getEnumeratorReturnType.IsRefLikeType)
                     {
                         // A custom enumerator wrapper is required
 
