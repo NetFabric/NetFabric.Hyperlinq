@@ -11,6 +11,6 @@ namespace NetFabric.Hyperlinq
     {
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static TestValueEnumerable AsValueEnumerable(this TestValueEnumerable source) => source;
+        public static TestValueEnumerable<TestValueType> AsValueEnumerable(this TestValueEnumerable<TestValueType> source) => source;
     }
 }

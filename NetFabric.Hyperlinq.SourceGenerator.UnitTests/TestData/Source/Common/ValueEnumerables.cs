@@ -2,16 +2,16 @@
 using System.Collections;
 using System.Collections.Generic;
 
-class TestValueEnumerable
-    : IValueEnumerable<int, TestValueEnumerable.DisposableEnumerator>
+class TestValueEnumerable<T>
+    : IValueEnumerable<T, TestValueEnumerable<T>.DisposableEnumerator>
 {
     public Enumerator GetEnumerator()
         => new();
 
-    DisposableEnumerator IValueEnumerable<int, DisposableEnumerator>.GetEnumerator()
+    DisposableEnumerator IValueEnumerable<T, DisposableEnumerator>.GetEnumerator()
         => new();
 
-    IEnumerator<int> IEnumerable<int>.GetEnumerator()
+    IEnumerator<T> IEnumerable<T>.GetEnumerator()
         => new DisposableEnumerator();
 
     IEnumerator IEnumerable.GetEnumerator()
@@ -19,18 +19,18 @@ class TestValueEnumerable
 
     public readonly struct Enumerator
     {
-        public int Current
-            => default;
+        public T Current
+            => default!;
 
         public bool MoveNext()
             => false;
     }
 
     public readonly struct DisposableEnumerator
-        : IEnumerator<int>
+        : IEnumerator<T>
     {
-        public int Current
-            => default;
+        public T Current
+            => default!;
         object? IEnumerator.Current
             => default;
 

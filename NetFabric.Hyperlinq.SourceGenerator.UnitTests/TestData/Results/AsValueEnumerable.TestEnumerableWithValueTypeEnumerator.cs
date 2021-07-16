@@ -11,18 +11,20 @@ namespace NetFabric.Hyperlinq
     {
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static TestEnumerableWithValueTypeEnumeratorAsValueEnumerable AsValueEnumerable(this TestEnumerableWithValueTypeEnumerator source) => new(source);
+        public static AsValueEnumerable_TestEnumerableWithValueTypeEnumerator_TestValueType_ AsValueEnumerable(this TestEnumerableWithValueTypeEnumerator<TestValueType> source) => new(source);
 
-        public readonly struct TestEnumerableWithValueTypeEnumeratorAsValueEnumerable: IValueEnumerable<int, TestEnumerableWithValueTypeEnumerator.Enumerator>
+        public readonly struct AsValueEnumerable_TestEnumerableWithValueTypeEnumerator_TestValueType_: IValueEnumerable<TestValueType, TestEnumerableWithValueTypeEnumerator<TestValueType>.Enumerator>
         {
-            readonly TestEnumerableWithValueTypeEnumerator source;
+            readonly TestEnumerableWithValueTypeEnumerator<TestValueType> source;
 
-            public TestEnumerableWithValueTypeEnumeratorAsValueEnumerable(TestEnumerableWithValueTypeEnumerator source) => this.source = source;
+            public AsValueEnumerable_TestEnumerableWithValueTypeEnumerator_TestValueType_(TestEnumerableWithValueTypeEnumerator<TestValueType> source) => this.source = source;
+
+            // Implement IValueEnumerable<TestValueType, TestEnumerableWithValueTypeEnumerator<TestValueType>.Enumerator>
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public TestEnumerableWithValueTypeEnumerator.Enumerator GetEnumerator() => source.GetEnumerator();
+            public TestEnumerableWithValueTypeEnumerator<TestValueType>.Enumerator GetEnumerator() => source.GetEnumerator();
 
-            IEnumerator<int> IEnumerable<int>.GetEnumerator() => source.GetEnumerator();
+            IEnumerator<TestValueType> IEnumerable<TestValueType>.GetEnumerator() => source.GetEnumerator();
 
             IEnumerator IEnumerable.GetEnumerator() => source.GetEnumerator();
         }

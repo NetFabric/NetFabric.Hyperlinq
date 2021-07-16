@@ -124,7 +124,7 @@ namespace NetFabric.Hyperlinq.SourceGenerator
             }
         }
 
-        internal static void GenerateSource(Compilation compilation, TypeSymbolsCache typeSymbolsCache, List<MemberAccessExpressionSyntax> memberAccessExpressions, CodeBuilder builder, CancellationToken cancellationToken)
+        internal static void GenerateSource(Compilation compilation, TypeSymbolsCache typeSymbolsCache, List<MemberAccessExpressionSyntax> memberAccessExpressions, CodeBuilder builder, CancellationToken cancellationToken, bool isUnitTest = false)
         {
             _ = builder
                 .AppendLine("#nullable enable")
@@ -144,14 +144,14 @@ namespace NetFabric.Hyperlinq.SourceGenerator
 
                     _ = expressionSyntax.Name.ToString() switch
                     {
-                        "AsValueEnumerable" => HandleAsValueEnumerable(compilation, typeSymbolsCache, expressionSyntax, builder, cancellationToken),
-                        _ => HandleMethod(compilation, expressionSyntax, builder, cancellationToken),
+                        "AsValueEnumerable" => HandleAsValueEnumerable(compilation, typeSymbolsCache, expressionSyntax, builder, cancellationToken, isUnitTest),
+                        _ => HandleMethod(compilation, expressionSyntax, builder, cancellationToken, isUnitTest),
                     };
                 }
             }
         }
 
-        static bool HandleMethod(Compilation compilation, MemberAccessExpressionSyntax expressionSyntax, CodeBuilder builder, CancellationToken cancellationToken)
+        static bool HandleMethod(Compilation compilation, MemberAccessExpressionSyntax expressionSyntax, CodeBuilder builder, CancellationToken cancellationToken, bool isUnitTest)
         {
             var semanticModel = compilation.GetSemanticModel(expressionSyntax.SyntaxTree);
             if (semanticModel.GetSymbolInfo(expressionSyntax, cancellationToken).Symbol is not null) // method already exists

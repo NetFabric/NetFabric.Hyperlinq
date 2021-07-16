@@ -11,18 +11,20 @@ namespace NetFabric.Hyperlinq
     {
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static TestEnumerableWithReferenceTypeEnumeratorAsValueEnumerable AsValueEnumerable(this TestEnumerableWithReferenceTypeEnumerator source) => new(source);
+        public static AsValueEnumerable_TestEnumerableWithReferenceTypeEnumerator_TestValueType_ AsValueEnumerable(this TestEnumerableWithReferenceTypeEnumerator<TestValueType> source) => new(source);
 
-        public readonly struct TestEnumerableWithReferenceTypeEnumeratorAsValueEnumerable: IValueEnumerable<int, ValueEnumerator<int>>
+        public readonly struct AsValueEnumerable_TestEnumerableWithReferenceTypeEnumerator_TestValueType_: IValueEnumerable<TestValueType, ValueEnumerator<TestValueType>>
         {
-            readonly TestEnumerableWithReferenceTypeEnumerator source;
+            readonly TestEnumerableWithReferenceTypeEnumerator<TestValueType> source;
 
-            public TestEnumerableWithReferenceTypeEnumeratorAsValueEnumerable(TestEnumerableWithReferenceTypeEnumerator source) => this.source = source;
+            public AsValueEnumerable_TestEnumerableWithReferenceTypeEnumerator_TestValueType_(TestEnumerableWithReferenceTypeEnumerator<TestValueType> source) => this.source = source;
+
+            // Implement IValueEnumerable<TestValueType, ValueEnumerator<TestValueType>>
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public ValueEnumerator<int> GetEnumerator() => new(source.GetEnumerator());
+            public ValueEnumerator<TestValueType> GetEnumerator() => new(source.GetEnumerator());
 
-            IEnumerator<int> IEnumerable<int>.GetEnumerator() => source.GetEnumerator();
+            IEnumerator<TestValueType> IEnumerable<TestValueType>.GetEnumerator() => source.GetEnumerator();
 
             IEnumerator IEnumerable.GetEnumerator() => source.GetEnumerator();
         }

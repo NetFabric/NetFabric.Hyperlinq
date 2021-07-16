@@ -11,34 +11,53 @@ namespace NetFabric.Hyperlinq
     {
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static TestCollectionAsValueEnumerable AsValueEnumerable(this TestCollection source) => new(source);
+        public static AsValueEnumerable_TestCollection_TestValueType_ AsValueEnumerable(this TestCollection<TestValueType> source) => new(source);
 
-        public readonly struct TestCollectionAsValueEnumerable: IValueReadOnlyCollection<int, TestCollection.Enumerator>, ICollection<int>
+        public readonly struct AsValueEnumerable_TestCollection_TestValueType_: IValueReadOnlyCollection<TestValueType, TestCollection<TestValueType>.Enumerator>, ICollection<TestValueType>
         {
-            readonly TestCollection source;
+            readonly TestCollection<TestValueType> source;
 
-            public TestCollectionAsValueEnumerable(TestCollection source) => this.source = source;
+            public AsValueEnumerable_TestCollection_TestValueType_(TestCollection<TestValueType> source) => this.source = source;
+
+            // Implement IValueEnumerable<TestValueType, TestCollection<TestValueType>.Enumerator>
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public TestCollection.Enumerator GetEnumerator() => source.GetEnumerator();
+            public TestCollection<TestValueType>.Enumerator GetEnumerator() => source.GetEnumerator();
 
-            IEnumerator<int> IEnumerable<int>.GetEnumerator() => source.GetEnumerator();
+            IEnumerator<TestValueType> IEnumerable<TestValueType>.GetEnumerator() => source.GetEnumerator();
 
             IEnumerator IEnumerable.GetEnumerator() => source.GetEnumerator();
+
+            // Implement ICollection<TestValueType>
 
             public int Count => source.Count;
 
             public bool IsReadOnly => true;
 
-            void ICollection<int>.Add(int item) => throw new NotSupportedException();
+            void ICollection<TestValueType>.Add(TestValueType item) => throw new NotSupportedException();
 
-            bool ICollection<int>.Remove(int item) => throw new NotSupportedException();
+            bool ICollection<TestValueType>.Remove(TestValueType item) => throw new NotSupportedException();
 
-            void ICollection<int>.Clear() => throw new NotSupportedException();
+            void ICollection<TestValueType>.Clear() => throw new NotSupportedException();
 
-            public bool Contains(int item) => source.Contains(item);
+            public void CopyTo(Span<TestValueType> span)
+            {
+                if (Count is 0) return;
+                if (span.Length < Count) throw new ArgumentException("Destination span was not long enough.", nameof(span));
 
-            public void CopyTo(int[] array, int arrayIndex) => source.CopyTo(array, arrayIndex);
+                var index = 0;
+                foreach (var current in this)
+                {
+                    span[index] = current;
+                    checked { index++; }
+                }
+            }
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public bool Contains(TestValueType item) => source.Contains(item);
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public void CopyTo(TestValueType[] array, int arrayIndex) => source.CopyTo(array, arrayIndex);
         }
     }
 }

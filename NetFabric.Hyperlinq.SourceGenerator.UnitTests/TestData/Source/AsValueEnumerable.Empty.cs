@@ -8,9 +8,9 @@ partial class TestsSource
         // test calling AsValueEnumerable() for types that don't need source generation
         // with NetFabric.Hyperlinq namespace NOT in a using clause 
 
+#if !NOT_TESTING
         var array = Array.Empty<int>();
 
-#if !NOT_TESTING
         _ = array.AsValueEnumerable();
         _ = new ArraySegment<int>(array).AsValueEnumerable();
 
@@ -19,6 +19,9 @@ partial class TestsSource
 
         _ = array.AsSpan().AsValueEnumerable();
         _ = ((ReadOnlySpan<int>)array.AsSpan()).AsValueEnumerable();
+
+        var list = new List<int>();
+        _ = list.AsValueEnumerable();
 #endif
     }
 }

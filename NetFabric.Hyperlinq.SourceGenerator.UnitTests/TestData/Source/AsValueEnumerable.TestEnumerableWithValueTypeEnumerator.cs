@@ -9,7 +9,7 @@ partial class TestsSource
     {
         // test calling AsValueEnumerable() for types that implement IEnumerable<> and the enumerator is a value type
 
-        _ = new TestEnumerableWithValueTypeEnumerator().AsValueEnumerable();
+        _ = new TestEnumerableWithValueTypeEnumerator<TestValueType>().AsValueEnumerable();
     }
 }
 

@@ -10,7 +10,7 @@ partial class TestsSource
         // test calling AsValueEnumerable() for types that implement IEnumerable<>
         // but the public GetEnumerator() returns a type that doesn't implement IEnumerator<>
 
-        _ = new TestEnumerableWithInterfacelessPublicEnumerator().AsValueEnumerable();
+        _ = new TestEnumerableWithInterfacelessPublicEnumerator<TestValueType>().AsValueEnumerable();
     }
 }
 

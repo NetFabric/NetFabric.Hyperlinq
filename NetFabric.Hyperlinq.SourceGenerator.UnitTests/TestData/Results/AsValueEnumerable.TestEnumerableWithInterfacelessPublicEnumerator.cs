@@ -11,23 +11,25 @@ namespace NetFabric.Hyperlinq
     {
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static TestEnumerableWithInterfacelessPublicEnumeratorAsValueEnumerable AsValueEnumerable(this TestEnumerableWithInterfacelessPublicEnumerator source) => new(source);
+        public static AsValueEnumerable_TestEnumerableWithInterfacelessPublicEnumerator_TestValueType_ AsValueEnumerable(this TestEnumerableWithInterfacelessPublicEnumerator<TestValueType> source) => new(source);
 
-        public readonly struct TestEnumerableWithInterfacelessPublicEnumeratorAsValueEnumerable: IValueEnumerable<int, ValueEnumerator<int>>
+        public readonly struct AsValueEnumerable_TestEnumerableWithInterfacelessPublicEnumerator_TestValueType_: IValueEnumerable<TestValueType, ValueEnumerator<TestValueType>>
         {
-            readonly TestEnumerableWithInterfacelessPublicEnumerator source;
+            readonly TestEnumerableWithInterfacelessPublicEnumerator<TestValueType> source;
 
-            public TestEnumerableWithInterfacelessPublicEnumeratorAsValueEnumerable(TestEnumerableWithInterfacelessPublicEnumerator source) => this.source = source;
+            public AsValueEnumerable_TestEnumerableWithInterfacelessPublicEnumerator_TestValueType_(TestEnumerableWithInterfacelessPublicEnumerator<TestValueType> source) => this.source = source;
+
+            // Implement IValueEnumerable<TestValueType, ValueEnumerator<TestValueType>>
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public TestEnumerableWithInterfacelessPublicEnumerator.Enumerator GetEnumerator() => source.GetEnumerator();
+            public TestEnumerableWithInterfacelessPublicEnumerator<TestValueType>.Enumerator GetEnumerator() => source.GetEnumerator();
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            ValueEnumerator<int> IValueEnumerable<int, ValueEnumerator<int>>.GetEnumerator() => new(((IEnumerable<int>)source).GetEnumerator());
+            ValueEnumerator<TestValueType> IValueEnumerable<TestValueType, ValueEnumerator<TestValueType>>.GetEnumerator() => new(((IEnumerable<TestValueType>)source).GetEnumerator());
 
-            IEnumerator<int> IEnumerable<int>.GetEnumerator() => ((IEnumerable<int>)source).GetEnumerator();
+            IEnumerator<TestValueType> IEnumerable<TestValueType>.GetEnumerator() => ((IEnumerable<TestValueType>)source).GetEnumerator();
 
-            IEnumerator IEnumerable.GetEnumerator() => ((IEnumerable<int>)source).GetEnumerator();
+            IEnumerator IEnumerable.GetEnumerator() => ((IEnumerable<TestValueType>)source).GetEnumerator();
         }
     }
 }

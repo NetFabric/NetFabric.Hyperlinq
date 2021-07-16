@@ -25,7 +25,7 @@ namespace NetFabric.Hyperlinq.SourceGenerator.UnitTests
                     new[] { "TestData/Source/AsValueEnumerable.Repeat.cs" },
                     "TestData/Results/AsValueEnumerable.Repeat.cs"
                 },
-                { 
+                {
                     new[] { "TestData/Source/AsValueEnumerable.TestEnumerableWithNoInterfaces.cs" },
                     "TestData/Results/AsValueEnumerable.TestEnumerableWithNoInterfaces.cs"
                 },
@@ -95,7 +95,7 @@ namespace NetFabric.Hyperlinq.SourceGenerator.UnitTests
 
             // Act
             var builder = new CodeBuilder();
-            Generator.GenerateSource(compilation, typeSymbolsCache, memberAccessExpressions, builder, CancellationToken.None);
+            Generator.GenerateSource(compilation, typeSymbolsCache, memberAccessExpressions, builder, CancellationToken.None, true);
             var result = builder.ToString();
 
             // Assert

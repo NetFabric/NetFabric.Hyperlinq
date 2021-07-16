@@ -11,48 +11,70 @@ namespace NetFabric.Hyperlinq
     {
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static TestListAsValueEnumerable AsValueEnumerable(this TestList source) => new(source);
+        public static AsValueEnumerable_TestList_TestValueType_ AsValueEnumerable(this TestList<TestValueType> source) => new(source);
 
-        public readonly struct TestListAsValueEnumerable: IValueReadOnlyList<int, TestList.Enumerator>, IList<int>
+        public readonly struct AsValueEnumerable_TestList_TestValueType_: IValueReadOnlyList<TestValueType, TestList<TestValueType>.Enumerator>, IList<TestValueType>
         {
-            readonly TestList source;
+            readonly TestList<TestValueType> source;
 
-            public TestListAsValueEnumerable(TestList source) => this.source = source;
+            public AsValueEnumerable_TestList_TestValueType_(TestList<TestValueType> source) => this.source = source;
+
+            // Implement IValueEnumerable<TestValueType, TestList<TestValueType>.Enumerator>
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public TestList.Enumerator GetEnumerator() => source.GetEnumerator();
+            public TestList<TestValueType>.Enumerator GetEnumerator() => source.GetEnumerator();
 
-            IEnumerator<int> IEnumerable<int>.GetEnumerator() => source.GetEnumerator();
+            IEnumerator<TestValueType> IEnumerable<TestValueType>.GetEnumerator() => source.GetEnumerator();
 
             IEnumerator IEnumerable.GetEnumerator() => source.GetEnumerator();
+
+            // Implement ICollection<TestValueType>
 
             public int Count => source.Count;
 
             public bool IsReadOnly => true;
 
-            void ICollection<int>.Add(int item) => throw new NotSupportedException();
+            void ICollection<TestValueType>.Add(TestValueType item) => throw new NotSupportedException();
 
-            bool ICollection<int>.Remove(int item) => throw new NotSupportedException();
+            bool ICollection<TestValueType>.Remove(TestValueType item) => throw new NotSupportedException();
 
-            void ICollection<int>.Clear() => throw new NotSupportedException();
+            void ICollection<TestValueType>.Clear() => throw new NotSupportedException();
 
-            public bool Contains(int item) => source.Contains(item);
+            public void CopyTo(Span<TestValueType> span)
+            {
+                if (Count is 0) return;
+                if (span.Length < Count) throw new ArgumentException("Destination span was not long enough.", nameof(span));
 
-            public void CopyTo(int[] array, int arrayIndex) => source.CopyTo(array, arrayIndex);
+                var index = 0;
+                foreach (var current in this)
+                {
+                    span[index] = current;
+                    checked { index++; }
+                }
+            }
 
-            public int this[int index] => source[index];
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public bool Contains(TestValueType item) => source.Contains(item);
 
-            int IList<int>.this[int index]
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public void CopyTo(TestValueType[] array, int arrayIndex) => source.CopyTo(array, arrayIndex);
+
+            // Implement IList<TestValueType>
+
+            public TestValueType this[int index] => source[index];
+
+            TestValueType IList<TestValueType>.this[int index]
             {
                 get => source[index];
                 set => throw new NotSupportedException();
             }
 
-            void IList<int>.Insert(int index, int item) => throw new NotSupportedException();
+            void IList<TestValueType>.Insert(int index, TestValueType item) => throw new NotSupportedException();
 
-            void IList<int>.RemoveAt(int index) => throw new NotSupportedException();
+            void IList<TestValueType>.RemoveAt(int index) => throw new NotSupportedException();
 
-            public int IndexOf(int item) => source.IndexOf(item);
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public int IndexOf(TestValueType item) => source.IndexOf(item);
         }
     }
 }

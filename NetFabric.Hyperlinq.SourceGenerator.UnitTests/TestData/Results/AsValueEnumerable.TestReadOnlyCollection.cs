@@ -11,59 +11,59 @@ namespace NetFabric.Hyperlinq
     {
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static TestReadOnlyCollectionAsValueEnumerable AsValueEnumerable(this TestReadOnlyCollection source) => new(source);
+        public static AsValueEnumerable_TestReadOnlyCollection_TestValueType_ AsValueEnumerable(this TestReadOnlyCollection<TestValueType> source) => new(source);
 
-        public readonly struct TestReadOnlyCollectionAsValueEnumerable: IValueReadOnlyCollection<int, TestReadOnlyCollection.Enumerator>, ICollection<int>
+        public readonly struct AsValueEnumerable_TestReadOnlyCollection_TestValueType_: IValueReadOnlyCollection<TestValueType, TestReadOnlyCollection<TestValueType>.Enumerator>, ICollection<TestValueType>
         {
-            readonly TestReadOnlyCollection source;
+            readonly TestReadOnlyCollection<TestValueType> source;
 
-            public TestReadOnlyCollectionAsValueEnumerable(TestReadOnlyCollection source) => this.source = source;
+            public AsValueEnumerable_TestReadOnlyCollection_TestValueType_(TestReadOnlyCollection<TestValueType> source) => this.source = source;
+
+            // Implement IValueEnumerable<TestValueType, TestReadOnlyCollection<TestValueType>.Enumerator>
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public TestReadOnlyCollection.Enumerator GetEnumerator() => source.GetEnumerator();
+            public TestReadOnlyCollection<TestValueType>.Enumerator GetEnumerator() => source.GetEnumerator();
 
-            IEnumerator<int> IEnumerable<int>.GetEnumerator() => source.GetEnumerator();
+            IEnumerator<TestValueType> IEnumerable<TestValueType>.GetEnumerator() => source.GetEnumerator();
 
             IEnumerator IEnumerable.GetEnumerator() => source.GetEnumerator();
+
+            // Implement ICollection<TestValueType>
 
             public int Count => source.Count;
 
             public bool IsReadOnly => true;
 
-            void ICollection<int>.Add(int item) => throw new NotSupportedException();
+            void ICollection<TestValueType>.Add(TestValueType item) => throw new NotSupportedException();
 
-            bool ICollection<int>.Remove(int item) => throw new NotSupportedException();
+            bool ICollection<TestValueType>.Remove(TestValueType item) => throw new NotSupportedException();
 
-            void ICollection<int>.Clear() => throw new NotSupportedException();
+            void ICollection<TestValueType>.Clear() => throw new NotSupportedException();
 
-            public bool Contains(int item)
+            public void CopyTo(Span<TestValueType> span)
             {
-                using var enumerator = GetEnumerator();
-                while (enumerator.MoveNext())
+                if (Count is 0) return;
+                if (span.Length < Count) throw new ArgumentException("Destination span was not long enough.", nameof(span));
+
+                var index = 0;
+                foreach (var current in this)
                 {
-                    if (EqualityComparer<int>.Default.Equals(enumerator.Current, item))
-                        return true;
+                    span[index] = current;
+                    checked { index++; }
+                }
+            }
+
+            public bool Contains(TestValueType item)
+            {
+                foreach (var current in this)
+                {
+                    if (EqualityComparer<TestValueType>.Default.Equals(current, item)) return true;
                 }
                 return true;
             }
 
-            public void CopyTo(int[] array, int arrayIndex) => CopyTo(array.AsSpan(arrayIndex));
-
-            public void CopyTo(Span<int> span)
-            {
-                if (Count is 0)
-                    return;
-
-                if (span.Length < Count)
-                    throw new ArgumentException("Destination array was not long enough. Check the destination index, length, and the array's lower bounds.", nameof(span));
-
-                using var enumerator = GetEnumerator();
-                checked
-                {
-                    for (var index = 0; enumerator.MoveNext(); index++)
-                        span[index] = enumerator.Current;
-                }
-            }
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public void CopyTo(TestValueType[] array, int arrayIndex) => CopyTo(array.AsSpan(arrayIndex));
         }
     }
 }

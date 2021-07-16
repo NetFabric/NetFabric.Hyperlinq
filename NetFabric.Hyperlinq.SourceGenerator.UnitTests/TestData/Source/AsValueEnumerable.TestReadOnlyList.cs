@@ -5,7 +5,7 @@ partial class TestsSource
     static void AsValueEnumerable_ReadOnlyList()
     {
         // test calling AsValueEnumerable() on an IValueEnumerable
-        _ = new TestReadOnlyList().AsValueEnumerable();
+        _ = new TestReadOnlyList<TestValueType>().AsValueEnumerable();
     }
 }
 

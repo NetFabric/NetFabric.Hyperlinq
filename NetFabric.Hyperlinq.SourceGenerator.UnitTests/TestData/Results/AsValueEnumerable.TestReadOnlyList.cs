@@ -11,84 +11,84 @@ namespace NetFabric.Hyperlinq
     {
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static TestReadOnlyListAsValueEnumerable AsValueEnumerable(this TestReadOnlyList source) => new(source);
+        public static AsValueEnumerable_TestReadOnlyList_TestValueType_ AsValueEnumerable(this TestReadOnlyList<TestValueType> source) => new(source);
 
-        public readonly struct TestReadOnlyListAsValueEnumerable: IValueReadOnlyList<int, TestReadOnlyList.Enumerator>, IList<int>
+        public readonly struct AsValueEnumerable_TestReadOnlyList_TestValueType_: IValueReadOnlyList<TestValueType, TestReadOnlyList<TestValueType>.Enumerator>, IList<TestValueType>
         {
-            readonly TestReadOnlyList source;
+            readonly TestReadOnlyList<TestValueType> source;
 
-            public TestReadOnlyListAsValueEnumerable(TestReadOnlyList source) => this.source = source;
+            public AsValueEnumerable_TestReadOnlyList_TestValueType_(TestReadOnlyList<TestValueType> source) => this.source = source;
+
+            // Implement IValueEnumerable<TestValueType, TestReadOnlyList<TestValueType>.Enumerator>
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public TestReadOnlyList.Enumerator GetEnumerator() => source.GetEnumerator();
+            public TestReadOnlyList<TestValueType>.Enumerator GetEnumerator() => source.GetEnumerator();
 
-            IEnumerator<int> IEnumerable<int>.GetEnumerator() => source.GetEnumerator();
+            IEnumerator<TestValueType> IEnumerable<TestValueType>.GetEnumerator() => source.GetEnumerator();
 
             IEnumerator IEnumerable.GetEnumerator() => source.GetEnumerator();
+
+            // Implement ICollection<TestValueType>
 
             public int Count => source.Count;
 
             public bool IsReadOnly => true;
 
-            void ICollection<int>.Add(int item) => throw new NotSupportedException();
+            void ICollection<TestValueType>.Add(TestValueType item) => throw new NotSupportedException();
 
-            bool ICollection<int>.Remove(int item) => throw new NotSupportedException();
+            bool ICollection<TestValueType>.Remove(TestValueType item) => throw new NotSupportedException();
 
-            void ICollection<int>.Clear() => throw new NotSupportedException();
+            void ICollection<TestValueType>.Clear() => throw new NotSupportedException();
 
-            public bool Contains(int item)
+            public void CopyTo(Span<TestValueType> span)
             {
-                using var enumerator = GetEnumerator();
-                while (enumerator.MoveNext())
+                if (Count is 0) return;
+                if (span.Length < Count) throw new ArgumentException("Destination span was not long enough.", nameof(span));
+
+                var index = 0;
+                foreach (var current in this)
                 {
-                    if (EqualityComparer<int>.Default.Equals(enumerator.Current, item))
-                        return true;
+                    span[index] = current;
+                    checked { index++; }
+                }
+            }
+
+            public bool Contains(TestValueType item)
+            {
+                foreach (var current in this)
+                {
+                    if (EqualityComparer<TestValueType>.Default.Equals(current, item)) return true;
                 }
                 return true;
             }
 
-            public void CopyTo(int[] array, int arrayIndex) => CopyTo(array.AsSpan(arrayIndex));
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public void CopyTo(TestValueType[] array, int arrayIndex) => CopyTo(array.AsSpan(arrayIndex));
 
-            public void CopyTo(Span<int> span)
-            {
-                if (Count is 0)
-                    return;
+            // Implement IList<TestValueType>
 
-                if (span.Length < Count)
-                    throw new ArgumentException("Destination array was not long enough. Check the destination index, length, and the array's lower bounds.", nameof(span));
+            public TestValueType this[int index] => source[index];
 
-                using var enumerator = GetEnumerator();
-                checked
-                {
-                    for (var index = 0; enumerator.MoveNext(); index++)
-                        span[index] = enumerator.Current;
-                }
-            }
-
-            public int this[int index] => source[index];
-
-            int IList<int>.this[int index]
+            TestValueType IList<TestValueType>.this[int index]
             {
                 get => source[index];
                 set => throw new NotSupportedException();
             }
 
-            void IList<int>.Insert(int index, int item) => throw new NotSupportedException();
+            void IList<TestValueType>.Insert(int index, TestValueType item) => throw new NotSupportedException();
 
-            void IList<int>.RemoveAt(int index) => throw new NotSupportedException();
+            void IList<TestValueType>.RemoveAt(int index) => throw new NotSupportedException();
 
-            public int IndexOf(int item)
+            public int IndexOf(TestValueType item)
             {
                 if (Count is not 0)
                 {
-                    using var enumerator = GetEnumerator();
-                    checked
+                    var index = 0;
+                    foreach (var current in this)
                     {
-                        for (var index = 0; enumerator.MoveNext(); index++)
-                        {
-                            if (EqualityComparer<int>.Default.Equals(enumerator.Current, item))
-                                return index;
-                        }
+                        if (EqualityComparer<TestValueType>.Default.Equals(current, item)) return index;
+
+                        checked { index++; }
                     }
                 }
                 return -1;

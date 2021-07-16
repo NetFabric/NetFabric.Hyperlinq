@@ -2,22 +2,22 @@
 using System.Collections;
 using System.Collections.Generic;
 
-class TestEnumerableWithNoInterfaces
+class TestEnumerableWithNoInterfaces<T>
 {
     public Enumerator GetEnumerator()
         => new();
 
     public readonly struct Enumerator
     {
-        public int Current
-            => default;
+        public T Current
+            => default!;
 
         public bool MoveNext()
             => false;
     }
 }
 
-class TestEnumerableWithNoInterfacesButEnumeratorWithResetAndDispose
+class TestEnumerableWithNoInterfacesButEnumeratorWithResetAndDispose<T>
 {
     public Enumerator GetEnumerator()
         => new();
@@ -25,8 +25,8 @@ class TestEnumerableWithNoInterfacesButEnumeratorWithResetAndDispose
     public readonly struct Enumerator
         : IDisposable
     {
-        public int Current
-            => default;
+        public T Current
+            => default!;
 
         public bool MoveNext()
             => false;
@@ -39,30 +39,30 @@ class TestEnumerableWithNoInterfacesButEnumeratorWithResetAndDispose
     }
 }
 
-class TestEnumerableWithInterfacelessPublicEnumerator
-    : IEnumerable<int>
+class TestEnumerableWithInterfacelessPublicEnumerator<T>
+    : IEnumerable<T>
 {
     public Enumerator GetEnumerator()
         => new();
-    IEnumerator<int> IEnumerable<int>.GetEnumerator()
+    IEnumerator<T> IEnumerable<T>.GetEnumerator()
         => new DisposableEnumerator();
     IEnumerator IEnumerable.GetEnumerator()
         => new DisposableEnumerator();
 
     public readonly ref struct Enumerator
     {
-        public int Current
-            => default;
+        public T Current
+            => default!;
 
         public bool MoveNext()
             => false;
     }
 
     class DisposableEnumerator
-        : IEnumerator<int>
+        : IEnumerator<T>
     {
-        public int Current
-            => default;
+        public T Current
+            => default!;
         object? IEnumerator.Current
             => default;
 
@@ -76,21 +76,21 @@ class TestEnumerableWithInterfacelessPublicEnumerator
     }
 }
 
-public class TestEnumerableWithValueTypeEnumerator
-    : IEnumerable<int>
+public class TestEnumerableWithValueTypeEnumerator<T>
+    : IEnumerable<T>
 {
     public Enumerator GetEnumerator()
         => new();
-    IEnumerator<int> IEnumerable<int>.GetEnumerator()
+    IEnumerator<T> IEnumerable<T>.GetEnumerator()
         => new Enumerator();
     IEnumerator IEnumerable.GetEnumerator()
         => new Enumerator();
 
     public readonly struct Enumerator
-        : IEnumerator<int>
+        : IEnumerator<T>
     {
-        public int Current
-            => default;
+        public T Current
+            => default!;
         object? IEnumerator.Current
             => default;
 
@@ -105,19 +105,19 @@ public class TestEnumerableWithValueTypeEnumerator
 }
 
 
-class TestEnumerableWithReferenceTypeEnumerator
-    : IEnumerable<int>
+class TestEnumerableWithReferenceTypeEnumerator<T>
+    : IEnumerable<T>
 {
-    public IEnumerator<int> GetEnumerator()
+    public IEnumerator<T> GetEnumerator()
         => new Enumerator();
     IEnumerator IEnumerable.GetEnumerator()
         => new Enumerator();
 
     class Enumerator
-        : IEnumerator<int>
+        : IEnumerator<T>
     {
-        public int Current
-            => default;
+        public T Current
+            => default!;
         object? IEnumerator.Current
             => default;
 
@@ -131,23 +131,23 @@ class TestEnumerableWithReferenceTypeEnumerator
     }
 }
 
-public class TestReadOnlyCollection
-    : IReadOnlyCollection<int>
+public class TestReadOnlyCollection<T>
+    : IReadOnlyCollection<T>
 {
     public int Count => default;
 
     public Enumerator GetEnumerator()
         => new();
-    IEnumerator<int> IEnumerable<int>.GetEnumerator()
+    IEnumerator<T> IEnumerable<T>.GetEnumerator()
         => new Enumerator();
     IEnumerator IEnumerable.GetEnumerator()
         => new Enumerator();
 
     public readonly struct Enumerator
-        : IEnumerator<int>
+        : IEnumerator<T>
     {
-        public int Current
-            => default;
+        public T Current
+            => default!;
         object? IEnumerator.Current
             => default;
 
@@ -161,30 +161,30 @@ public class TestReadOnlyCollection
     }
 }
 
-public class TestCollection
-    : ICollection<int>
+public class TestCollection<T>
+    : ICollection<T>
 {
     public int Count => default;
 
     public bool IsReadOnly => true;
-    public bool Contains(int item) => default;
-    public void CopyTo(int[] array, int arrayIndex) { }
-    void ICollection<int>.Add(int item) => throw new NotSupportedException();
-    bool ICollection<int>.Remove(int item) => throw new NotSupportedException();
-    void ICollection<int>.Clear() => throw new NotSupportedException();
+    public bool Contains(T item) => default;
+    public void CopyTo(T[] array, int arrayIndex) { }
+    void ICollection<T>.Add(T item) => throw new NotSupportedException();
+    bool ICollection<T>.Remove(T item) => throw new NotSupportedException();
+    void ICollection<T>.Clear() => throw new NotSupportedException();
 
     public Enumerator GetEnumerator()
         => new();
-    IEnumerator<int> IEnumerable<int>.GetEnumerator()
+    IEnumerator<T> IEnumerable<T>.GetEnumerator()
         => new Enumerator();
     IEnumerator IEnumerable.GetEnumerator()
         => new Enumerator();
 
     public readonly struct Enumerator
-        : IEnumerator<int>
+        : IEnumerator<T>
     {
-        public int Current
-            => default;
+        public T Current
+            => default!;
         object? IEnumerator.Current
             => default;
 
@@ -198,25 +198,25 @@ public class TestCollection
     }
 }
 
-public class TestReadOnlyList
-    : IReadOnlyList<int>
+public class TestReadOnlyList<T>
+    : IReadOnlyList<T>
 {
     public int Count => default;
 
-    public int this[int index] => default;
+    public T this[int index] => default!;
 
     public Enumerator GetEnumerator()
         => new();
-    IEnumerator<int> IEnumerable<int>.GetEnumerator()
+    IEnumerator<T> IEnumerable<T>.GetEnumerator()
         => new Enumerator();
     IEnumerator IEnumerable.GetEnumerator()
         => new Enumerator();
 
     public readonly struct Enumerator
-        : IEnumerator<int>
+        : IEnumerator<T>
     {
-        public int Current
-            => default;
+        public T Current
+            => default!;
         object? IEnumerator.Current
             => default;
 
@@ -230,41 +230,41 @@ public class TestReadOnlyList
     }
 }
 
-public class TestList
-    : IList<int>
+public class TestList<T>
+    : IList<T>
 {
     public int Count => default;
 
     public bool IsReadOnly => true;
 
-    public int this[int index] 
+    public T this[int index] 
     { 
-        get => default; 
+        get => default!; 
         set => throw new NotSupportedException(); 
     }
 
-    public bool Contains(int item) => default;
-    public void CopyTo(int[] array, int arrayIndex) { }
-    void ICollection<int>.Add(int item) => throw new NotSupportedException();
-    bool ICollection<int>.Remove(int item) => throw new NotSupportedException();
-    void ICollection<int>.Clear() => throw new NotSupportedException();
+    public bool Contains(T item) => default;
+    public void CopyTo(T[] array, int arrayIndex) { }
+    void ICollection<T>.Add(T item) => throw new NotSupportedException();
+    bool ICollection<T>.Remove(T item) => throw new NotSupportedException();
+    void ICollection<T>.Clear() => throw new NotSupportedException();
 
-    public int IndexOf(int item) => -1;
-    void IList<int>.Insert(int index, int item) => throw new NotSupportedException();
-    void IList<int>.RemoveAt(int index) => throw new NotSupportedException();
+    public int IndexOf(T item) => -1;
+    void IList<T>.Insert(int index, T item) => throw new NotSupportedException();
+    void IList<T>.RemoveAt(int index) => throw new NotSupportedException();
 
     public Enumerator GetEnumerator()
         => new();
-    IEnumerator<int> IEnumerable<int>.GetEnumerator()
+    IEnumerator<T> IEnumerable<T>.GetEnumerator()
         => new Enumerator();
     IEnumerator IEnumerable.GetEnumerator()
         => new Enumerator();
 
     public readonly struct Enumerator
-        : IEnumerator<int>
+        : IEnumerator<T>
     {
-        public int Current
-            => default;
+        public T Current
+            => default!;
         object? IEnumerator.Current
             => default;
 
