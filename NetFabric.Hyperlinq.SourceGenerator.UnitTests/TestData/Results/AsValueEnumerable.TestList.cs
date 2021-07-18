@@ -17,7 +17,7 @@ namespace NetFabric.Hyperlinq
         {
             readonly TestList<TestValueType> source;
 
-            public AsValueEnumerable_TestList_TestValueType_(TestList<TestValueType> source) => this.source = source;
+            internal AsValueEnumerable_TestList_TestValueType_(TestList<TestValueType> source) => this.source = source;
 
             // Implement IValueEnumerable<TestValueType, TestList<TestValueType>.Enumerator>
 

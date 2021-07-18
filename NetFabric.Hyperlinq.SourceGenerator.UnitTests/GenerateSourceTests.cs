@@ -54,6 +54,10 @@ namespace NetFabric.Hyperlinq.SourceGenerator.UnitTests
                     "TestData/Results/AsValueEnumerable.TestList.cs"
                 },
                 {
+                    new[] { "TestData/Source/AsValueEnumerable.TestListWithExplicitInterfaces.cs" },
+                    "TestData/Results/AsValueEnumerable.TestListWithExplicitInterfaces.cs"
+                },
+                {
                     new[] { "TestData/Source/AsValueEnumerable.TestReadOnlyList.cs" },
                     "TestData/Results/AsValueEnumerable.TestReadOnlyList.cs"
                 },

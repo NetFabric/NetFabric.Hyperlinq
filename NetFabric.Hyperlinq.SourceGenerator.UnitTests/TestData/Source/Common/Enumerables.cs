@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-class TestEnumerableWithNoInterfaces<T>
+public class TestEnumerableWithNoInterfaces<T>
 {
     public Enumerator GetEnumerator()
         => new();
@@ -17,7 +17,7 @@ class TestEnumerableWithNoInterfaces<T>
     }
 }
 
-class TestEnumerableWithNoInterfacesButEnumeratorWithResetAndDispose<T>
+public class TestEnumerableWithNoInterfacesButEnumeratorWithResetAndDispose<T>
 {
     public Enumerator GetEnumerator()
         => new();
@@ -39,7 +39,7 @@ class TestEnumerableWithNoInterfacesButEnumeratorWithResetAndDispose<T>
     }
 }
 
-class TestEnumerableWithInterfacelessPublicEnumerator<T>
+public class TestEnumerableWithInterfacelessPublicEnumerator<T>
     : IEnumerable<T>
 {
     public Enumerator GetEnumerator()
@@ -105,7 +105,7 @@ public class TestEnumerableWithValueTypeEnumerator<T>
 }
 
 
-class TestEnumerableWithReferenceTypeEnumerator<T>
+public class TestEnumerableWithReferenceTypeEnumerator<T>
     : IEnumerable<T>
 {
     public IEnumerator<T> GetEnumerator()
@@ -274,6 +274,53 @@ public class TestList<T>
         public void Reset()
         { }
         public void Dispose()
+        { }
+    }
+}
+
+
+public class TestListWithExplicitInterfaces<T>
+    : IList<T>
+{
+    int ICollection<T>.Count => default;
+
+    bool ICollection<T>.IsReadOnly => true;
+
+    T IList<T>.this[int index]
+    {
+        get => default!;
+        set => throw new NotSupportedException();
+    }
+
+    bool ICollection<T>.Contains(T item) => default;
+    void ICollection<T>.CopyTo(T[] array, int arrayIndex) { }
+    void ICollection<T>.Add(T item) => throw new NotSupportedException();
+    bool ICollection<T>.Remove(T item) => throw new NotSupportedException();
+    void ICollection<T>.Clear() => throw new NotSupportedException();
+
+    int IList<T>.IndexOf(T item) => -1;
+    void IList<T>.Insert(int index, T item) => throw new NotSupportedException();
+    void IList<T>.RemoveAt(int index) => throw new NotSupportedException();
+
+    IEnumerator<T> IEnumerable<T>.GetEnumerator()
+        => new Enumerator();
+    IEnumerator IEnumerable.GetEnumerator()
+        => new Enumerator();
+
+    class Enumerator
+        : IEnumerator<T>
+    {
+        T IEnumerator<T>.Current
+            => default!;
+        object? IEnumerator.Current
+            => default;
+
+        bool IEnumerator.MoveNext()
+            => false;
+
+        void IEnumerator.Reset()
+        { }
+        void IDisposable.Dispose()
         { }
     }
 }

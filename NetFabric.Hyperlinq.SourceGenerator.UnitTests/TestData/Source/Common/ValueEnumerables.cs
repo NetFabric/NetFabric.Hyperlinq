@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-class TestValueEnumerable<T>
+public class TestValueEnumerable<T>
     : IValueEnumerable<T, TestValueEnumerable<T>.DisposableEnumerator>
 {
     public Enumerator GetEnumerator()

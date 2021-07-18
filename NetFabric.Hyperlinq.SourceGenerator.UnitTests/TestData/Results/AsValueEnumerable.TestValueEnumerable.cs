@@ -7,7 +7,7 @@ using System.Runtime.CompilerServices;
 
 namespace NetFabric.Hyperlinq
 {
-    static partial class GeneratedExtensionMethods
+    public static partial class GeneratedExtensionMethods
     {
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

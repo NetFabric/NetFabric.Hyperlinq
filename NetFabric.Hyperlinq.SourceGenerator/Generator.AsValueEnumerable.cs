@@ -123,7 +123,7 @@ namespace NetFabric.Hyperlinq.SourceGenerator
                     _ = builder
                         .AppendLine($"readonly {receiverTypeString} source;") // source field
                         .AppendLine()
-                        .AppendLine($"public {enumerableTypeString}({receiverTypeString} source) => this.source = source;") // constructor
+                        .AppendLine($"internal {enumerableTypeString}({receiverTypeString} source) => this.source = source;") // constructor
                         .AppendLine()
                         .AppendLine($"// Implement IValueEnumerable<{itemTypeString}, {enumeratorTypeString}>")
                         .AppendLine();
@@ -185,7 +185,7 @@ namespace NetFabric.Hyperlinq.SourceGenerator
                             _ = builder
                                 .AppendLine($"readonly {getEnumeratorReturnTypeString} source;")
                                 .AppendLine()
-                                .AppendLine($"public Enumerator({getEnumeratorReturnTypeString} source) => this.source = source;")
+                                .AppendLine($"internal Enumerator({getEnumeratorReturnTypeString} source) => this.source = source;")
                                 .AppendLine()
                                 .AppendLine($"public {itemTypeString} Current => source.Current;")
                                 .AppendLine()

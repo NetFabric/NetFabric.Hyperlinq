@@ -17,7 +17,7 @@ namespace NetFabric.Hyperlinq
         {
             readonly TestEnumerableWithNoInterfacesButEnumeratorWithResetAndDispose<TestValueType> source;
 
-            public TestEnumerableWithNoInterfacesButEnumeratorWithResetAndDispose_TestValueType__AsValueEnumerable(TestEnumerableWithNoInterfacesButEnumeratorWithResetAndDispose<TestValueType> source) => this.source = source;
+            internal TestEnumerableWithNoInterfacesButEnumeratorWithResetAndDispose_TestValueType__AsValueEnumerable(TestEnumerableWithNoInterfacesButEnumeratorWithResetAndDispose<TestValueType> source) => this.source = source;
 
             // Implement IValueEnumerable<TestValueType, TestEnumerableWithNoInterfacesButEnumeratorWithResetAndDispose_TestValueType__AsValueEnumerable.Enumerator>
 
@@ -35,7 +35,7 @@ namespace NetFabric.Hyperlinq
             {
                 readonly TestEnumerableWithNoInterfacesButEnumeratorWithResetAndDispose<TestValueType>.Enumerator source;
 
-                public Enumerator(TestEnumerableWithNoInterfacesButEnumeratorWithResetAndDispose<TestValueType>.Enumerator source) => this.source = source;
+                internal Enumerator(TestEnumerableWithNoInterfacesButEnumeratorWithResetAndDispose<TestValueType>.Enumerator source) => this.source = source;
 
                 public TestValueType Current => source.Current;
 
