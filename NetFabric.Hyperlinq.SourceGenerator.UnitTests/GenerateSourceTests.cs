@@ -13,18 +13,18 @@ namespace NetFabric.Hyperlinq.SourceGenerator.UnitTests
         public static TheoryData<string[], string> GeneratorSources
             => new()
             {
-                //{
-                //    new[] { "TestData/Source/AsValueEnumerable.Empty.cs" },
-                //    "TestData/Results/Empty.cs"
-                //},
-                //{
-                //    new[] { "TestData/Source/AsValueEnumerable.Empty2.cs" },
-                //    "TestData/Results/Empty.cs"
-                //},
-                //{
-                //    new[] { "TestData/Source/AsValueEnumerable.Repeat.cs" },
-                //    "TestData/Results/AsValueEnumerable.Repeat.cs"
-                //},
+                {
+                    new[] { "TestData/Source/AsValueEnumerable.Empty.cs" },
+                    "TestData/Results/Empty.cs"
+                },
+                {
+                    new[] { "TestData/Source/AsValueEnumerable.Empty2.cs" },
+                    "TestData/Results/Empty.cs"
+                },
+                {
+                    new[] { "TestData/Source/AsValueEnumerable.Repeat.cs" },
+                    "TestData/Results/AsValueEnumerable.Repeat.cs"
+                },
 
                 {
                     new[] { "TestData/Source/AsValueEnumerable.TestEnumerableWithValueTypeEnumerator.cs" },

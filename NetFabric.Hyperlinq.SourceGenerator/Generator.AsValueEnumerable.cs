@@ -3,6 +3,7 @@ using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using NetFabric.CodeAnalysis;
 using System;
+using System.Collections.Generic;
 using System.Threading;
 
 namespace NetFabric.Hyperlinq.SourceGenerator
@@ -11,22 +12,28 @@ namespace NetFabric.Hyperlinq.SourceGenerator
     {
         static bool HandleAsValueEnumerable(Compilation compilation, TypeSymbolsCache typeSymbolsCache, MemberAccessExpressionSyntax expressionSyntax, CodeBuilder builder, CancellationToken cancellationToken, bool isUnitTest)
         {
-            // Get the type this operator is applied to
             var semanticModel = compilation.GetSemanticModel(expressionSyntax.SyntaxTree);
+
+            // Check if an extension method is defined for this type
+            if (semanticModel.GetSymbolInfo(expressionSyntax).Symbol is not null)
+                return false;
+
+            // Get the type this operator is applied to
             var receiverTypeSymbol = semanticModel.GetTypeInfo(expressionSyntax.Expression).Type;
 
             // Check if NetFabric.Hyperlinq already contains specific overloads for this type
-            if (receiverTypeSymbol is null 
+            // This is required for when the 'using NetFabric.Hyperlinq;' statement is missing
+            if (receiverTypeSymbol is null
                 or { TypeKind: TypeKind.Array } // is array
                 || SymbolEqualityComparer.Default.Equals(receiverTypeSymbol.OriginalDefinition, typeSymbolsCache[typeof(ArraySegment<>)])
                 || SymbolEqualityComparer.Default.Equals(receiverTypeSymbol.OriginalDefinition, typeSymbolsCache[typeof(Span<>)])
                 || SymbolEqualityComparer.Default.Equals(receiverTypeSymbol.OriginalDefinition, typeSymbolsCache[typeof(ReadOnlySpan<>)])
                 || SymbolEqualityComparer.Default.Equals(receiverTypeSymbol.OriginalDefinition, typeSymbolsCache[typeof(Memory<>)])
                 || SymbolEqualityComparer.Default.Equals(receiverTypeSymbol.OriginalDefinition, typeSymbolsCache[typeof(ReadOnlyMemory<>)])
+                || SymbolEqualityComparer.Default.Equals(receiverTypeSymbol.OriginalDefinition, typeSymbolsCache[typeof(List<>)])
                 )
                 return false; // no need to generate an implementation
 
-            // Generate the method source depending on receiver type characteristics
             var receiverTypeString = receiverTypeSymbol.ToDisplayString();
 
             // Receiver type implements IValueEnumerable<,>
