@@ -11,26 +11,31 @@ namespace NetFabric.Hyperlinq
     {
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static AsValueEnumerable_TestReadOnlyCollection_TestValueType_ AsValueEnumerable(this TestReadOnlyCollection<TestValueType> source) => new(source);
+        public static AsValueEnumerable_TestReadOnlyCollection_TestValueType_<TestReadOnlyCollection<TestValueType>> AsValueEnumerable(this TestReadOnlyCollection<TestValueType> source)
+            => new(source, source);
 
-        public readonly struct AsValueEnumerable_TestReadOnlyCollection_TestValueType_: IValueReadOnlyCollection<TestValueType, TestReadOnlyCollection<TestValueType>.Enumerator>, ICollection<TestValueType>
+        public readonly struct AsValueEnumerable_TestReadOnlyCollection_TestValueType_<TEnumerable>
+            : IValueReadOnlyCollection<TestValueType, TestReadOnlyCollection<TestValueType>.Enumerator>, ICollection<TestValueType>
+            where TEnumerable : IReadOnlyCollection<TestValueType>
         {
             readonly TestReadOnlyCollection<TestValueType> source;
+            readonly TEnumerable source2;
 
-            internal AsValueEnumerable_TestReadOnlyCollection_TestValueType_(TestReadOnlyCollection<TestValueType> source) => this.source = source;
+            internal AsValueEnumerable_TestReadOnlyCollection_TestValueType_(TestReadOnlyCollection<TestValueType> source, TEnumerable source2)
+                => (this.source, this.source2) = (source, source2);
 
             // Implement IValueEnumerable<TestValueType, TestReadOnlyCollection<TestValueType>.Enumerator>
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public TestReadOnlyCollection<TestValueType>.Enumerator GetEnumerator() => source.GetEnumerator();
 
-            IEnumerator<TestValueType> IEnumerable<TestValueType>.GetEnumerator() => source.GetEnumerator();
+            IEnumerator<TestValueType> IEnumerable<TestValueType>.GetEnumerator() => source2.GetEnumerator();
 
-            IEnumerator IEnumerable.GetEnumerator() => source.GetEnumerator();
+            IEnumerator IEnumerable.GetEnumerator() => source2.GetEnumerator();
 
             // Implement ICollection<TestValueType>
 
-            public int Count => source.Count;
+            public int Count => source2.Count;
 
             public bool IsReadOnly => true;
 

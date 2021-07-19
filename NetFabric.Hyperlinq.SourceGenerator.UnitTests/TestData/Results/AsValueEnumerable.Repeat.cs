@@ -11,6 +11,7 @@ namespace NetFabric.Hyperlinq
     {
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static NetFabric.Hyperlinq.ValueEnumerable.RepeatEnumerable<int> AsValueEnumerable(this NetFabric.Hyperlinq.ValueEnumerable.RepeatEnumerable<int> source) => source;
+        public static NetFabric.Hyperlinq.ValueEnumerable.RepeatEnumerable<int> AsValueEnumerable(this NetFabric.Hyperlinq.ValueEnumerable.RepeatEnumerable<int> source)
+            => source;
     }
 }

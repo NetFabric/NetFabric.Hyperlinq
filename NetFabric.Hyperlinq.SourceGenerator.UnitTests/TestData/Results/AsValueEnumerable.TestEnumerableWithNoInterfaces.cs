@@ -11,31 +11,32 @@ namespace NetFabric.Hyperlinq
     {
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static AsValueEnumerable_TestEnumerableWithNoInterfaces_TestValueType_ AsValueEnumerable(this TestEnumerableWithNoInterfaces<TestValueType> source) => new(source);
+        public static AsValueEnumerable_TestEnumerableWithNoInterfaces_TestValueType_ AsValueEnumerable(this TestEnumerableWithNoInterfaces<TestValueType> source)
+            => new(source);
 
-        public readonly struct AsValueEnumerable_TestEnumerableWithNoInterfaces_TestValueType_: IValueEnumerable<TestValueType, AsValueEnumerable_TestEnumerableWithNoInterfaces_TestValueType_.Enumerator>
+        public readonly struct AsValueEnumerable_TestEnumerableWithNoInterfaces_TestValueType_
+            : IValueEnumerable<TestValueType, AsValueEnumerable_TestEnumerableWithNoInterfaces_TestValueType_.Enumerator>
         {
             readonly TestEnumerableWithNoInterfaces<TestValueType> source;
 
-            internal AsValueEnumerable_TestEnumerableWithNoInterfaces_TestValueType_(TestEnumerableWithNoInterfaces<TestValueType> source) => this.source = source;
+            internal AsValueEnumerable_TestEnumerableWithNoInterfaces_TestValueType_(TestEnumerableWithNoInterfaces<TestValueType> source)
+                => this.source = source;
 
             // Implement IValueEnumerable<TestValueType, AsValueEnumerable_TestEnumerableWithNoInterfaces_TestValueType_.Enumerator>
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public TestEnumerableWithNoInterfaces<TestValueType>.Enumerator GetEnumerator() => source.GetEnumerator();
-
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            Enumerator IValueEnumerable<TestValueType, Enumerator>.GetEnumerator() => new(source.GetEnumerator());
+            public Enumerator GetEnumerator() => new(source.GetEnumerator());
 
             IEnumerator<TestValueType> IEnumerable<TestValueType>.GetEnumerator() => new Enumerator(source.GetEnumerator());
 
             IEnumerator IEnumerable.GetEnumerator() => new Enumerator(source.GetEnumerator());
 
-            public struct Enumerator: IEnumerator<TestValueType>
+            public struct Enumerator : IEnumerator<TestValueType>
             {
                 readonly TestEnumerableWithNoInterfaces<TestValueType>.Enumerator source;
 
-                internal Enumerator(TestEnumerableWithNoInterfaces<TestValueType>.Enumerator source) => this.source = source;
+                internal Enumerator(TestEnumerableWithNoInterfaces<TestValueType>.Enumerator source)
+                    => this.source = source;
 
                 public TestValueType Current => source.Current;
 

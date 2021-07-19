@@ -13,22 +13,19 @@ namespace NetFabric.Hyperlinq.SourceGenerator.UnitTests
         public static TheoryData<string[], string> GeneratorSources
             => new()
             {
-                {
-                    new[] { "TestData/Source/AsValueEnumerable.Empty.cs" },
-                    "TestData/Results/Empty.cs"
-                },
-                {
-                    new[] { "TestData/Source/AsValueEnumerable.Empty2.cs" },
-                    "TestData/Results/Empty.cs"
-                },
-                {
-                    new[] { "TestData/Source/AsValueEnumerable.Repeat.cs" },
-                    "TestData/Results/AsValueEnumerable.Repeat.cs"
-                },
-                {
-                    new[] { "TestData/Source/AsValueEnumerable.TestEnumerableWithNoInterfaces.cs" },
-                    "TestData/Results/AsValueEnumerable.TestEnumerableWithNoInterfaces.cs"
-                },
+                //{
+                //    new[] { "TestData/Source/AsValueEnumerable.Empty.cs" },
+                //    "TestData/Results/Empty.cs"
+                //},
+                //{
+                //    new[] { "TestData/Source/AsValueEnumerable.Empty2.cs" },
+                //    "TestData/Results/Empty.cs"
+                //},
+                //{
+                //    new[] { "TestData/Source/AsValueEnumerable.Repeat.cs" },
+                //    "TestData/Results/AsValueEnumerable.Repeat.cs"
+                //},
+
                 {
                     new[] { "TestData/Source/AsValueEnumerable.TestEnumerableWithValueTypeEnumerator.cs" },
                     "TestData/Results/AsValueEnumerable.TestEnumerableWithValueTypeEnumerator.cs"
@@ -36,6 +33,14 @@ namespace NetFabric.Hyperlinq.SourceGenerator.UnitTests
                 {
                     new[] { "TestData/Source/AsValueEnumerable.TestEnumerableWithReferenceTypeEnumerator.cs" },
                     "TestData/Results/AsValueEnumerable.TestEnumerableWithReferenceTypeEnumerator.cs"
+                },
+                {
+                    new[] { "TestData/Source/AsValueEnumerable.TestEnumerableWithNoInterfaces.cs" },
+                    "TestData/Results/AsValueEnumerable.TestEnumerableWithNoInterfaces.cs"
+                },
+                {
+                    new[] { "TestData/Source/AsValueEnumerable.TestEnumerableWithNoInterfacesButEnumeratorWithResetAndDispose.cs" },
+                    "TestData/Results/AsValueEnumerable.TestEnumerableWithNoInterfacesButEnumeratorWithResetAndDispose.cs"
                 },
                 {
                     new[] { "TestData/Source/AsValueEnumerable.TestEnumerableWithInterfacelessPublicEnumerator.cs" },
@@ -52,6 +57,10 @@ namespace NetFabric.Hyperlinq.SourceGenerator.UnitTests
                 {
                     new[] { "TestData/Source/AsValueEnumerable.TestList.cs" },
                     "TestData/Results/AsValueEnumerable.TestList.cs"
+                },
+                {
+                    new[] { "TestData/Source/AsValueEnumerable.IReadOnlyList.cs" },
+                    "TestData/Results/AsValueEnumerable.IReadOnlyList.cs"
                 },
                 {
                     new[] { "TestData/Source/AsValueEnumerable.TestListWithExplicitInterfaces.cs" },

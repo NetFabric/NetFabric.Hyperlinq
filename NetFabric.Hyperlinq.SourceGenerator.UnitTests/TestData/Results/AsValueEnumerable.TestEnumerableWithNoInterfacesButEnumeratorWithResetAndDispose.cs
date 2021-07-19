@@ -11,31 +11,32 @@ namespace NetFabric.Hyperlinq
     {
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static TestEnumerableWithNoInterfacesButEnumeratorWithResetAndDispose_TestValueType__AsValueEnumerable AsValueEnumerable(this TestEnumerableWithNoInterfacesButEnumeratorWithResetAndDispose<TestValueType> source) => new(source);
+        public static AsValueEnumerable_TestEnumerableWithNoInterfacesButEnumeratorWithResetAndDispose_TestValueType_ AsValueEnumerable(this TestEnumerableWithNoInterfacesButEnumeratorWithResetAndDispose<TestValueType> source)
+            => new(source);
 
-        public readonly struct TestEnumerableWithNoInterfacesButEnumeratorWithResetAndDispose_TestValueType__AsValueEnumerable: IValueEnumerable<TestValueType, TestEnumerableWithNoInterfacesButEnumeratorWithResetAndDispose_TestValueType__AsValueEnumerable.Enumerator>
+        public readonly struct AsValueEnumerable_TestEnumerableWithNoInterfacesButEnumeratorWithResetAndDispose_TestValueType_
+            : IValueEnumerable<TestValueType, AsValueEnumerable_TestEnumerableWithNoInterfacesButEnumeratorWithResetAndDispose_TestValueType_.Enumerator>
         {
             readonly TestEnumerableWithNoInterfacesButEnumeratorWithResetAndDispose<TestValueType> source;
 
-            internal TestEnumerableWithNoInterfacesButEnumeratorWithResetAndDispose_TestValueType__AsValueEnumerable(TestEnumerableWithNoInterfacesButEnumeratorWithResetAndDispose<TestValueType> source) => this.source = source;
+            internal AsValueEnumerable_TestEnumerableWithNoInterfacesButEnumeratorWithResetAndDispose_TestValueType_(TestEnumerableWithNoInterfacesButEnumeratorWithResetAndDispose<TestValueType> source)
+                => this.source = source;
 
-            // Implement IValueEnumerable<TestValueType, TestEnumerableWithNoInterfacesButEnumeratorWithResetAndDispose_TestValueType__AsValueEnumerable.Enumerator>
-
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public TestEnumerableWithNoInterfacesButEnumeratorWithResetAndDispose<TestValueType>.Enumerator GetEnumerator() => source.GetEnumerator();
+            // Implement IValueEnumerable<TestValueType, AsValueEnumerable_TestEnumerableWithNoInterfacesButEnumeratorWithResetAndDispose_TestValueType_.Enumerator>
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            Enumerator IValueEnumerable<TestValueType, Enumerator>.GetEnumerator() => new(source.GetEnumerator());
+            public Enumerator GetEnumerator() => new(source.GetEnumerator());
 
             IEnumerator<TestValueType> IEnumerable<TestValueType>.GetEnumerator() => new Enumerator(source.GetEnumerator());
 
             IEnumerator IEnumerable.GetEnumerator() => new Enumerator(source.GetEnumerator());
 
-            public struct Enumerator: IEnumerator<TestValueType>
+            public struct Enumerator : IEnumerator<TestValueType>
             {
                 readonly TestEnumerableWithNoInterfacesButEnumeratorWithResetAndDispose<TestValueType>.Enumerator source;
 
-                internal Enumerator(TestEnumerableWithNoInterfacesButEnumeratorWithResetAndDispose<TestValueType>.Enumerator source) => this.source = source;
+                internal Enumerator(TestEnumerableWithNoInterfacesButEnumeratorWithResetAndDispose<TestValueType>.Enumerator source)
+                    => this.source = source;
 
                 public TestValueType Current => source.Current;
 

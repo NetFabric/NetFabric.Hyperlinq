@@ -5,22 +5,22 @@ namespace NetFabric.Hyperlinq.SourceGenerator
 {
     class CodeBuilder
     {
-        static readonly string tab = "    ";
+        static readonly string identation = "    ";
 
         readonly StringBuilder builder = new();
         int currentLevel = 0;
 
-        StringBuilder AppendIndentation()
+        StringBuilder Indent()
         {
             for (var level = 0; level < currentLevel; level++)
-                _ = builder.Append(tab);
+                _ = builder.Append(identation);
 
             return builder;
         }
 
-        public CodeBuilder Append(CodeBuilder builder)
+        public CodeBuilder AppendIdentation()
         {
-            _ = builder.AppendLine();
+            _ = builder.Append(identation);
             return this;
         }
 
@@ -30,32 +30,35 @@ namespace NetFabric.Hyperlinq.SourceGenerator
             return this;
         }
 
-        public CodeBuilder AppendLine(char line)
+        public CodeBuilder AppendLine(char text)
         {
-            _ = AppendIndentation().Append(line).AppendLine();
+            _ = Indent().Append(text).AppendLine();
             return this;
         }
 
-        public CodeBuilder AppendLine(string line)
+        public CodeBuilder AppendLine(string text)
         {
-            _ = AppendIndentation().AppendLine(line);
+            _ = Indent().AppendLine(text);
             return this;
         }
 
         public CodeBuilder AppendLine(Action<StringBuilder> line)
         {
-            _ = AppendIndentation();
+            _ = Indent();
             line(builder);
             _ = AppendLine();
             return this;
         }
 
-        public IDisposable AppendBlock(string line) 
+        public IDisposable AppendBlock()
         {
-            _ = AppendLine(line).AppendLine('{');
+            _ = AppendLine('{');
             currentLevel++;
             return new CloseBlock(this);
         }
+
+        public IDisposable AppendBlock(string text) 
+            => AppendLine(text).AppendBlock();
 
         class CloseBlock : IDisposable
         {

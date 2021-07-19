@@ -37,7 +37,8 @@ namespace NetFabric.Hyperlinq.SourceGenerator
                 _ = builder
                     .AppendLine()
                     .AppendLine("[MethodImpl(MethodImplOptions.AggressiveInlining)]")
-                    .AppendLine($"public static {receiverTypeString} AsValueEnumerable(this {receiverTypeString} source) => source;");
+                    .AppendLine($"public static {receiverTypeString} AsValueEnumerable(this {receiverTypeString} source)")
+                    .AppendIdentation().AppendLine($"=> source;");
 
                 return true;
             }
@@ -57,7 +58,6 @@ namespace NetFabric.Hyperlinq.SourceGenerator
                 var itemTypeString = itemType.ToDisplayString();
 
                 // Check if the returned type by GetEnumerator() does not require a wrapper
-                var useGetEnumeratorReturnType = false;
                 var getEnumeratorReturnType = enumerableSymbols.GetEnumerator.ReturnType;
                 var getEnumeratorReturnTypeString = getEnumeratorReturnType.ToDisplayString();
 
@@ -81,111 +81,147 @@ namespace NetFabric.Hyperlinq.SourceGenerator
                 // Define what value enumerator type will be used
                 string enumeratorTypeString;
                 var enumeratorImplementsIEnumerator = getEnumeratorReturnType.ImplementsInterface(SpecialType.System_Collections_Generic_IEnumerator_T, out var _);
+                var useConstraints = enumerableImplementsIEnumerable;
                 if (enumeratorImplementsIEnumerator)
                 {
                     if (getEnumeratorReturnType.IsValueType)
-                    {
-                        // Enumerator is value type and implements IEnumerator<>
-                        useGetEnumeratorReturnType = true;
                         enumeratorTypeString = getEnumeratorReturnTypeString;
-                    }
                     else
-                    {
                         enumeratorTypeString = $"ValueEnumerator<{itemTypeString}>";
-                    }
                 }
                 else
                 {
-                    enumeratorTypeString = enumerableImplementsIEnumerable
-                        ? $"ValueEnumerator<{itemTypeString}>" 
-                        : $"{enumerableTypeString}.Enumerator";
+                    if (useConstraints)
+                        enumeratorTypeString = $"{enumerableTypeString}<TEnumerable>.Enumerator";
+                    else
+                        enumeratorTypeString = $"{enumerableTypeString}.Enumerator";
                 }
-
-                // Define what interfaces the wrapper should implement
-                string baseTypesString;
-                if (enumerableImplementsIList || enumerableImplementsIReadOnlyList)
-                    baseTypesString = $"IValueReadOnlyList<{itemTypeString}, {enumeratorTypeString}>, IList<{itemTypeString}>";
-                else if (enumerableImplementsICollection || enumerableImplementsIReadOnlyCollection)
-                    baseTypesString = $"IValueReadOnlyCollection<{itemTypeString}, {enumeratorTypeString}>, ICollection<{itemTypeString}>";
-                else
-                    baseTypesString = $"IValueEnumerable<{itemTypeString}, {enumeratorTypeString}>";
 
                 // Generate the method
-                _ = builder
-                    .AppendLine()
-                    .AppendLine("[MethodImpl(MethodImplOptions.AggressiveInlining)]")
-                    .AppendLine($"public static {enumerableTypeString} AsValueEnumerable(this {receiverTypeString} source) => new(source);")
-                    .AppendLine();
+                _ = useConstraints
+                    ? builder
+                        .AppendLine()
+                        .AppendLine("[MethodImpl(MethodImplOptions.AggressiveInlining)]")
+                        .AppendLine($"public static {enumerableTypeString}<{receiverTypeString}> AsValueEnumerable(this {receiverTypeString} source)")
+                        .AppendIdentation().AppendLine($"=> new(source, source);")
+                    : builder
+                        .AppendLine()
+                        .AppendLine("[MethodImpl(MethodImplOptions.AggressiveInlining)]")
+                        .AppendLine($"public static {enumerableTypeString} AsValueEnumerable(this {receiverTypeString} source)")
+                        .AppendIdentation().AppendLine($"=> new(source);");
 
                 // Generate the value enumerable wrapper
-                using (builder.AppendBlock($"public readonly struct {enumerableTypeString}: {baseTypesString}"))
-                {
-                    _ = builder
-                        .AppendLine($"readonly {receiverTypeString} source;") // source field
+                _ = useConstraints
+                    ? builder
                         .AppendLine()
-                        .AppendLine($"internal {enumerableTypeString}({receiverTypeString} source) => this.source = source;") // constructor
+                        .AppendLine($"public readonly struct {enumerableTypeString}<TEnumerable>")
+                    : builder
+                        .AppendLine()
+                        .AppendLine($"public readonly struct {enumerableTypeString}");
+
+                // Define what interfaces the wrapper implements
+                if (enumerableImplementsIList || enumerableImplementsIReadOnlyList)
+                    _ = builder.AppendIdentation().AppendLine($": IValueReadOnlyList<{itemTypeString}, {enumeratorTypeString}>, IList<{itemTypeString}>");
+                else if (enumerableImplementsICollection || enumerableImplementsIReadOnlyCollection)
+                    _ = builder.AppendIdentation().AppendLine($": IValueReadOnlyCollection<{itemTypeString}, {enumeratorTypeString}>, ICollection<{itemTypeString}>");
+                else
+                    _ = builder.AppendIdentation().AppendLine($": IValueEnumerable<{itemTypeString}, {enumeratorTypeString}>");
+
+                if (useConstraints)
+                {
+                    if (enumerableImplementsIList)
+                        _ = builder.AppendIdentation().AppendLine($"where TEnumerable : IList<TestValueType>");
+                    else if (enumerableImplementsIReadOnlyList)
+                        _ = builder.AppendIdentation().AppendLine($"where TEnumerable : IReadOnlyList<TestValueType>");
+                    else if (enumerableImplementsICollection)
+                        _ = builder.AppendIdentation().AppendLine($"where TEnumerable : ICollection<TestValueType>");
+                    else if (enumerableImplementsIReadOnlyCollection)
+                        _ = builder.AppendIdentation().AppendLine($"where TEnumerable : IReadOnlyCollection<TestValueType>");
+                    else if (enumerableImplementsIEnumerable)
+                        _ = builder.AppendIdentation().AppendLine($"where TEnumerable : IEnumerable<TestValueType>");
+                }
+
+                using (builder.AppendBlock())
+                {
+                    // Define fields
+                    _ = builder.AppendLine($"readonly {receiverTypeString} source;");
+                    if (useConstraints)
+                        _ = builder.AppendLine($"readonly TEnumerable source2;");
+
+                    // Define constructor
+                    _ = useConstraints
+                        ? builder
+                            .AppendLine()
+                            .AppendLine($"internal {enumerableTypeString}({receiverTypeString} source, TEnumerable source2)")
+                            .AppendIdentation().AppendLine($"=> (this.source, this.source2) = (source, source2);")
+                        : builder
+                            .AppendLine()
+                            .AppendLine($"internal {enumerableTypeString}({receiverTypeString} source)")
+                            .AppendIdentation().AppendLine($"=> this.source = source;");
+
+                    // Implement IValueEnumerable<,>
+
+                    _ = builder
                         .AppendLine()
                         .AppendLine($"// Implement IValueEnumerable<{itemTypeString}, {enumeratorTypeString}>")
                         .AppendLine();
 
-                    if (useGetEnumeratorReturnType)
+                    if (enumeratorImplementsIEnumerator)
                     {
-                        // No enumerator wrapper required
-                        _ = builder
-                            .AppendLine("[MethodImpl(MethodImplOptions.AggressiveInlining)]")
-                            .AppendLine($"public {enumeratorTypeString} GetEnumerator() => source.GetEnumerator();")
-                            .AppendLine()
-                            .AppendLine($"IEnumerator<{itemTypeString}> IEnumerable<{itemTypeString}>.GetEnumerator() => source.GetEnumerator();")
-                            .AppendLine()
-                            .AppendLine($"IEnumerator IEnumerable.GetEnumerator() => source.GetEnumerator();");
+                        if (getEnumeratorReturnType.IsValueType)
+                        {
+                            // No enumerator wrapper required
+                            _ = builder
+                                .AppendLine("[MethodImpl(MethodImplOptions.AggressiveInlining)]")
+                                .AppendLine($"public {enumeratorTypeString} GetEnumerator() => source.GetEnumerator();")
+                                .AppendLine()
+                                .AppendLine($"IEnumerator<{itemTypeString}> IEnumerable<{itemTypeString}>.GetEnumerator() => source2.GetEnumerator();")
+                                .AppendLine()
+                                .AppendLine($"IEnumerator IEnumerable.GetEnumerator() => source2.GetEnumerator();");
+                        }
+                        else if (enumerableSymbols.GetEnumerator.ContainingType.IsInterface())
+                        {
+                            // Use the ValueEnumerator<> enumerator wrapper
+                            _ = builder
+                                .AppendLine("[MethodImpl(MethodImplOptions.AggressiveInlining)]")
+                                .AppendLine($"public ValueEnumerator<{itemTypeString}> GetEnumerator() => new(source2.GetEnumerator());")
+                                .AppendLine()
+                                .AppendLine($"IEnumerator<{itemTypeString}> IEnumerable<{itemTypeString}>.GetEnumerator() => source2.GetEnumerator();")
+                                .AppendLine()
+                                .AppendLine($"IEnumerator IEnumerable.GetEnumerator() => source2.GetEnumerator();");
+                        }
+                        else
+                        {
+                            // Use the ValueEnumerator<> enumerator wrapper
+                            _ = builder
+                                .AppendLine("[MethodImpl(MethodImplOptions.AggressiveInlining)]")
+                                .AppendLine($"public ValueEnumerator<{itemTypeString}> GetEnumerator() => new(source.GetEnumerator());")
+                                .AppendLine()
+                                .AppendLine($"IEnumerator<{itemTypeString}> IEnumerable<{itemTypeString}>.GetEnumerator() => source2.GetEnumerator();")
+                                .AppendLine()
+                                .AppendLine($"IEnumerator IEnumerable.GetEnumerator() => source2.GetEnumerator();");
+                        }
                     }
-                    else if (enumeratorImplementsIEnumerator)
-                    {
-                        // Use the ValueEnumerator<> enumerator wrapper
-                        _ = builder
-                            .AppendLine("[MethodImpl(MethodImplOptions.AggressiveInlining)]")
-                            .AppendLine($"public {enumeratorTypeString} GetEnumerator() => new(source.GetEnumerator());")
-                            .AppendLine()
-                            .AppendLine($"IEnumerator<{itemTypeString}> IEnumerable<{itemTypeString}>.GetEnumerator() => source.GetEnumerator();")
-                            .AppendLine()
-                            .AppendLine($"IEnumerator IEnumerable.GetEnumerator() => source.GetEnumerator();");
-                    }
-                    else if (enumerableImplementsIEnumerable)
-                    {
-                        // Use the ValueEnumerator<> enumerator wrapper but need to cast to call GetEnumerator()
-                        _ = builder
-                            .AppendLine("[MethodImpl(MethodImplOptions.AggressiveInlining)]")
-                            .AppendLine($"public {getEnumeratorReturnTypeString} GetEnumerator() => source.GetEnumerator();")
-                            .AppendLine()
-                            .AppendLine("[MethodImpl(MethodImplOptions.AggressiveInlining)]")
-                            .AppendLine($"ValueEnumerator<{itemTypeString}> IValueEnumerable<{itemTypeString}, ValueEnumerator<{itemTypeString}>>.GetEnumerator() => new(((IEnumerable<{itemTypeString}>)source).GetEnumerator());")
-                            .AppendLine()
-                            .AppendLine($"IEnumerator<{itemTypeString}> IEnumerable<{itemTypeString}>.GetEnumerator() => ((IEnumerable<{itemTypeString}>)source).GetEnumerator();")
-                            .AppendLine()
-                            .AppendLine($"IEnumerator IEnumerable.GetEnumerator() => ((IEnumerable<{itemTypeString}>)source).GetEnumerator();");
-                    }
-                    else if (!getEnumeratorReturnType.IsRefLikeType)
+                    else
                     {
                         // A custom enumerator wrapper is required
 
                         _ = builder
                             .AppendLine("[MethodImpl(MethodImplOptions.AggressiveInlining)]")
-                            .AppendLine($"public {getEnumeratorReturnTypeString} GetEnumerator() => source.GetEnumerator();")
-                            .AppendLine()
-                            .AppendLine("[MethodImpl(MethodImplOptions.AggressiveInlining)]")
-                            .AppendLine($"Enumerator IValueEnumerable<{itemTypeString}, Enumerator>.GetEnumerator() => new(source.GetEnumerator());")
+                            .AppendLine($"public Enumerator GetEnumerator() => new(source.GetEnumerator());")
                             .AppendLine()
                             .AppendLine($"IEnumerator<{itemTypeString}> IEnumerable<{itemTypeString}>.GetEnumerator() => new Enumerator(source.GetEnumerator());")
                             .AppendLine()
                             .AppendLine($"IEnumerator IEnumerable.GetEnumerator() => new Enumerator(source.GetEnumerator());")
                             .AppendLine();
 
-                        using (builder.AppendBlock($"public struct Enumerator: IEnumerator<{itemTypeString}>"))
+                        using (builder.AppendBlock($"public struct Enumerator : IEnumerator<{itemTypeString}>"))
                         {
                             _ = builder
                                 .AppendLine($"readonly {getEnumeratorReturnTypeString} source;")
                                 .AppendLine()
-                                .AppendLine($"internal Enumerator({getEnumeratorReturnTypeString} source) => this.source = source;")
+                                .AppendLine($"internal Enumerator({getEnumeratorReturnTypeString} source)")
+                                .AppendIdentation().AppendLine("=> this.source = source;")
                                 .AppendLine()
                                 .AppendLine($"public {itemTypeString} Current => source.Current;")
                                 .AppendLine()
@@ -202,13 +238,13 @@ namespace NetFabric.Hyperlinq.SourceGenerator
                                     .AppendLine("[MethodImpl(MethodImplOptions.AggressiveInlining)]")
                                     .AppendLine("public void Reset() => source.Reset();");
 
-                            _ = builder.AppendLine();
-
                             _ = enumerableSymbols.EnumeratorSymbols.Dispose is null
                                 ? builder
+                                    .AppendLine()
                                     .AppendLine("[MethodImpl(MethodImplOptions.AggressiveInlining)]")
                                     .AppendLine("public void Dispose() { }")
                                 : builder
+                                    .AppendLine()
                                     .AppendLine("[MethodImpl(MethodImplOptions.AggressiveInlining)]")
                                     .AppendLine("public void Dispose() => source.Dispose();");
                         }
@@ -222,7 +258,7 @@ namespace NetFabric.Hyperlinq.SourceGenerator
                             .AppendLine()
                             .AppendLine($"// Implement ICollection<{itemTypeString}>")
                             .AppendLine()
-                            .AppendLine("public int Count => source.Count;")
+                            .AppendLine("public int Count => source2.Count;")
                             .AppendLine()
                             .AppendLine("public bool IsReadOnly => true;")
                             .AppendLine()
@@ -256,10 +292,10 @@ namespace NetFabric.Hyperlinq.SourceGenerator
                             _ = builder
                                 .AppendLine()
                                 .AppendLine("[MethodImpl(MethodImplOptions.AggressiveInlining)]")
-                                .AppendLine($"public bool Contains({itemTypeString} item) => source.Contains(item);")
+                                .AppendLine($"public bool Contains({itemTypeString} item) => source2.Contains(item);")
                                 .AppendLine()
                                 .AppendLine("[MethodImpl(MethodImplOptions.AggressiveInlining)]")
-                                .AppendLine($"public void CopyTo({itemTypeString}[] array, int arrayIndex) => source.CopyTo(array, arrayIndex);");
+                                .AppendLine($"public void CopyTo({itemTypeString}[] array, int arrayIndex) => source2.CopyTo(array, arrayIndex);");
                         }
                         else
                         {
@@ -289,13 +325,13 @@ namespace NetFabric.Hyperlinq.SourceGenerator
                                 .AppendLine()
                                 .AppendLine($"// Implement IList<{itemTypeString}>")
                                 .AppendLine()
-                                .AppendLine($"public {itemTypeString} this[int index] => source[index];")
+                                .AppendLine($"public {itemTypeString} this[int index] => source2[index];")
                                 .AppendLine();
 
                             using (builder.AppendBlock($"{itemTypeString} IList<{itemTypeString}>.this[int index]"))
                             {
                                 _ = builder
-                                    .AppendLine("get => source[index];")
+                                    .AppendLine("get => source2[index];")
                                     .AppendLine("set => throw new NotSupportedException();");
                             }
 
@@ -311,7 +347,7 @@ namespace NetFabric.Hyperlinq.SourceGenerator
                                 // Call the methods implemented by the source
                                 _ = builder
                                     .AppendLine("[MethodImpl(MethodImplOptions.AggressiveInlining)]")
-                                    .AppendLine($"public int IndexOf({itemTypeString} item) => source.IndexOf(item);");
+                                    .AppendLine($"public int IndexOf({itemTypeString} item) => source2.IndexOf(item);");
                             }
                             else
                             {

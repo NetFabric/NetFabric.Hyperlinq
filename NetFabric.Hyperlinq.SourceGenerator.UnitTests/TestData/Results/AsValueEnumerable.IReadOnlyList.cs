@@ -11,17 +11,17 @@ namespace NetFabric.Hyperlinq
     {
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static AsValueEnumerable_TestListWithExplicitInterfaces_TestValueType_<TestListWithExplicitInterfaces<TestValueType>> AsValueEnumerable(this TestListWithExplicitInterfaces<TestValueType> source)
+        public static AsValueEnumerable_System_Collections_Generic_IReadOnlyList_TestValueType_<System.Collections.Generic.IReadOnlyList<TestValueType>> AsValueEnumerable(this System.Collections.Generic.IReadOnlyList<TestValueType> source)
             => new(source, source);
 
-        public readonly struct AsValueEnumerable_TestListWithExplicitInterfaces_TestValueType_<TEnumerable>
+        public readonly struct AsValueEnumerable_System_Collections_Generic_IReadOnlyList_TestValueType_<TEnumerable>
             : IValueReadOnlyList<TestValueType, ValueEnumerator<TestValueType>>, IList<TestValueType>
-            where TEnumerable : IList<TestValueType>
+            where TEnumerable : IReadOnlyList<TestValueType>
         {
-            readonly TestListWithExplicitInterfaces<TestValueType> source;
+            readonly System.Collections.Generic.IReadOnlyList<TestValueType> source;
             readonly TEnumerable source2;
 
-            internal AsValueEnumerable_TestListWithExplicitInterfaces_TestValueType_(TestListWithExplicitInterfaces<TestValueType> source, TEnumerable source2)
+            internal AsValueEnumerable_System_Collections_Generic_IReadOnlyList_TestValueType_(System.Collections.Generic.IReadOnlyList<TestValueType> source, TEnumerable source2)
                 => (this.source, this.source2) = (source, source2);
 
             // Implement IValueEnumerable<TestValueType, ValueEnumerator<TestValueType>>
@@ -58,11 +58,17 @@ namespace NetFabric.Hyperlinq
                 }
             }
 
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public bool Contains(TestValueType item) => source2.Contains(item);
+            public bool Contains(TestValueType item)
+            {
+                foreach (var current in this)
+                {
+                    if (EqualityComparer<TestValueType>.Default.Equals(current, item)) return true;
+                }
+                return true;
+            }
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public void CopyTo(TestValueType[] array, int arrayIndex) => source2.CopyTo(array, arrayIndex);
+            public void CopyTo(TestValueType[] array, int arrayIndex) => CopyTo(array.AsSpan(arrayIndex));
 
             // Implement IList<TestValueType>
 
@@ -78,8 +84,20 @@ namespace NetFabric.Hyperlinq
 
             void IList<TestValueType>.RemoveAt(int index) => throw new NotSupportedException();
 
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public int IndexOf(TestValueType item) => source2.IndexOf(item);
+            public int IndexOf(TestValueType item)
+            {
+                if (Count is not 0)
+                {
+                    var index = 0;
+                    foreach (var current in this)
+                    {
+                        if (EqualityComparer<TestValueType>.Default.Equals(current, item)) return index;
+
+                        checked { index++; }
+                    }
+                }
+                return -1;
+            }
         }
     }
 }

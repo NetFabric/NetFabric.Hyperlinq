@@ -7,10 +7,11 @@ using System.Runtime.CompilerServices;
 
 namespace NetFabric.Hyperlinq
 {
-    public static partial class GeneratedExtensionMethods
+    static partial class GeneratedExtensionMethods
     {
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static TestValueEnumerable<TestValueType> AsValueEnumerable(this TestValueEnumerable<TestValueType> source) => source;
+        public static TestValueEnumerable<TestValueType> AsValueEnumerable(this TestValueEnumerable<TestValueType> source)
+            => source;
     }
 }

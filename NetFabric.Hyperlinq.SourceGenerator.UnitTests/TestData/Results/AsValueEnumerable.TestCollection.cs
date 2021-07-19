@@ -11,26 +11,31 @@ namespace NetFabric.Hyperlinq
     {
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static AsValueEnumerable_TestCollection_TestValueType_ AsValueEnumerable(this TestCollection<TestValueType> source) => new(source);
+        public static AsValueEnumerable_TestCollection_TestValueType_<TestCollection<TestValueType>> AsValueEnumerable(this TestCollection<TestValueType> source)
+            => new(source, source);
 
-        public readonly struct AsValueEnumerable_TestCollection_TestValueType_: IValueReadOnlyCollection<TestValueType, TestCollection<TestValueType>.Enumerator>, ICollection<TestValueType>
+        public readonly struct AsValueEnumerable_TestCollection_TestValueType_<TEnumerable>
+            : IValueReadOnlyCollection<TestValueType, TestCollection<TestValueType>.Enumerator>, ICollection<TestValueType>
+            where TEnumerable : ICollection<TestValueType>
         {
             readonly TestCollection<TestValueType> source;
+            readonly TEnumerable source2;
 
-            internal AsValueEnumerable_TestCollection_TestValueType_(TestCollection<TestValueType> source) => this.source = source;
+            internal AsValueEnumerable_TestCollection_TestValueType_(TestCollection<TestValueType> source, TEnumerable source2)
+                => (this.source, this.source2) = (source, source2);
 
             // Implement IValueEnumerable<TestValueType, TestCollection<TestValueType>.Enumerator>
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public TestCollection<TestValueType>.Enumerator GetEnumerator() => source.GetEnumerator();
 
-            IEnumerator<TestValueType> IEnumerable<TestValueType>.GetEnumerator() => source.GetEnumerator();
+            IEnumerator<TestValueType> IEnumerable<TestValueType>.GetEnumerator() => source2.GetEnumerator();
 
-            IEnumerator IEnumerable.GetEnumerator() => source.GetEnumerator();
+            IEnumerator IEnumerable.GetEnumerator() => source2.GetEnumerator();
 
             // Implement ICollection<TestValueType>
 
-            public int Count => source.Count;
+            public int Count => source2.Count;
 
             public bool IsReadOnly => true;
 
@@ -54,10 +59,10 @@ namespace NetFabric.Hyperlinq
             }
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public bool Contains(TestValueType item) => source.Contains(item);
+            public bool Contains(TestValueType item) => source2.Contains(item);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public void CopyTo(TestValueType[] array, int arrayIndex) => source.CopyTo(array, arrayIndex);
+            public void CopyTo(TestValueType[] array, int arrayIndex) => source2.CopyTo(array, arrayIndex);
         }
     }
 }

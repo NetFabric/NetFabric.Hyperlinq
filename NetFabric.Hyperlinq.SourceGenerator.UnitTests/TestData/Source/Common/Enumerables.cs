@@ -39,7 +39,7 @@ public class TestEnumerableWithNoInterfacesButEnumeratorWithResetAndDispose<T>
     }
 }
 
-public class TestEnumerableWithInterfacelessPublicEnumerator<T>
+public readonly struct TestEnumerableWithInterfacelessPublicEnumerator<T>
     : IEnumerable<T>
 {
     public Enumerator GetEnumerator()
@@ -49,7 +49,7 @@ public class TestEnumerableWithInterfacelessPublicEnumerator<T>
     IEnumerator IEnumerable.GetEnumerator()
         => new DisposableEnumerator();
 
-    public readonly ref struct Enumerator
+    public struct Enumerator
     {
         public T Current
             => default!;
@@ -76,7 +76,7 @@ public class TestEnumerableWithInterfacelessPublicEnumerator<T>
     }
 }
 
-public class TestEnumerableWithValueTypeEnumerator<T>
+public readonly struct TestEnumerableWithValueTypeEnumerator<T>
     : IEnumerable<T>
 {
     public Enumerator GetEnumerator()
@@ -105,7 +105,7 @@ public class TestEnumerableWithValueTypeEnumerator<T>
 }
 
 
-public class TestEnumerableWithReferenceTypeEnumerator<T>
+public readonly struct TestEnumerableWithReferenceTypeEnumerator<T>
     : IEnumerable<T>
 {
     public IEnumerator<T> GetEnumerator()
@@ -131,7 +131,7 @@ public class TestEnumerableWithReferenceTypeEnumerator<T>
     }
 }
 
-public class TestReadOnlyCollection<T>
+public readonly struct TestReadOnlyCollection<T>
     : IReadOnlyCollection<T>
 {
     public int Count => default;
@@ -161,7 +161,7 @@ public class TestReadOnlyCollection<T>
     }
 }
 
-public class TestCollection<T>
+public readonly struct TestCollection<T>
     : ICollection<T>
 {
     public int Count => default;
@@ -198,7 +198,7 @@ public class TestCollection<T>
     }
 }
 
-public class TestReadOnlyList<T>
+public readonly struct TestReadOnlyList<T>
     : IReadOnlyList<T>
 {
     public int Count => default;
@@ -230,7 +230,7 @@ public class TestReadOnlyList<T>
     }
 }
 
-public class TestList<T>
+public readonly struct TestList<T>
     : IList<T>
 {
     public int Count => default;
@@ -279,7 +279,7 @@ public class TestList<T>
 }
 
 
-public class TestListWithExplicitInterfaces<T>
+public readonly struct TestListWithExplicitInterfaces<T>
     : IList<T>
 {
     int ICollection<T>.Count => default;
