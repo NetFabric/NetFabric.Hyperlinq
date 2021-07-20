@@ -11,12 +11,11 @@ namespace NetFabric.Hyperlinq
     public static partial class ArrayExtensions
     {
 
-        [GeneratorIgnore]
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static MemoryValueEnumerable<TSource> AsValueEnumerable<TSource>(this ReadOnlyMemory<TSource> source)
             => new(source);
 
-        [GeneratorBindings(source: "source.Span", sourceImplements: "ReadOnlySpan`1")]
         [StructLayout(LayoutKind.Auto)]
         public readonly partial struct MemoryValueEnumerable<TSource>
             : IValueReadOnlyList<TSource, MemoryValueEnumerable<TSource>.DisposableEnumerator>

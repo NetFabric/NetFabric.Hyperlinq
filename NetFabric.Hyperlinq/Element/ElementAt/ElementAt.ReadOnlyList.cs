@@ -8,7 +8,7 @@ namespace NetFabric.Hyperlinq
     public static partial class ReadOnlyListExtensions
     {
 
-        [GeneratorIgnore]
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static Option<TSource> ElementAt<TList, TSource>(this TList source, int index) 
             where TList : struct, IReadOnlyList<TSource>
@@ -17,7 +17,7 @@ namespace NetFabric.Hyperlinq
                 : Option.Some(source[index]);
 
         
-        [GeneratorIgnore]
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static Option<TResult> ElementAt<TList, TSource, TResult, TSelector>(this TList source, int index, TSelector selector) 
             where TList : struct, IReadOnlyList<TSource>
@@ -27,7 +27,7 @@ namespace NetFabric.Hyperlinq
                 : Option.Some(selector.Invoke(source[index]));
 
         
-        [GeneratorIgnore]
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static Option<TResult> ElementAtAt<TList, TSource, TResult, TSelector>(this TList source, int index, TSelector selector) 
             where TList : struct, IReadOnlyList<TSource>

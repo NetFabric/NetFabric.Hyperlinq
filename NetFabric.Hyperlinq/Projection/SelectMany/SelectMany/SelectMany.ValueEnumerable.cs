@@ -10,7 +10,6 @@ namespace NetFabric.Hyperlinq
     public static partial class ValueEnumerableExtensions
     {
 
-        [GeneratorMapping("TSelector", "NetFabric.Hyperlinq.FunctionWrapper<TSource, TSubEnumerable>")]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static SelectManyEnumerable<TEnumerable, TEnumerator, TSource, TSubEnumerable, TSubEnumerator, TResult, FunctionWrapper<TSource, TSubEnumerable>> SelectMany<TEnumerable, TEnumerator, TSource, TSubEnumerable, TSubEnumerator, TResult>(this TEnumerable source, Func<TSource, TSubEnumerable> selector)
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>
@@ -28,7 +27,7 @@ namespace NetFabric.Hyperlinq
             where TSelector : struct, IFunction<TSource, TSubEnumerable>
             => new(source, selector);
 
-        [GeneratorIgnore]
+
         [StructLayout(LayoutKind.Auto)]
         public readonly partial struct SelectManyEnumerable<TEnumerable, TEnumerator, TSource, TSubEnumerable, TSubEnumerator, TResult, TSelector>
             : IValueEnumerable<TResult, SelectManyEnumerable<TEnumerable, TEnumerator, TSource, TSubEnumerable, TSubEnumerator, TResult, TSelector>.Enumerator>

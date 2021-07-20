@@ -34,7 +34,7 @@ namespace NetFabric.Hyperlinq
             return false;
         }
 
-        [GeneratorIgnore]
+
         static bool ContainsVector<TSource, TResult, TVectorSelector, TSelector>(this ReadOnlySpan<TSource> source, TResult value, TVectorSelector vectorSelector, TSelector selector)
             where TVectorSelector : struct, IFunction<Vector<TSource>, Vector<TResult>>
             where TSelector : struct, IFunction<TSource, TResult>

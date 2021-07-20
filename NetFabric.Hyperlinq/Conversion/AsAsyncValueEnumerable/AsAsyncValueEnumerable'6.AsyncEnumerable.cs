@@ -10,14 +10,14 @@ namespace NetFabric.Hyperlinq
     public static partial class AsyncEnumerableExtensions
     {
         
-        [GeneratorIgnore]
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static AsyncValueEnumerable<TEnumerable, TEnumerator, TEnumerator, TSource, FunctionWrapper<TEnumerable, CancellationToken, TEnumerator>, FunctionWrapper<TEnumerable, CancellationToken, TEnumerator>> AsAsyncValueEnumerable<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Func<TEnumerable, CancellationToken, TEnumerator> getAsyncEnumerator)
             where TEnumerable : IAsyncEnumerable<TSource>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
             => AsAsyncValueEnumerable<TEnumerable, TEnumerator, TSource, FunctionWrapper<TEnumerable, CancellationToken, TEnumerator>>(source, new FunctionWrapper<TEnumerable, CancellationToken, TEnumerator>(getAsyncEnumerator));
 
-        [GeneratorIgnore]
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static AsyncValueEnumerable<TEnumerable, TEnumerator, TEnumerator, TSource, TGetAsyncEnumerator, TGetAsyncEnumerator> AsAsyncValueEnumerable<TEnumerable, TEnumerator, TSource, TGetAsyncEnumerator>(this TEnumerable source, TGetAsyncEnumerator getAsyncEnumerator = default)
             where TEnumerable : IAsyncEnumerable<TSource>
@@ -25,7 +25,7 @@ namespace NetFabric.Hyperlinq
             where TGetAsyncEnumerator : struct, IFunction<TEnumerable, CancellationToken, TEnumerator>
             => new(source, getAsyncEnumerator, getAsyncEnumerator);
         
-        [GeneratorIgnore]
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static AsyncValueEnumerable<TEnumerable, TEnumerator, TEnumerator2, TSource, FunctionWrapper<TEnumerable, CancellationToken, TEnumerator>, FunctionWrapper<TEnumerable, CancellationToken, TEnumerator2>> AsAsyncValueEnumerable<TEnumerable, TEnumerator, TEnumerator2, TSource>(this TEnumerable source, Func<TEnumerable, CancellationToken, TEnumerator> getAsyncEnumerator, Func<TEnumerable, CancellationToken, TEnumerator2> getAsyncEnumerator2)
             where TEnumerable : IAsyncEnumerable<TSource>
@@ -33,7 +33,7 @@ namespace NetFabric.Hyperlinq
             where TEnumerator2 : struct
             => AsAsyncValueEnumerable<TEnumerable, TEnumerator, TEnumerator2, TSource, FunctionWrapper<TEnumerable, CancellationToken, TEnumerator>, FunctionWrapper<TEnumerable, CancellationToken, TEnumerator2>>(source, new FunctionWrapper<TEnumerable, CancellationToken, TEnumerator>(getAsyncEnumerator), new FunctionWrapper<TEnumerable, CancellationToken, TEnumerator2>(getAsyncEnumerator2));
 
-        [GeneratorIgnore]
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static AsyncValueEnumerable<TEnumerable, TEnumerator, TEnumerator2, TSource, TGetAsyncEnumerator, TGetAsyncEnumerator2> AsAsyncValueEnumerable<TEnumerable, TEnumerator, TEnumerator2, TSource, TGetAsyncEnumerator, TGetAsyncEnumerator2>(this TEnumerable source, TGetAsyncEnumerator getAsyncEnumerator = default, TGetAsyncEnumerator2 getAsyncEnumerator2 = default)
             where TEnumerable : IAsyncEnumerable<TSource>
@@ -53,8 +53,10 @@ namespace NetFabric.Hyperlinq
             where TGetAsyncEnumerator2 : struct, IFunction<TEnumerable, CancellationToken, TEnumerator2>
         {
             readonly TEnumerable source;
+#pragma warning disable IDE0044 // Add readonly modifier
             TGetAsyncEnumerator getAsyncEnumerator;
             TGetAsyncEnumerator2 getAsyncEnumerator2;
+#pragma warning restore IDE0044 // Add readonly modifier
 
             internal AsyncValueEnumerable(TEnumerable source, TGetAsyncEnumerator getAsyncEnumerator, TGetAsyncEnumerator2 getAsyncEnumerator2)
                 => (this.source, this.getAsyncEnumerator, this.getAsyncEnumerator2) = (source, getAsyncEnumerator, getAsyncEnumerator2);

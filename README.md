@@ -426,6 +426,7 @@ The following open-source projects are used to build and test this project:
 
 - [.NET](https://github.com/dotnet)
 - [BenchmarkDotNet](https://benchmarkdotnet.org/)
+- [Ben.TypeDictionary](https://github.com/benaadams/Ben.TypeDictionary)
 - [coveralls](https://coveralls.io)
 - [coverlet](https://github.com/tonerdo/coverlet)
 - [ILRepack](https://github.com/gluck/il-repack)
@@ -434,6 +435,7 @@ The following open-source projects are used to build and test this project:
 - [NetFabric.Hyperlinq.Analyzer](https://github.com/NetFabric/NetFabric.Hyperlinq.Analyzer)
 - [Nullable](https://github.com/manuelroemer/Nullable)
 - [Source Link](https://github.com/dotnet/sourcelink)
+- [UnoptimizedAssemblyDetector](https://github.com/bruno-garcia/unoptimized-assembly-detector)
 - [xUnit.net](https://xunit.net/)
 
 ## License

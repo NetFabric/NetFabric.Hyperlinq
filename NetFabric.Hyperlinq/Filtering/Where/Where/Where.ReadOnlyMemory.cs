@@ -10,7 +10,7 @@ namespace NetFabric.Hyperlinq
 {
     public static partial class ArrayExtensions
     {
-        [GeneratorMapping("TPredicate", "NetFabric.Hyperlinq.FunctionWrapper<TSource, bool>")]
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static MemoryWhereEnumerable<TSource, FunctionWrapper<TSource, bool>> Where<TSource>(this ReadOnlyMemory<TSource> source, Func<TSource, bool> predicate) 
             => source.Where(new FunctionWrapper<TSource, bool>(predicate));

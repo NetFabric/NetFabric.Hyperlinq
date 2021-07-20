@@ -4,7 +4,7 @@ namespace NetFabric.Hyperlinq
 {
     public static partial class ValueEnumerableExtensions
     {
-        [GeneratorIgnore]
+
         internal static TSum Sum<TEnumerable, TEnumerator, TSource, TSum>(this TEnumerable source)
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
@@ -17,7 +17,7 @@ namespace NetFabric.Hyperlinq
             return sum;
         }
 
-        [GeneratorIgnore]
+
         internal static TSum Sum<TEnumerable, TEnumerator, TSource, TSum, TPredicate>(this TEnumerable source, TPredicate predicate)
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
@@ -34,7 +34,7 @@ namespace NetFabric.Hyperlinq
             return sum;
         }
 
-        [GeneratorIgnore]
+
         internal static TSum SumAt<TEnumerable, TEnumerator, TSource, TSum, TPredicate>(this TEnumerable source, TPredicate predicate)
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
@@ -51,7 +51,7 @@ namespace NetFabric.Hyperlinq
             return sum;
         }
 
-        [GeneratorIgnore]
+
         internal static TSum Sum<TEnumerable, TEnumerator, TSource, TResult, TSum, TSelector>(this TEnumerable source, TSelector selector)
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
@@ -68,7 +68,7 @@ namespace NetFabric.Hyperlinq
             return sum;
         }
 
-        [GeneratorIgnore]
+
         internal static TSum SumAt<TEnumerable, TEnumerator, TSource, TResult, TSum, TSelector>(this TEnumerable source, TSelector selector)
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
@@ -85,7 +85,7 @@ namespace NetFabric.Hyperlinq
             return sum;
         }
         
-        [GeneratorIgnore]
+
         internal static TSum Sum<TEnumerable, TEnumerator, TSource, TResult, TSum, TPredicate, TSelector>(this TEnumerable source, TPredicate predicate, TSelector selector)
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>

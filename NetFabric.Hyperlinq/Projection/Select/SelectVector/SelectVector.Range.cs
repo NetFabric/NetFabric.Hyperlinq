@@ -30,7 +30,7 @@ namespace NetFabric.Hyperlinq
             where TResult : struct
             => new(start, count, vectorSelector, selector);
 
-        [GeneratorIgnore]
+
         [StructLayout(LayoutKind.Auto)]
         public partial struct RangeSelectVectorContext<TResult, TVectorSelector, TSelector>
             where TVectorSelector : struct, IFunction<Vector<int>, Vector<TResult>>

@@ -9,7 +9,7 @@ namespace NetFabric.Hyperlinq
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static bool ContainsVector<TSource>(this Span<TSource> source, TSource value)
             where TSource : struct
-            => ((ReadOnlySpan<TSource>)source).ContainsVector(value);
+            => source.AsReadOnlySpan().ContainsVector(value);
 
     }
 }

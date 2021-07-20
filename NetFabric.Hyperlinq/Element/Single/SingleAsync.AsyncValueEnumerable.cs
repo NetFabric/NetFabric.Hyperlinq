@@ -15,7 +15,7 @@ namespace NetFabric.Hyperlinq
             => source.GetSingleAsync<TEnumerable, TEnumerator, TSource>(cancellationToken);
 
 
-        [GeneratorIgnore]
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static ValueTask<Option<TSource>> SingleAsync<TEnumerable, TEnumerator, TSource, TPredicate>(this TEnumerable source, CancellationToken cancellationToken, TPredicate predicate = default) 
             where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
@@ -24,7 +24,7 @@ namespace NetFabric.Hyperlinq
             => source.GetSingleAsync<TEnumerable, TEnumerator, TSource, TPredicate>(cancellationToken, predicate);
 
 
-        [GeneratorIgnore]
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static ValueTask<Option<TSource>> SingleAtAsync<TEnumerable, TEnumerator, TSource, TPredicate>(this TEnumerable source, CancellationToken cancellationToken, TPredicate predicate = default) 
             where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
@@ -33,7 +33,7 @@ namespace NetFabric.Hyperlinq
             => source.GetSingleAtAsync<TEnumerable, TEnumerator, TSource, TPredicate>(cancellationToken, predicate);
 
 
-        [GeneratorIgnore]
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static async ValueTask<Option<TResult>> SingleAsync<TEnumerable, TEnumerator, TSource, TResult, TSelector>(this TEnumerable source, CancellationToken cancellationToken, TSelector selector = default) 
             where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
@@ -45,7 +45,7 @@ namespace NetFabric.Hyperlinq
         }
 
 
-        [GeneratorIgnore]
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static async ValueTask<Option<TResult>> SingleAtAsync<TEnumerable, TEnumerator, TSource, TResult, TSelector>(this TEnumerable source, CancellationToken cancellationToken, TSelector selector = default) 
             where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
@@ -69,7 +69,7 @@ namespace NetFabric.Hyperlinq
                 => selector.InvokeAsync(item, 0, cancellationToken);
         }
 
-        [GeneratorIgnore]
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static async ValueTask<Option<TResult>> SingleAsync<TEnumerable, TEnumerator, TSource, TResult, TPredicate, TSelector>(this TEnumerable source, CancellationToken cancellationToken, TPredicate predicate, TSelector selector = default) 
             where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
@@ -85,7 +85,7 @@ namespace NetFabric.Hyperlinq
         // GetSingleAsync
 
 
-        [GeneratorIgnore]
+
         static async ValueTask<Option<TSource>> GetSingleAsync<TEnumerable, TEnumerator, TSource>(this TEnumerable source, CancellationToken cancellationToken) 
             where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
@@ -106,7 +106,7 @@ namespace NetFabric.Hyperlinq
         }
 
 
-        [GeneratorIgnore]
+
         static async ValueTask<Option<TSource>> GetSingleAsync<TEnumerable, TEnumerator, TSource, TPredicate>(this TEnumerable source, CancellationToken cancellationToken, TPredicate predicate) 
             where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
@@ -141,7 +141,7 @@ namespace NetFabric.Hyperlinq
         }
 
 
-        [GeneratorIgnore]
+
         static async ValueTask<Option<TSource>> GetSingleAtAsync<TEnumerable, TEnumerator, TSource, TPredicate>(this TEnumerable source, CancellationToken cancellationToken, TPredicate predicate) 
             where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>

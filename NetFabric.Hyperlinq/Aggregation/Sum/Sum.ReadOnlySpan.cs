@@ -6,7 +6,7 @@ namespace NetFabric.Hyperlinq
 {
     public static partial class ArrayExtensions
     {
-        [GeneratorIgnore]
+
         static TSum Sum<TSource, TSum>(this ReadOnlySpan<TSource> source)
             where TSum : struct
         {
@@ -26,7 +26,7 @@ namespace NetFabric.Hyperlinq
             return Scalar.Add(sum0, sum1);
         }
         
-        [GeneratorIgnore]
+
         static TSum SumVector<TSource, TSum>(this ReadOnlySpan<TSource> source)
             where TSource : struct
             where TSum : struct
@@ -44,7 +44,7 @@ namespace NetFabric.Hyperlinq
             return Scalar.Add(vectorSum.Sum(), Sum<TSource, TSum>(source.Slice(source.Length - count, count)));
         }
 
-        [GeneratorIgnore]
+
         static TSum Sum<TSource, TSum, TPredicate>(this ReadOnlySpan<TSource> source, TPredicate predicate)
             where TPredicate : struct, IFunction<TSource, bool>
             where TSum : struct
@@ -66,7 +66,7 @@ namespace NetFabric.Hyperlinq
             return Scalar.Add(sum0, sum1);
         }
 
-        [GeneratorIgnore]
+
         static TSum SumAt<TSource, TSum, TPredicate>(this ReadOnlySpan<TSource> source, TPredicate predicate)
             where TPredicate : struct, IFunction<TSource, int, bool>
             where TSum : struct
@@ -89,7 +89,7 @@ namespace NetFabric.Hyperlinq
             return Scalar.Add(sum0, sum1);
         }
 
-        [GeneratorIgnore]
+
         static TSum Sum<TSource, TResult, TSum, TSelector>(this ReadOnlySpan<TSource> source, TSelector selector)
             where TSelector : struct, IFunction<TSource, TResult>
             where TSum : struct
@@ -110,7 +110,7 @@ namespace NetFabric.Hyperlinq
             return Scalar.Add(sum0, sum1);
         }
         
-        [GeneratorIgnore]
+
         static TSum SumVector<TSource, TResult, TSum, TVectorSelector, TSelector>(this ReadOnlySpan<TSource> source, TVectorSelector vectorSelector, TSelector selector)
             where TVectorSelector : struct, IFunction<Vector<TSource>, Vector<TResult>>
             where TSelector : struct, IFunction<TSource, TResult>
@@ -131,7 +131,7 @@ namespace NetFabric.Hyperlinq
             return Scalar.Add(vectorSum.Sum(), Sum<TSource, TResult, TSum, TSelector>(source.Slice(source.Length - count, count), selector));
         }
 
-        [GeneratorIgnore]
+
         static TSum SumAt<TSource, TResult, TSum, TSelector>(this ReadOnlySpan<TSource> source, TSelector selector)
             where TSelector : struct, IFunction<TSource, int, TResult>
             where TSum : struct
@@ -153,7 +153,7 @@ namespace NetFabric.Hyperlinq
             return Scalar.Add(sum0, sum1);
         }
         
-        [GeneratorIgnore]
+
         static TSum Sum<TSource, TResult, TSum, TPredicate, TSelector>(this ReadOnlySpan<TSource> source, TPredicate predicate, TSelector selector)
             where TPredicate : struct, IFunction<TSource, bool>
             where TSelector : struct, IFunction<TSource, TResult>

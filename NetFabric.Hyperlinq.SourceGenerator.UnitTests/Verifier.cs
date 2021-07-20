@@ -2,17 +2,14 @@
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.Text;
 using System.Collections.Generic;
+using System.Collections.Immutable;
+using System.IO;
 using System.Linq;
 
 namespace NetFabric.Hyperlinq.SourceGenerator.UnitTests
 {
     sealed class Verifier
     {
-        static readonly MetadataReference corlibReference = MetadataReference.CreateFromFile(typeof(object).Assembly.Location);
-        static readonly MetadataReference systemCoreReference = MetadataReference.CreateFromFile(typeof(Enumerable).Assembly.Location);
-        static readonly MetadataReference cSharpSymbolsReference = MetadataReference.CreateFromFile(typeof(CSharpCompilation).Assembly.Location);
-        static readonly MetadataReference codeAnalysisReference = MetadataReference.CreateFromFile(typeof(Compilation).Assembly.Location);
-
         static readonly string defaultFilePathPrefix = "Test";
         static readonly string testProjectName = "TestProject";
 
@@ -20,13 +17,23 @@ namespace NetFabric.Hyperlinq.SourceGenerator.UnitTests
         {
             var projectId = ProjectId.CreateNewId(debugName: testProjectName);
 
+            var coreLibPath = typeof(object).Assembly.Location;
+            var coreLibDirectory = Path.GetDirectoryName(coreLibPath)!;
+            var references = new[] {
+                    MetadataReference.CreateFromFile(coreLibPath),
+                    MetadataReference.CreateFromFile(Path.Combine(coreLibDirectory, "netstandard.dll")),
+                    MetadataReference.CreateFromFile(Path.Combine(coreLibDirectory, "System.Runtime.dll")),
+                    MetadataReference.CreateFromFile(Path.Combine(coreLibDirectory, "System.Collections.dll")),
+                    MetadataReference.CreateFromFile(typeof(Enumerable).Assembly.Location),
+                    MetadataReference.CreateFromFile(typeof(ImmutableArray<>).Assembly.Location),
+                    MetadataReference.CreateFromFile(typeof(IValueEnumerable<,>).Assembly.Location),
+                    MetadataReference.CreateFromFile(typeof(ValueEnumerableExtensions).Assembly.Location),
+                };
             var solution = new AdhocWorkspace()
                 .CurrentSolution
                 .AddProject(projectId, testProjectName, testProjectName, LanguageNames.CSharp)
-                .AddMetadataReference(projectId, corlibReference)
-                .AddMetadataReference(projectId, systemCoreReference)
-                .AddMetadataReference(projectId, cSharpSymbolsReference)
-                .AddMetadataReference(projectId, codeAnalysisReference);
+                .AddMetadataReferences(projectId, references)
+                .WithProjectCompilationOptions(projectId, new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary));
 
             var count = 0;
             foreach (var source in sources)

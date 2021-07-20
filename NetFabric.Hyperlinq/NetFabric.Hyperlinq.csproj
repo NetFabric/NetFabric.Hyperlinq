@@ -23,17 +23,19 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <SupportedPlatform Include="browser" />
+    <Compile Remove="Conversion\AsValueEnumerable\AsValueEnumerable%276.Enumerable.cs" />
+    <Compile Remove="Conversion\AsValueEnumerable\AsValueEnumerable%276.ReadOnlyCollection.cs" />
+    <Compile Remove="Conversion\AsValueEnumerable\AsValueEnumerable%276.ValueEnumerable.cs" />
+    <Compile Remove="Conversion\AsValueEnumerable\AsValueEnumerable%276.ValueReadOnlyCollection.cs" />
+    <Compile Remove="Conversion\AsValueEnumerable\AsValueEnumerable%276.ValueReadOnlyList.cs" />
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Include="..\NetFabric.Hyperlinq.SourceGenerator\Attributes\GeneratorBindingsAttribute.cs" Link="Utils\Generator\GeneratorBindingsAttribute.cs" />
-    <Compile Include="..\NetFabric.Hyperlinq.SourceGenerator\Attributes\GeneratorIgnoreAttribute.cs" Link="Utils\Generator\GeneratorIgnoreAttribute.cs" />
-    <Compile Include="..\NetFabric.Hyperlinq.SourceGenerator\Attributes\GeneratorMappingAttribute.cs" Link="Utils\Generator\GeneratorMappingAttribute.cs" />
+    <SupportedPlatform Include="browser" />
   </ItemGroup>
-
+  
   <ItemGroup Condition="'$(TargetFramework)' == 'net461' Or '$(TargetFramework)' == 'netstandard2.0'">
-    <Compile Remove="Conversion\AsValueEnumerable\Bindings\System\Collections\Immutable\*.cs" />
+    <Compile Remove="Conversion\AsValueEnumerable\AsValueEnumerable.ImmutableArray.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -43,7 +45,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\NetFabric.Hyperlinq.Abstractions\NetFabric.Hyperlinq.Abstractions.csproj" />
-    <ProjectReference Include="..\NetFabric.Hyperlinq.SourceGenerator\NetFabric.Hyperlinq.SourceGenerator.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />  
   </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFramework)'=='net461' Or '$(TargetFramework)'=='netstandard2.0'">
@@ -85,10 +86,6 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resource.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Utils\Contains\" />
   </ItemGroup>
 
 </Project>

@@ -13,7 +13,7 @@ namespace NetFabric.Hyperlinq
                 : Option.Some(source[index]);
 
         
-        [GeneratorIgnore]
+
         static Option<TSource> ElementAt<TSource, TPredicate>(this ReadOnlySpan<TSource> source, int index, TPredicate predicate) 
             where TPredicate : struct, IFunction<TSource, bool>
         {
@@ -29,7 +29,7 @@ namespace NetFabric.Hyperlinq
         }
 
         
-        [GeneratorIgnore]
+
         static Option<TSource> ElementAtAt<TSource, TPredicate>(this ReadOnlySpan<TSource> source, int index, TPredicate predicate) 
             where TPredicate : struct, IFunction<TSource, int, bool>
         {
@@ -46,7 +46,7 @@ namespace NetFabric.Hyperlinq
         }
 
         
-        [GeneratorIgnore]
+
         static Option<TResult> ElementAt<TSource, TResult, TSelector>(this ReadOnlySpan<TSource> source, int index, TSelector selector) 
             where TSelector : struct, IFunction<TSource, TResult>
             => index < 0 || index >= source.Length 
@@ -54,7 +54,7 @@ namespace NetFabric.Hyperlinq
                 : Option.Some(selector.Invoke(source[index]));
 
         
-        [GeneratorIgnore]
+
         static Option<TResult> ElementAtAt<TSource, TResult, TSelector>(this ReadOnlySpan<TSource> source, int index, TSelector selector) 
             where TSelector : struct, IFunction<TSource, int, TResult>
             => index < 0 || index >= source.Length 
@@ -62,7 +62,7 @@ namespace NetFabric.Hyperlinq
                 : Option.Some(selector.Invoke(source[index], index));
 
         
-        [GeneratorIgnore]
+
         static Option<TResult> ElementAt<TSource, TResult, TPredicate, TSelector>(this ReadOnlySpan<TSource> source, int index, TPredicate predicate, TSelector selector) 
             where TPredicate : struct, IFunction<TSource, bool>
             where TSelector : struct, IFunction<TSource, TResult>

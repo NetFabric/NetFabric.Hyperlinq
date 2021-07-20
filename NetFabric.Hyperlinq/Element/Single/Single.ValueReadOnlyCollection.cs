@@ -25,7 +25,7 @@ namespace NetFabric.Hyperlinq
             }
         }
 
-        [GeneratorIgnore]
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static Option<TSource> Single<TEnumerable, TEnumerator, TSource, TPredicate>(this TEnumerable source, TPredicate predicate)
             where TEnumerable : IValueReadOnlyCollection<TSource, TEnumerator>
@@ -37,7 +37,7 @@ namespace NetFabric.Hyperlinq
                 _ => ValueEnumerableExtensions.Single<TEnumerable, TEnumerator, TSource, TPredicate>(source, predicate)
             };
 
-        [GeneratorIgnore]
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static Option<TSource> SingleAt<TEnumerable, TEnumerator, TSource, TPredicate>(this TEnumerable source, TPredicate predicate)
             where TEnumerable : IValueReadOnlyCollection<TSource, TEnumerator>
@@ -49,7 +49,7 @@ namespace NetFabric.Hyperlinq
                 _ => ValueEnumerableExtensions.SingleAt<TEnumerable, TEnumerator, TSource, TPredicate>(source, predicate)
             };
 
-        [GeneratorIgnore]
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static Option<TResult> Single<TEnumerable, TEnumerator, TSource, TResult, TSelector>(this TEnumerable source, TSelector selector) 
             where TEnumerable : IValueReadOnlyCollection<TSource, TEnumerator>
@@ -70,7 +70,7 @@ namespace NetFabric.Hyperlinq
             }
         }
 
-        [GeneratorIgnore]
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static Option<TResult> SingleAt<TEnumerable, TEnumerator, TSource, TResult, TSelector>(this TEnumerable source, TSelector selector) 
             where TEnumerable : IValueReadOnlyCollection<TSource, TEnumerator>
@@ -92,7 +92,7 @@ namespace NetFabric.Hyperlinq
         }
 
 
-        [GeneratorIgnore]
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static Option<TResult> Single<TEnumerable, TEnumerator, TSource, TResult, TPredicate, TSelector>(this TEnumerable source, TPredicate predicate, TSelector selector)
             where TEnumerable : IValueReadOnlyCollection<TSource, TEnumerator>

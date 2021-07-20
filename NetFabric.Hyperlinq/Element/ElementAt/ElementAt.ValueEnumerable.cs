@@ -23,7 +23,7 @@ namespace NetFabric.Hyperlinq
         }
 
         
-        [GeneratorIgnore]
+
         internal static Option<TSource> ElementAt<TEnumerable, TEnumerator, TSource, TPredicate>(this TEnumerable source, int index, TPredicate predicate) 
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
@@ -42,7 +42,7 @@ namespace NetFabric.Hyperlinq
         }
 
         
-        [GeneratorIgnore]
+
         internal static Option<TSource> ElementAtAt<TEnumerable, TEnumerator, TSource, TPredicate>(this TEnumerable source, int index, TPredicate predicate) 
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
@@ -64,7 +64,7 @@ namespace NetFabric.Hyperlinq
         }
 
         
-        [GeneratorIgnore]
+
         internal static Option<TResult> ElementAt<TEnumerable, TEnumerator, TSource, TResult, TSelector>(this TEnumerable source, int index, TSelector selector) 
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
@@ -84,7 +84,7 @@ namespace NetFabric.Hyperlinq
         }
 
         
-        [GeneratorIgnore]
+
         internal static Option<TResult> ElementAtAt<TEnumerable, TEnumerator, TSource, TResult, TSelector>(this TEnumerable source, int index, TSelector selector) 
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
@@ -106,7 +106,7 @@ namespace NetFabric.Hyperlinq
         }
 
         
-        [GeneratorIgnore]
+
         internal static Option<TResult> ElementAt<TEnumerable, TEnumerator, TSource, TResult, TPredicate, TSelector>(this TEnumerable source, int index, TPredicate predicate, TSelector selector) 
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
