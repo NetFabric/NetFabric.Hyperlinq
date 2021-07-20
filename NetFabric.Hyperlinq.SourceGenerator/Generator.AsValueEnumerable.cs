@@ -4,22 +4,21 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 using NetFabric.CodeAnalysis;
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Threading;
 
 namespace NetFabric.Hyperlinq.SourceGenerator
 {
     public partial class Generator
     {
-        static bool HandleAsValueEnumerable(Compilation compilation, TypeSymbolsCache typeSymbolsCache, MemberAccessExpressionSyntax expressionSyntax, CodeBuilder builder, CancellationToken cancellationToken, bool isUnitTest)
+        static ValueEnumerableType? GenerateAsValueEnumerable(Compilation compilation, SemanticModel semanticModel, TypeSymbolsCache typeSymbolsCache, MemberAccessExpressionSyntax expressionSyntax, CodeBuilder builder, HashSet<MethodSignature> generatedMethods, CancellationToken cancellationToken, bool isUnitTest)
         {
-            var semanticModel = compilation.GetSemanticModel(expressionSyntax.SyntaxTree);
-
-            // Check if an extension method is defined for this type
-            if (semanticModel.GetSymbolInfo(expressionSyntax).Symbol is not null)
-                return false;
+            // Check if the method is already defined in the project source
+            if (semanticModel.GetSymbolInfo(expressionSyntax, cancellationToken).Symbol is IMethodSymbol methodSymbol and not null)
+                return new ValueEnumerableType(Name: methodSymbol.ReturnType.Name);
 
             // Get the type this operator is applied to
-            var receiverTypeSymbol = semanticModel.GetTypeInfo(expressionSyntax.Expression).Type;
+            var receiverTypeSymbol = semanticModel.GetTypeInfo(expressionSyntax.Expression, cancellationToken).Type;
 
             // Check if NetFabric.Hyperlinq already contains specific overloads for this type
             // This is required for when the 'using NetFabric.Hyperlinq;' statement is missing
@@ -31,8 +30,9 @@ namespace NetFabric.Hyperlinq.SourceGenerator
                 || SymbolEqualityComparer.Default.Equals(receiverTypeSymbol.OriginalDefinition, typeSymbolsCache[typeof(Memory<>)])
                 || SymbolEqualityComparer.Default.Equals(receiverTypeSymbol.OriginalDefinition, typeSymbolsCache[typeof(ReadOnlyMemory<>)])
                 || SymbolEqualityComparer.Default.Equals(receiverTypeSymbol.OriginalDefinition, typeSymbolsCache[typeof(List<>)])
+                || SymbolEqualityComparer.Default.Equals(receiverTypeSymbol.OriginalDefinition, typeSymbolsCache[typeof(ImmutableArray<>)])
                 )
-                return false; // no need to generate an implementation
+                return null; // no need to generate an implementation
 
             var receiverTypeString = receiverTypeSymbol.ToDisplayString();
 
@@ -47,9 +47,8 @@ namespace NetFabric.Hyperlinq.SourceGenerator
                     .AppendLine($"public static {receiverTypeString} AsValueEnumerable(this {receiverTypeString} source)")
                     .AppendIdentation().AppendLine($"=> source;");
 
-                return true;
+                return new ValueEnumerableType(Name: receiverTypeString);
             }
-
 
             // Receiver type is an enumerable
 
@@ -86,23 +85,16 @@ namespace NetFabric.Hyperlinq.SourceGenerator
                 }
 
                 // Define what value enumerator type will be used
-                string enumeratorTypeString;
                 var enumeratorImplementsIEnumerator = getEnumeratorReturnType.ImplementsInterface(SpecialType.System_Collections_Generic_IEnumerator_T, out var _);
                 var useConstraints = enumerableImplementsIEnumerable;
-                if (enumeratorImplementsIEnumerator)
-                {
-                    if (getEnumeratorReturnType.IsValueType)
-                        enumeratorTypeString = getEnumeratorReturnTypeString;
-                    else
-                        enumeratorTypeString = $"ValueEnumerator<{itemTypeString}>";
-                }
-                else
-                {
-                    if (useConstraints)
-                        enumeratorTypeString = $"{enumerableTypeString}<TEnumerable>.Enumerator";
-                    else
-                        enumeratorTypeString = $"{enumerableTypeString}.Enumerator";
-                }
+
+                var enumeratorTypeString = enumeratorImplementsIEnumerator
+                    ? getEnumeratorReturnType.IsValueType
+                        ? getEnumeratorReturnTypeString
+                        : $"ValueEnumerator<{itemTypeString}>"
+                    : useConstraints
+                        ? $"{enumerableTypeString}<TEnumerable>.Enumerator"
+                        : $"{enumerableTypeString}.Enumerator";
 
                 // Generate the method
                 _ = useConstraints
@@ -118,13 +110,14 @@ namespace NetFabric.Hyperlinq.SourceGenerator
                         .AppendIdentation().AppendLine($"=> new(source);");
 
                 // Generate the value enumerable wrapper
-                _ = useConstraints
-                    ? builder
+                string valueEnumerableTypeName;
+                valueEnumerableTypeName = useConstraints
+                    ? $"{enumerableTypeString}<TEnumerable>"
+                    : enumerableTypeString;
+
+                _ = builder
                         .AppendLine()
-                        .AppendLine($"public readonly struct {enumerableTypeString}<TEnumerable>")
-                    : builder
-                        .AppendLine()
-                        .AppendLine($"public readonly struct {enumerableTypeString}");
+                        .AppendLine($"public readonly struct {valueEnumerableTypeName}");
 
                 // Define what interfaces the wrapper implements
                 if (enumerableImplementsIList || enumerableImplementsIReadOnlyList)
@@ -378,11 +371,13 @@ namespace NetFabric.Hyperlinq.SourceGenerator
                         }
                     }
 
-                    return true;
+                    // A new AsValueEnumerable method has been generated
+                    _ = generatedMethods.Add(new MethodSignature("AsValueEnumerable", receiverTypeString));
+                    return new ValueEnumerableType(Name: valueEnumerableTypeName);
                 }
             }
 
-            return false;
+            return null;
         }
     }
 }

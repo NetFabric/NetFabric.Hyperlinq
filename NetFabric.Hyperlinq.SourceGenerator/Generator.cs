@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Diagnostics;
+using System.Linq;
 using System.Text;
 using System.Threading;
 
@@ -24,7 +25,7 @@ namespace NetFabric.Hyperlinq.SourceGenerator
             DiagnosticSeverity.Error,
             isEnabledByDefault: true);
 
-        internal static readonly ImmutableArray<string> methods = ImmutableArray.Create(new[]
+        internal static readonly ImmutableHashSet<string> methods = ImmutableHashSet.Create(new[]
         {
             // aggregation
             "Count",
@@ -98,12 +99,12 @@ namespace NetFabric.Hyperlinq.SourceGenerator
 
         public void Execute(GeneratorExecutionContext context)
         {
-            var typeSymbolCache = new TypeSymbolsCache(context.Compilation);
+            var typeSymbolsCache = new TypeSymbolsCache(context.Compilation);
 
             // Check if NetFabric.Hyperlinq.Abstractions and NetFabric.Hyperlinq.Abstractions are referenced
-            if (typeSymbolCache["NetFabric.Hyperlinq.IValueEnumerable`2"] is null 
-                || typeSymbolCache["NetFabric.Hyperlinq.ValueEnumerableExtensions"] is null)
-                return;
+            if (typeSymbolsCache["NetFabric.Hyperlinq.IValueEnumerable`2"] is null 
+                || typeSymbolsCache["NetFabric.Hyperlinq.ValueEnumerableExtensions"] is null)
+                return; // TODO: return a Diagnostic?
 
             if (context.SyntaxReceiver is not SyntaxReceiver receiver)
                 return;
@@ -111,7 +112,7 @@ namespace NetFabric.Hyperlinq.SourceGenerator
             try
             {
                 var builder = new CodeBuilder();
-                GenerateSource(context.Compilation, typeSymbolCache, receiver.MemberAccessExpressions, builder, context.CancellationToken);
+                GenerateSource(context.Compilation, typeSymbolsCache, receiver.MemberAccessExpressions, builder, context.CancellationToken);
                 context.AddSource("ExtensionMethods.g.cs", SourceText.From(builder.ToString(), Encoding.UTF8));
             }
             catch (OperationCanceledException)
@@ -126,6 +127,8 @@ namespace NetFabric.Hyperlinq.SourceGenerator
 
         internal static void GenerateSource(Compilation compilation, TypeSymbolsCache typeSymbolsCache, List<MemberAccessExpressionSyntax> memberAccessExpressions, CodeBuilder builder, CancellationToken cancellationToken, bool isUnitTest = false)
         {
+            var generatedMethods = new HashSet<MethodSignature>();
+
             _ = builder
                 .AppendLine("#nullable enable")
                 .AppendLine()
@@ -140,24 +143,26 @@ namespace NetFabric.Hyperlinq.SourceGenerator
             {
                 foreach (var expressionSyntax in memberAccessExpressions)
                 {
-                    cancellationToken.ThrowIfCancellationRequested();
+                    var semanticModel = compilation.GetSemanticModel(expressionSyntax.SyntaxTree);
 
-                    _ = expressionSyntax.Name.ToString() switch
-                    {
-                        "AsValueEnumerable" => HandleAsValueEnumerable(compilation, typeSymbolsCache, expressionSyntax, builder, cancellationToken, isUnitTest),
-                        _ => HandleMethod(compilation, expressionSyntax, builder, cancellationToken, isUnitTest),
-                    };
+                    _ = GenerateSource(compilation, semanticModel, typeSymbolsCache, expressionSyntax, builder, generatedMethods, cancellationToken, isUnitTest);
                 }
             }
         }
 
-        static bool HandleMethod(Compilation compilation, MemberAccessExpressionSyntax expressionSyntax, CodeBuilder builder, CancellationToken cancellationToken, bool isUnitTest)
-        {
-            var semanticModel = compilation.GetSemanticModel(expressionSyntax.SyntaxTree);
-            if (semanticModel.GetSymbolInfo(expressionSyntax, cancellationToken).Symbol is not null) // method already exists
-                return false;
+        static ValueEnumerableType? GenerateSource(Compilation compilation, SemanticModel semanticModel, TypeSymbolsCache typeSymbolsCache, MemberAccessExpressionSyntax expressionSyntax, CodeBuilder builder, HashSet<MethodSignature> generatedMethods, CancellationToken cancellationToken, bool isUnitTest)
+            => expressionSyntax.Name.ToString() switch
+            {
+                "AsValueEnumerable" => GenerateAsValueEnumerable(compilation, semanticModel, typeSymbolsCache, expressionSyntax, builder, generatedMethods, cancellationToken, isUnitTest),
+                _ => GenerateOperationSource(compilation, semanticModel, expressionSyntax, builder, generatedMethods, cancellationToken, isUnitTest),
+            };
 
-            return false;
+        static ValueEnumerableType? GenerateOperationSource(Compilation compilation, SemanticModel semanticModel, MemberAccessExpressionSyntax expressionSyntax, CodeBuilder builder, HashSet<MethodSignature> generatedMethods, CancellationToken cancellationToken, bool isUnitTest)
+        {
+            // Get the type this operator is applied to
+            var receiverTypeSymbol = semanticModel.GetTypeInfo(expressionSyntax.Expression, cancellationToken).Type;
+
+            return null;
         }
 
         static bool IsValueEnumerable(ITypeSymbol symbol, TypeSymbolsCache typeSymbolsCache)

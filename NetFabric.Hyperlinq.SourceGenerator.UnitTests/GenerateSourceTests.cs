@@ -74,14 +74,18 @@ namespace NetFabric.Hyperlinq.SourceGenerator.UnitTests
                     new[] { "TestData/Source/AsValueEnumerable.TestValueEnumerable.cs" },
                     "TestData/Results/AsValueEnumerable.TestValueEnumerable.cs"
                 },
-                //{
-                //    new[] { "TestData/Source/Count.Array.cs" },
-                //    "TestData/Results/Count.Array.cs"
-                //},
+                {
+                    new[] { "TestData/Source/Count.Array.cs" },
+                    "TestData/Results/Count.Array.cs"
+                },
                 //{
                 //    new[] { "TestData/Source/Count.Span.cs" },
                 //    "TestData/Results/Count.Span.cs"
                 //},
+                {
+                    new[] { "TestData/Source/Count.TestEnumerableWithValueTypeEnumerator.cs" },
+                    "TestData/Results/Count.TestEnumerableWithValueTypeEnumerator.cs"
+                },
             };
 
         [Theory]

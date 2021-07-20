@@ -8,9 +8,9 @@ namespace NetFabric.Hyperlinq.SourceGenerator
 {
     class SyntaxReceiver : ISyntaxReceiver
     {
-        readonly ImmutableArray<string> memberAccessNames;
+        readonly ImmutableHashSet<string> memberAccessNames;
 
-        public SyntaxReceiver(ImmutableArray<string> memberAccessNames) 
+        public SyntaxReceiver(ImmutableHashSet<string> memberAccessNames) 
             => this.memberAccessNames = memberAccessNames;
 
         public List<MemberAccessExpressionSyntax> MemberAccessExpressions { get; } = new();
