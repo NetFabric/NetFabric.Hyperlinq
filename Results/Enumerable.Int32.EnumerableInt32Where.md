@@ -18,22 +18,22 @@
 ### Results:
 ``` ini
 
-BenchmarkDotNet=v0.13.0, OS=Windows 10.0.19043.985 (21H1/May2021Update)
-Intel Core i7-7567U CPU 3.50GHz (Kaby Lake), 1 CPU, 4 logical and 2 physical cores
-.NET SDK=6.0.100-preview.4.21227.6
+BenchmarkDotNet=v0.13.0, OS=macOS Catalina 10.15.7 (19H1323) [Darwin 19.6.0]
+Intel Core i5-7360U CPU 2.30GHz (Kaby Lake), 1 CPU, 4 logical and 2 physical cores
+.NET SDK=6.0.100-preview.7.21379.14
   [Host] : .NET 5.0.6 (5.0.621.22011), X64 RyuJIT
-  .NET 6 : .NET 6.0.0 (6.0.21.22210), X64 RyuJIT
+  .NET 6 : .NET 6.0.0 (6.0.21.37719), X64 RyuJIT
 
 Job=.NET 6  EnvironmentVariables=COMPlus_ReadyToRun=0,COMPlus_TC_QuickJitForLoops=1,COMPlus_TieredPGO=1  Runtime=.NET 6.0  
 
 ```
-|                   Method | Count |        Mean |     Error |    StdDev |         Ratio | RatioSD |   Gen 0 | Gen 1 | Gen 2 | Allocated |
-|------------------------- |------ |------------:|----------:|----------:|--------------:|--------:|--------:|------:|------:|----------:|
-|                     Linq |   100 |    684.3 ns |   4.30 ns |   3.59 ns |      baseline |         |  0.0458 |     - |     - |      96 B |
-|                   LinqAF |   100 |    606.1 ns |   7.51 ns |   6.27 ns |  1.13x faster |   0.01x |  0.0191 |     - |     - |      40 B |
-|            LinqOptimizer |   100 | 44,830.0 ns | 378.80 ns | 543.26 ns | 65.36x slower |   0.90x | 13.9160 |     - |     - |  29,235 B |
-|                  Streams |   100 |  1,620.1 ns |  32.24 ns |  38.38 ns |  2.34x slower |   0.05x |  0.2823 |     - |     - |     592 B |
-|               StructLinq |   100 |    467.0 ns |   6.47 ns |   6.05 ns |  1.46x faster |   0.02x |  0.0305 |     - |     - |      64 B |
-| StructLinq_ValueDelegate |   100 |    379.8 ns |   3.48 ns |   3.25 ns |  1.80x faster |   0.02x |  0.0191 |     - |     - |      40 B |
-|                Hyperlinq |   100 |    511.7 ns |   2.28 ns |   1.90 ns |  1.34x faster |   0.01x |  0.0191 |     - |     - |      40 B |
-|  Hyperlinq_ValueDelegate |   100 |    441.9 ns |   5.68 ns |   5.32 ns |  1.55x faster |   0.02x |  0.0191 |     - |     - |      40 B |
+|                   Method | Count |        Mean |    Error |   StdDev |         Ratio | RatioSD |   Gen 0 | Gen 1 | Gen 2 | Allocated |
+|------------------------- |------ |------------:|---------:|---------:|--------------:|--------:|--------:|------:|------:|----------:|
+|                     Linq |   100 |    588.8 ns |  0.88 ns |  0.74 ns |      baseline |         |  0.0458 |     - |     - |      96 B |
+|                   LinqAF |   100 |    398.4 ns |  0.20 ns |  0.17 ns |  1.48x faster |   0.00x |  0.0191 |     - |     - |      40 B |
+|            LinqOptimizer |   100 | 46,118.9 ns | 65.78 ns | 58.32 ns | 78.33x slower |   0.14x | 13.8550 |     - |     - |  29,091 B |
+|                  Streams |   100 |  1,512.5 ns |  1.02 ns |  0.80 ns |  2.57x slower |   0.00x |  0.2823 |     - |     - |     592 B |
+|               StructLinq |   100 |    448.5 ns |  0.34 ns |  0.30 ns |  1.31x faster |   0.00x |  0.0305 |     - |     - |      64 B |
+| StructLinq_ValueDelegate |   100 |    287.3 ns |  0.30 ns |  0.25 ns |  2.05x faster |   0.00x |  0.0191 |     - |     - |      40 B |
+|                Hyperlinq |   100 |    445.2 ns |  0.35 ns |  0.32 ns |  1.32x faster |   0.00x |  0.0191 |     - |     - |      40 B |
+|  Hyperlinq_ValueDelegate |   100 |    341.2 ns |  0.14 ns |  0.11 ns |  1.73x faster |   0.00x |  0.0191 |     - |     - |      40 B |

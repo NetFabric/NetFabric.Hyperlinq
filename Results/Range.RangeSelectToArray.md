@@ -18,25 +18,25 @@
 ### Results:
 ``` ini
 
-BenchmarkDotNet=v0.13.0, OS=Windows 10.0.19043.985 (21H1/May2021Update)
-Intel Core i7-7567U CPU 3.50GHz (Kaby Lake), 1 CPU, 4 logical and 2 physical cores
-.NET SDK=6.0.100-preview.4.21227.6
+BenchmarkDotNet=v0.13.0, OS=macOS Catalina 10.15.7 (19H1323) [Darwin 19.6.0]
+Intel Core i5-7360U CPU 2.30GHz (Kaby Lake), 1 CPU, 4 logical and 2 physical cores
+.NET SDK=6.0.100-preview.7.21379.14
   [Host] : .NET 5.0.6 (5.0.621.22011), X64 RyuJIT
-  .NET 6 : .NET 6.0.0 (6.0.21.22210), X64 RyuJIT
+  .NET 6 : .NET 6.0.0 (6.0.21.37719), X64 RyuJIT
 
 Job=.NET 6  EnvironmentVariables=COMPlus_ReadyToRun=0,COMPlus_TC_QuickJitForLoops=1,COMPlus_TieredPGO=1  Runtime=.NET 6.0  
 
 ```
 |                       Method | Start | Count |      Mean |    Error |   StdDev |        Ratio | RatioSD |  Gen 0 | Gen 1 | Gen 2 | Allocated |
 |----------------------------- |------ |------ |----------:|---------:|---------:|-------------:|--------:|-------:|------:|------:|----------:|
-|                      ForLoop |     0 |   100 | 100.42 ns | 1.112 ns | 0.986 ns |     baseline |         | 0.2027 |     - |     - |     424 B |
-|                         Linq |     0 |   100 | 231.82 ns | 4.135 ns | 7.767 ns | 2.37x slower |   0.11x | 0.2446 |     - |     - |     512 B |
-|                   LinqFaster |     0 |   100 | 311.18 ns | 2.218 ns | 1.966 ns | 3.10x slower |   0.04x | 0.4053 |     - |     - |     848 B |
-|              LinqFaster_SIMD |     0 |   100 | 108.37 ns | 2.012 ns | 2.066 ns | 1.08x slower |   0.02x | 0.4053 |     - |     - |     848 B |
-|                       LinqAF |     0 |   100 | 747.85 ns | 6.472 ns | 5.737 ns | 7.45x slower |   0.11x | 0.7534 |     - |     - |   1,576 B |
-|                   StructLinq |     0 |   100 | 245.07 ns | 2.551 ns | 1.992 ns | 2.44x slower |   0.03x | 0.2294 |     - |     - |     480 B |
-|     StructLinq_ValueDelegate |     0 |   100 | 121.23 ns | 1.850 ns | 1.640 ns | 1.21x slower |   0.02x | 0.2027 |     - |     - |     424 B |
-|                    Hyperlinq |     0 |   100 | 256.39 ns | 1.949 ns | 1.823 ns | 2.56x slower |   0.03x | 0.2027 |     - |     - |     424 B |
-|      Hyperlinq_ValueDelegate |     0 |   100 | 142.34 ns | 1.267 ns | 1.123 ns | 1.42x slower |   0.02x | 0.2027 |     - |     - |     424 B |
-|               Hyperlinq_SIMD |     0 |   100 |  90.13 ns | 0.917 ns | 1.481 ns | 1.11x faster |   0.03x | 0.2027 |     - |     - |     424 B |
-| Hyperlinq_ValueDelegate_SIMD |     0 |   100 |  68.81 ns | 0.770 ns | 0.683 ns | 1.46x faster |   0.03x | 0.2027 |     - |     - |     424 B |
+|                      ForLoop |     0 |   100 | 104.95 ns | 0.227 ns | 0.212 ns |     baseline |         | 0.2027 |     - |     - |     424 B |
+|                         Linq |     0 |   100 | 241.63 ns | 0.448 ns | 0.374 ns | 2.30x slower |   0.01x | 0.2446 |     - |     - |     512 B |
+|                   LinqFaster |     0 |   100 | 347.94 ns | 0.732 ns | 0.649 ns | 3.32x slower |   0.01x | 0.4053 |     - |     - |     848 B |
+|              LinqFaster_SIMD |     0 |   100 | 125.79 ns | 0.398 ns | 0.372 ns | 1.20x slower |   0.00x | 0.4053 |     - |     - |     848 B |
+|                       LinqAF |     0 |   100 | 591.20 ns | 1.392 ns | 1.234 ns | 5.63x slower |   0.02x | 0.7534 |     - |     - |   1,576 B |
+|                   StructLinq |     0 |   100 | 228.38 ns | 0.238 ns | 0.211 ns | 2.18x slower |   0.01x | 0.2294 |     - |     - |     480 B |
+|     StructLinq_ValueDelegate |     0 |   100 | 107.33 ns | 1.236 ns | 1.156 ns | 1.02x slower |   0.01x | 0.2027 |     - |     - |     424 B |
+|                    Hyperlinq |     0 |   100 | 306.97 ns | 0.480 ns | 0.401 ns | 2.93x slower |   0.01x | 0.2027 |     - |     - |     424 B |
+|      Hyperlinq_ValueDelegate |     0 |   100 | 132.38 ns | 0.469 ns | 0.438 ns | 1.26x slower |   0.01x | 0.2027 |     - |     - |     424 B |
+|               Hyperlinq_SIMD |     0 |   100 |  97.05 ns | 0.122 ns | 0.108 ns | 1.08x faster |   0.00x | 0.2027 |     - |     - |     424 B |
+| Hyperlinq_ValueDelegate_SIMD |     0 |   100 |  65.10 ns | 1.404 ns | 1.826 ns | 1.60x faster |   0.05x | 0.2027 |     - |     - |     424 B |

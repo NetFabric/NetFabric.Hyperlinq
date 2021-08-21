@@ -18,17 +18,17 @@
 ### Results:
 ``` ini
 
-BenchmarkDotNet=v0.13.0, OS=Windows 10.0.19043.985 (21H1/May2021Update)
-Intel Core i7-7567U CPU 3.50GHz (Kaby Lake), 1 CPU, 4 logical and 2 physical cores
-.NET SDK=6.0.100-preview.4.21227.6
+BenchmarkDotNet=v0.13.0, OS=macOS Catalina 10.15.7 (19H1323) [Darwin 19.6.0]
+Intel Core i5-7360U CPU 2.30GHz (Kaby Lake), 1 CPU, 4 logical and 2 physical cores
+.NET SDK=6.0.100-preview.7.21379.14
   [Host] : .NET 5.0.6 (5.0.621.22011), X64 RyuJIT
-  .NET 6 : .NET 6.0.0 (6.0.21.22210), X64 RyuJIT
+  .NET 6 : .NET 6.0.0 (6.0.21.37719), X64 RyuJIT
 
 Job=.NET 6  EnvironmentVariables=COMPlus_ReadyToRun=0,COMPlus_TC_QuickJitForLoops=1,COMPlus_TieredPGO=1  Runtime=.NET 6.0  
 
 ```
-|      Method | Count |    Mean |    Error |   StdDev |        Ratio | RatioSD | Gen 0 | Gen 1 | Gen 2 | Allocated |
-|------------ |------ |--------:|---------:|---------:|-------------:|--------:|------:|------:|------:|----------:|
-| ForeachLoop |   100 | 1.570 s | 0.0208 s | 0.0184 s |     baseline |         |     - |     - |     - |     21 KB |
-|        Linq |   100 | 1.564 s | 0.0087 s | 0.0073 s | 1.00x faster |   0.01x |     - |     - |     - |     21 KB |
-|   Hyperlinq |   100 | 1.580 s | 0.0216 s | 0.0181 s | 1.01x slower |   0.02x |     - |     - |     - |     77 KB |
+|      Method | Count |     Mean |   Error |  StdDev |        Ratio | RatioSD | Gen 0 | Gen 1 | Gen 2 | Allocated |
+|------------ |------ |---------:|--------:|--------:|-------------:|--------:|------:|------:|------:|----------:|
+| ForeachLoop |   100 | 142.3 ms | 0.80 ms | 0.75 ms |     baseline |         |     - |     - |     - |     20 KB |
+|        Linq |   100 | 142.4 ms | 0.29 ms | 0.27 ms | 1.00x slower |   0.00x |     - |     - |     - |     23 KB |
+|   Hyperlinq |   100 | 142.8 ms | 0.58 ms | 0.54 ms | 1.00x slower |   0.01x |     - |     - |     - |     77 KB |

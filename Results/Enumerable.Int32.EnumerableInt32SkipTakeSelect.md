@@ -18,22 +18,22 @@
 ### Results:
 ``` ini
 
-BenchmarkDotNet=v0.13.0, OS=Windows 10.0.19043.985 (21H1/May2021Update)
-Intel Core i7-7567U CPU 3.50GHz (Kaby Lake), 1 CPU, 4 logical and 2 physical cores
-.NET SDK=6.0.100-preview.4.21227.6
+BenchmarkDotNet=v0.13.0, OS=macOS Catalina 10.15.7 (19H1323) [Darwin 19.6.0]
+Intel Core i5-7360U CPU 2.30GHz (Kaby Lake), 1 CPU, 4 logical and 2 physical cores
+.NET SDK=6.0.100-preview.7.21379.14
   [Host] : .NET 5.0.6 (5.0.621.22011), X64 RyuJIT
-  .NET 6 : .NET 6.0.0 (6.0.21.22210), X64 RyuJIT
+  .NET 6 : .NET 6.0.0 (6.0.21.37719), X64 RyuJIT
 
 Job=.NET 6  EnvironmentVariables=COMPlus_ReadyToRun=0,COMPlus_TC_QuickJitForLoops=1,COMPlus_TieredPGO=1  Runtime=.NET 6.0  
 
 ```
 |                   Method | Skip | Count |      Mean |     Error |    StdDev |         Ratio | RatioSD |   Gen 0 | Gen 1 | Gen 2 | Allocated |
 |------------------------- |----- |------ |----------:|----------:|----------:|--------------:|--------:|--------:|------:|------:|----------:|
-|                     Linq | 1000 |   100 |  3.805 μs | 0.0379 μs | 0.0316 μs |      baseline |         |  0.0992 |     - |     - |     208 B |
-|                   LinqAF | 1000 |   100 |  3.527 μs | 0.0277 μs | 0.0232 μs |  1.08x faster |   0.01x |  0.0191 |     - |     - |      40 B |
-|            LinqOptimizer | 1000 |   100 | 53.609 μs | 0.5157 μs | 1.2053 μs | 14.27x slower |   0.47x | 15.5640 |     - |     - |  32,618 B |
-|                  Streams | 1000 |   100 |  8.937 μs | 0.0870 μs | 0.0679 μs |  2.35x slower |   0.02x |  0.4272 |     - |     - |     920 B |
-|               StructLinq | 1000 |   100 |  2.804 μs | 0.0234 μs | 0.0195 μs |  1.36x faster |   0.02x |  0.0610 |     - |     - |     128 B |
-| StructLinq_ValueDelegate | 1000 |   100 |  3.502 μs | 0.0354 μs | 0.0314 μs |  1.09x faster |   0.01x |  0.0191 |     - |     - |      40 B |
-|                Hyperlinq | 1000 |   100 |  2.663 μs | 0.0195 μs | 0.0182 μs |  1.43x faster |   0.01x |  0.0191 |     - |     - |      40 B |
-|  Hyperlinq_ValueDelegate | 1000 |   100 |  2.552 μs | 0.0193 μs | 0.0171 μs |  1.49x faster |   0.01x |  0.0191 |     - |     - |      40 B |
+|                     Linq | 1000 |   100 |  3.071 μs | 0.0181 μs | 0.0160 μs |      baseline |         |  0.0992 |     - |     - |     208 B |
+|                   LinqAF | 1000 |   100 |  3.103 μs | 0.0011 μs | 0.0009 μs |  1.01x slower |   0.01x |  0.0191 |     - |     - |      40 B |
+|            LinqOptimizer | 1000 |   100 | 55.090 μs | 0.1880 μs | 0.1759 μs | 17.94x slower |   0.11x | 15.5640 |     - |     - |  32,618 B |
+|                  Streams | 1000 |   100 |  7.444 μs | 0.1335 μs | 0.1042 μs |  2.42x slower |   0.03x |  0.4349 |     - |     - |     920 B |
+|               StructLinq | 1000 |   100 |  2.668 μs | 0.0158 μs | 0.0132 μs |  1.15x faster |   0.01x |  0.0610 |     - |     - |     128 B |
+| StructLinq_ValueDelegate | 1000 |   100 |  2.435 μs | 0.0085 μs | 0.0075 μs |  1.26x faster |   0.01x |  0.0191 |     - |     - |      40 B |
+|                Hyperlinq | 1000 |   100 |  3.597 μs | 0.0036 μs | 0.0032 μs |  1.17x slower |   0.01x |  0.0191 |     - |     - |      40 B |
+|  Hyperlinq_ValueDelegate | 1000 |   100 |  2.859 μs | 0.0020 μs | 0.0016 μs |  1.07x faster |   0.01x |  0.0191 |     - |     - |      40 B |

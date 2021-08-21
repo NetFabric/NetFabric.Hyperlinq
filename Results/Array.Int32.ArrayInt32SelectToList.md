@@ -18,30 +18,30 @@
 ### Results:
 ``` ini
 
-BenchmarkDotNet=v0.13.0, OS=Windows 10.0.19043.985 (21H1/May2021Update)
-Intel Core i7-7567U CPU 3.50GHz (Kaby Lake), 1 CPU, 4 logical and 2 physical cores
-.NET SDK=6.0.100-preview.4.21227.6
+BenchmarkDotNet=v0.13.0, OS=macOS Catalina 10.15.7 (19H1323) [Darwin 19.6.0]
+Intel Core i5-7360U CPU 2.30GHz (Kaby Lake), 1 CPU, 4 logical and 2 physical cores
+.NET SDK=6.0.100-preview.7.21379.14
   [Host] : .NET 5.0.6 (5.0.621.22011), X64 RyuJIT
-  .NET 6 : .NET 6.0.0 (6.0.21.22210), X64 RyuJIT
+  .NET 6 : .NET 6.0.0 (6.0.21.37719), X64 RyuJIT
 
 Job=.NET 6  EnvironmentVariables=COMPlus_ReadyToRun=0,COMPlus_TC_QuickJitForLoops=1,COMPlus_TieredPGO=1  Runtime=.NET 6.0  
 
 ```
-|                       Method | Count |         Mean |      Error |     StdDev |          Ratio | RatioSD |   Gen 0 | Gen 1 | Gen 2 | Allocated |
-|----------------------------- |------ |-------------:|-----------:|-----------:|---------------:|--------:|--------:|------:|------:|----------:|
-|                      ForLoop |   100 |    289.07 ns |   1.816 ns |   1.610 ns |       baseline |         |  0.5660 |     - |     - |   1,184 B |
-|                  ForeachLoop |   100 |    289.50 ns |   2.920 ns |   2.588 ns |   1.00x slower |   0.01x |  0.5660 |     - |     - |   1,184 B |
-|                         Linq |   100 |    253.31 ns |   2.848 ns |   2.224 ns |   1.14x faster |   0.01x |  0.2408 |     - |     - |     504 B |
-|                   LinqFaster |   100 |    275.70 ns |   3.085 ns |   2.734 ns |   1.05x faster |   0.01x |  0.4206 |     - |     - |     880 B |
-|              LinqFaster_SIMD |   100 |    119.95 ns |   0.944 ns |   0.837 ns |   2.41x faster |   0.02x |  0.4206 |     - |     - |     880 B |
-|                 LinqFasterer |   100 |    311.24 ns |   2.728 ns |   2.552 ns |   1.08x slower |   0.01x |  0.4206 |     - |     - |     880 B |
-|                       LinqAF |   100 |    888.95 ns |   5.805 ns |   4.847 ns |   3.08x slower |   0.02x |  0.5655 |     - |     - |   1,184 B |
-|                LinqOptimizer |   100 | 34,858.89 ns | 317.816 ns | 265.390 ns | 120.64x slower |   1.24x | 13.4888 |     - |     - |  28,340 B |
-|                     SpanLinq |   100 |    329.69 ns |   2.858 ns |   2.674 ns |   1.14x slower |   0.01x |  0.2179 |     - |     - |     456 B |
-|                      Streams |   100 |  1,416.71 ns |   9.486 ns |   8.409 ns |   4.90x slower |   0.05x |  0.7534 |     - |     - |   1,576 B |
-|                   StructLinq |   100 |    254.12 ns |   2.338 ns |   2.187 ns |   1.14x faster |   0.01x |  0.2484 |     - |     - |     520 B |
-|     StructLinq_ValueDelegate |   100 |    136.83 ns |   1.228 ns |   1.026 ns |   2.11x faster |   0.02x |  0.2370 |     - |     - |     496 B |
-|                    Hyperlinq |   100 |    241.78 ns |   2.236 ns |   1.982 ns |   1.20x faster |   0.01x |  0.2179 |     - |     - |     456 B |
-|      Hyperlinq_ValueDelegate |   100 |    119.53 ns |   0.989 ns |   0.826 ns |   2.42x faster |   0.02x |  0.2179 |     - |     - |     456 B |
-|               Hyperlinq_SIMD |   100 |     97.41 ns |   1.151 ns |   0.961 ns |   2.97x faster |   0.04x |  0.2180 |     - |     - |     456 B |
-| Hyperlinq_ValueDelegate_SIMD |   100 |     67.95 ns |   0.833 ns |   0.738 ns |   4.25x faster |   0.06x |  0.2180 |     - |     - |     456 B |
+|                       Method | Count |         Mean |     Error |    StdDev |       Median |          Ratio | RatioSD |   Gen 0 | Gen 1 | Gen 2 | Allocated |
+|----------------------------- |------ |-------------:|----------:|----------:|-------------:|---------------:|--------:|--------:|------:|------:|----------:|
+|                      ForLoop |   100 |    319.95 ns |  0.549 ns |  0.514 ns |    319.79 ns |       baseline |         |  0.5660 |     - |     - |   1,184 B |
+|                  ForeachLoop |   100 |    326.32 ns |  1.404 ns |  1.096 ns |    326.01 ns |   1.02x slower |   0.00x |  0.5660 |     - |     - |   1,184 B |
+|                         Linq |   100 |    313.61 ns |  0.376 ns |  0.333 ns |    313.70 ns |   1.02x faster |   0.00x |  0.2408 |     - |     - |     504 B |
+|                   LinqFaster |   100 |    328.03 ns |  0.580 ns |  0.514 ns |    327.92 ns |   1.03x slower |   0.00x |  0.4206 |     - |     - |     880 B |
+|              LinqFaster_SIMD |   100 |    147.86 ns |  0.560 ns |  0.524 ns |    147.65 ns |   2.16x faster |   0.01x |  0.4208 |     - |     - |     880 B |
+|                 LinqFasterer |   100 |    281.84 ns |  0.618 ns |  0.547 ns |    281.55 ns |   1.14x faster |   0.00x |  0.4206 |     - |     - |     880 B |
+|                       LinqAF |   100 |    569.37 ns |  0.860 ns |  0.763 ns |    569.37 ns |   1.78x slower |   0.00x |  0.5655 |     - |     - |   1,184 B |
+|                LinqOptimizer |   100 | 36,173.60 ns | 60.717 ns | 50.701 ns | 36,173.10 ns | 113.03x slower |   0.26x | 13.5498 |     - |     - |  28,340 B |
+|                     SpanLinq |   100 |    351.64 ns |  1.542 ns |  1.287 ns |    351.44 ns |   1.10x slower |   0.00x |  0.2179 |     - |     - |     456 B |
+|                      Streams |   100 |  1,527.13 ns |  2.761 ns |  2.447 ns |  1,526.09 ns |   4.77x slower |   0.01x |  0.7534 |     - |     - |   1,576 B |
+|                   StructLinq |   100 |    272.42 ns |  0.393 ns |  0.368 ns |    272.33 ns |   1.17x faster |   0.00x |  0.2484 |     - |     - |     520 B |
+|     StructLinq_ValueDelegate |   100 |    204.25 ns |  0.387 ns |  0.362 ns |    204.31 ns |   1.57x faster |   0.00x |  0.2370 |     - |     - |     496 B |
+|                    Hyperlinq |   100 |    289.90 ns |  0.493 ns |  0.411 ns |    289.84 ns |   1.10x faster |   0.00x |  0.2179 |     - |     - |     456 B |
+|      Hyperlinq_ValueDelegate |   100 |    128.27 ns |  0.236 ns |  0.221 ns |    128.25 ns |   2.49x faster |   0.01x |  0.2179 |     - |     - |     456 B |
+|               Hyperlinq_SIMD |   100 |    105.49 ns |  2.190 ns |  3.140 ns |    103.21 ns |   2.97x faster |   0.07x |  0.2180 |     - |     - |     456 B |
+| Hyperlinq_ValueDelegate_SIMD |   100 |     68.85 ns |  0.162 ns |  0.143 ns |     68.87 ns |   4.65x faster |   0.01x |  0.2180 |     - |     - |     456 B |

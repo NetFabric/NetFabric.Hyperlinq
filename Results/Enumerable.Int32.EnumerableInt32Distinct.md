@@ -18,20 +18,20 @@
 ### Results:
 ``` ini
 
-BenchmarkDotNet=v0.13.0, OS=Windows 10.0.19043.985 (21H1/May2021Update)
-Intel Core i7-7567U CPU 3.50GHz (Kaby Lake), 1 CPU, 4 logical and 2 physical cores
-.NET SDK=6.0.100-preview.4.21227.6
+BenchmarkDotNet=v0.13.0, OS=macOS Catalina 10.15.7 (19H1323) [Darwin 19.6.0]
+Intel Core i5-7360U CPU 2.30GHz (Kaby Lake), 1 CPU, 4 logical and 2 physical cores
+.NET SDK=6.0.100-preview.7.21379.14
   [Host] : .NET 5.0.6 (5.0.621.22011), X64 RyuJIT
-  .NET 6 : .NET 6.0.0 (6.0.21.22210), X64 RyuJIT
+  .NET 6 : .NET 6.0.0 (6.0.21.37719), X64 RyuJIT
 
 Job=.NET 6  EnvironmentVariables=COMPlus_ReadyToRun=0,COMPlus_TC_QuickJitForLoops=1,COMPlus_TieredPGO=1  Runtime=.NET 6.0  
 
 ```
-|                   Method | Count |       Mean |    Error |   StdDev |        Ratio | RatioSD |  Gen 0 | Gen 1 | Gen 2 | Allocated |
-|------------------------- |------ |-----------:|---------:|---------:|-------------:|--------:|-------:|------:|------:|----------:|
-|              ForeachLoop |   100 |   960.4 ns |  6.02 ns |  5.33 ns |     baseline |         | 0.0992 |     - |     - |     208 B |
-|                     Linq |   100 |   954.9 ns |  5.50 ns |  4.88 ns | 1.01x faster |   0.01x | 0.1602 |     - |     - |     336 B |
-|                   LinqAF |   100 | 1,950.4 ns | 22.59 ns | 21.13 ns | 2.03x slower |   0.03x | 1.2550 |     - |     - |   2,624 B |
-|               StructLinq |   100 |   945.7 ns | 10.30 ns |  9.13 ns | 1.02x faster |   0.01x | 0.0305 |     - |     - |      64 B |
-| StructLinq_ValueDelegate |   100 |   821.5 ns |  4.52 ns |  3.78 ns | 1.17x faster |   0.01x | 0.0191 |     - |     - |      40 B |
-|                Hyperlinq |   100 | 1,031.4 ns |  5.99 ns |  5.00 ns | 1.07x slower |   0.01x | 0.0191 |     - |     - |      40 B |
+|                   Method | Count |       Mean |   Error |  StdDev |        Ratio | RatioSD |  Gen 0 | Gen 1 | Gen 2 | Allocated |
+|------------------------- |------ |-----------:|--------:|--------:|-------------:|--------:|-------:|------:|------:|----------:|
+|              ForeachLoop |   100 |   747.3 ns | 0.42 ns | 0.35 ns |     baseline |         | 0.0992 |     - |     - |     208 B |
+|                     Linq |   100 |   800.3 ns | 0.68 ns | 0.60 ns | 1.07x slower |   0.00x | 0.1602 |     - |     - |     336 B |
+|                   LinqAF |   100 | 1,570.5 ns | 2.90 ns | 2.42 ns | 2.10x slower |   0.00x | 1.2531 |     - |     - |   2,624 B |
+|               StructLinq |   100 |   733.7 ns | 0.64 ns | 0.53 ns | 1.02x faster |   0.00x | 0.0305 |     - |     - |      64 B |
+| StructLinq_ValueDelegate |   100 |   735.8 ns | 3.57 ns | 3.16 ns | 1.02x faster |   0.00x | 0.0191 |     - |     - |      40 B |
+|                Hyperlinq |   100 |   776.8 ns | 1.05 ns | 0.88 ns | 1.04x slower |   0.00x | 0.0191 |     - |     - |      40 B |

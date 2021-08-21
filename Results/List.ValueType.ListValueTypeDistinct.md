@@ -18,23 +18,23 @@
 ### Results:
 ``` ini
 
-BenchmarkDotNet=v0.13.0, OS=Windows 10.0.19043.985 (21H1/May2021Update)
-Intel Core i7-7567U CPU 3.50GHz (Kaby Lake), 1 CPU, 4 logical and 2 physical cores
-.NET SDK=6.0.100-preview.4.21227.6
+BenchmarkDotNet=v0.13.0, OS=macOS Catalina 10.15.7 (19H1323) [Darwin 19.6.0]
+Intel Core i5-7360U CPU 2.30GHz (Kaby Lake), 1 CPU, 4 logical and 2 physical cores
+.NET SDK=6.0.100-preview.7.21379.14
   [Host] : .NET 5.0.6 (5.0.621.22011), X64 RyuJIT
-  .NET 6 : .NET 6.0.0 (6.0.21.22210), X64 RyuJIT
+  .NET 6 : .NET 6.0.0 (6.0.21.37719), X64 RyuJIT
 
 Job=.NET 6  EnvironmentVariables=COMPlus_ReadyToRun=0,COMPlus_TC_QuickJitForLoops=1,COMPlus_TieredPGO=1  Runtime=.NET 6.0  
 
 ```
-|                   Method | Duplicates | Count |      Mean |     Error |    StdDev |    Median |        Ratio | RatioSD |   Gen 0 | Gen 1 | Gen 2 | Allocated |
-|------------------------- |----------- |------ |----------:|----------:|----------:|----------:|-------------:|--------:|--------:|------:|------:|----------:|
-|                  ForLoop |          4 |   100 | 15.737 μs | 0.3142 μs | 0.9263 μs | 15.200 μs |     baseline |         | 12.8174 |     - |     - |  26,976 B |
-|              ForeachLoop |          4 |   100 | 15.201 μs | 0.1339 μs | 0.1187 μs | 15.182 μs | 1.02x faster |   0.06x | 12.8174 |     - |     - |  26,976 B |
-|                     Linq |          4 |   100 | 20.457 μs | 0.3444 μs | 0.3221 μs | 20.365 μs | 1.32x slower |   0.07x | 12.8174 |     - |     - |  26,912 B |
-|               LinqFaster |          4 |   100 |  3.612 μs | 0.0479 μs | 0.0448 μs |  3.634 μs | 4.30x faster |   0.22x |  0.0114 |     - |     - |      24 B |
-|             LinqFasterer |          4 |   100 | 18.086 μs | 0.3244 μs | 0.2709 μs | 18.001 μs | 1.18x slower |   0.06x | 34.8816 |     - |     - |  73,168 B |
-|                   LinqAF |          4 |   100 | 68.328 μs | 0.3934 μs | 0.3680 μs | 68.431 μs | 4.41x slower |   0.26x | 20.2637 |     - |     - |  42,504 B |
-|               StructLinq |          4 |   100 | 15.386 μs | 0.0759 μs | 0.0673 μs | 15.384 μs | 1.01x faster |   0.06x |  0.0305 |     - |     - |      64 B |
-| StructLinq_ValueDelegate |          4 |   100 |  5.229 μs | 0.0499 μs | 0.0416 μs |  5.229 μs | 2.94x faster |   0.16x |       - |     - |     - |         - |
-|                Hyperlinq |          4 |   100 | 14.186 μs | 0.0807 μs | 0.0716 μs | 14.194 μs | 1.09x faster |   0.06x |       - |     - |     - |         - |
+|                   Method | Duplicates | Count |      Mean |     Error |    StdDev |        Ratio | RatioSD |   Gen 0 | Gen 1 | Gen 2 | Allocated |
+|------------------------- |----------- |------ |----------:|----------:|----------:|-------------:|--------:|--------:|------:|------:|----------:|
+|                  ForLoop |          4 |   100 | 12.370 μs | 0.0181 μs | 0.0169 μs |     baseline |         | 12.8784 |     - |     - |  26,976 B |
+|              ForeachLoop |          4 |   100 | 13.397 μs | 0.0168 μs | 0.0141 μs | 1.08x slower |   0.00x | 12.8784 |     - |     - |  26,976 B |
+|                     Linq |          4 |   100 | 15.083 μs | 0.0218 μs | 0.0193 μs | 1.22x slower |   0.00x | 12.8174 |     - |     - |  26,912 B |
+|               LinqFaster |          4 |   100 |  2.792 μs | 0.0014 μs | 0.0011 μs | 4.43x faster |   0.01x |  0.0114 |     - |     - |      24 B |
+|             LinqFasterer |          4 |   100 | 17.228 μs | 0.1209 μs | 0.1131 μs | 1.39x slower |   0.01x | 34.8816 |     - |     - |  73,168 B |
+|                   LinqAF |          4 |   100 | 38.352 μs | 0.0902 μs | 0.0704 μs | 3.10x slower |   0.01x | 20.9961 |     - |     - |  43,944 B |
+|               StructLinq |          4 |   100 | 13.138 μs | 0.0082 μs | 0.0077 μs | 1.06x slower |   0.00x |  0.0305 |     - |     - |      64 B |
+| StructLinq_ValueDelegate |          4 |   100 |  5.081 μs | 0.0045 μs | 0.0042 μs | 2.43x faster |   0.00x |       - |     - |     - |         - |
+|                Hyperlinq |          4 |   100 | 13.089 μs | 0.0104 μs | 0.0092 μs | 1.06x slower |   0.00x |       - |     - |     - |         - |
