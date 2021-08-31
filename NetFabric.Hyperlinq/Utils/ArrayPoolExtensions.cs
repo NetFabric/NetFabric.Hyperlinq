@@ -7,48 +7,53 @@ namespace NetFabric.Hyperlinq
     static class ArrayPoolExtensions
     {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static ValueMemoryOwner<T> RentMemory<T>(this ArrayPool<T> pool, int length, bool clearOnDispose)
-            => new(pool, length, sliced: false, clearOnDispose);
-        
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static ValueMemoryOwner<T> RentSliced<T>(this ArrayPool<T> pool, int length, bool clearOnDispose)
-            => new(pool, length, sliced: true, clearOnDispose);
+        public static ValueMemoryOwner<T> RentDisposable<T>(this ArrayPool<T> pool, int length, bool clearOnDispose)
+            => new(pool, length, clearOnDispose);
     }
 
     public struct ValueMemoryOwner<T>
         : IMemoryOwner<T>
     {
         readonly ArrayPool<T> pool;
-        T[]? array;
         readonly int length;
         readonly bool clearOnDispose;
+        T[]? rented;
 
-        internal ValueMemoryOwner(ArrayPool<T> pool, int length, bool sliced, bool clearOnDispose)
+        internal ValueMemoryOwner(ArrayPool<T> pool, int length, bool clearOnDispose)
         {
             this.pool = pool;
-            array = pool.Rent(length);
-            this.length = sliced ? length : array.Length;
+            this.length = length;
             this.clearOnDispose = clearOnDispose;
+            rented = this.pool.Rent(length);
         }
 
-        public Memory<T> Memory
+        public readonly T[] Rented 
         {
             get
             {
-                var array = this.array;
+                var array = rented;
                 if (array is null)
                     Throw.ObjectDisposedException(nameof(ValueMemoryOwner<T>));
-
+                return array;
+            }
+        }
+        public readonly Memory<T> Memory
+        {
+            get
+            {
+                var array = rented;
+                if (array is null)
+                    Throw.ObjectDisposedException(nameof(ValueMemoryOwner<T>));
                 return new Memory<T>(array, 0, length);
             }
         }
 
         public void Dispose()
         {
-            var array = this.array;
+            var array = rented;
             if (array is not null)
             {
-                this.array = null;
+                rented = null;
                 pool.Return(array, clearOnDispose);
             }
         }

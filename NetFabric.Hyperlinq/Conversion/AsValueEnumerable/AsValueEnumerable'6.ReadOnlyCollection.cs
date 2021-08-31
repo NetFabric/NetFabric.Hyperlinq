@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Buffers;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
@@ -104,12 +105,8 @@ namespace NetFabric.Hyperlinq
 
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public bool Contains(TSource item)
-                => source switch
-                {
-                    ICollection<TSource> collection => collection.Contains(item),
-                    _ => Count is not 0 && source.Contains(item),
-                };
+            bool ICollection<TSource>.Contains(TSource item)
+                => Contains(item, default);
 
             [ExcludeFromCodeCoverage]
             void ICollection<TSource>.Add(TSource item) 
@@ -123,12 +120,32 @@ namespace NetFabric.Hyperlinq
 
             #region Conversion
 
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public ValueEnumerable<TEnumerable, TEnumerator, TEnumerator2, TSource, TGetEnumerator, TGetEnumerator2> AsValueEnumerable()
                 => this;
 
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public TEnumerable AsEnumerable()
                 => source;
 
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public TSource[] ToArray()
+                => ValueReadOnlyCollectionExtensions.ToArray<ValueEnumerable<TEnumerable, TEnumerator, TEnumerator2, TSource, TGetEnumerator, TGetEnumerator2>, TEnumerator, TSource>(this);
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public ValueMemoryOwner<TSource> ToArray(ArrayPool<TSource> pool, bool clearOnDispose = default)
+                => ValueReadOnlyCollectionExtensions.ToArray<ValueEnumerable<TEnumerable, TEnumerator, TEnumerator2, TSource, TGetEnumerator, TGetEnumerator2>, TEnumerator, TSource>(this, pool, clearOnDispose);
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public List<TSource> ToList()
+                => ValueReadOnlyCollectionExtensions.ToList<ValueEnumerable<TEnumerable, TEnumerator, TEnumerator2, TSource, TGetEnumerator, TGetEnumerator2>, TEnumerator, TSource>(this);
+
+            #endregion
+            #region Quantifier
+
+            public bool Contains(TSource value, IEqualityComparer<TSource>? comparer = default)
+                => Count is not 0 && source.Contains(value);
+            
             #endregion
         }
 

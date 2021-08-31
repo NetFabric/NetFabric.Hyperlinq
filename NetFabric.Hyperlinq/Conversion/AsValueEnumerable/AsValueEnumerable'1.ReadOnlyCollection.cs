@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Buffers;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
@@ -71,12 +72,8 @@ namespace NetFabric.Hyperlinq
             }
             
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public bool Contains(TSource item)
-                => source switch
-                {
-                    ICollection<TSource> collection => collection.Contains(item),
-                    _ => Count is not 0 && source.Contains(item),
-                };
+            bool ICollection<TSource>.Contains(TSource item)
+                => Contains(item, default);
 
             [ExcludeFromCodeCoverage]
             void ICollection<TSource>.Add(TSource item) 
@@ -96,13 +93,24 @@ namespace NetFabric.Hyperlinq
             public IReadOnlyCollection<TSource> AsEnumerable()
                 => source;
 
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public TSource[] ToArray()
+                => ValueReadOnlyCollectionExtensions.ToArray<ValueEnumerable<TSource>, ValueEnumerator<TSource>, TSource>(this);
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public ValueMemoryOwner<TSource> ToArray(ArrayPool<TSource> pool, bool clearOnDispose = default)
+                => ValueReadOnlyCollectionExtensions.ToArray<ValueEnumerable<TSource>, ValueEnumerator<TSource>, TSource>(this, pool, clearOnDispose);
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public List<TSource> ToList()
+                => ValueReadOnlyCollectionExtensions.ToList<ValueEnumerable<TSource>, ValueEnumerator<TSource>, TSource>(this);
+
             #endregion
             #region Quantifier
 
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public bool Contains(TSource value, IEqualityComparer<TSource>? comparer)
-                => Count is not 0 && source.Contains(value, comparer);
-
+            public bool Contains(TSource value, IEqualityComparer<TSource>? comparer = default)
+                => Count is not 0 && source.Contains(value);
+            
             #endregion
         }
 

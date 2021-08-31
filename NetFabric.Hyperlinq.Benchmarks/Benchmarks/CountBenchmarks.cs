@@ -111,18 +111,22 @@ namespace NetFabric.Hyperlinq.Benchmarks
         [BenchmarkCategory("Array")]
         [Benchmark]
         public int Hyperlinq_Array()
-            => array.AsValueEnumerable().Count();
+            => array
+                .AsValueEnumerable()
+                .Count();
 
         [BenchmarkCategory("Enumerable_Value")]
         [Benchmark]
         public int Hyperlinq_Enumerable_Value()
-            => enumerableValue.AsValueEnumerable()
+            => enumerableValue
+                .AsValueEnumerable()
                 .Count();
 
         [BenchmarkCategory("Collection_Value")]
         [Benchmark]
         public int Hyperlinq_Collection_Value()
-            => collectionValue.AsValueEnumerable()
+            => collectionValue
+                .AsValueEnumerable()
                 .Count();
 
         [BenchmarkCategory("List_Value")]

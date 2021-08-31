@@ -172,7 +172,7 @@ namespace NetFabric.Hyperlinq
 
         public readonly ValueMemoryOwner<TElement> ToArray(ArrayPool<TElement> pool, bool clearOnDispose)
         {
-            var result = pool.RentSliced(Count, clearOnDispose);
+            var result = pool.RentDisposable(Count, clearOnDispose);
             CopyTo(result.Memory.Span);
             return result;
         }

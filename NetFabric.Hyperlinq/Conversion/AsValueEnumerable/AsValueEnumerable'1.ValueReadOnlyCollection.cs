@@ -67,12 +67,8 @@ namespace NetFabric.Hyperlinq
 
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public bool Contains(TSource item)
-                => source switch
-                {
-                    ICollection<TSource> collection => collection.Contains(item),
-                    _ => Count is not 0 && source.Contains(item),
-                };
+            bool ICollection<TSource>.Contains(TSource item)
+                => Contains(item, default);
 
             [ExcludeFromCodeCoverage]
             void ICollection<TSource>.Add(TSource item) 
@@ -93,6 +89,20 @@ namespace NetFabric.Hyperlinq
                 => source;
 
             #endregion
+            
+            #region Quantifier
+
+            public bool Contains(TSource value, IEqualityComparer<TSource>? comparer = default)
+            {
+                if (Count is 0)
+                    return false;
+                
+                if (Utils.UseDefault(comparer) && source is ICollection<TSource> collection)
+                    return collection.Contains(value);
+
+                return source.Contains<IValueEnumerable<TSource, TEnumerator>, TEnumerator, TSource>(value, comparer);
+            }
+            #endregion        
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

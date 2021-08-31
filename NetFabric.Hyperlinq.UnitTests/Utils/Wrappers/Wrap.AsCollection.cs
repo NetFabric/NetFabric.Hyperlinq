@@ -23,13 +23,13 @@ namespace NetFabric.Hyperlinq
                 : base(source)
             { }
 
-            public bool IsReadOnly  
+            bool ICollection<T>.IsReadOnly  
                 => true;
 
-            public void CopyTo(T[] array, int arrayIndex) 
+            void ICollection<T>.CopyTo(T[] array, int arrayIndex) 
                 => source.CopyTo(array, arrayIndex);
 
-            public bool Contains(T item)
+            bool ICollection<T>.Contains(T item)
                 => ((ICollection<T>)source).Contains(item);
 
             void ICollection<T>.Add(T item) 

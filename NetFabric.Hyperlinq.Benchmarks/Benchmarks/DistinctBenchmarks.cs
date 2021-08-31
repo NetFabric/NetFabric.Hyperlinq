@@ -4,6 +4,8 @@ using StructLinq;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+// ReSharper disable ForeachCanBeConvertedToQueryUsingAnotherGetEnumerator
+// ReSharper disable LoopCanBeConvertedToQuery
 
 namespace NetFabric.Hyperlinq.Benchmarks
 {

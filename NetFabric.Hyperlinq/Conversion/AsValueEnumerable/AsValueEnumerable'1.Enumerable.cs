@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System.Buffers;
+using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
@@ -38,6 +39,30 @@ namespace NetFabric.Hyperlinq
 
             public IEnumerable<TSource> AsEnumerable()
                 => source;
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public TSource[] ToArray()
+                => this.ToArray<ValueEnumerable<TSource>, ValueEnumerator<TSource>, TSource>();
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public ValueMemoryOwner<TSource> ToArray(ArrayPool<TSource> pool, bool clearOnDispose = default)
+                => this.ToArray<ValueEnumerable<TSource>, ValueEnumerator<TSource>, TSource>(pool, clearOnDispose);
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public List<TSource> ToList()
+                => this.ToList<ValueEnumerable<TSource>, ValueEnumerator<TSource>, TSource>();
+
+            #endregion
+            
+            #region Quantifier
+
+            public bool Contains(TSource value, IEqualityComparer<TSource>? comparer = default)
+            {
+                if (Utils.UseDefault(comparer) && source is ICollection<TSource> collection)
+                    return collection.Contains(value);
+
+                return this.Contains<ValueEnumerable<TSource>, ValueEnumerator<TSource>, TSource>(value, comparer);
+            }
 
             #endregion
         }

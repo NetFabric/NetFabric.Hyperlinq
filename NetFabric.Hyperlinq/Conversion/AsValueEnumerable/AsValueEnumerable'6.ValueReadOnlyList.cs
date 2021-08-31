@@ -114,6 +114,7 @@ namespace NetFabric.Hyperlinq
             {
                 switch (source)
                 {
+                    // ReSharper disable once HeapView.PossibleBoxingAllocation
                     case ICollection<TSource> collection:
                         collection.CopyTo(array, arrayIndex);
                         break;
@@ -124,12 +125,8 @@ namespace NetFabric.Hyperlinq
             }
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public readonly bool Contains(TSource item)
-                => source switch
-                {
-                    ICollection<TSource> collection => collection.Contains(item),
-                    _ => Count is not 0 && source.Contains(item),
-                };
+            bool ICollection<TSource>.Contains(TSource item)
+                => Contains(item, default);
 
             public readonly int IndexOf(TSource item)
             {
@@ -206,6 +203,22 @@ namespace NetFabric.Hyperlinq
                 => SelectAt<ValueEnumerable<TEnumerable, TEnumerator, TEnumerator2, TSource, TGetEnumerator, TGetEnumerator2>, TEnumerator, TSource, TResult, TSelector>(this, selector);
 
             #endregion
+            
+            #region Quantifier
+            
+            public bool Contains(TSource value, IEqualityComparer<TSource>? comparer = default)
+            {
+                if (Count is 0)
+                    return false;
+                
+                // ReSharper disable once HeapView.PossibleBoxingAllocation
+                if (Utils.UseDefault(comparer) && source is ICollection<TSource> collection)
+                    return collection.Contains(value);
+
+                return ValueReadOnlyCollectionExtensions.Contains<TEnumerable, TEnumerator, TSource>(source, value, comparer);
+            }
+            
+            #endregion        
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

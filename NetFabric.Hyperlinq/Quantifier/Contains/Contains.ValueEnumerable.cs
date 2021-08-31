@@ -10,12 +10,12 @@ namespace NetFabric.Hyperlinq
         {
             if (Utils.UseDefault(comparer))
             {
-                return source switch
-                {
-                    // ReSharper disable once HeapView.PossibleBoxingAllocation
-                    ICollection<TSource> collection => collection.Contains(value),
-                    _ => DefaultContains(source, value),
-                };
+                // ReSharper disable once HeapView.PossibleBoxingAllocation
+                if (source is ICollection<TSource> collection)
+                    return collection.Contains(value);
+
+                if (Utils.IsValueType<TSource>())
+                    return DefaultContains(source, value);
             }
 
             return ComparerContains(source, value, comparer);

@@ -59,18 +59,22 @@ namespace NetFabric.Hyperlinq.Benchmarks
         [BenchmarkCategory("Array")]
         [Benchmark]
         public Option<int> Hyperlinq_Array()
-            => array.AsValueEnumerable().ElementAt(Count - 1);
+            => array
+                .AsValueEnumerable()
+                .ElementAt(Count - 1);
 
         [BenchmarkCategory("Enumerable_Value")]
         [Benchmark]
         public Option<int> Hyperlinq_Enumerable_Value()
-            => enumerableValue.AsValueEnumerable()
+            => enumerableValue
+                .AsValueEnumerable()
                 .ElementAt(Count - 1);
 
         [BenchmarkCategory("Collection_Value")]
         [Benchmark]
         public Option<int> Hyperlinq_Collection_Value()
-            => collectionValue.AsValueEnumerable()
+            => collectionValue
+                .AsValueEnumerable()
                 .ElementAt(Count - 1);
 
         [BenchmarkCategory("List_Value")]

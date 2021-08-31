@@ -22,7 +22,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         [BenchmarkCategory("Collection_Value")]
         [Benchmark(Baseline = true)]
         public bool Linq_Collection_Value() 
-            => Enumerable.Contains(collectionValue, Count - 1);
+            => collectionValue.Contains(Count - 1);
 
         [BenchmarkCategory("List_Value")]
         [Benchmark(Baseline = true)]
