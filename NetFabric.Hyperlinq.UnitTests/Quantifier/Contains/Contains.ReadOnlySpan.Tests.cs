@@ -127,15 +127,18 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Contains
         {
             // Arrange
             const int value = int.MaxValue;
+            var comparer = new TestComparer<int>();
             var wrapped = (ReadOnlySpan<int>)source.AsSpan();
 
             // Act
             var result = wrapped.AsValueEnumerable()
-                .Contains(value, TestComparer<int>.Instance);
+                .Contains(value, comparer);
 
             // Assert
             _ = result.Must()
                 .BeFalse();
+            _ = comparer.EqualsCounter.Must()
+                .BeEqualTo(source.Length);
         }
 
         [Theory]
@@ -145,15 +148,18 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Contains
         {
             // Arrange
             var value = source.Last();
+            var comparer = new TestComparer<int>();
             var wrapped = (ReadOnlySpan<int>)source.AsSpan();
 
             // Act
             var result = wrapped.AsValueEnumerable()
-                .Contains(value, TestComparer<int>.Instance);
+                .Contains(value, comparer);
 
             // Assert
             _ = result.Must()
                 .BeTrue();
+            _ = comparer.EqualsCounter.Must()
+                .BeEqualTo(source.Length);
         }
     }
 }

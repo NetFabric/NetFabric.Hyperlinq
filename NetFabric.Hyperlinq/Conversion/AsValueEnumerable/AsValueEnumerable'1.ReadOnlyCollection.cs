@@ -109,7 +109,7 @@ namespace NetFabric.Hyperlinq
             #region Quantifier
 
             public bool Contains(TSource value, IEqualityComparer<TSource>? comparer = default)
-                => Count is not 0 && source.Contains(value);
+                => Count is not 0 && source.Contains(value, comparer);
             
             #endregion
         }
