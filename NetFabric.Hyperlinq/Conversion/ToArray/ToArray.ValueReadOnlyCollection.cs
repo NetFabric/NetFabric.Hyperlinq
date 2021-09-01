@@ -20,23 +20,12 @@ namespace NetFabric.Hyperlinq
                 
                 // ReSharper disable once HeapView.PossibleBoxingAllocation
                 // ReSharper disable once SuspiciousTypeConversion.Global
-                ICollection<TSource> collection => BuildArrayFromCollectionOfTSource(collection),
-
-                // ReSharper disable once HeapView.PossibleBoxingAllocation
-                // ReSharper disable once SuspiciousTypeConversion.Global
-                ICollection collection => BuildArrayFromCollection(collection),
+                ICollection<TSource> collection => BuildArrayFromCollection(collection),
 
                 _ => BuildArray(source)
             };
 
-            static TSource[] BuildArrayFromCollectionOfTSource(ICollection<TSource> collection)
-            {
-                var result = Utils.AllocateUninitializedArray<TSource>(collection.Count);
-                collection.CopyTo(result, 0);
-                return result;                
-            }
-
-            static TSource[] BuildArrayFromCollection(ICollection collection)
+            static TSource[] BuildArrayFromCollection(ICollection<TSource> collection)
             {
                 var result = Utils.AllocateUninitializedArray<TSource>(collection.Count);
                 collection.CopyTo(result, 0);
@@ -56,9 +45,28 @@ namespace NetFabric.Hyperlinq
             where TEnumerable : IValueReadOnlyCollection<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
         {
-            var result = pool.RentSliced(source.Count, clearOnDispose);
-            Copy<TEnumerable, TEnumerator, TSource>(source, result.Memory.Span);
-            return result;
+            return source switch
+            {
+                // ReSharper disable once HeapView.PossibleBoxingAllocation
+                // ReSharper disable once SuspiciousTypeConversion.Global
+                ICollection<TSource> collection => BuildArrayFromCollection(collection, pool, clearOnDispose),
+                
+                _ => BuildArray(source, pool, clearOnDispose)
+            };
+
+            static ValueMemoryOwner<TSource> BuildArrayFromCollection(ICollection<TSource> collection, ArrayPool<TSource> pool, bool clearOnDispose)
+            {
+                var result = pool.RentDisposable(collection.Count, clearOnDispose);
+                collection.CopyTo(result.Rented, 0);
+                return result;
+            }
+
+            static ValueMemoryOwner<TSource> BuildArray(TEnumerable source, ArrayPool<TSource> pool, bool clearOnDispose)
+            {
+                var result = pool.RentDisposable(source.Count, clearOnDispose);
+                Copy<TEnumerable, TEnumerator, TSource>(source, result.Memory.Span);
+                return result;
+            } 
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -136,8 +144,8 @@ namespace NetFabric.Hyperlinq
             where TEnumerator : struct, IEnumerator<TSource>
             where TSelector : struct, IFunction<TSource, TResult>
         {
-            var result = pool.RentSliced(source.Count, clearOnDispose);
-            Copy<TEnumerable, TEnumerator, TSource, TResult, TSelector>(source, result.Memory.Span, selector);
+            var result = pool.RentDisposable(source.Count, clearOnDispose);
+            Copy<TEnumerable, TEnumerator, TSource, TResult, TSelector>(source, result.Rented, selector);
             return result;
         }
 
@@ -173,8 +181,8 @@ namespace NetFabric.Hyperlinq
             where TEnumerator : struct, IEnumerator<TSource>
             where TSelector : struct, IFunction<TSource, int, TResult>
         {
-            var result = pool.RentSliced(source.Count, clearOnDispose);
-            CopyAt<TEnumerable, TEnumerator, TSource, TResult, TSelector>(source, result.Memory.Span, selector);
+            var result = pool.RentDisposable(source.Count, clearOnDispose);
+            CopyAt<TEnumerable, TEnumerator, TSource, TResult, TSelector>(source, result.Rented, selector);
             return result;
         }
         

@@ -182,7 +182,7 @@ namespace NetFabric.Hyperlinq
 
             public ValueTask<ValueMemoryOwner<TSource>> ToArrayAsync(ArrayPool<TSource> pool, CancellationToken cancellationToken = default, bool clearOnDispose = default)
             {
-                var result = pool.RentSliced(count, clearOnDispose);
+                var result = pool.RentDisposable(count, clearOnDispose);
                 var array = result.Memory.Span;
                 var end = count - 1;
                 for (var index = 0; index <= end; index++)

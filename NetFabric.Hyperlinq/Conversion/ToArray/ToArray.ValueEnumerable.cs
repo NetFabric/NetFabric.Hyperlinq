@@ -14,20 +14,14 @@ namespace NetFabric.Hyperlinq
         {
             return source switch
             {
-                ICollection<TSource> collection => BuildArrayFromCollectionOfTSource(collection),
+                // ReSharper disable once HeapView.PossibleBoxingAllocation
                 // ReSharper disable once SuspiciousTypeConversion.Global
-                ICollection collection => BuildArrayFromCollection(collection),
+                ICollection<TSource> collection => BuildArrayFromCollection(collection),
+                
                 _ => BuildArray(source)
             };
 
-            static TSource[] BuildArrayFromCollectionOfTSource(ICollection<TSource> collection)
-            {
-                var result = Utils.AllocateUninitializedArray<TSource>(collection.Count);
-                collection.CopyTo(result, 0);
-                return result;                
-            }
-
-            static TSource[] BuildArrayFromCollection(ICollection collection)
+            static TSource[] BuildArrayFromCollection(ICollection<TSource> collection)
             {
                 var result = Utils.AllocateUninitializedArray<TSource>(collection.Count);
                 collection.CopyTo(result, 0);
@@ -46,8 +40,27 @@ namespace NetFabric.Hyperlinq
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
         {
-            using var arrayBuilder = ToArrayBuilder<TEnumerable, TEnumerator, TSource>(source, pool, clearOnDispose);
-            return arrayBuilder.ToArray(pool, clearOnDispose);
+            return source switch
+            {
+                // ReSharper disable once HeapView.PossibleBoxingAllocation
+                // ReSharper disable once SuspiciousTypeConversion.Global
+                ICollection<TSource> collection => BuildArrayFromCollection(collection, pool, clearOnDispose),
+                
+                _ => BuildArray(source, pool, clearOnDispose)
+            };
+
+            static ValueMemoryOwner<TSource> BuildArrayFromCollection(ICollection<TSource> collection, ArrayPool<TSource> pool, bool clearOnDispose)
+            {
+                var result = pool.RentDisposable(collection.Count, clearOnDispose);
+                collection.CopyTo(result.Rented, 0);
+                return result;
+            }
+
+            static ValueMemoryOwner<TSource> BuildArray(TEnumerable source, ArrayPool<TSource> pool, bool clearOnDispose)
+            {
+                using var arrayBuilder = ToArrayBuilder<TEnumerable, TEnumerator, TSource>(source, pool, clearOnDispose);
+                return arrayBuilder.ToArray(pool, clearOnDispose);
+            }            
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////

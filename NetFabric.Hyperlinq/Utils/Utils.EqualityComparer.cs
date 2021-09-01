@@ -11,7 +11,6 @@ namespace NetFabric.Hyperlinq
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool UseDefault<T>(IEqualityComparer<T>? comparer)
-            => IsValueType<T>() 
-               && (comparer is null || ReferenceEquals(comparer, EqualityComparer<T>.Default));
+            => comparer is null || ReferenceEquals(comparer, EqualityComparer<T>.Default);
     }
 }

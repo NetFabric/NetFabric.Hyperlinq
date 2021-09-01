@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Buffers;
+using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Threading;
@@ -61,6 +62,18 @@ namespace NetFabric.Hyperlinq
 
             public IAsyncEnumerable<TSource> AsAsyncEnumerable()
                 => source;
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public ValueTask<TSource[]> ToArrayAsync()
+                => this.ToArrayAsync<AsyncValueEnumerable<TSource>, AsyncEnumerator, TSource>();
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public ValueTask<ValueMemoryOwner<TSource>> ToArrayAsync(ArrayPool<TSource> pool, CancellationToken cancellationToken = default, bool clearOnDispose = default)
+                => this.ToArrayAsync<AsyncValueEnumerable<TSource>, AsyncEnumerator, TSource>(pool, cancellationToken, clearOnDispose);
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public ValueTask<List<TSource>> ToListAsync()
+                => this.ToListAsync<AsyncValueEnumerable<TSource>, AsyncEnumerator, TSource>();
 
             #endregion
         }

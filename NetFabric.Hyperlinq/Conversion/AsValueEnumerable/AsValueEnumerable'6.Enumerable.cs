@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Buffers;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
@@ -71,11 +73,38 @@ namespace NetFabric.Hyperlinq
             
             #region Conversion
 
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public ValueEnumerable<TEnumerable, TEnumerator, TEnumerator2, TSource, TGetEnumerator, TGetEnumerator2> AsValueEnumerable()
                 => this;
 
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public TEnumerable AsEnumerable()
                 => source;
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public TSource[] ToArray()
+                => this.ToArray<ValueEnumerable<TEnumerable, TEnumerator, TEnumerator2, TSource, TGetEnumerator, TGetEnumerator2>, TEnumerator, TSource>();
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public ValueMemoryOwner<TSource> ToArray(ArrayPool<TSource> pool, bool clearOnDispose = default)
+                => this.ToArray<ValueEnumerable<TEnumerable, TEnumerator, TEnumerator2, TSource, TGetEnumerator, TGetEnumerator2>, TEnumerator, TSource>(pool, clearOnDispose);
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public List<TSource> ToList()
+                => this.ToList<ValueEnumerable<TEnumerable, TEnumerator, TEnumerator2, TSource, TGetEnumerator, TGetEnumerator2>, TEnumerator, TSource>();
+
+            #endregion
+            
+            #region Quantifier
+
+            public bool Contains(TSource value, IEqualityComparer<TSource>? comparer = default)
+            {
+                // ReSharper disable once HeapView.PossibleBoxingAllocation
+                if (Utils.UseDefault(comparer) && source is ICollection<TSource> collection)
+                    return collection.Contains(value);
+
+                return this.Contains<ValueEnumerable<TEnumerable, TEnumerator, TEnumerator2, TSource, TGetEnumerator, TGetEnumerator2>, TEnumerator, TSource>(value, comparer);
+            }
 
             #endregion
         }

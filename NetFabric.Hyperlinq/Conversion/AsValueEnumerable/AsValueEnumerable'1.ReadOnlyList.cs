@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Buffers;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
@@ -82,9 +83,11 @@ namespace NetFabric.Hyperlinq
             {
                 switch (source)
                 {
+                    // ReSharper disable once HeapView.PossibleBoxingAllocation
                     case ICollection<TSource> collection:
                         collection.CopyTo(array, arrayIndex);
                         break;
+                    
                     default:
                         CopyTo(array.AsSpan(arrayIndex));
                         break;
@@ -92,14 +95,16 @@ namespace NetFabric.Hyperlinq
             }
             
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public bool Contains(TSource item)
-                => Count is not 0 && source.Contains(item);
+            bool ICollection<TSource>.Contains(TSource item)
+                => Contains(item, default);
 
             public int IndexOf(TSource item)
             {
                 return source switch
                 {
+                    // ReSharper disable once HeapView.PossibleBoxingAllocation
                     IList<TSource> list => list.IndexOf(item),
+                    
                     _ => IndexOfEnumerable(this, item),
                 };
 
@@ -146,11 +151,26 @@ namespace NetFabric.Hyperlinq
 
             #region Conversion
 
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public ValueEnumerable<TList, TSource> AsValueEnumerable()
                 => this;
 
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public IReadOnlyCollection<TSource> AsEnumerable()
+                // ReSharper disable once HeapView.PossibleBoxingAllocation
                 => source;
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public TSource[] ToArray()
+                => ValueReadOnlyCollectionExtensions.ToArray<ValueEnumerable<TList, TSource>, ValueEnumerator<TSource>, TSource>(this);
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public ValueMemoryOwner<TSource> ToArray(ArrayPool<TSource> pool, bool clearOnDispose = default)
+                => ValueReadOnlyCollectionExtensions.ToArray<ValueEnumerable<TList, TSource>, ValueEnumerator<TSource>, TSource>(this, pool, clearOnDispose);
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public List<TSource> ToList()
+                => ValueReadOnlyCollectionExtensions.ToList<ValueEnumerable<TList, TSource>, ValueEnumerator<TSource>, TSource>(this);
 
             #endregion
             
@@ -174,6 +194,14 @@ namespace NetFabric.Hyperlinq
                 where TSelector : struct, IFunction<TSource, int, TResult>
                 => ValueReadOnlyListExtensions.SelectAt<ValueEnumerable<TList, TSource>, ValueEnumerator<TSource>, TSource, TResult, TSelector>(this, selector);
 
+            #endregion
+            
+            #region Quantifier
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public bool Contains(TSource value, IEqualityComparer<TSource>? comparer = default)
+                => Count is not 0 && source.Contains(value);
+            
             #endregion
         }
 

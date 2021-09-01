@@ -1,6 +1,7 @@
 using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Configs;
 using StructLinq;
+using System.Buffers;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -10,6 +11,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
     [CategoriesColumn]
     public class ToArrayBenchmarks: RandomBenchmarksBase
     {
+        
         [BenchmarkCategory("Array")]
         [Benchmark(Baseline = true)]
         public int[] Linq_Array()

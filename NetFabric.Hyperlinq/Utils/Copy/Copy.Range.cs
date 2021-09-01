@@ -15,7 +15,7 @@ namespace NetFabric.Hyperlinq
 
             destination = destination.Slice(0, count);
 
-            if (Vector.IsHardwareAccelerated && count > Vector<int>.Count * 2)
+            if (Vector.IsHardwareAccelerated && count >= Vector<int>.Count)
             {
                 var destinationVectors = MemoryMarshal.Cast<int, Vector<int>>(destination);
 

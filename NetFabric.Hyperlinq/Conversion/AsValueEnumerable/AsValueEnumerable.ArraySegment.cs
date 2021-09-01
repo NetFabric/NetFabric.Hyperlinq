@@ -160,6 +160,14 @@ namespace NetFabric.Hyperlinq
                 => source.AsSpan().ToArray();
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public ValueMemoryOwner<TSource> ToArray(ArrayPool<TSource> pool, bool clearOnDispose = default)
+                => source.AsSpan().ToArray(pool, clearOnDispose);
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public List<TSource> ToList()
+                => ((ReadOnlySpan<TSource>)source.AsSpan()).ToList();
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public Dictionary<TKey, TSource> ToDictionary<TKey>(Func<TSource, TKey> keySelector, IEqualityComparer<TKey>? comparer = default)
                 where TKey : notnull
                 => ((ReadOnlySpan<TSource>)source.AsSpan()).ToDictionary(keySelector, comparer);

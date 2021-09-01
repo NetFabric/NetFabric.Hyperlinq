@@ -14,7 +14,7 @@ namespace NetFabric.Hyperlinq
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ValueMemoryOwner<TSource> ToArray<TSource>(this ReadOnlySpan<TSource> source, ArrayPool<TSource> pool, bool clearOnDispose = default)
         {
-            var result = pool.RentSliced(source.Length, clearOnDispose);
+            var result = pool.RentDisposable(source.Length, clearOnDispose);
             Copy(source, result.Memory.Span);
             return result;
         }
@@ -130,7 +130,7 @@ namespace NetFabric.Hyperlinq
             where TSource : struct
             where TResult : struct
         {
-            var result = pool.RentSliced(source.Length, clearOnDispose);
+            var result = pool.RentDisposable(source.Length, clearOnDispose);
             CopyVector(source, result.Memory.Span, vectorSelector, selector);
             return result;
         }
@@ -140,7 +140,7 @@ namespace NetFabric.Hyperlinq
         static ValueMemoryOwner<TResult> ToArray<TSource, TResult, TSelector>(this ReadOnlySpan<TSource> source, ArrayPool<TResult> pool, bool clearOnDispose, TSelector selector)
             where TSelector : struct, IFunction<TSource, TResult>
         {
-            var result = pool.RentSliced(source.Length, clearOnDispose);
+            var result = pool.RentDisposable(source.Length, clearOnDispose);
             Copy(source, result.Memory.Span, selector);
             return result;
         }
@@ -171,7 +171,7 @@ namespace NetFabric.Hyperlinq
         static ValueMemoryOwner<TResult> ToArrayAt<TSource, TResult, TSelector>(this ReadOnlySpan<TSource> source, ArrayPool<TResult> pool, bool clearOnDispose, TSelector selector)
             where TSelector : struct, IFunction<TSource, int, TResult>
         {
-            var result = pool.RentSliced(source.Length, clearOnDispose);
+            var result = pool.RentDisposable(source.Length, clearOnDispose);
             CopyAt(source, result.Memory.Span, selector);
             return result;
         }

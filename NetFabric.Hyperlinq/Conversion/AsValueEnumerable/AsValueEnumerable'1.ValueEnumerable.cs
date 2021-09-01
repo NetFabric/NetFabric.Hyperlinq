@@ -45,6 +45,18 @@ namespace NetFabric.Hyperlinq
                 => source;
 
             #endregion
+            
+            #region Quantifier
+
+            public bool Contains(TSource value, IEqualityComparer<TSource>? comparer = default)
+            {
+                if (Utils.UseDefault(comparer) && source is ICollection<TSource> collection)
+                    return collection.Contains(value);
+
+                return source.Contains<IValueEnumerable<TSource, TEnumerator>, TEnumerator, TSource>(value, comparer);
+            }
+
+            #endregion
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

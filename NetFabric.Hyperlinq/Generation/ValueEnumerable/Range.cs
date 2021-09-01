@@ -260,7 +260,7 @@ namespace NetFabric.Hyperlinq
 
             public ValueMemoryOwner<int> ToArray(ArrayPool<int> pool, bool clearOnDispose = default)
             {
-                var result = pool.RentSliced(Count, clearOnDispose);
+                var result = pool.RentDisposable(Count, clearOnDispose);
                 ArrayExtensions.CopyRange(start, Count, result.Memory.Span);
                 return result;
             }
