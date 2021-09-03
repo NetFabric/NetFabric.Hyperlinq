@@ -11,7 +11,6 @@ namespace NetFabric.Hyperlinq.Benchmarks
     [CategoriesColumn]
     public class ToArrayBenchmarks: RandomBenchmarksBase
     {
-        
         [BenchmarkCategory("Array")]
         [Benchmark(Baseline = true)]
         public int[] Linq_Array()
@@ -171,5 +170,94 @@ namespace NetFabric.Hyperlinq.Benchmarks
             => asyncEnumerableReference
                 .AsAsyncValueEnumerable()
                 .ToArrayAsync();
+        
+        // ---------------------------------------------------------------------
+
+        [BenchmarkCategory("Array")]
+        [Benchmark]
+        public IMemoryOwner<int> Hyperlinq_Array_ArrayPool()
+        {
+            using var buffer = array.AsValueEnumerable()
+                .ToArray(ArrayPool<int>.Shared);
+            return buffer;
+        }
+
+        [BenchmarkCategory("Enumerable_Value")]
+        [Benchmark]
+        public IMemoryOwner<int> Hyperlinq_Enumerable_ArrayPool_Value()
+        {
+            using var buffer = enumerableValue.AsValueEnumerable()
+                .ToArray(ArrayPool<int>.Shared);
+            return buffer;
+        }
+
+        [BenchmarkCategory("Collection_Value")]
+        [Benchmark]
+        public IMemoryOwner<int> Hyperlinq_Collection_ArrayPool_Value()
+        {
+            using var buffer = collectionValue.AsValueEnumerable()
+                .ToArray(ArrayPool<int>.Shared);
+            return buffer;
+        }
+
+        [BenchmarkCategory("List_Value")]
+        [Benchmark]
+        public IMemoryOwner<int> Hyperlinq_List_ArrayPool_Value()
+        {
+            using var buffer = listValue
+                .AsValueEnumerable()
+                .ToArray(ArrayPool<int>.Shared);
+            return buffer;
+        }
+
+        [BenchmarkCategory("AsyncEnumerable_Value")]
+        [Benchmark]
+        public async ValueTask<IMemoryOwner<int>> Hyperlinq_AsyncEnumerable_ArrayPool_Value()
+        {
+            using var buffer = await asyncEnumerableValue
+                .AsAsyncValueEnumerable()
+                .ToArrayAsync(ArrayPool<int>.Shared);
+            return buffer;
+        }
+
+        [BenchmarkCategory("Enumerable_Reference")]
+        [Benchmark]
+        public IMemoryOwner<int> Hyperlinq_Enumerable_ArrayPool_Reference()
+        {
+            using var buffer = enumerableReference
+                .AsValueEnumerable()
+                .ToArray(ArrayPool<int>.Shared);
+            return buffer;
+        }
+
+        [BenchmarkCategory("Collection_Reference")]
+        [Benchmark]
+        public IMemoryOwner<int> Hyperlinq_Collection_ArrayPool_Reference()
+        {
+            using var buffer = collectionReference
+                .AsValueEnumerable()
+                .ToArray(ArrayPool<int>.Shared);
+            return buffer;
+        }
+
+        [BenchmarkCategory("List_Reference")]
+        [Benchmark]
+        public IMemoryOwner<int> Hyperlinq_List_ArrayPool_Reference()
+        {
+            using var buffer = listReference
+                .AsValueEnumerable()
+                .ToArray(ArrayPool<int>.Shared);
+            return buffer;
+        }
+
+        [BenchmarkCategory("AsyncEnumerable_Reference")]
+        [Benchmark]
+        public async ValueTask<IMemoryOwner<int>> Hyperlinq_AsyncEnumerable_ArrayPool_Reference()
+        {
+            using var buffer = await asyncEnumerableReference
+                .AsAsyncValueEnumerable()
+                .ToArrayAsync(ArrayPool<int>.Shared);  
+            return buffer;
+        }  
     }
 }

@@ -195,7 +195,7 @@ namespace NetFabric.Hyperlinq
                 => ValueReadOnlyCollectionExtensions.ToArray<TEnumerable, TEnumerator, TSource, TResult, TSelector>(source, selector);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public ValueMemoryOwner<TResult> ToArray(ArrayPool<TResult> pool, bool clearOnDispose = default)
+            public IMemoryOwner<TResult> ToArray(ArrayPool<TResult> pool, bool clearOnDispose = default)
                 => ValueReadOnlyCollectionExtensions.ToArray<TEnumerable, TEnumerator, TSource, TResult, TSelector>(source, pool, clearOnDispose, selector);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]

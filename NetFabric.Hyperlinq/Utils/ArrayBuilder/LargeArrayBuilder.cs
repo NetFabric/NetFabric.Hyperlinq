@@ -78,19 +78,8 @@ namespace NetFabric.Hyperlinq
         /// Otherwise, use <see cref="SlowAdd"/>.
         /// </remarks>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [SkipLocalsInit]
         public void Add(T item)
-        {
-            Debug.Assert(maxCapacity > Count);
-
-            // Must be >= and not == to enable range check elimination
-            if ((uint)index >= (uint)current.Length)
-                AllocateBuffer();
-
-            current[index++] = item;
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public void AddRef(in T item)
         {
             Debug.Assert(maxCapacity > Count);
 
@@ -106,59 +95,51 @@ namespace NetFabric.Hyperlinq
         /// </summary>
         /// <param name="array">The destination array.</param>
         /// <param name="arrayIndex">The index in <paramref name="array"/> to start copying to.</param>
+        [SkipLocalsInit]
         public readonly void CopyTo(T[] array, int arrayIndex)
-            => CopyTo(array.AsSpan(arrayIndex));
-
-        public readonly void CopyTo(Span<T> span)
         {
-            var arrayIndex = 0;
             foreach (var buffer in buffers.AsSpan())
             {
                 var length = buffer.Length;
-                buffer.AsSpan().CopyTo(span.Slice(arrayIndex, length));
+                Array.Copy(buffer, 0, array, arrayIndex, length);
 
                 arrayIndex += length;
             }
             if (arrayIndex < Count)
             {
                 var length = Count - arrayIndex;
-                current.AsSpan(0, length).CopyTo(span.Slice(arrayIndex, length));
+                Array.Copy(current, 0, array, arrayIndex, length);
             }
         }
 
         /// <summary>
-        /// Adds an item to this builder.
-        /// </summary>
-        /// <param name="item">The item to add.</param>
-        /// <remarks>
-        /// Use <see cref="Add"/> if adding to the builder is a bottleneck for your use case.
-        /// Otherwise, use <see cref="SlowAdd"/>.
-        /// </remarks>
-        [MethodImpl(MethodImplOptions.NoInlining)]
-        public void SlowAdd(T item) 
-            => Add(item);
-
-        /// <summary>
         /// Creates an array from the contents of this builder.
         /// </summary>
+        [SkipLocalsInit]
         public readonly T[] ToArray()
         {
+            if (Count is 0) 
+                return Array.Empty<T>();
+            
             // ReSharper disable once HeapView.ObjectAllocation.Evident
-            var array = new T[Count];
-            if (Count is not 0)
-                CopyTo(array);
+            var array = Utils.AllocateUninitializedArray<T>(Count);
+            CopyTo(array, 0);
             return array;
         }
 
-        public readonly ValueMemoryOwner<T> ToArray(ArrayPool<T> pool, bool clearOnDispose)
+        [SkipLocalsInit]
+        public readonly IMemoryOwner<T> ToArray(ArrayPool<T> pool, bool clearOnDispose)
         {
+            if (Count is 0)
+                return EmptyMemoryOwner<T>.Instance;
+            
             var result = pool.RentDisposable(Count, clearOnDispose);
-            if (Count is not 0)
-                CopyTo(result.Memory.Span);
+            CopyTo(result.Rented, 0);
             return result;
         }
 
         [MethodImpl(MethodImplOptions.NoInlining)]
+        [SkipLocalsInit]
         void AllocateBuffer()
         {
             // - On the first few adds, simply resize _first.
@@ -190,6 +171,7 @@ namespace NetFabric.Hyperlinq
             index = 0;
         }
 
+        [SkipLocalsInit]
         public readonly void Dispose()
         {
             pool.Return(current, clearOnDispose);
@@ -202,16 +184,21 @@ namespace NetFabric.Hyperlinq
             => true;
 
         [ExcludeFromCodeCoverage]
-        IEnumerator<T> IEnumerable<T>.GetEnumerator() => throw new NotSupportedException();
+        readonly IEnumerator<T> IEnumerable<T>.GetEnumerator() => throw new NotSupportedException();
+        
         [ExcludeFromCodeCoverage]
-        IEnumerator IEnumerable.GetEnumerator() => throw new NotSupportedException();
+        readonly IEnumerator IEnumerable.GetEnumerator() => throw new NotSupportedException();
+        
         [ExcludeFromCodeCoverage]
-        void ICollection<T>.Add(T item) => throw new NotSupportedException();
+        readonly void ICollection<T>.Add(T item) => throw new NotSupportedException();
+        
         [ExcludeFromCodeCoverage]
-        void ICollection<T>.Clear() => throw new NotSupportedException();
+        readonly void ICollection<T>.Clear() => throw new NotSupportedException();
+        
         [ExcludeFromCodeCoverage]
-        bool ICollection<T>.Contains(T item) => throw new NotSupportedException();
+        readonly bool ICollection<T>.Contains(T item) => throw new NotSupportedException();
+        
         [ExcludeFromCodeCoverage]
-        bool ICollection<T>.Remove(T item) => throw new NotSupportedException();
+        readonly bool ICollection<T>.Remove(T item) => throw new NotSupportedException();
     }
 }

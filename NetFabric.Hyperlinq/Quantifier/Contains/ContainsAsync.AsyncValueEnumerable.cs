@@ -30,7 +30,7 @@ namespace NetFabric.Hyperlinq
             where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
         {
-            return Utils.UseDefault(comparer)
+            return comparer.UseDefaultComparer()
                 ? DefaultContainsAsync(source, value, cancellationToken)
                 : ComparerContainsAsync(source, value, comparer, cancellationToken);
 

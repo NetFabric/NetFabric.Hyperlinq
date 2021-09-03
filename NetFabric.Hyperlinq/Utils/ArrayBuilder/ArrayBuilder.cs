@@ -7,6 +7,7 @@
 using System;
 using System.Buffers;
 using System.Diagnostics;
+using System.Runtime.CompilerServices;
 
 namespace NetFabric.Hyperlinq
 {
@@ -21,7 +22,8 @@ namespace NetFabric.Hyperlinq
         const int maxCoreClrArrayLength = 0x7fefffff; // For byte arrays the limit is slightly larger
 
         readonly ArrayPool<T> pool;
-        T[]? buffer; // Starts out null, initialized on first Add.
+        T[] buffer;
+        int index;
 
         /// <summary>
         /// Initializes the <see cref="ArrayBuilder{T}"/> with a specified capacity.
@@ -32,58 +34,40 @@ namespace NetFabric.Hyperlinq
         {
             Debug.Assert(capacity >= 0);
             if (capacity > 0)
-            {
                 buffer = this.pool.Rent(capacity);
-            }
         }
 
         public ArrayBuilder(ArrayPool<T> pool)
         {
             this.pool = pool;
-            buffer = default;
-            Count = 0;
+            buffer = Array.Empty<T>();
+            index = 0;
         }
-
-        /// <summary>
-        /// Gets the number of items this instance can store without re-allocating,
-        /// or 0 if the backing array is <c>null</c>.
-        /// </summary>
-        public int Capacity 
-            => buffer?.Length ?? 0;
 
         /// <summary>
         /// Gets the number of items in the array currently in use.
         /// </summary>
-        public int Count { get; private set; }
+        public int Count 
+            => index;
 
-        // /// <summary>
-        // /// Gets or sets the item at a certain index in the array.
-        // /// </summary>
-        // /// <param name="index">The index into the array.</param>
-        // public T this[int index]
-        // {
-        //     get
-        //     {
-        //         Debug.Assert(index >= 0 && index < Count);
-        //         return buffer![index];
-        //     }
-        // }
-
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [SkipLocalsInit]
         public readonly Span<T> AsSpan()
-            => buffer!.AsSpan(0, Count);
+            => buffer.AsSpan(0, index);
 
         /// <summary>
         /// Adds an item to the backing array, resizing it if necessary.
         /// </summary>
         /// <param name="item">The item to add.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [SkipLocalsInit]
         public void Add(T item)
         {
-            if (Count == Capacity)
-            {
+            // Must be >= and not == to enable range check elimination
+            if ((uint)index >= (uint)buffer.Length)
                 EnsureCapacity(Count + 1);
-            }
 
-            UncheckedAdd(item);
+            buffer[index++] = item;
         }
 
         /// <summary>
@@ -94,19 +78,21 @@ namespace NetFabric.Hyperlinq
         /// Use this method if you know there is enough space in the <see cref="ArrayBuilder{T}"/>
         /// for another item, and you are writing performance-sensitive code.
         /// </remarks>
-        public void UncheckedAdd(T item)
-        {
-            Debug.Assert(buffer is not null);
-            Debug.Assert(Count < Capacity);
+        // [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        // [SkipLocalsInit]
+        // public void UncheckedAdd(T item)
+        // {
+        //     Debug.Assert(Count < Capacity);
+        //
+        //     buffer[Count++] = item;
+        // }
 
-            buffer[Count++] = item;
-        }
-
+        [SkipLocalsInit]
         void EnsureCapacity(int minimum)
         {
-            Debug.Assert(minimum > Capacity);
+            Debug.Assert(minimum > index);
 
-            var capacity = Capacity;
+            var capacity = index;
             var nextCapacity = capacity switch
             { 
                 0 => defaultMinCapacity,
@@ -114,31 +100,23 @@ namespace NetFabric.Hyperlinq
             };
 
             if ((uint)nextCapacity > (uint)maxCoreClrArrayLength)
-            {
                 nextCapacity = Math.Max(capacity + 1, maxCoreClrArrayLength);
-            }
 
             nextCapacity = Math.Max(nextCapacity, minimum);
 
             var next = pool.Rent(nextCapacity);
-            try
+            if (index is not 0)
             {
-                if (buffer is not null)
-                {
-                    Array.Copy(buffer, next, Count);
-                }
+                Array.Copy(buffer, next, Count);
+                pool.Return(buffer);
             }
-            finally
-            {
-                if (buffer is not null)
-                    pool.Return(buffer);
-                buffer = next;
-            }
+
+            buffer = next; 
         }
 
         public readonly void Dispose()
         {
-            if (buffer is not null)
+            if (index is not 0)
                 pool.Return(buffer);
         }
     }

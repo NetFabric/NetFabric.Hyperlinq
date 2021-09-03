@@ -10,7 +10,7 @@ namespace NetFabric.Hyperlinq
             return source switch
             {
                 { Length: 0 } => false,
-                _ => Utils.UseDefault(comparer)
+                _ => comparer.UseDefaultComparer()
                     ? ValueContains(source, value)
                     : ReferenceContains(source, value, comparer)
             };
@@ -44,7 +44,7 @@ namespace NetFabric.Hyperlinq
             return source switch
             {
                 { Length: 0 } => false,
-                _ => Utils.UseDefault(comparer)
+                _ => comparer.UseDefaultComparer()
                     ? ValueContains(source, value, selector)
                     : ReferenceContains(source, value, comparer, selector)
             };

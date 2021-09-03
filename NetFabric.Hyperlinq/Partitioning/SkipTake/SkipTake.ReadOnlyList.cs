@@ -242,9 +242,10 @@ namespace NetFabric.Hyperlinq
                 if (source.Count is 0)
                     return false;
 
-                if (Utils.UseDefault(comparer))
+                if (comparer.UseDefaultComparer())
                 {
                     // ReSharper disable once HeapView.PossibleBoxingAllocation
+                    // ReSharper disable once HeapView.BoxingAllocation
                     if (offset is 0 && Count == source.Count && source is ICollection<TSource> collection)
                         return collection.Contains(value);
 

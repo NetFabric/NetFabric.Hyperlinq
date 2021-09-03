@@ -45,7 +45,7 @@ namespace NetFabric.Hyperlinq
                 => this.ToArray<ValueEnumerable<TSource>, ValueEnumerator<TSource>, TSource>();
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public ValueMemoryOwner<TSource> ToArray(ArrayPool<TSource> pool, bool clearOnDispose = default)
+            public IMemoryOwner<TSource> ToArray(ArrayPool<TSource> pool, bool clearOnDispose = default)
                 => this.ToArray<ValueEnumerable<TSource>, ValueEnumerator<TSource>, TSource>(pool, clearOnDispose);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -58,7 +58,7 @@ namespace NetFabric.Hyperlinq
 
             public bool Contains(TSource value, IEqualityComparer<TSource>? comparer = default)
             {
-                if (Utils.UseDefault(comparer) && source is ICollection<TSource> collection)
+                if (comparer.UseDefaultComparer() && source is ICollection<TSource> collection)
                     return collection.Contains(value);
 
                 return this.Contains<ValueEnumerable<TSource>, ValueEnumerator<TSource>, TSource>(value, comparer);

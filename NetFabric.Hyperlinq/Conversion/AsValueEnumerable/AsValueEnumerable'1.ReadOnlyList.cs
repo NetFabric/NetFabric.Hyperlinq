@@ -62,35 +62,39 @@ namespace NetFabric.Hyperlinq
             bool ICollection<TSource>.IsReadOnly  
                 => true;
 
-            public void CopyTo(Span<TSource> span)
+            [SkipLocalsInit]
+            public void CopyTo(TSource[] array, int arrayIndex)
             {
                 if (Count is 0)
                     return;
                 
-                if (span.Length < Count)
-                    Throw.ArgumentException(Resource.DestinationNotLongEnough, nameof(span));
+                if (array.Length - arrayIndex < Count)
+                    Throw.ArgumentException(Resource.DestinationNotLongEnough, nameof(array));
 
-                using var enumerator = GetEnumerator();
-                checked
+                // ReSharper disable once HeapView.PossibleBoxingAllocation
+                if (source is ICollection<TSource> collection)
                 {
-                    for (var index = 0; enumerator.MoveNext(); index++)
-                        span[index] = enumerator.Current;
+                    collection.CopyTo(array, arrayIndex);
                 }
-            }
-
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public void CopyTo(TSource[] array, int arrayIndex)
-            {
-                switch (source)
+                else
                 {
-                    // ReSharper disable once HeapView.PossibleBoxingAllocation
-                    case ICollection<TSource> collection:
-                        collection.CopyTo(array, arrayIndex);
-                        break;
-                    
-                    default:
-                        CopyTo(array.AsSpan(arrayIndex));
-                        break;
+                    using var enumerator = GetEnumerator();
+                    if (arrayIndex is 0 && array.Length == Count)
+                    {
+                        for (var index = 0; index < array.Length; index++)
+                        {
+                            _ = enumerator.MoveNext();
+                            array[index] = enumerator.Current;
+                        }
+                    }
+                    else
+                    {
+                        checked
+                        {
+                            for (var index = arrayIndex; enumerator.MoveNext(); index++)
+                                array[index] = enumerator.Current;
+                        }
+                    }
                 }
             }
             
@@ -160,17 +164,32 @@ namespace NetFabric.Hyperlinq
                 // ReSharper disable once HeapView.PossibleBoxingAllocation
                 => source;
 
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            [SkipLocalsInit]
             public TSource[] ToArray()
-                => ValueReadOnlyCollectionExtensions.ToArray<ValueEnumerable<TList, TSource>, ValueEnumerator<TSource>, TSource>(this);
+            {
+                if (source.Count is 0)
+                    return Array.Empty<TSource>();
+
+                var result = Utils.AllocateUninitializedArray<TSource>(source.Count);
+                CopyTo(result, 0);
+                return result;
+            }
+            
+            [SkipLocalsInit]
+            public IMemoryOwner<TSource> ToArray(ArrayPool<TSource> pool, bool clearOnDispose = default)
+            {
+                if (source.Count is 0)
+                    return EmptyMemoryOwner<TSource>.Instance;
+
+                var result = pool.RentDisposable(source.Count, clearOnDispose);
+                CopyTo(result.Rented, 0);
+                return result;
+            }
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public ValueMemoryOwner<TSource> ToArray(ArrayPool<TSource> pool, bool clearOnDispose = default)
-                => ValueReadOnlyCollectionExtensions.ToArray<ValueEnumerable<TList, TSource>, ValueEnumerator<TSource>, TSource>(this, pool, clearOnDispose);
-
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            [SkipLocalsInit]
             public List<TSource> ToList()
-                => ValueReadOnlyCollectionExtensions.ToList<ValueEnumerable<TList, TSource>, ValueEnumerator<TSource>, TSource>(this);
+                => ToArray().AsList();
 
             #endregion
             

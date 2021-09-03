@@ -22,7 +22,13 @@ namespace NetFabric.Hyperlinq.Benchmarks
         {
             var config = DefaultConfig.Instance
                 .WithSummaryStyle(SummaryStyle.Default.WithRatioStyle(RatioStyle.Trend))
-                .AddJob(Job.Default.WithRuntime(CoreRuntime.Core60))
+                .AddJob(Job.Default
+                    .WithRuntime(CoreRuntime.Core60)
+                    .WithEnvironmentVariables(
+                        new EnvironmentVariable("COMPlus_ReadyToRun", "0"),
+                        new EnvironmentVariable("COMPlus_TC_QuickJitForLoops", "1"),
+                        new EnvironmentVariable("COMPlus_TieredPGO", "1"))
+                    .WithId(".NET 6 PGO"))
                 .AddDiagnoser(MemoryDiagnoser.Default);
                 
             foreach (var summary in BenchmarkSwitcher.FromAssembly(typeof(Program).Assembly).Run(args, config))

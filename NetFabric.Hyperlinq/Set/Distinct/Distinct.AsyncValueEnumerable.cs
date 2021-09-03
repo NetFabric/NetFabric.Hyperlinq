@@ -222,7 +222,7 @@ namespace NetFabric.Hyperlinq
                 => (await FillSetAsync(cancellationToken).ConfigureAwait(false)).ToArray();
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public async ValueTask<ValueMemoryOwner<TSource>> ToArrayAsync(ArrayPool<TSource> pool, bool clearOnDispose, CancellationToken cancellationToken = default)
+            public async ValueTask<IMemoryOwner<TSource>> ToArrayAsync(ArrayPool<TSource> pool, bool clearOnDispose, CancellationToken cancellationToken = default)
                 => (await FillSetAsync(cancellationToken).ConfigureAwait(false)).ToArray(pool, clearOnDispose);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]

@@ -80,31 +80,44 @@ namespace NetFabric.Hyperlinq
             bool ICollection<TSource>.IsReadOnly  
                 => true;
 
-            public void CopyTo(Span<TSource> span)
+            [SkipLocalsInit]
+            public void CopyTo(TSource[] array, int arrayIndex)
             {
                 if (Count is 0)
                     return;
                 
-                if (span.Length < Count)
-                    Throw.ArgumentException(Resource.DestinationNotLongEnough, nameof(span));
+                if (array.Length - arrayIndex < Count)
+                    Throw.ArgumentException(Resource.DestinationNotLongEnough, nameof(array));
 
-                if (source.Count is not 0)
+                // ReSharper disable once HeapView.PossibleBoxingAllocation
+                if (source is ICollection<TSource> collection)
+                {
+                    collection.CopyTo(array, arrayIndex);
+                }
+                else
                 {
                     using var enumerator = getEnumerator.Invoke(source);
-                    checked
+                    if (arrayIndex is 0 && array.Length == Count)
                     {
-                        for (var index = 0; enumerator.MoveNext(); index++)
-                            span[index] = enumerator.Current;
+                        for (var index = 0; index < array.Length; index++)
+                        {
+                            _ = enumerator.MoveNext();
+                            array[index] = enumerator.Current;
+                        }                        
+                    }
+                    else
+                    {
+                        checked
+                        {
+                            for (var index = arrayIndex; enumerator.MoveNext(); index++)
+                                array[index] = enumerator.Current;
+                        }
                     }
                 }
             }
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public void CopyTo(TSource[] array, int arrayIndex)
-                => CopyTo(array.AsSpan(arrayIndex));
-
-
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            [SkipLocalsInit]
             bool ICollection<TSource>.Contains(TSource item)
                 => Contains(item, default);
 
@@ -128,17 +141,32 @@ namespace NetFabric.Hyperlinq
             public TEnumerable AsEnumerable()
                 => source;
 
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            [SkipLocalsInit]
             public TSource[] ToArray()
-                => ValueReadOnlyCollectionExtensions.ToArray<ValueEnumerable<TEnumerable, TEnumerator, TEnumerator2, TSource, TGetEnumerator, TGetEnumerator2>, TEnumerator, TSource>(this);
+            {
+                if (source.Count is 0)
+                    return Array.Empty<TSource>();
+
+                var result = Utils.AllocateUninitializedArray<TSource>(source.Count);
+                CopyTo(result, 0);
+                return result;
+            }
+            
+            [SkipLocalsInit]
+            public IMemoryOwner<TSource> ToArray(ArrayPool<TSource> pool, bool clearOnDispose = default)
+            {
+                if (source.Count is 0)
+                    return EmptyMemoryOwner<TSource>.Instance;
+
+                var result = pool.RentDisposable(source.Count, clearOnDispose);
+                CopyTo(result.Rented, 0);
+                return result;
+            }
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public ValueMemoryOwner<TSource> ToArray(ArrayPool<TSource> pool, bool clearOnDispose = default)
-                => ValueReadOnlyCollectionExtensions.ToArray<ValueEnumerable<TEnumerable, TEnumerator, TEnumerator2, TSource, TGetEnumerator, TGetEnumerator2>, TEnumerator, TSource>(this, pool, clearOnDispose);
-
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            [SkipLocalsInit]
             public List<TSource> ToList()
-                => ValueReadOnlyCollectionExtensions.ToList<ValueEnumerable<TEnumerable, TEnumerator, TEnumerator2, TSource, TGetEnumerator, TGetEnumerator2>, TEnumerator, TSource>(this);
+                => ToArray().AsList();
 
             #endregion
             #region Quantifier

@@ -101,5 +101,10 @@ namespace NetFabric.Hyperlinq
         [MethodImpl(MethodImplOptions.NoInlining)]
         public static void ObjectDisposedException(string objectName)
             => throw new ObjectDisposedException(objectName);
+
+        [DoesNotReturn]
+        [MethodImpl(MethodImplOptions.NoInlining)]
+        public static T ObjectDisposedException<T>(string objectName)
+            => throw new ObjectDisposedException(objectName);
     }
 }

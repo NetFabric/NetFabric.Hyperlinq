@@ -68,7 +68,7 @@ namespace NetFabric.Hyperlinq
                 => this.ToArrayAsync<AsyncValueEnumerable<TSource>, AsyncEnumerator, TSource>();
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public ValueTask<ValueMemoryOwner<TSource>> ToArrayAsync(ArrayPool<TSource> pool, CancellationToken cancellationToken = default, bool clearOnDispose = default)
+            public ValueTask<IMemoryOwner<TSource>> ToArrayAsync(ArrayPool<TSource> pool, CancellationToken cancellationToken = default, bool clearOnDispose = default)
                 => this.ToArrayAsync<AsyncValueEnumerable<TSource>, AsyncEnumerator, TSource>(pool, cancellationToken, clearOnDispose);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]

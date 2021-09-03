@@ -7,11 +7,13 @@ namespace NetFabric.Hyperlinq
     static class ArrayPoolExtensions
     {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static ValueMemoryOwner<T> RentDisposable<T>(this ArrayPool<T> pool, int length, bool clearOnDispose)
+        [SkipLocalsInit]
+        public static MemoryOwner<T> RentDisposable<T>(this ArrayPool<T> pool, int length, bool clearOnDispose)
             => new(pool, length, clearOnDispose);
     }
 
-    public struct ValueMemoryOwner<T>
+    [SkipLocalsInit]
+    class MemoryOwner<T>
         : IMemoryOwner<T>
     {
         readonly ArrayPool<T> pool;
@@ -19,7 +21,7 @@ namespace NetFabric.Hyperlinq
         readonly bool clearOnDispose;
         T[]? rented;
 
-        internal ValueMemoryOwner(ArrayPool<T> pool, int length, bool clearOnDispose)
+        internal MemoryOwner(ArrayPool<T> pool, int length, bool clearOnDispose)
         {
             this.pool = pool;
             this.length = length;
@@ -27,23 +29,24 @@ namespace NetFabric.Hyperlinq
             rented = this.pool.Rent(length);
         }
 
-        public readonly T[] Rented 
+        public T[] Rented
         {
             get
             {
                 var array = rented;
                 if (array is null)
-                    Throw.ObjectDisposedException(nameof(ValueMemoryOwner<T>));
+                    Throw.ObjectDisposedException<T[]>(nameof(MemoryOwner<T>));
                 return array;
             }
         }
-        public readonly Memory<T> Memory
+
+        public Memory<T> Memory
         {
             get
             {
                 var array = rented;
                 if (array is null)
-                    Throw.ObjectDisposedException(nameof(ValueMemoryOwner<T>));
+                    Throw.ObjectDisposedException<T[]>(nameof(MemoryOwner<T>));
                 return new Memory<T>(array, 0, length);
             }
         }
@@ -58,5 +61,17 @@ namespace NetFabric.Hyperlinq
             }
         }
     }
-    
+
+    [SkipLocalsInit]
+    class EmptyMemoryOwner<T>
+        : IMemoryOwner<T>
+    {
+        public static EmptyMemoryOwner<T> Instance => new();
+        
+        private EmptyMemoryOwner() { }
+        
+        public Memory<T> Memory => Memory<T>.Empty;
+        
+        public void Dispose() { }
+    }
 }
