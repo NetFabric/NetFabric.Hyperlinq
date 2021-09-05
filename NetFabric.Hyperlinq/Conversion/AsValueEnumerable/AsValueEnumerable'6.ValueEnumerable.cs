@@ -87,7 +87,7 @@ namespace NetFabric.Hyperlinq
             public bool Contains(TSource value, IEqualityComparer<TSource>? comparer = default)
             {
                 // ReSharper disable once HeapView.PossibleBoxingAllocation
-                if (Utils.UseDefault(comparer) && source is ICollection<TSource> collection)
+                if (comparer.UseDefaultComparer() && source is ICollection<TSource> collection)
                     return collection.Contains(value);
 
                 return source.Contains<TEnumerable, TEnumerator, TSource>(value, comparer);

@@ -51,7 +51,7 @@ namespace NetFabric.Hyperlinq
         {
             bucketsPool = ArrayPool<int>.Shared;
             slotsPool = ArrayPool<Slot>.Shared;
-            useDefaultComparer = Utils.UseDefault(comparer);
+            useDefaultComparer = comparer.UseDefaultComparer();
             this.comparer = comparer ?? EqualityComparer<TElement>.Default;
             buckets = default;
             slots = default;
@@ -170,7 +170,7 @@ namespace NetFabric.Hyperlinq
             return array;
         }
 
-        public readonly ValueMemoryOwner<TElement> ToArray(ArrayPool<TElement> pool, bool clearOnDispose)
+        public readonly IMemoryOwner<TElement> ToArray(ArrayPool<TElement> pool, bool clearOnDispose)
         {
             var result = pool.RentDisposable(Count, clearOnDispose);
             CopyTo(result.Memory.Span);

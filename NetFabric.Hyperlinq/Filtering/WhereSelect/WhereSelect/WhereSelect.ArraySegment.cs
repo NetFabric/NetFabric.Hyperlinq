@@ -238,7 +238,7 @@ namespace NetFabric.Hyperlinq
                 => ((ReadOnlySpan<TSource>)source.AsSpan()).ToArray<TSource, TResult, TPredicate, TSelector>(predicate, selector);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public ValueMemoryOwner<TResult> ToArray(ArrayPool<TResult> pool, bool clearOnDispose = default)
+            public IMemoryOwner<TResult> ToArray(ArrayPool<TResult> pool, bool clearOnDispose = default)
                 => ((ReadOnlySpan<TSource>)source.AsSpan()).ToArray(pool, clearOnDispose, predicate, selector);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]

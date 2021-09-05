@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 
 namespace NetFabric.Hyperlinq
 {
@@ -18,6 +19,7 @@ namespace NetFabric.Hyperlinq
     /// Helper type for building dynamically-sized arrays while minimizing allocations and copying.
     /// </summary>
     /// <typeparam name="T">The element type.</typeparam>
+    [StructLayout(LayoutKind.Auto)]
     struct LargeArrayBuilder<T> 
         : ICollection<T>
         , IDisposable
@@ -25,12 +27,12 @@ namespace NetFabric.Hyperlinq
         const int defaultMinCapacity = 4;
 
         readonly ArrayPool<T> pool;
+        readonly bool clearOnDispose;     
         readonly int maxCapacity;  // The maximum capacity this builder can have.
         ArrayBuilder<T[]> buffers; // After ResizeLimit * 2, we store previous buffers we've filled out here.
         T[] current;               // Current buffer we're reading into. If _count <= ResizeLimit, this is _first.
         int index;                 // Index into the current buffer.
-        int storedCount;           // Number of items stored in buffers. 
-        readonly bool clearOnDispose;     
+        int count;                 // Total number of items stored
 
         /// <summary>
         /// Constructs a new builder.
@@ -52,52 +54,54 @@ namespace NetFabric.Hyperlinq
             Debug.Assert(maxCapacity >= 0);
 
             this.pool = pool;
+            this.clearOnDispose = clearOnDispose;
             this.maxCapacity = maxCapacity;
             buffers = new ArrayBuilder<T[]>(arrayBuilderPool);
             current = Array.Empty<T>();
             index = 0;
-            storedCount = 0;
-            this.clearOnDispose = clearOnDispose;
+            count = 0;
         }
 
         /// <summary>
         /// Gets the number of items added to the builder.
         /// </summary>
-        public readonly int Count
-        {
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            get => storedCount + index;
-        }
+        // ReSharper disable once ConvertToAutoPropertyWhenPossible
+        public int Count => count;
 
         /// <summary>
         /// Adds an item to this builder.
         /// </summary>
         /// <param name="item">The item to add.</param>
         /// <remarks>
-        /// Use <see cref="Add"/> if adding to the builder is a bottleneck for your use case.
-        /// Otherwise, use <see cref="SlowAdd"/>.
-        /// </remarks>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [SkipLocalsInit]
         public void Add(T item)
         {
-            Debug.Assert(maxCapacity > Count);
+            Debug.Assert(maxCapacity > count);
+
+            var index = this.index;
+            var current = this.current;
 
             // Must be >= and not == to enable range check elimination
             if ((uint)index >= (uint)current.Length)
-                AllocateBuffer();
+            {
+                AddWithBufferAllocation(item);
+            }
+            else
+            {
+                current[index] = item;
+                this.index = index + 1;
+            }
 
-            current[index++] = item;
+            count++;
         }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public void AddRef(in T item)
+        
+        // Non-inline to improve code quality as uncommon path
+        [MethodImpl(MethodImplOptions.NoInlining)]
+        [SkipLocalsInit]
+        void AddWithBufferAllocation(T item)
         {
-            Debug.Assert(maxCapacity > Count);
-
-            // Must be >= and not == to enable range check elimination
-            if ((uint)index >= (uint)current.Length)
-                AllocateBuffer();
-
+            AllocateBuffer();
             current[index++] = item;
         }
 
@@ -106,69 +110,52 @@ namespace NetFabric.Hyperlinq
         /// </summary>
         /// <param name="array">The destination array.</param>
         /// <param name="arrayIndex">The index in <paramref name="array"/> to start copying to.</param>
+        [SkipLocalsInit]
         public readonly void CopyTo(T[] array, int arrayIndex)
-            => CopyTo(array.AsSpan(arrayIndex));
-
-        public readonly void CopyTo(Span<T> span)
         {
-            var arrayIndex = 0;
             foreach (var buffer in buffers.AsSpan())
             {
                 var length = buffer.Length;
-                buffer.AsSpan().CopyTo(span.Slice(arrayIndex, length));
-
+                Array.Copy(buffer, 0, array, arrayIndex, length);
                 arrayIndex += length;
             }
-            if (arrayIndex < Count)
-            {
-                var length = Count - arrayIndex;
-                current.AsSpan(0, length).CopyTo(span.Slice(arrayIndex, length));
-            }
+            if (arrayIndex < count)
+                Array.Copy(current, 0, array, arrayIndex, count - arrayIndex);
         }
-
-        /// <summary>
-        /// Adds an item to this builder.
-        /// </summary>
-        /// <param name="item">The item to add.</param>
-        /// <remarks>
-        /// Use <see cref="Add"/> if adding to the builder is a bottleneck for your use case.
-        /// Otherwise, use <see cref="SlowAdd"/>.
-        /// </remarks>
-        [MethodImpl(MethodImplOptions.NoInlining)]
-        public void SlowAdd(T item) 
-            => Add(item);
 
         /// <summary>
         /// Creates an array from the contents of this builder.
         /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [SkipLocalsInit]
         public readonly T[] ToArray()
         {
+            if (count is 0) 
+                return Array.Empty<T>();
+            
             // ReSharper disable once HeapView.ObjectAllocation.Evident
-            var array = new T[Count];
-            if (Count is not 0)
-                CopyTo(array);
+            var array = Utils.AllocateUninitializedArray<T>(count);
+            CopyTo(array, 0);
             return array;
         }
 
-        public readonly ValueMemoryOwner<T> ToArray(ArrayPool<T> pool, bool clearOnDispose)
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [SkipLocalsInit]
+        public readonly IMemoryOwner<T> ToArray(ArrayPool<T> pool, bool clearOnDispose)
         {
-            var result = pool.RentDisposable(Count, clearOnDispose);
-            if (Count is not 0)
-                CopyTo(result.Memory.Span);
+            if (count is 0)
+                return EmptyMemoryOwner<T>.Instance;
+            
+            var result = pool.RentDisposable(count, clearOnDispose);
+            CopyTo(result.Rented, 0);
             return result;
         }
 
         [MethodImpl(MethodImplOptions.NoInlining)]
+        [SkipLocalsInit]
         void AllocateBuffer()
         {
-            // - On the first few adds, simply resize _first.
-            // - When we pass ResizeLimit, allocate ResizeLimit elements for _current
-            //   and start reading into _current. Set _index to 0.
-            // - When _current runs out of space, add it to _buffers and repeat the
-            //   above step, except with _current.Length * 2.
-            // - Make sure we never pass _maxCapacity in all of the above steps.
-
-            Debug.Assert((uint)maxCapacity > (uint)Count);
+            Debug.Assert((uint)maxCapacity > (uint)count);
             Debug.Assert(index == current.Length, $"{nameof(AllocateBuffer)} was called, but there's more space.");
 
             // Example scenario: Let's say _count == 64.
@@ -179,17 +166,17 @@ namespace NetFabric.Hyperlinq
             // the rhs the limit minus the amount we've already allocated.
 
             var nextCapacity = defaultMinCapacity;
-            if (Count is not 0)
+            if (count is not 0)
             {
                 buffers.Add(current);
-                nextCapacity = Math.Min(Count, maxCapacity - Count);
-                storedCount += index;
+                nextCapacity = Math.Min(count, maxCapacity - count);
             }
 
             current = pool.Rent(nextCapacity);
             index = 0;
         }
 
+        [SkipLocalsInit]
         public readonly void Dispose()
         {
             pool.Return(current, clearOnDispose);
@@ -202,16 +189,27 @@ namespace NetFabric.Hyperlinq
             => true;
 
         [ExcludeFromCodeCoverage]
-        IEnumerator<T> IEnumerable<T>.GetEnumerator() => throw new NotSupportedException();
+        readonly IEnumerator<T> IEnumerable<T>.GetEnumerator() 
+            => throw new NotSupportedException();
+        
         [ExcludeFromCodeCoverage]
-        IEnumerator IEnumerable.GetEnumerator() => throw new NotSupportedException();
+        readonly IEnumerator IEnumerable.GetEnumerator() 
+            => throw new NotSupportedException();
+        
         [ExcludeFromCodeCoverage]
-        void ICollection<T>.Add(T item) => throw new NotSupportedException();
+        readonly void ICollection<T>.Add(T item) 
+            => throw new NotSupportedException();
+        
         [ExcludeFromCodeCoverage]
-        void ICollection<T>.Clear() => throw new NotSupportedException();
+        readonly void ICollection<T>.Clear() 
+            => throw new NotSupportedException();
+        
         [ExcludeFromCodeCoverage]
-        bool ICollection<T>.Contains(T item) => throw new NotSupportedException();
+        readonly bool ICollection<T>.Contains(T item) 
+            => throw new NotSupportedException();
+        
         [ExcludeFromCodeCoverage]
-        bool ICollection<T>.Remove(T item) => throw new NotSupportedException();
+        readonly bool ICollection<T>.Remove(T item) 
+            => throw new NotSupportedException();
     }
 }

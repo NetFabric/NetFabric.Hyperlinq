@@ -8,7 +8,7 @@ namespace NetFabric.Hyperlinq
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
         {
-            if (Utils.UseDefault(comparer))
+            if (comparer.UseDefaultComparer())
             {
                 // ReSharper disable once HeapView.PossibleBoxingAllocation
                 if (source is ICollection<TSource> collection)
@@ -51,7 +51,7 @@ namespace NetFabric.Hyperlinq
             where TEnumerator : struct, IEnumerator<TSource>
             where TSelector : struct, IFunction<TSource, TResult>
         {
-            return Utils.UseDefault(comparer)
+            return comparer.UseDefaultComparer()
                 ? ValueContains(source, value, selector)
                 : ReferenceContains(source, value, comparer, selector);
 

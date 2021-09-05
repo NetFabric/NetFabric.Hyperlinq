@@ -45,11 +45,6 @@ namespace NetFabric.Hyperlinq
             bool ICollection<TSource>.IsReadOnly  
                 => true;
 
-            public void CopyTo(Span<TSource> span) 
-            {
-                // nothing to do 
-            }
-
             public void CopyTo(TSource[] array, int arrayIndex)
             {
                 // nothing to do 

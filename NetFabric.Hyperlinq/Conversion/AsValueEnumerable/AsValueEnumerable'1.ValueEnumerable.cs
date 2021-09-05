@@ -50,7 +50,7 @@ namespace NetFabric.Hyperlinq
 
             public bool Contains(TSource value, IEqualityComparer<TSource>? comparer = default)
             {
-                if (Utils.UseDefault(comparer) && source is ICollection<TSource> collection)
+                if (comparer.UseDefaultComparer() && source is ICollection<TSource> collection)
                     return collection.Contains(value);
 
                 return source.Contains<IValueEnumerable<TSource, TEnumerator>, TEnumerator, TSource>(value, comparer);

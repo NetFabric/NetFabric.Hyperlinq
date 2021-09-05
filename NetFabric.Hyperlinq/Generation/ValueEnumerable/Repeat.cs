@@ -183,7 +183,7 @@ namespace NetFabric.Hyperlinq
                 return array;
             }
 
-            public ValueMemoryOwner<TSource> ToArray(ArrayPool<TSource> pool, bool clearOnDispose = default)
+            public IMemoryOwner<TSource> ToArray(ArrayPool<TSource> pool, bool clearOnDispose = default)
             {
                 var result = pool.RentDisposable(Count, clearOnDispose);
                 CopyTo(result.Memory.Span);
@@ -236,7 +236,7 @@ namespace NetFabric.Hyperlinq
             return array;
         }
 
-        public static ValueMemoryOwner<TSource> ToArrayVector<TSource>(this RepeatEnumerable<TSource> source, ArrayPool<TSource> pool, bool clearOnDispose = default)
+        public static IMemoryOwner<TSource> ToArrayVector<TSource>(this RepeatEnumerable<TSource> source, ArrayPool<TSource> pool, bool clearOnDispose = default)
             where TSource : struct
         {
             var result = pool.RentDisposable(source.count, clearOnDispose);

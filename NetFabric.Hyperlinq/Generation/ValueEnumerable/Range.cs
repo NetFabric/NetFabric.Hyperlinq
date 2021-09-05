@@ -209,7 +209,7 @@ namespace NetFabric.Hyperlinq
 
                 var end = start + Count;
                 
-                if (Utils.UseDefault(comparer))
+                if (comparer.UseDefaultComparer())
                     return value >= start && value < end;
 
                 for (var item = start; item < end; item++)
@@ -258,7 +258,7 @@ namespace NetFabric.Hyperlinq
                 return array;
             }
 
-            public ValueMemoryOwner<int> ToArray(ArrayPool<int> pool, bool clearOnDispose = default)
+            public IMemoryOwner<int> ToArray(ArrayPool<int> pool, bool clearOnDispose = default)
             {
                 var result = pool.RentDisposable(Count, clearOnDispose);
                 ArrayExtensions.CopyRange(start, Count, result.Memory.Span);

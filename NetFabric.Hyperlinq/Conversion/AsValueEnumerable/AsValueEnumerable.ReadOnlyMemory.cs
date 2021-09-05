@@ -68,12 +68,8 @@ namespace NetFabric.Hyperlinq
                 => true;
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public void CopyTo(Span<TSource> span)
-                => source.Span.CopyTo(span);
-
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public void CopyTo(TSource[] array, int arrayIndex)
-                => CopyTo(array.AsSpan(arrayIndex));
+                => source.Span.CopyTo(array.AsSpan(arrayIndex));
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             bool ICollection<TSource>.Contains(TSource item)

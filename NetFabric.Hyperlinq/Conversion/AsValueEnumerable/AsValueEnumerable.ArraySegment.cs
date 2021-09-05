@@ -73,21 +73,22 @@ namespace NetFabric.Hyperlinq
                 => true;
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public void CopyTo(Span<TSource> span)
-                => ((ReadOnlySpan<TSource>)source.AsSpan()).CopyTo(span);
-
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public void CopyTo(TSource[] array, int arrayIndex)
-                => ((ICollection<TSource>)source).CopyTo(array, arrayIndex);
+                => System.Array.Copy(source.Array!, source.Offset, array, arrayIndex, source.Count);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public bool Contains(TSource item)
-                => ((ICollection<TSource>)source).Contains(item);
+                => source.Contains(item);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public int IndexOf(TSource item)
-                => ((IList<TSource>)source).IndexOf(item);
-
+            {
+                var index = System.Array.IndexOf(source.Array!, item, source.Offset, source.Count);
+                return index >= 0 
+                    ? index - source.Offset 
+                    : -1;
+            }
+            
             [ExcludeFromCodeCoverage]
             void ICollection<TSource>.Add(TSource item)
                 => Throw.NotSupportedException();
@@ -160,7 +161,7 @@ namespace NetFabric.Hyperlinq
                 => source.AsSpan().ToArray();
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public ValueMemoryOwner<TSource> ToArray(ArrayPool<TSource> pool, bool clearOnDispose = default)
+            public IMemoryOwner<TSource> ToArray(ArrayPool<TSource> pool, bool clearOnDispose = default)
                 => source.AsSpan().ToArray(pool, clearOnDispose);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]

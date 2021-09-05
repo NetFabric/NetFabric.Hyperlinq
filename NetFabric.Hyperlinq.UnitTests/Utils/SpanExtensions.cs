@@ -20,7 +20,7 @@ namespace NetFabric.Hyperlinq.UnitTests
 
         public static bool SequenceEqual<T>(this ReadOnlySpan<T> first, IEnumerable<T> second, IEqualityComparer<T>? comparer = default)
         {
-            if (Utils.IsValueType<T>() && Utils.UseDefault(comparer))
+            if (Utils.IsValueType<T>() && comparer.UseDefaultComparer())
             {
                 using var enumerator = second.GetEnumerator();
                 for (var index = 0; true; index++)

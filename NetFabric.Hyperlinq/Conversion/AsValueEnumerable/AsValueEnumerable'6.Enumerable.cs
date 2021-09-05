@@ -86,7 +86,7 @@ namespace NetFabric.Hyperlinq
                 => this.ToArray<ValueEnumerable<TEnumerable, TEnumerator, TEnumerator2, TSource, TGetEnumerator, TGetEnumerator2>, TEnumerator, TSource>();
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public ValueMemoryOwner<TSource> ToArray(ArrayPool<TSource> pool, bool clearOnDispose = default)
+            public IMemoryOwner<TSource> ToArray(ArrayPool<TSource> pool, bool clearOnDispose = default)
                 => this.ToArray<ValueEnumerable<TEnumerable, TEnumerator, TEnumerator2, TSource, TGetEnumerator, TGetEnumerator2>, TEnumerator, TSource>(pool, clearOnDispose);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -100,7 +100,7 @@ namespace NetFabric.Hyperlinq
             public bool Contains(TSource value, IEqualityComparer<TSource>? comparer = default)
             {
                 // ReSharper disable once HeapView.PossibleBoxingAllocation
-                if (Utils.UseDefault(comparer) && source is ICollection<TSource> collection)
+                if (comparer.UseDefaultComparer() && source is ICollection<TSource> collection)
                     return collection.Contains(value);
 
                 return this.Contains<ValueEnumerable<TEnumerable, TEnumerator, TEnumerator2, TSource, TGetEnumerator, TGetEnumerator2>, TEnumerator, TSource>(value, comparer);
