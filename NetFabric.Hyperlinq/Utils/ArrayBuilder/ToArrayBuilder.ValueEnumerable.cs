@@ -14,7 +14,10 @@ namespace NetFabric.Hyperlinq
             var builder = new LargeArrayBuilder<TSource>(arrayPool, clearOnDispose);
             using var enumerator = source.GetEnumerator();
             while (enumerator.MoveNext())
-                builder.Add(enumerator.Current);
+            {
+                var item = enumerator.Current;
+                builder.Add(item);
+            }
             return builder;
         }
 
@@ -61,7 +64,10 @@ namespace NetFabric.Hyperlinq
             var builder = new LargeArrayBuilder<TResult>(arrayPool, clearOnDispose);
             using var enumerator = source.GetEnumerator();
             while (enumerator.MoveNext())
-                builder.Add(selector.Invoke(enumerator.Current));
+            {
+                var item = enumerator.Current;
+                builder.Add(selector.Invoke(item));
+            }
             return builder;
         }
 
@@ -76,7 +82,10 @@ namespace NetFabric.Hyperlinq
             checked
             {
                 for (var index = 0; enumerator.MoveNext(); index++)
-                    builder.Add(selector.Invoke(enumerator.Current, index));
+                {
+                    var item = enumerator.Current;
+                    builder.Add(selector.Invoke(item, index));
+                }
             }
             return builder;
         }

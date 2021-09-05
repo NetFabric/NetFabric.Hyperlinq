@@ -8,6 +8,7 @@ using System;
 using System.Buffers;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 
 namespace NetFabric.Hyperlinq
 {
@@ -15,6 +16,7 @@ namespace NetFabric.Hyperlinq
     /// Helper type for avoiding allocations while building arrays.
     /// </summary>
     /// <typeparam name="T">The element type.</typeparam>
+    [StructLayout(LayoutKind.Auto)]
     struct ArrayBuilder<T> 
         : IDisposable
     {
@@ -47,12 +49,12 @@ namespace NetFabric.Hyperlinq
         /// <summary>
         /// Gets the number of items in the array currently in use.
         /// </summary>
-        public int Count 
-            => index;
+        // ReSharper disable once ConvertToAutoPropertyWithPrivateSetter
+        public int Count => index;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         [SkipLocalsInit]
-        public readonly Span<T> AsSpan()
+        public readonly ReadOnlySpan<T> AsSpan()
             => buffer.AsSpan(0, index);
 
         /// <summary>
@@ -63,29 +65,29 @@ namespace NetFabric.Hyperlinq
         [SkipLocalsInit]
         public void Add(T item)
         {
+            var buffer = this.buffer;
+            var index = this.index;
+            
             // Must be >= and not == to enable range check elimination
             if ((uint)index >= (uint)buffer.Length)
-                EnsureCapacity(Count + 1);
-
+            {
+                AddWithBufferAllocation(item);
+            }
+            else
+            {
+                buffer[index] = item;
+                this.index = index + 1;                
+            }
+        }
+        
+        // Non-inline to improve code quality as uncommon path
+        [MethodImpl(MethodImplOptions.NoInlining)]
+        [SkipLocalsInit]
+        void AddWithBufferAllocation(T item)
+        {
+            EnsureCapacity(index + 1);
             buffer[index++] = item;
         }
-
-        /// <summary>
-        /// Adds an item to the backing array, without checking if there is room.
-        /// </summary>
-        /// <param name="item">The item to add.</param>
-        /// <remarks>
-        /// Use this method if you know there is enough space in the <see cref="ArrayBuilder{T}"/>
-        /// for another item, and you are writing performance-sensitive code.
-        /// </remarks>
-        // [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        // [SkipLocalsInit]
-        // public void UncheckedAdd(T item)
-        // {
-        //     Debug.Assert(Count < Capacity);
-        //
-        //     buffer[Count++] = item;
-        // }
 
         [SkipLocalsInit]
         void EnsureCapacity(int minimum)
@@ -93,11 +95,9 @@ namespace NetFabric.Hyperlinq
             Debug.Assert(minimum > index);
 
             var capacity = index;
-            var nextCapacity = capacity switch
-            { 
-                0 => defaultMinCapacity,
-                _ => 2 * capacity,
-            };
+            var nextCapacity = capacity is 0
+                ? defaultMinCapacity
+                : 2 * capacity;
 
             if ((uint)nextCapacity > (uint)maxCoreClrArrayLength)
                 nextCapacity = Math.Max(capacity + 1, maxCoreClrArrayLength);
@@ -107,13 +107,14 @@ namespace NetFabric.Hyperlinq
             var next = pool.Rent(nextCapacity);
             if (index is not 0)
             {
-                Array.Copy(buffer, next, Count);
+                Array.Copy(buffer, next, index);
                 pool.Return(buffer);
             }
 
             buffer = next; 
         }
 
+        [SkipLocalsInit]
         public readonly void Dispose()
         {
             if (index is not 0)
