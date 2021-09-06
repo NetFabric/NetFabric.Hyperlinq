@@ -62,7 +62,6 @@ namespace NetFabric.Hyperlinq
             bool ICollection<TSource>.IsReadOnly  
                 => true;
 
-            [SkipLocalsInit]
             public void CopyTo(TSource[] array, int arrayIndex)
             {
                 if (Count is 0)
@@ -79,7 +78,7 @@ namespace NetFabric.Hyperlinq
                 else
                 {
                     using var enumerator = GetEnumerator();
-                    if (arrayIndex is 0 && array.Length == Count)
+                    if (arrayIndex is 0 && array.Length == Count) // to enable range check elimination
                     {
                         for (var index = 0; index < array.Length; index++)
                         {
@@ -164,7 +163,6 @@ namespace NetFabric.Hyperlinq
                 // ReSharper disable once HeapView.PossibleBoxingAllocation
                 => source;
 
-            [SkipLocalsInit]
             public TSource[] ToArray()
             {
                 if (source.Count is 0)
@@ -175,7 +173,6 @@ namespace NetFabric.Hyperlinq
                 return result;
             }
             
-            [SkipLocalsInit]
             public IMemoryOwner<TSource> ToArray(ArrayPool<TSource> pool, bool clearOnDispose = default)
             {
                 if (source.Count is 0)
@@ -187,7 +184,6 @@ namespace NetFabric.Hyperlinq
             }
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            [SkipLocalsInit]
             public List<TSource> ToList()
                 => ToArray().AsList();
 

@@ -74,7 +74,7 @@ namespace NetFabric.Hyperlinq
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public void CopyTo(TSource[] array, int arrayIndex)
-                => System.Array.Copy(source.Array!, source.Offset, array, arrayIndex, source.Count);
+                => source.AsSpan().CopyTo(array.AsSpan(arrayIndex));
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public bool Contains(TSource item)

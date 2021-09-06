@@ -1,4 +1,5 @@
-﻿using System.Buffers;
+﻿using System;
+using System.Buffers;
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
@@ -34,23 +35,51 @@ namespace NetFabric.Hyperlinq
             
             #region Conversion
 
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public ValueEnumerable<TSource> AsValueEnumerable()
                 => this;
 
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public IEnumerable<TSource> AsEnumerable()
                 => source;
 
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public TSource[] ToArray()
-                => this.ToArray<ValueEnumerable<TSource>, ValueEnumerator<TSource>, TSource>();
+            {
+                // ReSharper disable once HeapView.PossibleBoxingAllocation
+                if (source is ICollection<TSource> collection)
+                {
+                    if (collection.Count is 0)
+                        return Array.Empty<TSource>();
 
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+                    var result = Utils.AllocateUninitializedArray<TSource>(collection.Count);
+                    collection.CopyTo(result, 0);
+                    return result;
+                }
+                
+                using var arrayBuilder = ValueEnumerableExtensions.ToArrayBuilder<ValueEnumerable<TSource>, ValueEnumerator<TSource>, TSource>(this, ArrayPool<TSource>.Shared, false);
+                return arrayBuilder.ToArray();
+            }
+
             public IMemoryOwner<TSource> ToArray(ArrayPool<TSource> pool, bool clearOnDispose = default)
-                => this.ToArray<ValueEnumerable<TSource>, ValueEnumerator<TSource>, TSource>(pool, clearOnDispose);
+            {
+                // ReSharper disable once HeapView.PossibleBoxingAllocation
+                if (source is ICollection<TSource> collection)
+                {
+                    if (collection.Count is 0)
+                        return EmptyMemoryOwner<TSource>.Instance;
+                
+                    var result = pool.RentDisposable(collection.Count, clearOnDispose);
+                    collection.CopyTo(result.Rented, 0);
+                    return result;                
+                }
 
+                using var arrayBuilder = ValueEnumerableExtensions.ToArrayBuilder<ValueEnumerable<TSource>, ValueEnumerator<TSource>, TSource>(this, pool, clearOnDispose);
+                return arrayBuilder.ToArray(pool, clearOnDispose);
+            }
+            
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public List<TSource> ToList()
-                => this.ToList<ValueEnumerable<TSource>, ValueEnumerator<TSource>, TSource>();
+                => ToArray().AsList();
 
             #endregion
             

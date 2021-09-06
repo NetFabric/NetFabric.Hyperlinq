@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Buffers;
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
@@ -61,30 +62,70 @@ namespace NetFabric.Hyperlinq
 
             
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public TEnumerator2 GetEnumerator() 
+            public readonly TEnumerator2 GetEnumerator() 
                 => getEnumerator2.Invoke(source);
-            TEnumerator IValueEnumerable<TSource, TEnumerator>.GetEnumerator() 
+            readonly TEnumerator IValueEnumerable<TSource, TEnumerator>.GetEnumerator() 
                 => getEnumerator.Invoke(source);
-            IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() 
+            readonly IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() 
                 // ReSharper disable once HeapView.PossibleBoxingAllocation
                 => source.GetEnumerator();
-            IEnumerator IEnumerable.GetEnumerator() 
+            readonly IEnumerator IEnumerable.GetEnumerator() 
                 // ReSharper disable once HeapView.PossibleBoxingAllocation
                 => source.GetEnumerator();
 
             #region Conversion
 
-            public ValueEnumerable<TEnumerable, TEnumerator, TEnumerator2, TSource, TGetEnumerator, TGetEnumerator2> AsValueEnumerable()
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public readonly ValueEnumerable<TEnumerable, TEnumerator, TEnumerator2, TSource, TGetEnumerator, TGetEnumerator2> AsValueEnumerable()
                 => this;
 
-            public TEnumerable AsEnumerable()
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public readonly TEnumerable AsEnumerable()
                 => source;
+
+            public TSource[] ToArray()
+            {
+                // ReSharper disable once HeapView.PossibleBoxingAllocation
+                if (source is ICollection<TSource> collection)
+                {
+                    if (collection.Count is 0)
+                        return Array.Empty<TSource>();
+
+                    var result = Utils.AllocateUninitializedArray<TSource>(collection.Count);
+                    collection.CopyTo(result, 0);
+                    return result;
+                }
+                
+                using var arrayBuilder = ToArrayBuilder<TEnumerable, TEnumerator, TSource>(source, ArrayPool<TSource>.Shared, false);
+                return arrayBuilder.ToArray();
+            }
+
+            public IMemoryOwner<TSource> ToArray(ArrayPool<TSource> pool, bool clearOnDispose = default)
+            {
+                // ReSharper disable once HeapView.PossibleBoxingAllocation
+                if (source is ICollection<TSource> collection)
+                {
+                    if (collection.Count is 0)
+                        return EmptyMemoryOwner<TSource>.Instance;
+                
+                    var result = pool.RentDisposable(collection.Count, clearOnDispose);
+                    collection.CopyTo(result.Rented, 0);
+                    return result;                
+                }
+
+                using var arrayBuilder = ToArrayBuilder<TEnumerable, TEnumerator, TSource>(source, pool, clearOnDispose);
+                return arrayBuilder.ToArray(pool, clearOnDispose);
+            }
+            
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public List<TSource> ToList()
+                => ToArray().AsList();
 
             #endregion
             
             #region Quantifier
             
-            public bool Contains(TSource value, IEqualityComparer<TSource>? comparer = default)
+            public readonly bool Contains(TSource value, IEqualityComparer<TSource>? comparer = default)
             {
                 // ReSharper disable once HeapView.PossibleBoxingAllocation
                 if (comparer.UseDefaultComparer() && source is ICollection<TSource> collection)

@@ -53,7 +53,6 @@ namespace NetFabric.Hyperlinq
         public int Count => index;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        [SkipLocalsInit]
         public readonly ReadOnlySpan<T> AsSpan()
             => buffer.AsSpan(0, index);
 
@@ -62,7 +61,6 @@ namespace NetFabric.Hyperlinq
         /// </summary>
         /// <param name="item">The item to add.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        [SkipLocalsInit]
         public void Add(T item)
         {
             var buffer = this.buffer;
@@ -82,14 +80,12 @@ namespace NetFabric.Hyperlinq
         
         // Non-inline to improve code quality as uncommon path
         [MethodImpl(MethodImplOptions.NoInlining)]
-        [SkipLocalsInit]
         void AddWithBufferAllocation(T item)
         {
             EnsureCapacity(index + 1);
             buffer[index++] = item;
         }
 
-        [SkipLocalsInit]
         void EnsureCapacity(int minimum)
         {
             Debug.Assert(minimum > index);
@@ -107,14 +103,13 @@ namespace NetFabric.Hyperlinq
             var next = pool.Rent(nextCapacity);
             if (index is not 0)
             {
-                Array.Copy(buffer, next, index);
+                buffer.AsSpan().CopyTo(next.AsSpan(index));
                 pool.Return(buffer);
             }
 
             buffer = next; 
         }
 
-        [SkipLocalsInit]
         public readonly void Dispose()
         {
             if (index is not 0)

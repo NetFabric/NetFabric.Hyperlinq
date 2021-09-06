@@ -74,7 +74,6 @@ namespace NetFabric.Hyperlinq
         /// <param name="item">The item to add.</param>
         /// <remarks>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        [SkipLocalsInit]
         public void Add(T item)
         {
             Debug.Assert(maxCapacity > count);
@@ -98,7 +97,6 @@ namespace NetFabric.Hyperlinq
         
         // Non-inline to improve code quality as uncommon path
         [MethodImpl(MethodImplOptions.NoInlining)]
-        [SkipLocalsInit]
         void AddWithBufferAllocation(T item)
         {
             AllocateBuffer();
@@ -110,24 +108,22 @@ namespace NetFabric.Hyperlinq
         /// </summary>
         /// <param name="array">The destination array.</param>
         /// <param name="arrayIndex">The index in <paramref name="array"/> to start copying to.</param>
-        [SkipLocalsInit]
         public readonly void CopyTo(T[] array, int arrayIndex)
         {
+            var span = array.AsSpan();
             foreach (var buffer in buffers.AsSpan())
             {
-                var length = buffer.Length;
-                Array.Copy(buffer, 0, array, arrayIndex, length);
-                arrayIndex += length;
+                buffer.AsSpan().CopyTo(span);
+                span = span.Slice(buffer.Length);
             }
-            if (arrayIndex < count)
-                Array.Copy(current, 0, array, arrayIndex, count - arrayIndex);
+            if (span.Length is not 0)
+                current.AsSpan(0, span.Length).CopyTo(span);
         }
 
         /// <summary>
         /// Creates an array from the contents of this builder.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        [SkipLocalsInit]
         public readonly T[] ToArray()
         {
             if (count is 0) 
@@ -140,7 +136,6 @@ namespace NetFabric.Hyperlinq
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        [SkipLocalsInit]
         public readonly IMemoryOwner<T> ToArray(ArrayPool<T> pool, bool clearOnDispose)
         {
             if (count is 0)
@@ -152,7 +147,6 @@ namespace NetFabric.Hyperlinq
         }
 
         [MethodImpl(MethodImplOptions.NoInlining)]
-        [SkipLocalsInit]
         void AllocateBuffer()
         {
             Debug.Assert((uint)maxCapacity > (uint)count);
@@ -176,7 +170,6 @@ namespace NetFabric.Hyperlinq
             index = 0;
         }
 
-        [SkipLocalsInit]
         public readonly void Dispose()
         {
             pool.Return(current, clearOnDispose);

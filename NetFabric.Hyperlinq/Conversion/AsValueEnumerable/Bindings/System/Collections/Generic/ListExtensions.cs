@@ -42,9 +42,6 @@ namespace NetFabric.Hyperlinq
         }
 
         // ReSharper disable once ClassNeverInstantiated.Local
-#if NET5_0_OR_GREATER       
-        [SkipLocalsInit]
-#endif
         class ListLayout<TSource>
         {
             public TSource[]? items;

@@ -62,36 +62,62 @@ namespace NetFabric.Hyperlinq
 
             
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public TEnumerator2 GetEnumerator() 
+            public readonly TEnumerator2 GetEnumerator() 
                 => getEnumerator2.Invoke(source);
-            TEnumerator IValueEnumerable<TSource, TEnumerator>.GetEnumerator() 
+            readonly TEnumerator IValueEnumerable<TSource, TEnumerator>.GetEnumerator() 
                 => getEnumerator.Invoke(source);
-            IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() 
+            readonly IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() 
                 => source.GetEnumerator();
-            IEnumerator IEnumerable.GetEnumerator() 
+            readonly IEnumerator IEnumerable.GetEnumerator() 
                 => source.GetEnumerator();
             
             #region Conversion
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public ValueEnumerable<TEnumerable, TEnumerator, TEnumerator2, TSource, TGetEnumerator, TGetEnumerator2> AsValueEnumerable()
+            public readonly ValueEnumerable<TEnumerable, TEnumerator, TEnumerator2, TSource, TGetEnumerator, TGetEnumerator2> AsValueEnumerable()
                 => this;
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public TEnumerable AsEnumerable()
+            public readonly TEnumerable AsEnumerable()
                 => source;
 
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public TSource[] ToArray()
-                => this.ToArray<ValueEnumerable<TEnumerable, TEnumerator, TEnumerator2, TSource, TGetEnumerator, TGetEnumerator2>, TEnumerator, TSource>();
+            public readonly TSource[] ToArray()
+            {
+                // ReSharper disable once HeapView.PossibleBoxingAllocation
+                if (source is ICollection<TSource> collection)
+                {
+                    if (collection.Count is 0)
+                        return Array.Empty<TSource>();
+
+                    var result = Utils.AllocateUninitializedArray<TSource>(collection.Count);
+                    collection.CopyTo(result, 0);
+                    return result;
+                }
+                
+                using var arrayBuilder = ValueEnumerableExtensions.ToArrayBuilder<ValueEnumerable<TEnumerable, TEnumerator, TEnumerator2, TSource, TGetEnumerator, TGetEnumerator2>, TEnumerator, TSource>(this, ArrayPool<TSource>.Shared, false);
+                return arrayBuilder.ToArray();
+            }
+
+            public readonly IMemoryOwner<TSource> ToArray(ArrayPool<TSource> pool, bool clearOnDispose = default)
+            {
+                // ReSharper disable once HeapView.PossibleBoxingAllocation
+                if (source is ICollection<TSource> collection)
+                {
+                    if (collection.Count is 0)
+                        return EmptyMemoryOwner<TSource>.Instance;
+
+                    var result = pool.RentDisposable(collection.Count, clearOnDispose);
+                    collection.CopyTo(result.Rented, 0);
+                    return result;
+                }
+
+                using var arrayBuilder = ValueEnumerableExtensions.ToArrayBuilder<ValueEnumerable<TEnumerable, TEnumerator, TEnumerator2, TSource, TGetEnumerator, TGetEnumerator2>, TEnumerator, TSource>(this, pool, clearOnDispose);
+                return arrayBuilder.ToArray(pool, clearOnDispose);
+            }
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public IMemoryOwner<TSource> ToArray(ArrayPool<TSource> pool, bool clearOnDispose = default)
-                => this.ToArray<ValueEnumerable<TEnumerable, TEnumerator, TEnumerator2, TSource, TGetEnumerator, TGetEnumerator2>, TEnumerator, TSource>(pool, clearOnDispose);
-
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public List<TSource> ToList()
-                => this.ToList<ValueEnumerable<TEnumerable, TEnumerator, TEnumerator2, TSource, TGetEnumerator, TGetEnumerator2>, TEnumerator, TSource>();
+            public readonly List<TSource> ToList()
+                => ToArray().AsList();
 
             #endregion
             

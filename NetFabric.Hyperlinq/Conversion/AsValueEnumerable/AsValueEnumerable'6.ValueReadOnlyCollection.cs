@@ -69,22 +69,21 @@ namespace NetFabric.Hyperlinq
                 => source.Count;
             
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public TEnumerator2 GetEnumerator() 
+            public readonly TEnumerator2 GetEnumerator() 
                 => getEnumerator2.Invoke(source);
-            TEnumerator IValueEnumerable<TSource, TEnumerator>.GetEnumerator() 
+            readonly TEnumerator IValueEnumerable<TSource, TEnumerator>.GetEnumerator() 
                 => getEnumerator.Invoke(source);
-            IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() 
+            readonly IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() 
                 // ReSharper disable once HeapView.BoxingAllocation
                 => source.GetEnumerator();
-            IEnumerator IEnumerable.GetEnumerator() 
+            readonly IEnumerator IEnumerable.GetEnumerator() 
                 // ReSharper disable once HeapView.BoxingAllocation
                 => source.GetEnumerator();
 
-            bool ICollection<TSource>.IsReadOnly  
+            readonly bool ICollection<TSource>.IsReadOnly  
                 => true;
 
-            [SkipLocalsInit]
-            public void CopyTo(TSource[] array, int arrayIndex)
+            public readonly void CopyTo(TSource[] array, int arrayIndex)
             {
                 if (Count is 0)
                     return;
@@ -102,7 +101,7 @@ namespace NetFabric.Hyperlinq
                     using var enumerator = getEnumerator.Invoke(source);
                     if (arrayIndex is 0 && array.Length == Count)
                     {
-                        for (var index = 0; index < array.Length; index++)
+                        for (var index = 0; index < array.Length; index++) // to enable range check elimination
                         {
                             _ = enumerator.MoveNext();
                             array[index] = enumerator.Current;
@@ -120,29 +119,30 @@ namespace NetFabric.Hyperlinq
             }
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            bool ICollection<TSource>.Contains(TSource item)
+            readonly bool ICollection<TSource>.Contains(TSource item)
                 => Contains(item, default);
 
             [ExcludeFromCodeCoverage]
-            void ICollection<TSource>.Add(TSource item) 
+            readonly void ICollection<TSource>.Add(TSource item) 
                 => Throw.NotSupportedException();
             [ExcludeFromCodeCoverage]
-            void ICollection<TSource>.Clear() 
+            readonly void ICollection<TSource>.Clear() 
                 => Throw.NotSupportedException();
             [ExcludeFromCodeCoverage]
-            bool ICollection<TSource>.Remove(TSource item) 
+            readonly bool ICollection<TSource>.Remove(TSource item) 
                 => Throw.NotSupportedException<bool>();
 
             #region Conversion
 
-            public ValueEnumerable<TEnumerable, TEnumerator, TEnumerator2, TSource, TGetEnumerator, TGetEnumerator2> AsValueEnumerable()
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public readonly ValueEnumerable<TEnumerable, TEnumerator, TEnumerator2, TSource, TGetEnumerator, TGetEnumerator2> AsValueEnumerable()
                 => this;
 
-            public TEnumerable AsEnumerable()
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public readonly TEnumerable AsEnumerable()
                 => source;
             
-            [SkipLocalsInit]
-            public TSource[] ToArray()
+            public readonly TSource[] ToArray()
             {
                 if (source.Count is 0)
                     return Array.Empty<TSource>();
@@ -152,8 +152,7 @@ namespace NetFabric.Hyperlinq
                 return result;
             }
             
-            [SkipLocalsInit]
-            public IMemoryOwner<TSource> ToArray(ArrayPool<TSource> pool, bool clearOnDispose = default)
+            public readonly IMemoryOwner<TSource> ToArray(ArrayPool<TSource> pool, bool clearOnDispose = default)
             {
                 if (source.Count is 0)
                     return EmptyMemoryOwner<TSource>.Instance;
@@ -164,15 +163,14 @@ namespace NetFabric.Hyperlinq
             }
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            [SkipLocalsInit]
-            public List<TSource> ToList()
+            public readonly List<TSource> ToList()
                 => ToArray().AsList();
 
             #endregion
             
             #region Quantifier
             
-            public bool Contains(TSource value, IEqualityComparer<TSource>? comparer = default)
+            public readonly bool Contains(TSource value, IEqualityComparer<TSource>? comparer = default)
             {
                 if (Count is 0)
                     return false;

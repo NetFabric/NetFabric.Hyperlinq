@@ -7,7 +7,6 @@ namespace NetFabric.Hyperlinq
     {
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        [SkipLocalsInit]
         public static T[] AllocateUninitializedArray<T>(int count)
 #if NET5_0_OR_GREATER 
             => GC.AllocateUninitializedArray<T>(count, pinned: false);
