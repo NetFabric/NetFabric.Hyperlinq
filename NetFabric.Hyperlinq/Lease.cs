@@ -36,7 +36,7 @@ namespace NetFabric.Hyperlinq
             get => length;
             set
             {
-                if (rented is null || value > rented.Length)
+                if (value < 0 || value > rented.Length)
                     Throw.ArgumentOutOfRangeException(nameof(value));
 
                 length = value;
