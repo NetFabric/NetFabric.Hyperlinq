@@ -24,14 +24,14 @@ namespace NetFabric.Hyperlinq
             return result;
         }
 
-        public static IMemoryOwner<TSource> ToArray<TEnumerable, TEnumerator, TSource>(this TEnumerable source, ArrayPool<TSource> pool, bool clearOnDispose = default)
+        public static Lease<TSource> ToArray<TEnumerable, TEnumerator, TSource>(this TEnumerable source, ArrayPool<TSource> pool, bool clearOnDispose = default)
             where TEnumerable : IValueReadOnlyCollection<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
         {
             if (source.Count is 0)
-                return EmptyMemoryOwner<TSource>.Instance;
+                return Lease<TSource>.Default;
 
-            var result = pool.RentDisposable(source.Count, clearOnDispose);
+            var result = pool.Lease(source.Count, clearOnDispose);
             // ReSharper disable once HeapView.PossibleBoxingAllocation
             if (source is ICollection<TSource> collection)
                 collection.CopyTo(result.Rented, 0);
@@ -53,12 +53,12 @@ namespace NetFabric.Hyperlinq
                 : ValueEnumerableExtensions.ToArray<TEnumerable, TEnumerator, TSource, TPredicate>(source, predicate);
 
         [GeneratorIgnore]
-        static IMemoryOwner<TSource> ToArray<TEnumerable, TEnumerator, TSource, TPredicate>(this TEnumerable source, ArrayPool<TSource> pool, bool clearOnDispose, TPredicate predicate)
+        static Lease<TSource> ToArray<TEnumerable, TEnumerator, TSource, TPredicate>(this TEnumerable source, ArrayPool<TSource> pool, bool clearOnDispose, TPredicate predicate)
             where TEnumerable : IValueReadOnlyCollection<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
             where TPredicate : struct, IFunction<TSource, bool>
             => source.Count is 0 
-                ? EmptyMemoryOwner<TSource>.Instance
+                ? Lease<TSource>.Default
                 : ValueEnumerableExtensions.ToArray<TEnumerable, TEnumerator, TSource, TPredicate>(source, pool, clearOnDispose, predicate);
 
         //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -74,12 +74,12 @@ namespace NetFabric.Hyperlinq
 
         [GeneratorIgnore]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        static IMemoryOwner<TSource> ToArrayAt<TEnumerable, TEnumerator, TSource, TPredicate>(this TEnumerable source, ArrayPool<TSource> pool, bool clearOnDispose, TPredicate predicate)
+        static Lease<TSource> ToArrayAt<TEnumerable, TEnumerator, TSource, TPredicate>(this TEnumerable source, ArrayPool<TSource> pool, bool clearOnDispose, TPredicate predicate)
             where TEnumerable : IValueReadOnlyCollection<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
             where TPredicate : struct, IFunction<TSource, int, bool>
             => source.Count is 0 
-                ? EmptyMemoryOwner<TSource>.Instance
+                ? Lease<TSource>.Default
                 : ValueEnumerableExtensions.ToArrayAt<TEnumerable, TEnumerator, TSource, TPredicate>(source, pool, clearOnDispose, predicate);
 
         //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -99,15 +99,15 @@ namespace NetFabric.Hyperlinq
         }
 
         [GeneratorIgnore]
-        internal static IMemoryOwner<TResult> ToArray<TEnumerable, TEnumerator, TSource, TResult, TSelector>(this TEnumerable source, ArrayPool<TResult> pool, bool clearOnDispose, TSelector selector)
+        internal static Lease<TResult> ToArray<TEnumerable, TEnumerator, TSource, TResult, TSelector>(this TEnumerable source, ArrayPool<TResult> pool, bool clearOnDispose, TSelector selector)
             where TEnumerable : IValueReadOnlyCollection<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
             where TSelector : struct, IFunction<TSource, TResult>
         {
             if (source.Count is 0)
-                return EmptyMemoryOwner<TResult>.Instance;
+                return Lease<TResult>.Default;
 
-            var result = pool.RentDisposable(source.Count, clearOnDispose);
+            var result = pool.Lease(source.Count, clearOnDispose);
             Copy<TEnumerable, TEnumerator, TSource, TResult, TSelector>(source, result.Rented, selector);
             return result;
         }
@@ -130,15 +130,15 @@ namespace NetFabric.Hyperlinq
         }
 
         [GeneratorIgnore]
-        internal static IMemoryOwner<TResult> ToArrayAt<TEnumerable, TEnumerator, TSource, TResult, TSelector>(this TEnumerable source, ArrayPool<TResult> pool, bool clearOnDispose, TSelector selector)
+        internal static Lease<TResult> ToArrayAt<TEnumerable, TEnumerator, TSource, TResult, TSelector>(this TEnumerable source, ArrayPool<TResult> pool, bool clearOnDispose, TSelector selector)
             where TEnumerable : IValueReadOnlyCollection<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
             where TSelector : struct, IFunction<TSource, int, TResult>
         {
             if (source.Count is 0)
-                return EmptyMemoryOwner<TResult>.Instance;
+                return Lease<TResult>.Default;
 
-            var result = pool.RentDisposable(source.Count, clearOnDispose);
+            var result = pool.Lease(source.Count, clearOnDispose);
             CopyAt<TEnumerable, TEnumerator, TSource, TResult, TSelector>(source, result.Rented, selector);
             return result;
         }
@@ -156,13 +156,13 @@ namespace NetFabric.Hyperlinq
                 : ValueEnumerableExtensions.ToArray<TEnumerable, TEnumerator, TSource, TResult, TPredicate, TSelector>(source, predicate, selector);
 
         [GeneratorIgnore]
-        static IMemoryOwner<TResult> ToArray<TEnumerable, TEnumerator, TSource, TResult, TPredicate, TSelector>(this TEnumerable source, ArrayPool<TResult> pool, bool clearOnDispose, TPredicate predicate, TSelector selector)
+        static Lease<TResult> ToArray<TEnumerable, TEnumerator, TSource, TResult, TPredicate, TSelector>(this TEnumerable source, ArrayPool<TResult> pool, bool clearOnDispose, TPredicate predicate, TSelector selector)
             where TEnumerable : IValueReadOnlyCollection<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
             where TPredicate : struct, IFunction<TSource, bool>
             where TSelector : struct, IFunction<TSource, TResult>
             => source.Count is 0 
-                ? EmptyMemoryOwner<TResult>.Instance
+                ? Lease<TResult>.Default
                 : ValueEnumerableExtensions.ToArray<TEnumerable, TEnumerator, TSource, TResult, TPredicate, TSelector>(source, pool, clearOnDispose, predicate, selector);
     }
 }

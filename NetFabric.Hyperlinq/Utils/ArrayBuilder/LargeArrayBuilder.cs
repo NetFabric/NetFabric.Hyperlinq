@@ -136,12 +136,12 @@ namespace NetFabric.Hyperlinq
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public readonly IMemoryOwner<T> ToArray(ArrayPool<T> pool, bool clearOnDispose)
+        public readonly Lease<T> ToArray(ArrayPool<T> pool, bool clearOnDispose)
         {
             if (count is 0)
-                return EmptyMemoryOwner<T>.Instance;
+                return Lease<T>.Default;
             
-            var result = pool.RentDisposable(count, clearOnDispose);
+            var result = pool.Lease(count, clearOnDispose);
             CopyTo(result.Rented, 0);
             return result;
         }
