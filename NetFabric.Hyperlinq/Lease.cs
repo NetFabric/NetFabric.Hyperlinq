@@ -15,7 +15,7 @@ namespace NetFabric.Hyperlinq
 
         readonly ArrayPool<T> pool;
         readonly bool clearOnDispose;
-        T[]? leased;
+        T[]? rented;
         int length;
         
         internal Lease(ArrayPool<T> pool, int length, bool clearOnDispose)
@@ -23,7 +23,7 @@ namespace NetFabric.Hyperlinq
             this.pool = pool;
             this.length = length;
             this.clearOnDispose = clearOnDispose;
-            leased = length is 0
+            rented = length is 0
                 ? Array.Empty<T>()
                 : this.pool.Rent(length);
         }
@@ -36,7 +36,7 @@ namespace NetFabric.Hyperlinq
             get => length;
             set
             {
-                if (leased is null || value > leased.Length)
+                if (rented is null || value > rented.Length)
                     Throw.ArgumentOutOfRangeException(nameof(value));
 
                 length = value;
@@ -50,7 +50,7 @@ namespace NetFabric.Hyperlinq
         {
             get
             {
-                var array = leased;
+                var array = rented;
                 if (array is null)
                     Throw.ObjectDisposedException(nameof(Lease<T>));
                 return array;
@@ -64,7 +64,7 @@ namespace NetFabric.Hyperlinq
         {
             get
             {
-                var array = leased;
+                var array = rented;
                 if (array is null)
                     Throw.ObjectDisposedException(nameof(Lease<T>));
                 return array.AsMemory(0, length);
@@ -78,7 +78,7 @@ namespace NetFabric.Hyperlinq
         {
             get
             {
-                var array = leased;
+                var array = rented;
                 if (array is null)
                     Throw.ObjectDisposedException(nameof(Lease<T>));
                 return array.AsMemory(length);
@@ -87,28 +87,48 @@ namespace NetFabric.Hyperlinq
 
         public void Dispose()
         {
-            var array = leased;
+            var array = rented;
             if (array is not null)
             {
-                leased = null;
+                rented = null;
                 pool.Return(array, clearOnDispose);
             }
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public Enumerator GetEnumerator() 
-            => new(Rented, length);
-        
+        public Enumerator GetEnumerator()
+        {
+            var array = rented;
+            if (array is null)
+                Throw.ObjectDisposedException(nameof(Lease<T>));
+            return new Enumerator(array, length);
+        }
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         DisposableEnumerator IValueEnumerable<T, DisposableEnumerator>.GetEnumerator() 
-            => new(Rented, length);
+        {
+            var array = rented;
+            if (array is null)
+                Throw.ObjectDisposedException(nameof(Lease<T>));
+            return new DisposableEnumerator(array, length);
+        }
         
         IEnumerator<T> IEnumerable<T>.GetEnumerator() 
+        {
+            var array = rented;
+            if (array is null)
+                Throw.ObjectDisposedException(nameof(Lease<T>));
             // ReSharper disable once HeapView.BoxingAllocation
-            => new DisposableEnumerator(Rented, length);
+            return new DisposableEnumerator(array, length);
+        }
         
         IEnumerator IEnumerable.GetEnumerator() 
-            => Rented.GetEnumerator();
+        {
+            var array = rented;
+            if (array is null)
+                Throw.ObjectDisposedException(nameof(Lease<T>));
+            return array.GetEnumerator();
+        }
 
         public struct Enumerator
         {
