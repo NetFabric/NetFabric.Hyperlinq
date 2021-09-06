@@ -182,10 +182,8 @@ namespace NetFabric.Hyperlinq
             public bool MoveNext()
                 => ++index < length;        
 
-            [ExcludeFromCodeCoverage]
-            [DoesNotReturn]
-            public readonly void Reset() 
-                => Throw.NotSupportedException();
+            public void Reset() 
+                => index = -1;
 
             public readonly void Dispose()
             { }
