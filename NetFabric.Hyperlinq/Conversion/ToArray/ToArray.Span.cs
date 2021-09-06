@@ -8,7 +8,6 @@ namespace NetFabric.Hyperlinq
     static partial class ArrayExtensions
     {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        [SkipLocalsInit]
         public static IMemoryOwner<TSource> ToArray<TSource>(this Span<TSource> source, ArrayPool<TSource> pool, bool clearOnDispose = default)
             => ((ReadOnlySpan<TSource>)source).ToArray(pool, clearOnDispose);
     }

@@ -1,3 +1,4 @@
+using System;
 using System.Numerics;
 using System.Runtime.CompilerServices;
 
@@ -11,6 +12,7 @@ namespace NetFabric.Hyperlinq
         
         [GeneratorIgnore]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [SkipLocalsInit]
         static unsafe TResult SumRange<TResult, TVectorSelector, TSelector>(int start, int count, TVectorSelector vectorSelector, TSelector selector)
             where TVectorSelector : struct, IFunction<Vector<int>, Vector<TResult>>
             where TSelector : struct, IFunction<int, TResult>

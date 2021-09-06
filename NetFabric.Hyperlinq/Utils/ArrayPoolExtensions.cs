@@ -7,12 +7,10 @@ namespace NetFabric.Hyperlinq
     static class ArrayPoolExtensions
     {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        [SkipLocalsInit]
         public static MemoryOwner<T> RentDisposable<T>(this ArrayPool<T> pool, int length, bool clearOnDispose)
             => new(pool, length, clearOnDispose);
     }
 
-    [SkipLocalsInit]
     class MemoryOwner<T>
         : IMemoryOwner<T>
     {
@@ -62,7 +60,6 @@ namespace NetFabric.Hyperlinq
         }
     }
 
-    [SkipLocalsInit]
     class EmptyMemoryOwner<T>
         : IMemoryOwner<T>
     {

@@ -1,4 +1,6 @@
-﻿using System.Collections;
+﻿using System;
+using System.Buffers;
+using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
@@ -38,11 +40,51 @@ namespace NetFabric.Hyperlinq
             
             #region Conversion
 
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public ValueEnumerable<TEnumerator, TSource> AsValueEnumerable()
                 => this;
 
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public IEnumerable<TSource> AsEnumerable()
                 => source;
+
+            public TSource[] ToArray()
+            {
+                // ReSharper disable once HeapView.PossibleBoxingAllocation
+                if (source is ICollection<TSource> collection)
+                {
+                    if (collection.Count is 0)
+                        return Array.Empty<TSource>();
+
+                    var result = Utils.AllocateUninitializedArray<TSource>(collection.Count);
+                    collection.CopyTo(result, 0);
+                    return result;
+                }
+                
+                using var arrayBuilder = ToArrayBuilder<IValueEnumerable<TSource, TEnumerator>, TEnumerator, TSource>(source, ArrayPool<TSource>.Shared, false);
+                return arrayBuilder.ToArray();
+            }
+
+            public IMemoryOwner<TSource> ToArray(ArrayPool<TSource> pool, bool clearOnDispose = default)
+            {
+                // ReSharper disable once HeapView.PossibleBoxingAllocation
+                if (source is ICollection<TSource> collection)
+                {
+                    if (collection.Count is 0)
+                        return EmptyMemoryOwner<TSource>.Instance;
+                
+                    var result = pool.RentDisposable(collection.Count, clearOnDispose);
+                    collection.CopyTo(result.Rented, 0);
+                    return result;                
+                }
+
+                using var arrayBuilder = ToArrayBuilder<IValueEnumerable<TSource, TEnumerator>, TEnumerator, TSource>(source, pool, clearOnDispose);
+                return arrayBuilder.ToArray(pool, clearOnDispose);
+            }
+            
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public List<TSource> ToList()
+                => ToArray().AsList();
 
             #endregion
             

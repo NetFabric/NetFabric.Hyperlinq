@@ -201,6 +201,9 @@ namespace NetFabric.Hyperlinq
         {
             if (Count is 0)
                 return;
+            
+            if (span.Length < Count)
+                Throw.ArgumentException(Resource.DestinationNotLongEnough, nameof(span));
 
             var source = slots!.AsSpan(0, Count);
             for (var index = 0; index < source.Length; index++)
