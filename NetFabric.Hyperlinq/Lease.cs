@@ -188,6 +188,15 @@ namespace NetFabric.Hyperlinq
             public readonly void Dispose()
             { }
         }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public ArrayExtensions.ArraySegmentValueEnumerable<T> AsValueEnumerable()
+            => rented is null 
+                ? Throw.ObjectDisposedException<ArrayExtensions.ArraySegmentValueEnumerable<T>>(nameof(Lease<T>))
+                : new ArraySegment<T>(rented, 0, length).AsValueEnumerable();
         
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public IEnumerable<T> AsEnumerable()
+            => this;
     }
 }

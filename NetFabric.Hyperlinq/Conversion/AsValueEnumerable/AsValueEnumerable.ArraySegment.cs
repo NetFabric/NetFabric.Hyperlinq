@@ -83,10 +83,10 @@ namespace NetFabric.Hyperlinq
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public int IndexOf(TSource item)
             {
-                var index = System.Array.IndexOf(source.Array!, item, source.Offset, source.Count);
-                return index >= 0 
-                    ? index - source.Offset 
-                    : -1;
+                var index = Array.IndexOf(source.Array!, item, source.Offset, source.Count);
+                return index < 0 
+                    ? -1
+                    : index - source.Offset;
             }
             
             [ExcludeFromCodeCoverage]
@@ -196,14 +196,24 @@ namespace NetFabric.Hyperlinq
             #region Element
 
             public Option<TSource> ElementAt(int index)
-                => ((ReadOnlySpan<TSource>)source.AsSpan()).ElementAt(index);
+                => index < 0 || index >= source.Count 
+                    ? Option.None 
+                    : Option.Some(source.Array![source.Offset + index]);
 
             public Option<TSource> First()
-                => ((ReadOnlySpan<TSource>)source.AsSpan()).First();
-
+                => source switch
+                {
+                    { Count: 0 } => Option.None,
+                    _ => Option.Some(source.Array![source.Offset])
+                };
+            
             public Option<TSource> Single()
-                => ((ReadOnlySpan<TSource>)source.AsSpan()).Single();
-
+                => source switch
+                {
+                    { Count: 1 } => Option.Some(source.Array![source.Offset]),
+                    _ => Option.None,
+                };
+            
             #endregion
 
             #region Filtering
