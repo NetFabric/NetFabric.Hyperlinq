@@ -70,8 +70,9 @@ namespace NetFabric.Hyperlinq.UnitTests.Set.Distinct
                 .ToArray(pool);
 
             // Assert
-            _ = result.Memory
-                .SequenceEqual(expected);
+            _ = result.Must()
+                .BeEnumerableOf<int>()
+                .BeEqualTo(expected);
         }
 
         [Theory]

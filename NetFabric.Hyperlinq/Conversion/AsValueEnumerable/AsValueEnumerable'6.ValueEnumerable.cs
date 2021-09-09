@@ -100,15 +100,15 @@ namespace NetFabric.Hyperlinq
                 return arrayBuilder.ToArray();
             }
 
-            public IMemoryOwner<TSource> ToArray(ArrayPool<TSource> pool, bool clearOnDispose = default)
+            public Lease<TSource> ToArray(ArrayPool<TSource> pool, bool clearOnDispose = default)
             {
                 // ReSharper disable once HeapView.PossibleBoxingAllocation
                 if (source is ICollection<TSource> collection)
                 {
                     if (collection.Count is 0)
-                        return EmptyMemoryOwner<TSource>.Instance;
+                        return Lease.Empty<TSource>();
                 
-                    var result = pool.RentDisposable(collection.Count, clearOnDispose);
+                    var result = pool.Lease(collection.Count, clearOnDispose);
                     collection.CopyTo(result.Rented, 0);
                     return result;                
                 }

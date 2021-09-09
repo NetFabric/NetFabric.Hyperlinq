@@ -149,12 +149,12 @@ namespace NetFabric.Hyperlinq
                 return result;
             }
             
-            public readonly IMemoryOwner<TSource> ToArray(ArrayPool<TSource> pool, bool clearOnDispose = default)
+            public readonly Lease<TSource> ToArray(ArrayPool<TSource> pool, bool clearOnDispose = default)
             {
                 if (source.Count is 0)
-                    return EmptyMemoryOwner<TSource>.Instance;
+                    return Lease.Empty<TSource>();
 
-                var result = pool.RentDisposable(source.Count, clearOnDispose);
+                var result = pool.Lease(source.Count, clearOnDispose);
                 CopyTo(result.Rented, 0);
                 return result;
             }

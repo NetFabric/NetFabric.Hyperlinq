@@ -180,9 +180,9 @@ namespace NetFabric.Hyperlinq
                 return new ValueTask<TSource[]>(result: array);
             }
 
-            public ValueTask<IMemoryOwner<TSource>> ToArrayAsync(ArrayPool<TSource> pool, CancellationToken cancellationToken = default, bool clearOnDispose = default)
+            public ValueTask<Lease<TSource>> ToArrayAsync(ArrayPool<TSource> pool, CancellationToken cancellationToken = default, bool clearOnDispose = default)
             {
-                var result = pool.RentDisposable(count, clearOnDispose);
+                var result = pool.Lease(count, clearOnDispose);
                 var array = result.Memory.Span;
                 var end = count - 1;
                 for (var index = 0; index <= end; index++)
@@ -190,7 +190,7 @@ namespace NetFabric.Hyperlinq
                     cancellationToken.ThrowIfCancellationRequested();
                     array[index] = value;
                 }
-                return new ValueTask<IMemoryOwner<TSource>>(result: result);
+                return new ValueTask<Lease<TSource>>(result: result);
             }
 
             public async ValueTask<List<TSource>> ToListAsync(CancellationToken cancellationToken = default)

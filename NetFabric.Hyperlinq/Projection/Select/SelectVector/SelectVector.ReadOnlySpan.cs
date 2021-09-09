@@ -88,7 +88,7 @@ namespace NetFabric.Hyperlinq
                 => source.ToArrayVector<TSource, TResult, TVectorSelector, TSelector>(vectorSelector, selector);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public IMemoryOwner<TResult> ToArray(ArrayPool<TResult> pool, bool clearOnDispose = default)
+            public Lease<TResult> ToArray(ArrayPool<TResult> pool, bool clearOnDispose = default)
                 => source.ToArrayVector(pool, clearOnDispose, vectorSelector, selector);
 
             public List<TResult> ToList()

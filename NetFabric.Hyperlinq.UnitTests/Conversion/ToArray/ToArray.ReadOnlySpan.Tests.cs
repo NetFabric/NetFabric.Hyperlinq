@@ -26,7 +26,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
                 .ToArray(pool);
 
             // Assert
-            _ = result.Memory.Must()
+            _ = result.Must()
+                .BeEnumerableOf<int>()
                 .BeEqualTo(expected);
         }
 
@@ -77,7 +78,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
                 .ToArray(pool);
 
             // Assert
-            _ = result.Memory.Must()
+            _ = result.Must()
+                .BeEnumerableOf<int>()
                 .BeEqualTo(expected);
         }
 
@@ -128,7 +130,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
                 .ToArray(pool);
 
             // Assert
-            _ = result.Memory.Must()
+            _ = result.Must()
+                .BeEnumerableOf<int>()
                 .BeEqualTo(expected);
         }
 
@@ -178,7 +181,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
                 .ToArray(pool);
 
             // Assert
-            _ = result.Memory.Must()
+            _ = result.Must()
+                .BeEnumerableOf<string>()
                 .BeEqualTo(expected);
         }
 
@@ -228,7 +232,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
                 .ToArray(pool);
 
             // Assert
-            _ = result.Memory.Must()
+            _ = result.Must()
+                .BeEnumerableOf<string>()
                 .BeEqualTo(expected);
         }
 
@@ -282,7 +287,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
                 .ToArray(pool);
 
             // Assert
-            _ = result.Memory.Must()
+            _ = result.Must()
+                .BeEnumerableOf<string>()
                 .BeEqualTo(expected);
         }
     }

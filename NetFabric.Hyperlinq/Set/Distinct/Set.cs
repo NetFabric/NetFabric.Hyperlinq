@@ -170,9 +170,9 @@ namespace NetFabric.Hyperlinq
             return array;
         }
 
-        public readonly IMemoryOwner<TElement> ToArray(ArrayPool<TElement> pool, bool clearOnDispose)
+        public readonly Lease<TElement> ToArray(ArrayPool<TElement> pool, bool clearOnDispose)
         {
-            var result = pool.RentDisposable(Count, clearOnDispose);
+            var result = pool.Lease(Count, clearOnDispose);
             CopyTo(result.Memory.Span);
             return result;
         }

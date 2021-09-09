@@ -11,12 +11,12 @@ namespace NetFabric.Hyperlinq
         static TSource[] ToArray<TSource>(this ReadOnlySpan<TSource> source)
             => source.ToArray();
 
-        public static IMemoryOwner<TSource> ToArray<TSource>(this ReadOnlySpan<TSource> source, ArrayPool<TSource> pool, bool clearOnDispose = default)
+        public static Lease<TSource> ToArray<TSource>(this ReadOnlySpan<TSource> source, ArrayPool<TSource> pool, bool clearOnDispose = default)
         {
             if (source.Length is 0)
-                return EmptyMemoryOwner<TSource>.Instance;
+                return Lease.Empty<TSource>();
 
-            var result = pool.RentDisposable(source.Length, clearOnDispose);
+            var result = pool.Lease(source.Length, clearOnDispose);
             Copy(source, result.Memory.Span);
             return result;
         }
@@ -35,11 +35,11 @@ namespace NetFabric.Hyperlinq
         }
 
         [GeneratorIgnore]
-        static IMemoryOwner<TSource> ToArray<TSource, TPredicate>(this ReadOnlySpan<TSource> source, ArrayPool<TSource> pool, bool clearOnDispose, TPredicate predicate)
+        static Lease<TSource> ToArray<TSource, TPredicate>(this ReadOnlySpan<TSource> source, ArrayPool<TSource> pool, bool clearOnDispose, TPredicate predicate)
             where TPredicate : struct, IFunction<TSource, bool>
         {
             if (source.Length is 0)
-                return EmptyMemoryOwner<TSource>.Instance;
+                return Lease.Empty<TSource>();
 
             using var arrayBuilder = ToArrayBuilder(source, pool, clearOnDispose, predicate);
             return arrayBuilder.ToArray(pool, clearOnDispose);
@@ -60,11 +60,11 @@ namespace NetFabric.Hyperlinq
         }
 
         [GeneratorIgnore]
-        static IMemoryOwner<TSource> ToArrayAt<TSource, TPredicate>(this ReadOnlySpan<TSource> source, ArrayPool<TSource> pool, bool clearOnDispose, TPredicate predicate)
+        static Lease<TSource> ToArrayAt<TSource, TPredicate>(this ReadOnlySpan<TSource> source, ArrayPool<TSource> pool, bool clearOnDispose, TPredicate predicate)
             where TPredicate : struct, IFunction<TSource, int, bool>
         {
             if (source.Length is 0)
-                return EmptyMemoryOwner<TSource>.Instance;
+                return Lease.Empty<TSource>();
 
             using var arrayBuilder = ToArrayBuilderAt(source, pool, clearOnDispose, predicate);
             return arrayBuilder.ToArray(pool, clearOnDispose);
@@ -101,28 +101,28 @@ namespace NetFabric.Hyperlinq
         }
 
         [GeneratorIgnore]
-        static IMemoryOwner<TResult> ToArrayVector<TSource, TResult, TVectorSelector, TSelector>(this ReadOnlySpan<TSource> source, ArrayPool<TResult> pool, bool clearOnDispose, TVectorSelector vectorSelector, TSelector selector)
+        static Lease<TResult> ToArrayVector<TSource, TResult, TVectorSelector, TSelector>(this ReadOnlySpan<TSource> source, ArrayPool<TResult> pool, bool clearOnDispose, TVectorSelector vectorSelector, TSelector selector)
             where TVectorSelector : struct, IFunction<Vector<TSource>, Vector<TResult>>
             where TSelector : struct, IFunction<TSource, TResult>
             where TSource : struct
             where TResult : struct
         {
             if (source.Length is 0)
-                return EmptyMemoryOwner<TResult>.Instance;
+                return Lease.Empty<TResult>();
 
-            var result = pool.RentDisposable(source.Length, clearOnDispose);
+            var result = pool.Lease(source.Length, clearOnDispose);
             CopyVector(source, result.Memory.Span, vectorSelector, selector);
             return result;
         }
 
         [GeneratorIgnore]
-        static IMemoryOwner<TResult> ToArray<TSource, TResult, TSelector>(this ReadOnlySpan<TSource> source, ArrayPool<TResult> pool, bool clearOnDispose, TSelector selector)
+        static Lease<TResult> ToArray<TSource, TResult, TSelector>(this ReadOnlySpan<TSource> source, ArrayPool<TResult> pool, bool clearOnDispose, TSelector selector)
             where TSelector : struct, IFunction<TSource, TResult>
         {
             if (source.Length is 0)
-                return EmptyMemoryOwner<TResult>.Instance;
+                return Lease.Empty<TResult>();
 
-            var result = pool.RentDisposable(source.Length, clearOnDispose);
+            var result = pool.Lease(source.Length, clearOnDispose);
             Copy(source, result.Memory.Span, selector);
             return result;
         }
@@ -142,13 +142,13 @@ namespace NetFabric.Hyperlinq
         }
 
         [GeneratorIgnore]
-        static IMemoryOwner<TResult> ToArrayAt<TSource, TResult, TSelector>(this ReadOnlySpan<TSource> source, ArrayPool<TResult> pool, bool clearOnDispose, TSelector selector)
+        static Lease<TResult> ToArrayAt<TSource, TResult, TSelector>(this ReadOnlySpan<TSource> source, ArrayPool<TResult> pool, bool clearOnDispose, TSelector selector)
             where TSelector : struct, IFunction<TSource, int, TResult>
         {
             if (source.Length is 0)
-                return EmptyMemoryOwner<TResult>.Instance;
+                return Lease.Empty<TResult>();
 
-            var result = pool.RentDisposable(source.Length, clearOnDispose);
+            var result = pool.Lease(source.Length, clearOnDispose);
             CopyAt(source, result.Memory.Span, selector);
             return result;
         }
@@ -169,12 +169,12 @@ namespace NetFabric.Hyperlinq
         }
 
         [GeneratorIgnore]
-        static IMemoryOwner<TResult> ToArray<TSource, TResult, TPredicate, TSelector>(this ReadOnlySpan<TSource> source, ArrayPool<TResult> pool, bool clearOnDispose, TPredicate predicate, TSelector selector)
+        static Lease<TResult> ToArray<TSource, TResult, TPredicate, TSelector>(this ReadOnlySpan<TSource> source, ArrayPool<TResult> pool, bool clearOnDispose, TPredicate predicate, TSelector selector)
             where TPredicate : struct, IFunction<TSource, bool>
             where TSelector : struct, IFunction<TSource, TResult>
         {
             if (source.Length is 0)
-                return EmptyMemoryOwner<TResult>.Instance;
+                return Lease.Empty<TResult>();
 
             using var arrayBuilder = ToArrayBuilder(source, pool, clearOnDispose, predicate, selector);
             return arrayBuilder.ToArray(pool, clearOnDispose);
