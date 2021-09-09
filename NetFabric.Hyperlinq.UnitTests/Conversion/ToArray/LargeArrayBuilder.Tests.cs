@@ -43,7 +43,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
             var expected = Enumerable
                 .Range(0, count)
                 .ToArray();
-            using var builder = new LargeArrayBuilder<int>(ArrayPool<int>.Shared, false);
+            // ReSharper disable once ConvertToUsingDeclaration
+            using var builder = new LargeArrayBuilder<int>(pool, false);
             for (var index = 0; index < count; index++)
                 builder.Add(expected[index]);
 
@@ -51,7 +52,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
             using var result = builder.ToArray(pool, false);
 
             // Assert
-            _ = result.Memory.Must()
+            _ = result.Must()
+                .BeEnumerableOf<int>()
                 .BeEqualTo(expected);
         }
     }

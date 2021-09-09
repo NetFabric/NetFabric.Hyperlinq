@@ -258,7 +258,7 @@ namespace NetFabric.Hyperlinq
                 return array;
             }
 
-            public IMemoryOwner<int> ToArray(ArrayPool<int> pool, bool clearOnDispose = default)
+            public Lease<int> ToArray(ArrayPool<int> pool, bool clearOnDispose = default)
             {
                 var result = pool.Lease(Count, clearOnDispose);
                 ArrayExtensions.CopyRange(start, Count, result.Memory.Span);

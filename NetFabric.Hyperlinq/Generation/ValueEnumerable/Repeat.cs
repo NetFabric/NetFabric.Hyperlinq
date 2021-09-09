@@ -183,7 +183,7 @@ namespace NetFabric.Hyperlinq
                 return array;
             }
 
-            public IMemoryOwner<TSource> ToArray(ArrayPool<TSource> pool, bool clearOnDispose = default)
+            public Lease<TSource> ToArray(ArrayPool<TSource> pool, bool clearOnDispose = default)
             {
                 var result = pool.Lease(Count, clearOnDispose);
                 CopyTo(result.Memory.Span);
@@ -236,7 +236,7 @@ namespace NetFabric.Hyperlinq
             return array;
         }
 
-        public static IMemoryOwner<TSource> ToArrayVector<TSource>(this RepeatEnumerable<TSource> source, ArrayPool<TSource> pool, bool clearOnDispose = default)
+        public static Lease<TSource> ToArrayVector<TSource>(this RepeatEnumerable<TSource> source, ArrayPool<TSource> pool, bool clearOnDispose = default)
             where TSource : struct
         {
             var result = pool.Lease(source.count, clearOnDispose);

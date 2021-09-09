@@ -113,7 +113,7 @@ namespace NetFabric.Hyperlinq
             public Lease<TSource> ToArray(ArrayPool<TSource> pool, bool clearOnDispose = default)
             {
                 if (source.Count is 0)
-                    return Lease<TSource>.Default;
+                    return Lease.Empty<TSource>();
 
                 var result = pool.Lease(source.Count, clearOnDispose);
                 CopyTo(result.Rented, 0);

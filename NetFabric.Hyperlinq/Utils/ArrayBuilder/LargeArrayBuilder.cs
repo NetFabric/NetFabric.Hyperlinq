@@ -139,7 +139,7 @@ namespace NetFabric.Hyperlinq
         public readonly Lease<T> ToArray(ArrayPool<T> pool, bool clearOnDispose)
         {
             if (count is 0)
-                return Lease<T>.Default;
+                return Lease.Empty<T>();
             
             var result = pool.Lease(count, clearOnDispose);
             CopyTo(result.Rented, 0);

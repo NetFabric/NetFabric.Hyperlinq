@@ -66,7 +66,7 @@ namespace NetFabric.Hyperlinq
                 if (source is ICollection<TSource> collection)
                 {
                     if (collection.Count is 0)
-                        return Lease<TSource>.Default;
+                        return Lease.Empty<TSource>();
                 
                     var result = pool.Lease(collection.Count, clearOnDispose);
                     collection.CopyTo(result.Rented, 0);

@@ -29,7 +29,7 @@ namespace NetFabric.Hyperlinq
             where TEnumerator : struct, IEnumerator<TSource>
         {
             if (source.Count is 0)
-                return Lease<TSource>.Default;
+                return Lease.Empty<TSource>();
 
             var result = pool.Lease(source.Count, clearOnDispose);
             // ReSharper disable once HeapView.PossibleBoxingAllocation
@@ -58,7 +58,7 @@ namespace NetFabric.Hyperlinq
             where TEnumerator : struct, IEnumerator<TSource>
             where TPredicate : struct, IFunction<TSource, bool>
             => source.Count is 0 
-                ? Lease<TSource>.Default
+                ? Lease.Empty<TSource>()
                 : ValueEnumerableExtensions.ToArray<TEnumerable, TEnumerator, TSource, TPredicate>(source, pool, clearOnDispose, predicate);
 
         //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -79,7 +79,7 @@ namespace NetFabric.Hyperlinq
             where TEnumerator : struct, IEnumerator<TSource>
             where TPredicate : struct, IFunction<TSource, int, bool>
             => source.Count is 0 
-                ? Lease<TSource>.Default
+                ? Lease.Empty<TSource>()
                 : ValueEnumerableExtensions.ToArrayAt<TEnumerable, TEnumerator, TSource, TPredicate>(source, pool, clearOnDispose, predicate);
 
         //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -105,7 +105,7 @@ namespace NetFabric.Hyperlinq
             where TSelector : struct, IFunction<TSource, TResult>
         {
             if (source.Count is 0)
-                return Lease<TResult>.Default;
+                return Lease.Empty<TResult>();
 
             var result = pool.Lease(source.Count, clearOnDispose);
             Copy<TEnumerable, TEnumerator, TSource, TResult, TSelector>(source, result.Rented, selector);
@@ -136,7 +136,7 @@ namespace NetFabric.Hyperlinq
             where TSelector : struct, IFunction<TSource, int, TResult>
         {
             if (source.Count is 0)
-                return Lease<TResult>.Default;
+                return Lease.Empty<TResult>();
 
             var result = pool.Lease(source.Count, clearOnDispose);
             CopyAt<TEnumerable, TEnumerator, TSource, TResult, TSelector>(source, result.Rented, selector);
@@ -162,7 +162,7 @@ namespace NetFabric.Hyperlinq
             where TPredicate : struct, IFunction<TSource, bool>
             where TSelector : struct, IFunction<TSource, TResult>
             => source.Count is 0 
-                ? Lease<TResult>.Default
+                ? Lease.Empty<TResult>()
                 : ValueEnumerableExtensions.ToArray<TEnumerable, TEnumerator, TSource, TResult, TPredicate, TSelector>(source, pool, clearOnDispose, predicate, selector);
     }
 }

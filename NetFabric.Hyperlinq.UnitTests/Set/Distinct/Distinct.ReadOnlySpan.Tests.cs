@@ -68,7 +68,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Set.Distinct
                 .ToArray(ArrayPool<int>.Shared);
 
             // Assert
-            _ = result.Memory.Must()
+            _ = result.Must()
+                .BeEnumerableOf<int>()
                 .BeEqualTo(expected);
         }
 

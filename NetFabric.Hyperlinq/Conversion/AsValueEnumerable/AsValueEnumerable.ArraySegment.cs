@@ -161,7 +161,7 @@ namespace NetFabric.Hyperlinq
                 => source.AsSpan().ToArray();
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public IMemoryOwner<TSource> ToArray(ArrayPool<TSource> pool, bool clearOnDispose = default)
+            public Lease<TSource> ToArray(ArrayPool<TSource> pool, bool clearOnDispose = default)
                 => source.AsSpan().ToArray(pool, clearOnDispose);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]

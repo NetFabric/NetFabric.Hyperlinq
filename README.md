@@ -290,23 +290,23 @@ source.AsValueEnumerable()
 
 ### Buffer pools
 
-[Buffer pools](https://adamsitnik.com/Array-Pool/) allow the use of heap memory without adding pressure to the garbage collector. It preallocates a chunk of memory and "rents" it as required. The garbage collector will add this memory to the Large Object Heap (LOH).
+[Buffer pools](https://adamsitnik.com/Array-Pool/) allow the use of heap memory without adding pressure to the garbage collector. It pre-allocates a chunk of memory and "rents" it as required. The garbage collector will add this memory to the Large Object Heap (LOH).
 
 `ToArray()` is frequently used to cache values for a brief period and the use of buffer pools may be useful.
 
-`Netfabric.Hyperlinq` adds an overload that takes a `MemoryPool<>` as a parameter:
+`Netfabric.Hyperlinq` adds an overload that takes a `ArrayPool<>` as a parameter:
 
 ``` csharp
 void Method()
 {
   using var buffer = source.AsValueEnumerable()
-      .ToArray(MemoryPool<int>.Shared);
+      .ToArray(ArrayPool<int>.Shared);
   var memory = buffer.Memory;
   // use memory here
 }
 ```
 
-It returns an [`IMemoryOwner<>`](https://docs.microsoft.com/en-us/dotnet/api/system.buffers.imemoryowner-1). The `using` statement guarantees that it is disposed and the buffer automatically returned to the pool. 
+It returns an instance of a [`IMemoryOwner<>`](https://docs.microsoft.com/en-us/dotnet/api/system.buffers.imemoryowner-1). The `using` statement guarantees that it is disposed and the buffer automatically returned to the pool. 
 
 ### SIMD
 

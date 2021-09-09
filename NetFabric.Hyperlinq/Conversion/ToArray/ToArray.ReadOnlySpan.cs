@@ -14,7 +14,7 @@ namespace NetFabric.Hyperlinq
         public static Lease<TSource> ToArray<TSource>(this ReadOnlySpan<TSource> source, ArrayPool<TSource> pool, bool clearOnDispose = default)
         {
             if (source.Length is 0)
-                return Lease<TSource>.Default;
+                return Lease.Empty<TSource>();
 
             var result = pool.Lease(source.Length, clearOnDispose);
             Copy(source, result.Memory.Span);
@@ -39,7 +39,7 @@ namespace NetFabric.Hyperlinq
             where TPredicate : struct, IFunction<TSource, bool>
         {
             if (source.Length is 0)
-                return Lease<TSource>.Default;
+                return Lease.Empty<TSource>();
 
             using var arrayBuilder = ToArrayBuilder(source, pool, clearOnDispose, predicate);
             return arrayBuilder.ToArray(pool, clearOnDispose);
@@ -64,7 +64,7 @@ namespace NetFabric.Hyperlinq
             where TPredicate : struct, IFunction<TSource, int, bool>
         {
             if (source.Length is 0)
-                return Lease<TSource>.Default;
+                return Lease.Empty<TSource>();
 
             using var arrayBuilder = ToArrayBuilderAt(source, pool, clearOnDispose, predicate);
             return arrayBuilder.ToArray(pool, clearOnDispose);
@@ -108,7 +108,7 @@ namespace NetFabric.Hyperlinq
             where TResult : struct
         {
             if (source.Length is 0)
-                return Lease<TResult>.Default;
+                return Lease.Empty<TResult>();
 
             var result = pool.Lease(source.Length, clearOnDispose);
             CopyVector(source, result.Memory.Span, vectorSelector, selector);
@@ -120,7 +120,7 @@ namespace NetFabric.Hyperlinq
             where TSelector : struct, IFunction<TSource, TResult>
         {
             if (source.Length is 0)
-                return Lease<TResult>.Default;
+                return Lease.Empty<TResult>();
 
             var result = pool.Lease(source.Length, clearOnDispose);
             Copy(source, result.Memory.Span, selector);
@@ -146,7 +146,7 @@ namespace NetFabric.Hyperlinq
             where TSelector : struct, IFunction<TSource, int, TResult>
         {
             if (source.Length is 0)
-                return Lease<TResult>.Default;
+                return Lease.Empty<TResult>();
 
             var result = pool.Lease(source.Length, clearOnDispose);
             CopyAt(source, result.Memory.Span, selector);
@@ -174,7 +174,7 @@ namespace NetFabric.Hyperlinq
             where TSelector : struct, IFunction<TSource, TResult>
         {
             if (source.Length is 0)
-                return Lease<TResult>.Default;
+                return Lease.Empty<TResult>();
 
             using var arrayBuilder = ToArrayBuilder(source, pool, clearOnDispose, predicate, selector);
             return arrayBuilder.ToArray(pool, clearOnDispose);
