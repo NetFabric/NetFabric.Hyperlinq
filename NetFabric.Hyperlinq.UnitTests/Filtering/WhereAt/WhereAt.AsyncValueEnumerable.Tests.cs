@@ -34,7 +34,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Filtering.WhereAt
         [MemberData(nameof(TestData.PredicateAtEmpty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.PredicateAtSingle), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.PredicateAtMultiple), MemberType = typeof(TestData))]
-        public async ValueTask Where_Sum_Predicate_With_ValidData_Must_Succeed(int[] source, Func<int, int, bool> predicate)
+        public async Task Where_Sum_Predicate_With_ValidData_Must_Succeed(int[] source, Func<int, int, bool> predicate)
         {
             // Arrange
             var wrapped = Wrap

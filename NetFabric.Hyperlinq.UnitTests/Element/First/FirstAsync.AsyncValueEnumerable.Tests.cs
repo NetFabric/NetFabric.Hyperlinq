@@ -30,7 +30,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.FirstAsync
         [Theory]
         [MemberData(nameof(TestData.Single), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.Multiple), MemberType = typeof(TestData))]
-        public async ValueTask FirstAsync_With_ValidData_Must_Return_Some(int[] source)
+        public async Task FirstAsync_With_ValidData_Must_Return_Some(int[] source)
         {
             // Arrange
             var wrapped = Wrap
@@ -72,7 +72,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.FirstAsync
         [Theory]
         [MemberData(nameof(TestData.PredicateSingle), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.PredicateMultiple), MemberType = typeof(TestData))]
-        public async ValueTask FirstAsync_Predicate_With_ValidData_Must_Return_Some(int[] source, Func<int, bool> predicate)
+        public async Task FirstAsync_Predicate_With_ValidData_Must_Return_Some(int[] source, Func<int, bool> predicate)
         {
             // Arrange
             var wrapped = Wrap
@@ -115,7 +115,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.FirstAsync
         [Theory]
         [MemberData(nameof(TestData.PredicateAtSingle), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.PredicateAtMultiple), MemberType = typeof(TestData))]
-        public async ValueTask FirstAsync_PredicateAt_With_ValidData_Must_Return_Some(int[] source, Func<int, int, bool> predicate)
+        public async Task FirstAsync_PredicateAt_With_ValidData_Must_Return_Some(int[] source, Func<int, int, bool> predicate)
         {
             // Arrange
             var wrapped = Wrap
@@ -159,7 +159,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.FirstAsync
         [Theory]
         [MemberData(nameof(TestData.SelectorSingle), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.SelectorMultiple), MemberType = typeof(TestData))]
-        public async ValueTask FirstAsync_Selector_With_ValidData_Must_Return_Some(int[] source, Func<int, string> selector)
+        public async Task FirstAsync_Selector_With_ValidData_Must_Return_Some(int[] source, Func<int, string> selector)
         {
             // Arrange
             var wrapped = Wrap
@@ -203,7 +203,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.FirstAsync
         [Theory]
         [MemberData(nameof(TestData.SelectorAtSingle), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.SelectorAtMultiple), MemberType = typeof(TestData))]
-        public async ValueTask FirstAsync_SelectorAt_With_ValidData_Must_Return_Some(int[] source, Func<int, int, string> selector)
+        public async Task FirstAsync_SelectorAt_With_ValidData_Must_Return_Some(int[] source, Func<int, int, string> selector)
         {
             // Arrange
             var wrapped = Wrap
@@ -248,7 +248,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.FirstAsync
         [Theory]
         [MemberData(nameof(TestData.PredicateSelectorSingle), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.PredicateSelectorMultiple), MemberType = typeof(TestData))]
-        public async ValueTask FirstAsync_Predicate_Selector_With_ValidData_Must_Return_Some(int[] source, Func<int, bool> predicate, Func<int, string> selector)
+        public async Task FirstAsync_Predicate_Selector_With_ValidData_Must_Return_Some(int[] source, Func<int, bool> predicate, Func<int, string> selector)
         {
             // Arrange
             var wrapped = Wrap

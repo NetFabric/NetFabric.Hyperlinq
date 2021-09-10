@@ -177,8 +177,7 @@ namespace NetFabric.Hyperlinq
 
             public TSource[] ToArray()
             {
-                // ReSharper disable once HeapView.ObjectAllocation.Evident
-                var array = new TSource[Count];
+                var array = Utils.AllocateUninitializedArray<TSource>(Count);
                 CopyTo(array.AsSpan());
                 return array;
             }
@@ -231,7 +230,7 @@ namespace NetFabric.Hyperlinq
             where TSource : struct
         {
             // ReSharper disable once HeapView.ObjectAllocation.Evident
-            var array = new TSource[source.count];
+            var array = Utils.AllocateUninitializedArray<TSource>(source.count);
             source.CopyToVector(array.AsSpan());
             return array;
         }

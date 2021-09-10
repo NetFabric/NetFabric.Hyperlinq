@@ -12,7 +12,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.ContainsAsync
         [MemberData(nameof(TestData.Empty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.Single), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.Multiple), MemberType = typeof(TestData))]
-        public async ValueTask ContainsAsync_ValueType_With_Null_And_NotContains_Must_ReturnFalse(int[] source)
+        public async Task ContainsAsync_ValueType_With_Null_And_NotContains_Must_ReturnFalse(int[] source)
         {
             // Arrange
             const int value = int.MaxValue;
@@ -32,7 +32,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.ContainsAsync
         [MemberData(nameof(TestData.Empty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.Single), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.Multiple), MemberType = typeof(TestData))]
-        public async ValueTask ContainsAsync_ReferenceType_With_Null_And_NotContains_Must_ReturnFalse(int[] source)
+        public async Task ContainsAsync_ReferenceType_With_Null_And_NotContains_Must_ReturnFalse(int[] source)
         {
             // Arrange
             const string? value = default;
@@ -51,7 +51,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.ContainsAsync
         [Theory]
         [MemberData(nameof(TestData.Single), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.Multiple), MemberType = typeof(TestData))]
-        public async ValueTask ContainsAsync_ValueType_With_Null_And_Contains_Must_ReturnTrue(int[] source)
+        public async Task ContainsAsync_ValueType_With_Null_And_Contains_Must_ReturnTrue(int[] source)
         {
             // Arrange
             var value = source
@@ -71,7 +71,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.ContainsAsync
         [Theory]
         [MemberData(nameof(TestData.Single), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.Multiple), MemberType = typeof(TestData))]
-        public async ValueTask ContainsAsync_ReferenceType_With_Null_And_Contains_Must_ReturnTrue(int[] source)
+        public async Task ContainsAsync_ReferenceType_With_Null_And_Contains_Must_ReturnTrue(int[] source)
         {
             // Arrange
             var value = source
@@ -93,7 +93,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.ContainsAsync
         [MemberData(nameof(TestData.Empty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.Single), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.Multiple), MemberType = typeof(TestData))]
-        public async ValueTask ContainsAsync_With_DefaultComparer_And_NotContains_Must_ReturnFalse(int[] source)
+        public async Task ContainsAsync_With_DefaultComparer_And_NotContains_Must_ReturnFalse(int[] source)
         {
             // Arrange
             const int value = int.MaxValue;
@@ -112,7 +112,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.ContainsAsync
         [Theory]
         [MemberData(nameof(TestData.Single), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.Multiple), MemberType = typeof(TestData))]
-        public async ValueTask ContainsAsync_With_DefaultComparer_And_Contains_Must_ReturnTrue(int[] source)
+        public async Task ContainsAsync_With_DefaultComparer_And_Contains_Must_ReturnTrue(int[] source)
         {
             // Arrange
             var value = source
@@ -134,7 +134,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.ContainsAsync
         [MemberData(nameof(TestData.Empty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.Single), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.Multiple), MemberType = typeof(TestData))]
-        public async ValueTask ContainsAsync_With_Comparer_And_NotContains_Must_ReturnFalse(int[] source)
+        public async Task ContainsAsync_With_Comparer_And_NotContains_Must_ReturnFalse(int[] source)
         {
             // Arrange
             const int value = int.MaxValue;
@@ -156,7 +156,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.ContainsAsync
         [Theory]
         [MemberData(nameof(TestData.Single), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.Multiple), MemberType = typeof(TestData))]
-        public async ValueTask ContainsAsync_With_Comparer_And_Contains_Must_ReturnTrue(int[] source)
+        public async Task ContainsAsync_With_Comparer_And_Contains_Must_ReturnTrue(int[] source)
         {
             // Arrange
             var value = source

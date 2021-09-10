@@ -74,7 +74,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Generation.AsyncValueEnumerableTests
 
         [Theory]
         [MemberData(nameof(TestData.Range), MemberType = typeof(TestData))]
-        public async ValueTask Range_AnyAsync_With_ValidData_Must_Succeed(int start, int count)
+        public async Task Range_AnyAsync_With_ValidData_Must_Succeed(int start, int count)
         {
             // Arrange
             var expected = Enumerable.Any(Enumerable.Range(start, count));
@@ -91,7 +91,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Generation.AsyncValueEnumerableTests
 
         [Theory]
         [MemberData(nameof(TestData.Range_Contains), MemberType = typeof(TestData))]
-        public async ValueTask Range_ContainsAsync_With_ValidData_Must_Succeed(int start, int count, int value)
+        public async Task Range_ContainsAsync_With_ValidData_Must_Succeed(int start, int count, int value)
         {
             // Arrange
             var expected = Enumerable.Contains(Enumerable.Range(start, count), value);
@@ -109,7 +109,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Generation.AsyncValueEnumerableTests
 
         [Theory]
         [MemberData(nameof(TestData.Range), MemberType = typeof(TestData))]
-        public async ValueTask Range_ToArray_With_ValidData_Must_Succeed(int start, int count)
+        public async Task Range_ToArray_With_ValidData_Must_Succeed(int start, int count)
         {
             // Arrange
             var expected = Enumerable.ToArray(Enumerable.Range(start, count));
@@ -128,7 +128,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Generation.AsyncValueEnumerableTests
   
         [Theory]
         [MemberData(nameof(TestData.Range), MemberType = typeof(TestData))]
-        public async ValueTask Range_With_ToList_Must_Succeed(int start, int count)
+        public async Task Range_With_ToList_Must_Succeed(int start, int count)
         {
             // Arrange
             var expected = Enumerable.ToList(Enumerable.Range(start, count));

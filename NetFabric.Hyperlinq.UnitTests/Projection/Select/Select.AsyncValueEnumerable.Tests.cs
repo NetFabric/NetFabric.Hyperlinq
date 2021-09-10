@@ -33,7 +33,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Projection.Select
         [MemberData(nameof(TestData.Empty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.Single), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.Multiple), MemberType = typeof(TestData))]
-        public async ValueTask Select_Sum_With_ValidData_Must_Succeed(int[] source)
+        public async Task Select_Sum_With_ValidData_Must_Succeed(int[] source)
         {
             // Arrange
             var wrapped = Wrap.AsAsyncValueEnumerable(source);

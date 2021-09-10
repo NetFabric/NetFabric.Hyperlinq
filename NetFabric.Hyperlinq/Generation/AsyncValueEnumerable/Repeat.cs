@@ -166,16 +166,14 @@ namespace NetFabric.Hyperlinq
 
             public ValueTask<TSource[]> ToArrayAsync(CancellationToken cancellationToken = default)
             {
-                // ReSharper disable once HeapView.ObjectAllocation.Evident
-                var array = new TSource[count];
-                if (value is object)
+                if (value is null)
+                    return new ValueTask<TSource[]>(result: new TSource[count]);
+
+                var array = Utils.AllocateUninitializedArray<TSource>(count);
+                for (var index = 0; index < array.Length; index++)
                 {
-                    var end = count - 1;
-                    for (var index = 0; index <= end; index++)
-                    {
-                        cancellationToken.ThrowIfCancellationRequested();
-                        array[index] = value;
-                    }
+                    cancellationToken.ThrowIfCancellationRequested();
+                    array[index] = value;
                 }
                 return new ValueTask<TSource[]>(result: array);
             }
@@ -184,8 +182,7 @@ namespace NetFabric.Hyperlinq
             {
                 var result = pool.Lease(count, clearOnDispose);
                 var array = result.Memory.Span;
-                var end = count - 1;
-                for (var index = 0; index <= end; index++)
+                for (var index = 0; index < array.Length; index++)
                 {
                     cancellationToken.ThrowIfCancellationRequested();
                     array[index] = value;
