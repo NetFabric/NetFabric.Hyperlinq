@@ -33,7 +33,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Set.Distinct
         [MemberData(nameof(TestData.Empty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.Single), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.Multiple), MemberType = typeof(TestData))]
-        public async ValueTask Distinct_ToArrayAsync_With_ValidData_Must_Succeed(int[] source)
+        public async Task Distinct_ToArrayAsync_With_ValidData_Must_Succeed(int[] source)
         {
             // Arrange
             var wrapped = Wrap.AsAsyncValueEnumerable(source);
@@ -57,7 +57,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Set.Distinct
         [MemberData(nameof(TestData.Empty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.Single), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.Multiple), MemberType = typeof(TestData))]
-        public async ValueTask Distinct_ToArrayAsync_MemoryPool_With_ValidData_Must_Succeed(int[] source)
+        public async Task Distinct_ToArrayAsync_MemoryPool_With_ValidData_Must_Succeed(int[] source)
         {
             // Arrange
             var pool = ArrayPool<int>.Shared;
@@ -81,7 +81,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Set.Distinct
         [MemberData(nameof(TestData.Empty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.Single), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.Multiple), MemberType = typeof(TestData))]
-        public async ValueTask Distinct_ToListAsync_With_ValidData_Must_Succeed(int[] source)
+        public async Task Distinct_ToListAsync_With_ValidData_Must_Succeed(int[] source)
         {
             // Arrange
             var wrapped = Wrap.AsAsyncValueEnumerable(source);
@@ -105,7 +105,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Set.Distinct
         [MemberData(nameof(TestData.Empty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.Single), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.Multiple), MemberType = typeof(TestData))]
-        public async ValueTask Distinct_SumAsync_With_ValidData_Must_Succeed(int[] source)
+        public async Task Distinct_SumAsync_With_ValidData_Must_Succeed(int[] source)
         {
             // Arrange
             var wrapped = Wrap.AsAsyncValueEnumerable(source);

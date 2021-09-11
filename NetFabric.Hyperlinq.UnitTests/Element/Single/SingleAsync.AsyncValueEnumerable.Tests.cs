@@ -29,7 +29,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.SingleAsync
 
         [Theory]
         [MemberData(nameof(TestData.Single), MemberType = typeof(TestData))]
-        public async ValueTask SingleAsync_With_SingleAsync_Must_Return_Some(int[] source)
+        public async Task SingleAsync_With_Single_Must_Return_Some(int[] source)
         {
             // Arrange
             var wrapped = Wrap
@@ -43,9 +43,9 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.SingleAsync
                 .ConfigureAwait(false);
 
             // Assert
-            _ = result.Match(
-                value => value.Must().BeEqualTo(expected), 
-                () => throw new Exception());
+            _ = result.Must()
+                .BeOfType<Option<int>>()
+                .EvaluateTrue(option => option.IsSome && option.Value == expected);
         }
 
         [Theory]
@@ -89,7 +89,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.SingleAsync
 
         [Theory]
         [MemberData(nameof(TestData.PredicateSingle), MemberType = typeof(TestData))]
-        public async ValueTask SingleAsync_Predicate_With_SingleAsync_Must_Return_Some(int[] source, Func<int, bool> predicate)
+        public async Task SingleAsync_Predicate_With_SingleAsync_Must_Return_Some(int[] source, Func<int, bool> predicate)
         {
             // Arrange
             var wrapped = Wrap
@@ -104,9 +104,9 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.SingleAsync
                 .ConfigureAwait(false);
 
             // Assert
-            _ = result.Match(
-                value => value.Must().BeEqualTo(expected), 
-                () => throw new Exception());
+            _ = result.Must()
+                .BeOfType<Option<int>>()
+                .EvaluateTrue(option => option.IsSome && option.Value == expected);
         }
 
         [Theory]
@@ -151,7 +151,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.SingleAsync
 
         [Theory]
         [MemberData(nameof(TestData.PredicateAtSingle), MemberType = typeof(TestData))]
-        public async ValueTask SingleAsync_PredicateAt_With_SingleAsync_Must_Return_Some(int[] source, Func<int, int, bool> predicate)
+        public async Task SingleAsync_PredicateAt_With_SingleAsync_Must_Return_Some(int[] source, Func<int, int, bool> predicate)
         {
             // Arrange
             var wrapped = Wrap
@@ -167,9 +167,9 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.SingleAsync
                 .ConfigureAwait(false);
 
             // Assert
-            _ = result.Match(
-                value => value.Must().BeEqualTo(expected), 
-                () => throw new Exception());
+            _ = result.Must()
+                .BeOfType<Option<int>>()
+                .EvaluateTrue(option => option.IsSome && option.Value == expected);
         }
 
         [Theory]
@@ -214,7 +214,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.SingleAsync
 
         [Theory]
         [MemberData(nameof(TestData.SelectorSingle), MemberType = typeof(TestData))]
-        public async ValueTask SingleAsync_Selector_With_SingleAsync_Must_Return_Some(int[] source, Func<int, string> selector)
+        public async Task SingleAsync_Selector_With_SingleAsync_Must_Return_Some(int[] source, Func<int, string> selector)
         {
             // Arrange
             var wrapped = Wrap
@@ -230,9 +230,9 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.SingleAsync
                 .ConfigureAwait(false);
 
             // Assert
-            _ = result.Match(
-                value => value.Must().BeEqualTo(expected), 
-                () => throw new Exception());
+            _ = result.Must()
+                .BeOfType<Option<string>>()
+                .EvaluateTrue(option => option.IsSome && option.Value == expected);
         }
 
         [Theory]
@@ -277,7 +277,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.SingleAsync
 
         [Theory]
         [MemberData(nameof(TestData.SelectorAtSingle), MemberType = typeof(TestData))]
-        public async ValueTask SingleAsync_SelectorAt_With_SingleAsync_Must_Return_Some(int[] source, Func<int, int, string> selector)
+        public async Task SingleAsync_SelectorAt_With_SingleAsync_Must_Return_Some(int[] source, Func<int, int, string> selector)
         {
             // Arrange
             var wrapped = Wrap
@@ -293,9 +293,9 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.SingleAsync
                 .ConfigureAwait(false);
 
             // Assert
-            _ = result.Match(
-                value => value.Must().BeEqualTo(expected), 
-                () => throw new Exception());
+            _ = result.Must()
+                .BeOfType<Option<string>>()
+                .EvaluateTrue(option => option.IsSome && option.Value == expected);
         }
 
         [Theory]
@@ -341,7 +341,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.SingleAsync
 
         [Theory]
         [MemberData(nameof(TestData.PredicateSelectorSingle), MemberType = typeof(TestData))]
-        public async ValueTask SingleAsync_Predicate_Selector_With_SingleAsync_Must_Return_Some(int[] source, Func<int, bool> predicate, Func<int, string> selector)
+        public async Task SingleAsync_Predicate_Selector_With_SingleAsync_Must_Return_Some(int[] source, Func<int, bool> predicate, Func<int, string> selector)
         {
             // Arrange
             var wrapped = Wrap
@@ -359,9 +359,9 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.SingleAsync
                 .ConfigureAwait(false);
 
             // Assert
-            _ = result.Match(
-                value => value.Must().BeEqualTo(expected), 
-                () => throw new Exception());
+            _ = result.Must()
+                .BeOfType<Option<string>>()
+                .EvaluateTrue(option => option.IsSome && option.Value == expected);
         }
 
         [Theory]

@@ -75,7 +75,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Generation.ValueEnumerableTests
 
         [Theory]
         [MemberData(nameof(TestData.Repeat), MemberType = typeof(TestData))]
-        public async ValueTask Repeat_All_With_ValidData_Must_Succeed(int value, int count)
+        public async Task Repeat_All_With_ValidData_Must_Succeed(int value, int count)
         {
             // Arrange
             var expected = Enumerable.Repeat(value, count).All(item => false);
@@ -93,7 +93,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Generation.ValueEnumerableTests
 
         [Theory]
         [MemberData(nameof(TestData.Repeat), MemberType = typeof(TestData))]
-        public async ValueTask Repeat_Any_With_ValidData_Must_Succeed(int value, int count)
+        public async Task Repeat_Any_With_ValidData_Must_Succeed(int value, int count)
         {
             // Arrange
             var expected = Enumerable.Repeat(value, count).Any();
@@ -111,7 +111,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Generation.ValueEnumerableTests
 
         [Theory]
         [MemberData(nameof(TestData.Repeat), MemberType = typeof(TestData))]
-        public async ValueTask Repeat_ToArray_With_ValidData_Must_Succeed(int value, int count)
+        public async Task Repeat_ToArray_With_ValidData_Must_Succeed(int value, int count)
         {
             // Arrange
             var expected = Enumerable.Repeat(value, count).ToArray();
@@ -130,7 +130,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Generation.ValueEnumerableTests
 
         [Theory]
         [MemberData(nameof(TestData.Repeat), MemberType = typeof(TestData))]
-        public async ValueTask Repeat_ToList_With_ValidData_Must_Succeed(int value, int count)
+        public async Task Repeat_ToList_With_ValidData_Must_Succeed(int value, int count)
         {
             // Arrange
             var expected = Enumerable.Repeat(value, count).ToList();
@@ -143,9 +143,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Generation.ValueEnumerableTests
 
             // Assert
             _ = result.Must()
-                .BeOfType<List<int>>()
-                .BeAsyncEnumerableOf<int>()
-                .BeEqualTo(expected);
+                .EvaluateTrue(list => list.SequenceEqual(expected));
         }
     }
 }

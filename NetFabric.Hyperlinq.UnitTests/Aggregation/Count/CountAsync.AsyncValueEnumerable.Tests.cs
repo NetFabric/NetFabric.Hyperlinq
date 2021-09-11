@@ -12,7 +12,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Aggregation.Count
         [MemberData(nameof(TestData.Empty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.Single), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.Multiple), MemberType = typeof(TestData))]
-        public async ValueTask CountAsync_With_ValidData_Must_Succeed(int[] source)
+        public async Task CountAsync_With_ValidData_Must_Succeed(int[] source)
         {
             // Arrange
             var wrapped = Wrap
@@ -34,7 +34,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Aggregation.Count
         [MemberData(nameof(TestData.PredicateEmpty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.PredicateSingle), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.PredicateMultiple), MemberType = typeof(TestData))]
-        public async ValueTask CountAsync_Predicate_With_ValidData_Must_Succeed(int[] source, Func<int, bool> predicate)
+        public async Task CountAsync_Predicate_With_ValidData_Must_Succeed(int[] source, Func<int, bool> predicate)
         {
             // Arrange
             var wrapped = Wrap
@@ -57,7 +57,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Aggregation.Count
         [MemberData(nameof(TestData.PredicateAtEmpty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.PredicateAtSingle), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.PredicateAtMultiple), MemberType = typeof(TestData))]
-        public async ValueTask CountAsync_PredicateAt_With_ValidData_Must_Succeed(int[] source, Func<int, int, bool> predicate)
+        public async Task CountAsync_PredicateAt_With_ValidData_Must_Succeed(int[] source, Func<int, int, bool> predicate)
         {
             // Arrange
             var wrapped = Wrap

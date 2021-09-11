@@ -8,10 +8,9 @@ namespace NetFabric.Hyperlinq
         public static TheoryData<int, int> Repeat =>
             new()
             {
-                { 0, 0 },
-                { 0, 1 },
-                { 0, 5 },
-                { 5, 5 }
+                { 1, 0 },
+                { 1, 1 },
+                { 1, 5 },
             };
 
         public static TheoryData<int, int, int> Repeat_SkipTake =>

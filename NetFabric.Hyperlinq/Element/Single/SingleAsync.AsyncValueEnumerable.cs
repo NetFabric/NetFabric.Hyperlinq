@@ -93,18 +93,21 @@ namespace NetFabric.Hyperlinq
             var enumerator = source.GetAsyncEnumerator(cancellationToken);
             try
             {
-                return await enumerator.MoveNextAsync().ConfigureAwait(false)
-                    ? await enumerator.MoveNextAsync().ConfigureAwait(false) 
-                        ? Option.None
-                        : Option.Some(enumerator.Current)
-                    : Option.None;
+                if (!await enumerator.MoveNextAsync().ConfigureAwait(false))
+                    return Option.None;
+                
+                var value = enumerator.Current;
+                    
+                if (await enumerator.MoveNextAsync().ConfigureAwait(false))
+                    return Option.None;
+
+                return Option.Some(value);
             }
             finally
             {
                 await enumerator.DisposeAsync().ConfigureAwait(false);
             }
         }
-
 
         [GeneratorIgnore]
         static async ValueTask<Option<TSource>> GetSingleAsync<TEnumerable, TEnumerator, TSource, TPredicate>(this TEnumerable source, CancellationToken cancellationToken, TPredicate predicate) 
