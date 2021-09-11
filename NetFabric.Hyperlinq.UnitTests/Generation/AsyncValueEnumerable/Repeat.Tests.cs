@@ -143,9 +143,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Generation.ValueEnumerableTests
 
             // Assert
             _ = result.Must()
-                .BeOfType<List<int>>()
-                .BeEnumerableOf<int>()
-                .BeEqualTo(expected);
+                .EvaluateTrue(list => list.SequenceEqual(expected));
         }
     }
 }
