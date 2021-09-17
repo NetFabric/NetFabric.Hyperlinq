@@ -37,7 +37,7 @@ namespace LinqBenchmarks
                         new EnvironmentVariable("COMPlus_ReadyToRun", "0"),
                         new EnvironmentVariable("COMPlus_TC_QuickJitForLoops", "1"),
                         new EnvironmentVariable("COMPlus_TieredPGO", "1"))
-                    .WithId(".NET 6")
+                    .WithId(".NET 6 PGO")
                 );
             
             foreach (var summary in BenchmarkSwitcher.FromAssembly(typeof(Program).Assembly).Run(args, config))
