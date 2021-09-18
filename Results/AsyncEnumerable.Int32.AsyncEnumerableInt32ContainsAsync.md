@@ -12,7 +12,7 @@
 - SpanLinq: [0.0.1](https://www.nuget.org/packages/SpanLinq/0.0.1)
 - Streams.CSharp: [0.6.0](https://www.nuget.org/packages/Streams.CSharp/0.6.0)
 - StructLinq.BCL: [0.27.0](https://www.nuget.org/packages/StructLinq/0.27.0)
-- NetFabric.Hyperlinq: [3.0.0-beta44](https://www.nuget.org/packages/NetFabric.Hyperlinq/3.0.0-beta44)
+- NetFabric.Hyperlinq: [3.0.0-beta46](https://www.nuget.org/packages/NetFabric.Hyperlinq/3.0.0-beta46)
 - System.Linq.Async: [5.0.0](https://www.nuget.org/packages/System.Linq.Async/5.0.0)
 
 ### Results:
@@ -29,6 +29,6 @@ Job=.NET 6 PGO  EnvironmentVariables=COMPlus_ReadyToRun=0,COMPlus_TC_QuickJitFor
 ```
 |      Method | Count |     Mean |   Error |  StdDev |        Ratio | RatioSD | Allocated |
 |------------ |------ |---------:|--------:|--------:|-------------:|--------:|----------:|
-| ForeachLoop |   100 | 164.7 ms | 3.25 ms | 6.78 ms |     baseline |         |     20 KB |
-|        Linq |   100 | 165.8 ms | 0.90 ms | 0.80 ms | 1.04x slower |   0.10x |     21 KB |
-|   Hyperlinq |   100 | 166.1 ms | 0.82 ms | 0.76 ms | 1.04x slower |   0.10x |     22 KB |
+| ForeachLoop |   100 | 137.8 ms | 2.73 ms | 5.94 ms |     baseline |         |     20 KB |
+|        Linq |   100 | 141.2 ms | 2.78 ms | 2.46 ms | 1.02x faster |   0.04x |     22 KB |
+|   Hyperlinq |   100 | 133.5 ms | 2.65 ms | 5.53 ms | 1.03x faster |   0.06x |     20 KB |

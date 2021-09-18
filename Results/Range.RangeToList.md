@@ -12,7 +12,7 @@
 - SpanLinq: [0.0.1](https://www.nuget.org/packages/SpanLinq/0.0.1)
 - Streams.CSharp: [0.6.0](https://www.nuget.org/packages/Streams.CSharp/0.6.0)
 - StructLinq.BCL: [0.27.0](https://www.nuget.org/packages/StructLinq/0.27.0)
-- NetFabric.Hyperlinq: [3.0.0-beta44](https://www.nuget.org/packages/NetFabric.Hyperlinq/3.0.0-beta44)
+- NetFabric.Hyperlinq: [3.0.0-beta46](https://www.nuget.org/packages/NetFabric.Hyperlinq/3.0.0-beta46)
 - System.Linq.Async: [5.0.0](https://www.nuget.org/packages/System.Linq.Async/5.0.0)
 
 ### Results:
@@ -29,9 +29,9 @@ Job=.NET 6 PGO  EnvironmentVariables=COMPlus_ReadyToRun=0,COMPlus_TC_QuickJitFor
 ```
 |     Method | Start | Count |      Mean |    Error |   StdDev |        Ratio | RatioSD |  Gen 0 | Allocated |
 |----------- |------ |------ |----------:|---------:|---------:|-------------:|--------:|-------:|----------:|
-|    ForLoop |     0 |   100 | 321.20 ns | 2.092 ns | 1.855 ns |     baseline |         | 0.5660 |   1,184 B |
-|       Linq |     0 |   100 | 207.74 ns | 0.765 ns | 0.716 ns | 1.55x faster |   0.01x | 0.2370 |     496 B |
-| LinqFaster |     0 |   100 | 147.07 ns | 1.446 ns | 1.353 ns | 2.19x faster |   0.02x | 0.4208 |     880 B |
-|     LinqAF |     0 |   100 | 283.26 ns | 1.519 ns | 1.421 ns | 1.13x faster |   0.01x | 0.2179 |     456 B |
-| StructLinq |     0 |   100 | 102.22 ns | 0.381 ns | 0.338 ns | 3.14x faster |   0.01x | 0.2180 |     456 B |
-|  Hyperlinq |     0 |   100 |  62.23 ns | 0.441 ns | 0.368 ns | 5.16x faster |   0.04x | 0.2180 |     456 B |
+|    ForLoop |     0 |   100 | 327.05 ns | 2.415 ns | 2.141 ns |     baseline |         | 0.5660 |   1,184 B |
+|       Linq |     0 |   100 | 210.13 ns | 1.195 ns | 1.059 ns | 1.56x faster |   0.01x | 0.2370 |     496 B |
+| LinqFaster |     0 |   100 | 149.33 ns | 1.417 ns | 1.326 ns | 2.19x faster |   0.02x | 0.4208 |     880 B |
+|     LinqAF |     0 |   100 | 282.87 ns | 3.181 ns | 2.820 ns | 1.16x faster |   0.01x | 0.2179 |     456 B |
+| StructLinq |     0 |   100 | 103.16 ns | 0.429 ns | 0.402 ns | 3.17x faster |   0.03x | 0.2180 |     456 B |
+|  Hyperlinq |     0 |   100 |  61.37 ns | 0.483 ns | 0.428 ns | 5.33x faster |   0.06x | 0.2180 |     456 B |

@@ -12,7 +12,7 @@
 - SpanLinq: [0.0.1](https://www.nuget.org/packages/SpanLinq/0.0.1)
 - Streams.CSharp: [0.6.0](https://www.nuget.org/packages/Streams.CSharp/0.6.0)
 - StructLinq.BCL: [0.27.0](https://www.nuget.org/packages/StructLinq/0.27.0)
-- NetFabric.Hyperlinq: [3.0.0-beta44](https://www.nuget.org/packages/NetFabric.Hyperlinq/3.0.0-beta44)
+- NetFabric.Hyperlinq: [3.0.0-beta46](https://www.nuget.org/packages/NetFabric.Hyperlinq/3.0.0-beta46)
 - System.Linq.Async: [5.0.0](https://www.nuget.org/packages/System.Linq.Async/5.0.0)
 
 ### Results:
@@ -29,12 +29,12 @@ Job=.NET 6 PGO  EnvironmentVariables=COMPlus_ReadyToRun=0,COMPlus_TC_QuickJitFor
 ```
 |                   Method | Count |        Mean |     Error |    StdDev |         Ratio | RatioSD |   Gen 0 | Allocated |
 |------------------------- |------ |------------:|----------:|----------:|--------------:|--------:|--------:|----------:|
-|              ForeachLoop |   100 |    543.5 ns |   3.96 ns |   3.71 ns |      baseline |         |  0.7877 |   1,648 B |
-|                     Linq |   100 |    888.2 ns |   4.22 ns |   3.74 ns |  1.64x slower |   0.01x |  0.6266 |   1,312 B |
-|                   LinqAF |   100 |    892.1 ns |   4.86 ns |   4.31 ns |  1.64x slower |   0.02x |  0.7725 |   1,616 B |
-|            LinqOptimizer |   100 | 52,040.9 ns | 282.56 ns | 264.31 ns | 95.76x slower |   0.70x | 15.3198 |  32,109 B |
-|                  Streams |   100 |  1,560.0 ns |   8.52 ns |   7.97 ns |  2.87x slower |   0.02x |  1.0319 |   2,160 B |
-|               StructLinq |   100 |    922.1 ns |   4.37 ns |   3.65 ns |  1.70x slower |   0.01x |  0.2632 |     552 B |
-| StructLinq_ValueDelegate |   100 |    592.5 ns |   4.31 ns |   3.82 ns |  1.09x slower |   0.01x |  0.2213 |     464 B |
-|                Hyperlinq |   100 |    942.6 ns |   5.36 ns |   4.75 ns |  1.74x slower |   0.01x |  0.2213 |     464 B |
-|  Hyperlinq_ValueDelegate |   100 |    645.3 ns |   2.77 ns |   2.31 ns |  1.19x slower |   0.01x |  0.2213 |     464 B |
+|              ForeachLoop |   100 |    549.8 ns |   4.07 ns |   3.81 ns |      baseline |         |  0.7877 |   1,648 B |
+|                     Linq |   100 |    794.1 ns |   3.71 ns |   3.47 ns |  1.44x slower |   0.01x |  0.6266 |   1,312 B |
+|                   LinqAF |   100 |    920.5 ns |   5.74 ns |   5.09 ns |  1.67x slower |   0.02x |  0.7725 |   1,616 B |
+|            LinqOptimizer |   100 | 53,910.6 ns | 270.29 ns | 239.61 ns | 98.01x slower |   0.90x | 15.3198 |  32,109 B |
+|                  Streams |   100 |  1,569.1 ns |   7.22 ns |   6.40 ns |  2.85x slower |   0.03x |  1.0319 |   2,160 B |
+|               StructLinq |   100 |    937.8 ns |   3.78 ns |   3.53 ns |  1.71x slower |   0.01x |  0.2632 |     552 B |
+| StructLinq_ValueDelegate |   100 |    592.1 ns |   3.74 ns |   3.31 ns |  1.08x slower |   0.01x |  0.2213 |     464 B |
+|                Hyperlinq |   100 |    899.7 ns |   4.09 ns |   3.83 ns |  1.64x slower |   0.01x |  0.2213 |     464 B |
+|  Hyperlinq_ValueDelegate |   100 |    645.3 ns |   3.26 ns |   2.89 ns |  1.17x slower |   0.01x |  0.2213 |     464 B |

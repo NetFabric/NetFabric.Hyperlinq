@@ -12,7 +12,7 @@
 - SpanLinq: [0.0.1](https://www.nuget.org/packages/SpanLinq/0.0.1)
 - Streams.CSharp: [0.6.0](https://www.nuget.org/packages/Streams.CSharp/0.6.0)
 - StructLinq.BCL: [0.27.0](https://www.nuget.org/packages/StructLinq/0.27.0)
-- NetFabric.Hyperlinq: [3.0.0-beta44](https://www.nuget.org/packages/NetFabric.Hyperlinq/3.0.0-beta44)
+- NetFabric.Hyperlinq: [3.0.0-beta46](https://www.nuget.org/packages/NetFabric.Hyperlinq/3.0.0-beta46)
 - System.Linq.Async: [5.0.0](https://www.nuget.org/packages/System.Linq.Async/5.0.0)
 
 ### Results:
@@ -27,8 +27,8 @@ Intel Core i5-7360U CPU 2.30GHz (Kaby Lake), 1 CPU, 4 logical and 2 physical cor
 Job=.NET 6 PGO  EnvironmentVariables=COMPlus_ReadyToRun=0,COMPlus_TC_QuickJitForLoops=1,COMPlus_TieredPGO=1  Runtime=.NET 6.0  
 
 ```
-|      Method | Count |     Mean |     Error |    StdDev |        Ratio | RatioSD | Allocated |
-|------------ |------ |---------:|----------:|----------:|-------------:|--------:|----------:|
-| ForeachLoop |   100 | 1.676 ms | 0.0125 ms | 0.0117 ms |     baseline |         |     538 B |
-|        Linq |   100 | 1.667 ms | 0.0201 ms | 0.0188 ms | 1.01x faster |   0.01x |     554 B |
-|   Hyperlinq |   100 | 1.680 ms | 0.0114 ms | 0.0107 ms | 1.00x slower |   0.01x |     546 B |
+|      Method | Count |     Mean |     Error |    StdDev |   Median |        Ratio | RatioSD | Allocated |
+|------------ |------ |---------:|----------:|----------:|---------:|-------------:|--------:|----------:|
+| ForeachLoop |   100 | 1.662 ms | 0.0163 ms | 0.0152 ms | 1.666 ms |     baseline |         |     538 B |
+|        Linq |   100 | 1.510 ms | 0.0615 ms | 0.1813 ms | 1.629 ms | 1.03x faster |   0.10x |     554 B |
+|   Hyperlinq |   100 | 1.335 ms | 0.0267 ms | 0.0782 ms | 1.338 ms | 1.32x faster |   0.06x |     546 B |

@@ -12,7 +12,7 @@
 - SpanLinq: [0.0.1](https://www.nuget.org/packages/SpanLinq/0.0.1)
 - Streams.CSharp: [0.6.0](https://www.nuget.org/packages/Streams.CSharp/0.6.0)
 - StructLinq.BCL: [0.27.0](https://www.nuget.org/packages/StructLinq/0.27.0)
-- NetFabric.Hyperlinq: [3.0.0-beta44](https://www.nuget.org/packages/NetFabric.Hyperlinq/3.0.0-beta44)
+- NetFabric.Hyperlinq: [3.0.0-beta46](https://www.nuget.org/packages/NetFabric.Hyperlinq/3.0.0-beta46)
 - System.Linq.Async: [5.0.0](https://www.nuget.org/packages/System.Linq.Async/5.0.0)
 
 ### Results:
@@ -29,16 +29,16 @@ Job=.NET 6 PGO  EnvironmentVariables=COMPlus_ReadyToRun=0,COMPlus_TC_QuickJitFor
 ```
 |                   Method | Count |        Mean |     Error |    StdDev |         Ratio | RatioSD |   Gen 0 | Allocated |
 |------------------------- |------ |------------:|----------:|----------:|--------------:|--------:|--------:|----------:|
-|                  ForLoop |   100 |    549.7 ns |   0.64 ns |   0.50 ns |      baseline |         |       - |         - |
-|              ForeachLoop |   100 |    793.7 ns |   1.75 ns |   1.64 ns |  1.44x slower |   0.00x |       - |         - |
-|                     Linq |   100 |  1,296.4 ns |   6.75 ns |   6.32 ns |  2.36x slower |   0.01x |  0.0877 |     184 B |
-|               LinqFaster |   100 |  1,753.2 ns |   9.77 ns |   9.14 ns |  3.19x slower |   0.02x |  3.8605 |   8,088 B |
-|             LinqFasterer |   100 |  1,759.9 ns |  30.02 ns |  28.08 ns |  3.19x slower |   0.05x |  4.7379 |   9,936 B |
-|                   LinqAF |   100 |  1,370.6 ns |   6.91 ns |   6.47 ns |  2.49x slower |   0.01x |       - |         - |
-|            LinqOptimizer |   100 | 53,203.5 ns | 384.07 ns | 340.47 ns | 96.78x slower |   0.56x | 73.1201 | 154,832 B |
-|                 SpanLinq |   100 |    769.9 ns |   1.77 ns |   1.66 ns |  1.40x slower |   0.00x |       - |         - |
-|                  Streams |   100 |  2,011.0 ns |   3.73 ns |   2.91 ns |  3.66x slower |   0.01x |  0.4044 |     848 B |
-|               StructLinq |   100 |    655.0 ns |   1.87 ns |   1.75 ns |  1.19x slower |   0.00x |  0.0191 |      40 B |
-| StructLinq_ValueDelegate |   100 |    576.1 ns |   2.96 ns |   2.62 ns |  1.05x slower |   0.00x |       - |         - |
-|                Hyperlinq |   100 |  1,007.8 ns |   3.58 ns |   3.17 ns |  1.83x slower |   0.01x |       - |         - |
-|  Hyperlinq_ValueDelegate |   100 |    890.9 ns |   1.81 ns |   1.70 ns |  1.62x slower |   0.00x |       - |         - |
+|                  ForLoop |   100 |    551.1 ns |   1.18 ns |   0.98 ns |      baseline |         |       - |         - |
+|              ForeachLoop |   100 |    796.1 ns |   2.44 ns |   2.28 ns |  1.44x slower |   0.00x |       - |         - |
+|                     Linq |   100 |  1,301.4 ns |   6.16 ns |   5.76 ns |  2.36x slower |   0.01x |  0.0877 |     184 B |
+|               LinqFaster |   100 |  1,791.8 ns |   7.84 ns |   7.34 ns |  3.25x slower |   0.02x |  3.8605 |   8,088 B |
+|             LinqFasterer |   100 |  1,788.3 ns |  29.34 ns |  27.45 ns |  3.24x slower |   0.05x |  4.7379 |   9,936 B |
+|                   LinqAF |   100 |  1,377.4 ns |   4.92 ns |   4.37 ns |  2.50x slower |   0.01x |       - |         - |
+|            LinqOptimizer |   100 | 54,768.1 ns | 506.13 ns | 473.43 ns | 99.42x slower |   0.79x | 73.1201 | 154,832 B |
+|                 SpanLinq |   100 |    773.2 ns |   2.51 ns |   2.34 ns |  1.40x slower |   0.00x |       - |         - |
+|                  Streams |   100 |  2,098.9 ns |   2.47 ns |   1.93 ns |  3.81x slower |   0.01x |  0.4044 |     848 B |
+|               StructLinq |   100 |    651.2 ns |   1.65 ns |   1.54 ns |  1.18x slower |   0.00x |  0.0191 |      40 B |
+| StructLinq_ValueDelegate |   100 |    577.5 ns |   1.96 ns |   1.74 ns |  1.05x slower |   0.00x |       - |         - |
+|                Hyperlinq |   100 |  1,010.9 ns |   4.40 ns |   3.90 ns |  1.83x slower |   0.01x |       - |         - |
+|  Hyperlinq_ValueDelegate |   100 |    878.1 ns |   5.85 ns |   5.47 ns |  1.59x slower |   0.01x |       - |         - |
