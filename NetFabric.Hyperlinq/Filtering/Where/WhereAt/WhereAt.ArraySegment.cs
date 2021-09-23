@@ -84,10 +84,14 @@ namespace NetFabric.Hyperlinq
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
                 public bool MoveNext()
                 {
+                    var index = this.index;
                     while (++index <= end)
                     {
                         if (predicate.Invoke(source![index + offset], index))
+                        {
+                            this.index = index;
                             return true;
+                        }
                     }
                     return false;
                 }
