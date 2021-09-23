@@ -125,8 +125,15 @@ namespace NetFabric.Hyperlinq
 
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
                 public bool MoveNext()
-                    => ++index <= end;
-
+                {
+                    if (index <= end)
+                    {
+                        index++;
+                        return index <= end;
+                    }
+                    return false;
+                }
+                
                 [ExcludeFromCodeCoverage]
                 [DoesNotReturn]
                 public readonly void Reset()

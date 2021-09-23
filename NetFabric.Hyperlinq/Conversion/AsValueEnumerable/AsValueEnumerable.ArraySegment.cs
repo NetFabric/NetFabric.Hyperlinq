@@ -131,7 +131,14 @@ namespace NetFabric.Hyperlinq
 
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
                 public bool MoveNext()
-                    => ++index < source.Count;
+                {
+                    if (index < source.Count)
+                    {
+                        index++;
+                        return index < source.Count;
+                    }
+                    return false;
+                }
 
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
                 [ExcludeFromCodeCoverage]

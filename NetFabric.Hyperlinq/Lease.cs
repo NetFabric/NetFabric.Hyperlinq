@@ -28,7 +28,7 @@ namespace NetFabric.Hyperlinq
         T[]? rented;
         int length;
         
-        public Lease(ArrayPool<T> pool, int length, bool clearOnDispose = false)
+        internal Lease(ArrayPool<T> pool, int length, bool clearOnDispose)
         {
             Debug.Assert(length >= 0);
 
@@ -37,7 +37,7 @@ namespace NetFabric.Hyperlinq
             this.clearOnDispose = clearOnDispose;
             rented = length is 0
                 ? Array.Empty<T>()
-                : this.pool.Rent(length);
+                : pool.Rent(length);
         }
 
         /// <summary>
@@ -163,7 +163,12 @@ namespace NetFabric.Hyperlinq
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public bool MoveNext()
-                => ++index < length;
+            {
+                if (index >= length) 
+                    return false;
+                index++;
+                return index < length;
+            }
         }
 
         public struct DisposableEnumerator
@@ -192,7 +197,12 @@ namespace NetFabric.Hyperlinq
             
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public bool MoveNext()
-                => ++index < length;        
+            {
+                if (index >= length) 
+                    return false;
+                index++;
+                return index < length;
+            }
 
             public void Reset() 
                 => index = -1;
