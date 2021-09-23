@@ -86,11 +86,12 @@ namespace NetFabric.Hyperlinq.SourceGenerator
         }
 
         public CodeBuilder AppendGeneratedCodeMethodAttributes()
-            => AppendLine($"[GeneratedCode(\"{assemblyName}\", \"{(IsUnitTest ? "0.0.0" : assemblyVersion)}\")]")
-                .AppendLine("[DebuggerNonUserCode]")
-                .AppendLine("[ExcludeFromCodeCoverage]")
-                .AppendLine("[EditorBrowsable(EditorBrowsableState.Never)]")
-                .AppendLine("[Obsolete(\"This method is not intended to be used directly by user code\")]");
+            => IsUnitTest 
+                ? this // do nothing
+                : AppendLine($"[GeneratedCode(\"{assemblyName}\", \"{(IsUnitTest ? "0.0.0" : assemblyVersion)}\")]")
+                    .AppendLine("[DebuggerNonUserCode]")
+                    .AppendLine("[ExcludeFromCodeCoverage]")
+                    .AppendLine("[EditorBrowsable(EditorBrowsableState.Never)]");
 
         public override string ToString() 
             => builder.ToString();

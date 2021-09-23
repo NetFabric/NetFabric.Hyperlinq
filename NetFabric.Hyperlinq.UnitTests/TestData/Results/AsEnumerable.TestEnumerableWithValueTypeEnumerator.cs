@@ -38,12 +38,6 @@ namespace NetFabric.Hyperlinq
         //    IEnumerator IEnumerable.GetEnumerator() => source2.GetEnumerator();
         //}
 
-        [GeneratedCode("NetFabric.Hyperlinq", "0.0.0")]
-        [DebuggerNonUserCode]
-        [ExcludeFromCodeCoverage]
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        [Obsolete("This method is not intended to be used directly by user code")]
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static GeneratedExtensionMethods.AsValueEnumerable_TestEnumerableWithValueTypeEnumerator_TestValueType_<TestEnumerableWithValueTypeEnumerator<TestValueType>> AsEnumerable(this GeneratedExtensionMethods.AsValueEnumerable_TestEnumerableWithValueTypeEnumerator_TestValueType_<TestEnumerableWithValueTypeEnumerator<TestValueType>> source)
             => NetFabric.Hyperlinq.ValueEnumerableExtensions.AsEnumerable<GeneratedExtensionMethods.AsValueEnumerable_TestEnumerableWithValueTypeEnumerator_TestValueType_<TestEnumerableWithValueTypeEnumerator<TestValueType>>, TestEnumerableWithValueTypeEnumerator<TestValueType>.Enumerator, TestValueType>(source);
     }

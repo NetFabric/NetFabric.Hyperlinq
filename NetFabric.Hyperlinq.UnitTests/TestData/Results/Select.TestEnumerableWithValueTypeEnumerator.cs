@@ -14,12 +14,6 @@ namespace NetFabric.Hyperlinq
     static partial class GeneratedExtensionMethods
     {
 
-        //[GeneratedCode("NetFabric.Hyperlinq", "0.0.0")]
-        //[DebuggerNonUserCode]
-        //[ExcludeFromCodeCoverage]
-        //[EditorBrowsable(EditorBrowsableState.Never)]
-        //[Obsolete("This method is not intended to be used directly by user code")]
-        //[MethodImpl(MethodImplOptions.AggressiveInlining)]
         //public static AsValueEnumerable_TestEnumerableWithValueTypeEnumerator_TestValueType_<TestEnumerableWithValueTypeEnumerator<TestValueType>> AsValueEnumerable(this TestEnumerableWithValueTypeEnumerator<TestValueType> source)
         //    => new(source, source);
 
@@ -44,12 +38,6 @@ namespace NetFabric.Hyperlinq
         //}
 
 
-        [GeneratedCode("NetFabric.Hyperlinq", "0.0.0")]
-        [DebuggerNonUserCode]
-        [ExcludeFromCodeCoverage]
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        [Obsolete("This method is not intended to be used directly by user code")]
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ValueEnumerableExtensions.SelectEnumerable<GeneratedExtensionMethods.AsValueEnumerable_TestEnumerableWithValueTypeEnumerator_TestValueType_<TestEnumerableWithValueTypeEnumerator<TestValueType>>, TestEnumerableWithValueTypeEnumerator<TestValueType>.Enumerator, TestValueType, TestReferenceType, FunctionWrapper<TestValueType, TestReferenceType>> Select(this GeneratedExtensionMethods.AsValueEnumerable_TestEnumerableWithValueTypeEnumerator_TestValueType_<TestEnumerableWithValueTypeEnumerator<TestValueType>> source, System.Func<TestValueType, TestReferenceType> selector)
             => NetFabric.Hyperlinq.ValueEnumerableExtensions.Select<GeneratedExtensionMethods.AsValueEnumerable_TestEnumerableWithValueTypeEnumerator_TestValueType_<TestEnumerableWithValueTypeEnumerator<TestValueType>>, TestEnumerableWithValueTypeEnumerator<TestValueType>.Enumerator, TestValueType, TestReferenceType>(source, selector);
     }

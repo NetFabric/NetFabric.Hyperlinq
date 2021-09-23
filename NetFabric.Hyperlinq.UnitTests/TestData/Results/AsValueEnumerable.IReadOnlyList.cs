@@ -14,12 +14,6 @@ namespace NetFabric.Hyperlinq
     static partial class GeneratedExtensionMethods
     {
 
-        [GeneratedCode("NetFabric.Hyperlinq", "0.0.0")]
-        [DebuggerNonUserCode]
-        [ExcludeFromCodeCoverage]
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        [Obsolete("This method is not intended to be used directly by user code")]
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static AsValueEnumerable_System_Collections_Generic_IReadOnlyList_TestValueType_<System.Collections.Generic.IReadOnlyList<TestValueType>> AsValueEnumerable(this System.Collections.Generic.IReadOnlyList<TestValueType> source)
             => new(source, source);
 
