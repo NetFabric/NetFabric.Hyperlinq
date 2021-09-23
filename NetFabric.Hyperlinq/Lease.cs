@@ -28,7 +28,7 @@ namespace NetFabric.Hyperlinq
         T[]? rented;
         int length;
         
-        internal Lease(ArrayPool<T> pool, int length, bool clearOnDispose)
+        public Lease(ArrayPool<T> pool, int length, bool clearOnDispose = false)
         {
             Debug.Assert(length >= 0);
 
@@ -208,7 +208,7 @@ namespace NetFabric.Hyperlinq
                 : new ArraySegment<T>(rented, 0, length).AsValueEnumerable();
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public IEnumerable<T> AsEnumerable()
+        public Lease<T> AsEnumerable()
             => this;
     }
 }
