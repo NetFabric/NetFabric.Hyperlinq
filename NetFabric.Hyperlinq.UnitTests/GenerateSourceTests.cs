@@ -131,13 +131,18 @@ namespace NetFabric.Hyperlinq.SourceGenerator.UnitTests
                 .ToList();
 
             // Act
-            var builder = new CodeBuilder(isUnitTest: true);
+            var builder = new CodeBuilder { IsUnitTest = true };
             Generator.GenerateSource(compilation, typeSymbolsCache, memberAccessExpressions, builder, CancellationToken.None);
             var result = builder.ToString();
 
             // Assert
+#if NET5_0_OR_GREATER            
+            _ = result.Must()
+                .BeEqualTo(await File.ReadAllTextAsync(expected));
+#else
             _ = result.Must()
                 .BeEqualTo(File.ReadAllText(expected));
+#endif
         }
     }
 }

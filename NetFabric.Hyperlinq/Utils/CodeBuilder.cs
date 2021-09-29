@@ -7,18 +7,12 @@ namespace NetFabric.Hyperlinq.SourceGenerator
 {
     class CodeBuilder
     {
-        static readonly string indentation = "    ";
-
-        static readonly string assemblyName = typeof(CodeBuilder).Assembly.GetName().Name;
-        static readonly string assemblyVersion = typeof(CodeBuilder).Assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion ?? string.Empty;
+        const string indentation = "    ";
 
         readonly StringBuilder builder = new();
         int currentLevel = 0;
 
-        public CodeBuilder(bool isUnitTest = false)
-            => IsUnitTest = isUnitTest;
-        
-        public bool IsUnitTest { get; }
+        public bool IsUnitTest { get; init; } = false;
 
         StringBuilder Indent()
         {
@@ -84,14 +78,6 @@ namespace NetFabric.Hyperlinq.SourceGenerator
                 _ = builder.AppendLine('}');
             }
         }
-
-        public CodeBuilder AppendGeneratedCodeMethodAttributes()
-            => IsUnitTest 
-                ? this // do nothing
-                : AppendLine($"[GeneratedCode(\"{assemblyName}\", \"{(IsUnitTest ? "0.0.0" : assemblyVersion)}\")]")
-                    .AppendLine("[DebuggerNonUserCode]")
-                    .AppendLine("[ExcludeFromCodeCoverage]")
-                    .AppendLine("[EditorBrowsable(EditorBrowsableState.Never)]");
 
         public override string ToString() 
             => builder.ToString();
