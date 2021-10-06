@@ -14,6 +14,7 @@ namespace NetFabric.Hyperlinq
     static partial class GeneratedExtensionMethods
     {
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static AsValueEnumerable_TestEnumerableWithNoInterfaces_TestValueType_ AsValueEnumerable(this TestEnumerableWithNoInterfaces<TestValueType> source)
             => new(source);
 

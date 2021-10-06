@@ -11,12 +11,15 @@ namespace NetFabric.Hyperlinq.SourceGenerator
             .GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion 
             ?? string.Empty;
 
-        public static CodeBuilder AppendGeneratedCodeMethodAttributes(this CodeBuilder builder)
+        public static CodeBuilder GeneratedCodeMethodAttributes(this CodeBuilder builder)
             => builder.IsUnitTest 
                 ? builder // do nothing
-                : builder.AppendLine($"[GeneratedCode(\"{assemblyName}\", \"{assemblyVersion}\")]")
-                    .AppendLine("[DebuggerNonUserCode]")
-                    .AppendLine("[ExcludeFromCodeCoverage]")
-                    .AppendLine("[EditorBrowsable(EditorBrowsableState.Never)]");
+                : builder.Line($"[GeneratedCode(\"{assemblyName}\", \"{assemblyVersion}\")]")
+                    .Line("[DebuggerNonUserCode]")
+                    .Line("[ExcludeFromCodeCoverage]")
+                    .Line("[EditorBrowsable(EditorBrowsableState.Never)]");
+
+        public static CodeBuilder AggressiveInliningAttribute(this CodeBuilder builder)
+            => builder.Line("[MethodImpl(MethodImplOptions.AggressiveInlining)]");
     }
 }

@@ -14,7 +14,7 @@ namespace NetFabric.Hyperlinq.SourceGenerator
 
         public bool IsUnitTest { get; init; } = false;
 
-        StringBuilder Indent()
+        StringBuilder AppendIndents()
         {
             for (var level = 0; level < currentLevel; level++)
                 _ = builder.Append(indentation);
@@ -22,48 +22,115 @@ namespace NetFabric.Hyperlinq.SourceGenerator
             return builder;
         }
 
-        public CodeBuilder AppendIndentation()
+        public CodeBuilder Indent()
         {
             _ = builder.Append(indentation);
             return this;
         }
 
-        public CodeBuilder AppendLine()
+        public CodeBuilder Line()
         {
             _ = builder.AppendLine();
             return this;
         }
 
-        public CodeBuilder AppendLine(char text)
+        public CodeBuilder Line(char text)
         {
-            _ = Indent().Append(text).AppendLine();
+            _ = AppendIndents().Append(text).AppendLine();
             return this;
         }
 
-        public CodeBuilder AppendLine(string text)
+        public CodeBuilder Line(string text)
         {
-            _ = Indent().AppendLine(text);
+            _ = AppendIndents().AppendLine(text);
             return this;
         }
 
-        public CodeBuilder AppendLine(Action<StringBuilder> line)
+        public CodeBuilder Line(Action<StringBuilder> line)
         {
-            _ = Indent();
+            _ = AppendIndents();
             line(builder);
-            _ = AppendLine();
+            _ = Line();
             return this;
         }
 
-        public IDisposable AppendBlock()
+        public IDisposable Block()
         {
-            _ = AppendLine('{');
+            _ = Line('{');
             currentLevel++;
             // ReSharper disable once HeapView.ObjectAllocation.Evident
             return new CloseBlock(this);
         }
 
-        public IDisposable AppendBlock(string text) 
-            => AppendLine(text).AppendBlock();
+        public IDisposable Block(string text) 
+            => Line(text).Block();
+
+        public CodeBuilder MethodBlock(string header, Action<CodeBuilder> block)
+        {
+            using (Block(header))
+            {
+                block(this);
+            }
+            return this;
+        }
+
+        public CodeBuilder IfBlock(string condition, Action<CodeBuilder> block)
+        {
+            using (Block($"if ({condition})"))
+            {
+                block(this);
+            }
+            return this;
+        }
+
+        public CodeBuilder IfBlock(string condition, Action<CodeBuilder> trueBlock, Action<CodeBuilder> falseBlock)
+        {
+            using (Block($"if ({condition}))"))
+            {
+                trueBlock(this);
+            }
+            using (Block("else"))
+            {
+                falseBlock(this);
+            }
+            return this;
+        }
+
+        public CodeBuilder ForEachBlock(string text, Action<CodeBuilder> block)
+        {
+            using (Block($"foreach ({text})"))
+            {
+                block(this);
+            }
+            return this;
+        }
+
+        public CodeBuilder ForBlock(string text, Action<CodeBuilder> block)
+        {
+            using (Block($"for ({text})"))
+            {
+                block(this);
+            }
+            return this;
+        }
+
+        public CodeBuilder WhileBlock(string text, Action<CodeBuilder> block)
+        {
+            using (Block($"while ({text})"))
+            {
+                block(this);
+            }
+            return this;
+        }
+
+        public CodeBuilder CheckedBlock(Action<CodeBuilder> block)
+        {
+            using (Block("checked"))
+            {
+                block(this);
+            }
+            return this;
+        }
 
         class CloseBlock : IDisposable
         {
@@ -75,7 +142,7 @@ namespace NetFabric.Hyperlinq.SourceGenerator
             public void Dispose()
             {
                 builder.currentLevel--;
-                _ = builder.AppendLine('}');
+                _ = builder.Line('}');
             }
         }
 

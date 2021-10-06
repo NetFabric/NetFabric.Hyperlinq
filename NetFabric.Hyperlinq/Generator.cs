@@ -153,20 +153,20 @@ namespace NetFabric.Hyperlinq.SourceGenerator
             var generatedMethods = new Dictionary<MethodSignature, ValueEnumerableType>();
 
             _ = builder
-                .AppendLine("#nullable enable")
-                .AppendLine()
-                .AppendLine("using System;")
-                .AppendLine("using System.CodeDom.Compiler;")
-                .AppendLine("using System.Collections;")
-                .AppendLine("using System.Collections.Generic;")
-                .AppendLine("using System.ComponentModel;")
-                .AppendLine("using System.Diagnostics;")
-                .AppendLine("using System.Diagnostics.CodeAnalysis;")
-                .AppendLine("using System.Runtime.CompilerServices;")
-                .AppendLine();
+                .Line("#nullable enable")
+                .Line()
+                .Line("using System;")
+                .Line("using System.CodeDom.Compiler;")
+                .Line("using System.Collections;")
+                .Line("using System.Collections.Generic;")
+                .Line("using System.ComponentModel;")
+                .Line("using System.Diagnostics;")
+                .Line("using System.Diagnostics.CodeAnalysis;")
+                .Line("using System.Runtime.CompilerServices;")
+                .Line();
 
-            using (builder.AppendBlock("namespace NetFabric.Hyperlinq"))
-            using (builder.AppendBlock("static partial class GeneratedExtensionMethods"))
+            using (builder.Block("namespace NetFabric.Hyperlinq"))
+            using (builder.Block("static partial class GeneratedExtensionMethods"))
             {
                 foreach (var expressionSyntax in memberAccessExpressions)
                 {
@@ -271,12 +271,12 @@ namespace NetFabric.Hyperlinq.SourceGenerator
                     ? $"{hyperlinqMethod.ReturnType.ContainingType}.{hyperlinqMethod.ReturnType.Name}<{typeArgumentsString}>"
                     : hyperlinqMethod.ReturnType.ToDisplayString();
                 _ = builder
-                    .AppendLine()
-                    .AppendGeneratedCodeMethodAttributes()
-                    .AppendLine("[MethodImpl(MethodImplOptions.AggressiveInlining)]")
-                    .AppendLine($"public static {returnTypeString} {methodSymbol.Name}(this {parametersString})")
-                    .AppendIndentation()
-                    .AppendLine($"=> {containingClassString}.{methodSymbol.Name}<{typeArgumentsString}>({argumentsString});");
+                    .Line()
+                    .GeneratedCodeMethodAttributes()
+                    .Line("[MethodImpl(MethodImplOptions.AggressiveInlining)]")
+                    .Line($"public static {returnTypeString} {methodSymbol.Name}(this {parametersString})")
+                    .Indent()
+                    .Line($"=> {containingClassString}.{methodSymbol.Name}<{typeArgumentsString}>({argumentsString});");
             }
 
             // The method is not yet defined
@@ -301,10 +301,10 @@ namespace NetFabric.Hyperlinq.SourceGenerator
                 //    new string[] { "source" }
                 //    .Concat(methodSymbol.Parameters.Select(parameter => parameter.Name)));
                 //_ = builder
-                //    .AppendLine()
-                //    .AppendLine("[MethodImpl(MethodImplOptions.AggressiveInlining)]")
-                //    .AppendLine($"public static {hyperlinqMethod.ReturnType.ToDisplayString()} {methodSymbol.Name}(this {parametersString})")
-                //    .AppendIndentation().AppendLine($"=> {containingClassString}.{methodSymbol.Name}<{receiverType.Name}, {receiverType.EnumeratorType}, {receiverType.ItemType}>({argumentsString});");
+                //    .Line()
+                //    .Line("[MethodImpl(MethodImplOptions.AggressiveInlining)]")
+                //    .Line($"public static {hyperlinqMethod.ReturnType.ToDisplayString()} {methodSymbol.Name}(this {parametersString})")
+                //    .Indent().Line($"=> {containingClassString}.{methodSymbol.Name}<{receiverType.Name}, {receiverType.EnumeratorType}, {receiverType.ItemType}>({argumentsString});");
 
                 //generatedMethods.Add(methodSignature, returnType);
                 //return returnType;
