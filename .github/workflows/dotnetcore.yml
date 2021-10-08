@@ -10,20 +10,21 @@ jobs:
     - name: Check out repository
       uses: actions/checkout@v2
     - name: Setup .NET Core
-      uses: actions/setup-dotnet@v1.7.2
+      uses: actions/setup-dotnet@v1
       with:
-        dotnet-version: '6.0.100-preview.2.21155.3'
+        dotnet-version: '6.0.x'
+        include-prerelease: true
     - name: Test source generator
-      run: dotnet test ./NetFabric.Hyperlinq.SourceGenerator.UnitTests/NetFabric.Hyperlinq.SourceGenerator.UnitTests.csproj 
+      run: dotnet test ./NetFabric.Hyperlinq.UnitTests/NetFabric.Hyperlinq.UnitTests.csproj 
     - name: Build solution
       run: dotnet build
     - name: Tests and coverage
-      run: dotnet test ./NetFabric.Hyperlinq.UnitTests/NetFabric.Hyperlinq.UnitTests.csproj -f:net6.0 -p:CollectCoverage=true -p:CoverletOutputFormat=lcov -p:CoverletOutput=TestResults/
+      run: dotnet test ./NetFabric.Hyperlinq.Core.UnitTests/NetFabric.Hyperlinq.Core.UnitTests.csproj -f:net6.0 -p:CollectCoverage=true -p:CoverletOutputFormat=lcov -p:CoverletOutput=TestResults/
     - name: Publish coverage report to coveralls.io
       uses: coverallsapp/github-action@master
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }}
-        path-to-lcov: ./NetFabric.Hyperlinq.UnitTests/TestResults/coverage.net6.0.info
+        path-to-lcov: ./NetFabric.Hyperlinq.Core.UnitTests/TestResults/coverage.net6.0.info
       
 
       

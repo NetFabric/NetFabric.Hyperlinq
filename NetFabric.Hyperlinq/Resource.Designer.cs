@@ -11,7 +11,7 @@ namespace NetFabric.Hyperlinq {
     using System;
     
     
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class Resource {
@@ -45,27 +45,9 @@ namespace NetFabric.Hyperlinq {
             }
         }
         
-        internal static string ArraySegmentNull {
-            get {
-                return ResourceManager.GetString("ArraySegmentNull", resourceCulture);
-            }
-        }
-        
         internal static string DestinationNotLongEnough {
             get {
                 return ResourceManager.GetString("DestinationNotLongEnough", resourceCulture);
-            }
-        }
-        
-        internal static string EmptySequence {
-            get {
-                return ResourceManager.GetString("EmptySequence", resourceCulture);
-            }
-        }
-        
-        internal static string NotSingleSequence {
-            get {
-                return ResourceManager.GetString("NotSingleSequence", resourceCulture);
             }
         }
     }

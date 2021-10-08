@@ -3,18 +3,13 @@
     <OutputType>Exe</OutputType>
     <TargetFrameworks>net6.0</TargetFrameworks>
     <IsPackable>false</IsPackable>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-  </PropertyGroup>
-
-  <PropertyGroup>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <DebugType>pdbonly</DebugType>
-    <DebugSymbols>true</DebugSymbols>
+    <Configuration>Release</Configuration>
+    <DebugSymbols>false</DebugSymbols>
   </PropertyGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\NetFabric.Hyperlinq\NetFabric.Hyperlinq.csproj" />
-    <ProjectReference Include="..\NetFabric.Hyperlinq.UnitTests\NetFabric.Hyperlinq.UnitTests.csproj" />
+    <ProjectReference Include="..\NetFabric.Hyperlinq.Core.UnitTests\NetFabric.Hyperlinq.Core.UnitTests.csproj" />
   </ItemGroup>
 
   <ItemGroup>

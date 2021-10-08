@@ -1,60 +1,55 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.0;netcoreapp3.1;net5.0;net6.0</TargetFrameworks>
-    <PackageId>NetFabric.Hyperlinq</PackageId>
-    <Title>NetFabric.Hyperlinq</Title>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <PackageId>NetFabric.Hyperlinq.SourceGenerator</PackageId>
+    <Title>NetFabric.Hyperlinq.SourceGenerator</Title>
     <Description> High performance LINQ implementation with minimal heap allocations. Supports enumerables, async enumerables, Memory, and Span.</Description>
     <Version>3.0.0-beta48</Version>
     <PackageIcon>Icon.png</PackageIcon>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <PackageTags>netfabric, hyperlinq, linq, enumeration, extensions, performance</PackageTags>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
-    <EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
-    <IncludeSymbols>true</IncludeSymbols>
-    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <!-- <TreatWarningsAsErrors>true</TreatWarningsAsErrors> -->
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(TargetFramework)'=='net461' Or '$(TargetFramework)'=='netstandard2.0' Or '$(TargetFramework)'=='netcoreapp2.1'">
-    <!-- disable nullable warning -->
-    <NoWarn>$(NoWarn);8600;8601;8602;8603;8604</NoWarn>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild> <!-- Generates a package at build -->
+    <IncludeBuildOutput>false</IncludeBuildOutput> <!-- Do not include the generator as a lib dependency -->
   </PropertyGroup>
 
   <ItemGroup>
-    <SupportedPlatform Include="browser" />
+    <None Include="..\Icon.png" Link="Icon.png">
+      <PackagePath></PackagePath>
+      <Pack>true</Pack>
+    </None>
+    <None Include="..\LICENSE" Link="LICENSE">
+      <PackagePath></PackagePath>
+      <Pack>true</Pack>
+    </None>
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Include="..\NetFabric.Hyperlinq.SourceGenerator\Attributes\GeneratorBindingsAttribute.cs" Link="Utils\Generator\GeneratorBindingsAttribute.cs" />
-    <Compile Include="..\NetFabric.Hyperlinq.SourceGenerator\Attributes\GeneratorIgnoreAttribute.cs" Link="Utils\Generator\GeneratorIgnoreAttribute.cs" />
-    <Compile Include="..\NetFabric.Hyperlinq.SourceGenerator\Attributes\GeneratorMappingAttribute.cs" Link="Utils\Generator\GeneratorMappingAttribute.cs" />
+    <!-- Take a public dependency on NetFabric.Hyperlinq.Core. Consumers of this generator will get a reference to this package -->
+    <ProjectReference Include="..\NetFabric.Hyperlinq.Core\NetFabric.Hyperlinq.Core.csproj" />
   </ItemGroup>
-
-  <ItemGroup Condition="'$(TargetFramework)' == 'net461' Or '$(TargetFramework)' == 'netstandard2.0'">
-    <Compile Remove="Conversion\AsValueEnumerable\Bindings\System\Collections\Immutable\*.cs" />
-  </ItemGroup>
-
+  
   <ItemGroup>
-    <None Include="..\Icon.png" Pack="true" PackagePath="" />
-    <None Include="..\LICENSE" Pack="true" PackagePath="" />
-  </ItemGroup>
+    <!-- Take a private dependency on Ben.TypeDictionary (PrivateAssets=all) Consumers of this generator will not reference it.
+         Set GeneratePathProperty=true so we can reference the binaries via the PKGBen_TypeDictionary property -->
+    <PackageReference Include="Ben.TypeDictionary" Version="0.1.4" PrivateAssets="all" GeneratePathProperty="true" />
+    
+    <!-- Take a private dependency on NetFabric.CodeAnalysis (PrivateAssets=all) Consumers of this generator will not reference it.
+         Set GeneratePathProperty=true so we can reference the binaries via the PKGNetFabric_CodeAnalysis property -->
+    <PackageReference Include="NetFabric.CodeAnalysis" Version="4.0.2" PrivateAssets="all" GeneratePathProperty="true" />
 
+    <!-- Package the generator in the analyzer directory of the nuget package -->
+    <None Include="$(OutputPath)\$(AssemblyName).dll" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false" />
+    
+    <!-- Package the Ben.TypeDictionary dependency alongside the generator assembly -->
+    <None Include="$(PKGBen_TypeDictionary)\lib\netstandard2.0\*.dll" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false" />
+    <None Include="$(PKGNetFabric_CodeAnalysis)\lib\netstandard2.0\*.dll" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false" />
+  </ItemGroup>
+  
   <ItemGroup>
-    <ProjectReference Include="..\NetFabric.Hyperlinq.Abstractions\NetFabric.Hyperlinq.Abstractions.csproj" />
-    <ProjectReference Include="..\NetFabric.Hyperlinq.SourceGenerator\NetFabric.Hyperlinq.SourceGenerator.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />  
-  </ItemGroup>
-
-  <ItemGroup Condition="'$(TargetFramework)'=='net461' Or '$(TargetFramework)'=='netstandard2.0'">
-    <PackageReference Include="System.Memory" Version="4.5.4" />
-    <PackageReference Include="System.ValueTuple" Version="4.5.0" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="System.Runtime.CompilerServices.Unsafe" Version="5.0.0" />
-    <PackageReference Include="System.Buffers" Version="4.5.1" />
-    <PackageReference Include="Nullable" Version="1.3.0">
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="3.11.0" />
+    <PackageReference Include="Microsoft.CodeAnalysis.Analyzers" Version="3.3.2">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
@@ -62,33 +57,29 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Meziantou.Analyzer" Version="1.0.667">
+    <PackageReference Include="IsExternalInit" Version="1.0.1">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>    
+    <PackageReference Include="Nullable" Version="1.3.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="UnoptimizedAssemblyDetector" Version="0.1.1">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
   </ItemGroup>
-
-  <ItemGroup>
-    <Compile Update="Resource.Designer.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Resource.resx</DependentUpon>
-    </Compile>
-  </ItemGroup>
-
+  
   <ItemGroup>
     <EmbeddedResource Update="Resource.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resource.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
-
+  
   <ItemGroup>
-    <Folder Include="Utils\Contains\" />
+    <Compile Update="Resource.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
   </ItemGroup>
 
 </Project>

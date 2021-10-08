@@ -1,3 +1,3 @@
-﻿using System.Runtime.CompilerServices;
+using System.Runtime.CompilerServices;
 
-[assembly:InternalsVisibleTo("NetFabric.Hyperlinq.UnitTests")]
+[assembly: InternalsVisibleTo("NetFabric.Hyperlinq.UnitTests")]

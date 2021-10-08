@@ -1,11 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.28516.95
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31423.177
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetFabric.Hyperlinq", "NetFabric.Hyperlinq\NetFabric.Hyperlinq.csproj", "{EEEAA31B-434E-4849-A3E5-FA9664F5CE9B}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetFabric.Hyperlinq.UnitTests", "NetFabric.Hyperlinq.UnitTests\NetFabric.Hyperlinq.UnitTests.csproj", "{FE0CFD9E-7685-4595-8691-5364228722E9}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{2C452DA5-FE07-451C-BFE1-AD14A57F7B09}"
 	ProjectSection(SolutionItems) = preProject
@@ -24,13 +22,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetFabric.Hyperlinq.Benchmarks", "NetFabric.Hyperlinq.Benchmarks\NetFabric.Hyperlinq.Benchmarks.csproj", "{02EE275F-6E2D-444A-AB1F-9BCD02DEA204}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetFabric.Hyperlinq.SourceGenerator", "NetFabric.Hyperlinq.SourceGenerator\NetFabric.Hyperlinq.SourceGenerator.csproj", "{B8C004E3-F59E-4017-8781-C0F99B61BDEF}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetFabric.Hyperlinq.SourceGenerator.UnitTests", "NetFabric.Hyperlinq.SourceGenerator.UnitTests\NetFabric.Hyperlinq.SourceGenerator.UnitTests.csproj", "{12F96462-A2F8-4FBE-B4F5-29BA6A6DB4D9}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetFabric.Hyperlinq.Abstractions", "NetFabric.Hyperlinq.Abstractions\NetFabric.Hyperlinq.Abstractions.csproj", "{6981E761-E698-437D-AF63-0E80844B7D41}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetFabric.Hyperlinq.Immutable", "NetFabric.Hyperlinq.Immutable\NetFabric.Hyperlinq.Immutable.csproj", "{6CB7E269-91CB-47CC-BF9F-67956D5E0F7E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetFabric.Hyperlinq.Core", "NetFabric.Hyperlinq.Core\NetFabric.Hyperlinq.Core.csproj", "{9EA4EA87-7656-48BA-BE7F-E5CC1B48512D}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetFabric.Hyperlinq.Core.UnitTests", "NetFabric.Hyperlinq.Core.UnitTests\NetFabric.Hyperlinq.Core.UnitTests.csproj", "{794C4984-BB46-4A50-9BC1-53831B5C8002}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetFabric.Hyperlinq.UnitTests", "NetFabric.Hyperlinq.UnitTests\NetFabric.Hyperlinq.UnitTests.csproj", "{F0A7B925-30F2-4FAA-97E6-7848B3E104B6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -42,30 +40,26 @@ Global
 		{EEEAA31B-434E-4849-A3E5-FA9664F5CE9B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EEEAA31B-434E-4849-A3E5-FA9664F5CE9B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EEEAA31B-434E-4849-A3E5-FA9664F5CE9B}.Release|Any CPU.Build.0 = Release|Any CPU
-		{FE0CFD9E-7685-4595-8691-5364228722E9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{FE0CFD9E-7685-4595-8691-5364228722E9}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{FE0CFD9E-7685-4595-8691-5364228722E9}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{FE0CFD9E-7685-4595-8691-5364228722E9}.Release|Any CPU.Build.0 = Release|Any CPU
 		{02EE275F-6E2D-444A-AB1F-9BCD02DEA204}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{02EE275F-6E2D-444A-AB1F-9BCD02DEA204}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{02EE275F-6E2D-444A-AB1F-9BCD02DEA204}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{02EE275F-6E2D-444A-AB1F-9BCD02DEA204}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B8C004E3-F59E-4017-8781-C0F99B61BDEF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B8C004E3-F59E-4017-8781-C0F99B61BDEF}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B8C004E3-F59E-4017-8781-C0F99B61BDEF}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B8C004E3-F59E-4017-8781-C0F99B61BDEF}.Release|Any CPU.Build.0 = Release|Any CPU
-		{12F96462-A2F8-4FBE-B4F5-29BA6A6DB4D9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{12F96462-A2F8-4FBE-B4F5-29BA6A6DB4D9}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{12F96462-A2F8-4FBE-B4F5-29BA6A6DB4D9}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{12F96462-A2F8-4FBE-B4F5-29BA6A6DB4D9}.Release|Any CPU.Build.0 = Release|Any CPU
 		{6981E761-E698-437D-AF63-0E80844B7D41}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{6981E761-E698-437D-AF63-0E80844B7D41}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6981E761-E698-437D-AF63-0E80844B7D41}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6981E761-E698-437D-AF63-0E80844B7D41}.Release|Any CPU.Build.0 = Release|Any CPU
-		{6CB7E269-91CB-47CC-BF9F-67956D5E0F7E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{6CB7E269-91CB-47CC-BF9F-67956D5E0F7E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{6CB7E269-91CB-47CC-BF9F-67956D5E0F7E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{6CB7E269-91CB-47CC-BF9F-67956D5E0F7E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9EA4EA87-7656-48BA-BE7F-E5CC1B48512D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9EA4EA87-7656-48BA-BE7F-E5CC1B48512D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9EA4EA87-7656-48BA-BE7F-E5CC1B48512D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9EA4EA87-7656-48BA-BE7F-E5CC1B48512D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{794C4984-BB46-4A50-9BC1-53831B5C8002}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{794C4984-BB46-4A50-9BC1-53831B5C8002}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{794C4984-BB46-4A50-9BC1-53831B5C8002}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{794C4984-BB46-4A50-9BC1-53831B5C8002}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F0A7B925-30F2-4FAA-97E6-7848B3E104B6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F0A7B925-30F2-4FAA-97E6-7848B3E104B6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F0A7B925-30F2-4FAA-97E6-7848B3E104B6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F0A7B925-30F2-4FAA-97E6-7848B3E104B6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
