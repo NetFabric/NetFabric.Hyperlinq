@@ -9,13 +9,12 @@ using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
 
-namespace NetFabric.Hyperlinq
-{
-    static partial class GeneratedExtensionMethods
-    {
+namespace NetFabric.Hyperlinq;
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static int Count(this NetFabric.Hyperlinq.ArrayExtensions.SpanValueEnumerable<int> source, Func<int, bool> predicate) 
-            => NetFabric.Hyperlinq.ArrayExtensions.Count(source.Span, predicate);
-    }
+static partial class GeneratedExtensionMethods
+{
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static int Count(this NetFabric.Hyperlinq.ArrayExtensions.SpanValueEnumerable<int> source, Func<int, bool> predicate) 
+        => NetFabric.Hyperlinq.ArrayExtensions.Count(source.Span, predicate);
 }

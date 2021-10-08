@@ -9,53 +9,54 @@ using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
 
-namespace NetFabric.Hyperlinq
+namespace NetFabric.Hyperlinq;
+
+static partial class GeneratedExtensionMethods
 {
-    static partial class GeneratedExtensionMethods
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static AsValueEnumerable_TestEnumerableWithInterfacelessPublicEnumerator_TestValueType_ AsValueEnumerable(this TestEnumerableWithInterfacelessPublicEnumerator<TestValueType> source)
+        => new(source);
+
+    public readonly struct AsValueEnumerable_TestEnumerableWithInterfacelessPublicEnumerator_TestValueType_
+        : IValueEnumerable<TestValueType, AsValueEnumerable_TestEnumerableWithInterfacelessPublicEnumerator_TestValueType_.Enumerator>
     {
+        readonly TestEnumerableWithInterfacelessPublicEnumerator<TestValueType> source;
+
+        internal AsValueEnumerable_TestEnumerableWithInterfacelessPublicEnumerator_TestValueType_(TestEnumerableWithInterfacelessPublicEnumerator<TestValueType> source)
+            => this.source = source;
+
+        // Implement IValueEnumerable<TestValueType, AsValueEnumerable_TestEnumerableWithInterfacelessPublicEnumerator_TestValueType_.Enumerator>
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static AsValueEnumerable_TestEnumerableWithInterfacelessPublicEnumerator_TestValueType_<TestEnumerableWithInterfacelessPublicEnumerator<TestValueType>> AsValueEnumerable(this TestEnumerableWithInterfacelessPublicEnumerator<TestValueType> source)
-            => new(source, source);
+        public Enumerator GetEnumerator() => new(source.GetEnumerator());
 
-        public readonly struct AsValueEnumerable_TestEnumerableWithInterfacelessPublicEnumerator_TestValueType_<TEnumerable>
-            : IValueEnumerable<TestValueType, AsValueEnumerable_TestEnumerableWithInterfacelessPublicEnumerator_TestValueType_<TEnumerable>.Enumerator>
-            where TEnumerable : IEnumerable<TestValueType>
+        IEnumerator<TestValueType> IEnumerable<TestValueType>.GetEnumerator() => GetEnumerator();
+
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+
+        public struct Enumerator : IEnumerator<TestValueType>
         {
-            readonly TestEnumerableWithInterfacelessPublicEnumerator<TestValueType> source;
-            readonly TEnumerable source2;
+            readonly TestEnumerableWithInterfacelessPublicEnumerator<TestValueType>.Enumerator source;
 
-            internal AsValueEnumerable_TestEnumerableWithInterfacelessPublicEnumerator_TestValueType_(TestEnumerableWithInterfacelessPublicEnumerator<TestValueType> source, TEnumerable source2)
-                => (this.source, this.source2) = (source, source2);
+            internal Enumerator(TestEnumerableWithInterfacelessPublicEnumerator<TestValueType>.Enumerator source)
+                => this.source = source;
 
-            // Implement IValueEnumerable<TestValueType, AsValueEnumerable_TestEnumerableWithInterfacelessPublicEnumerator_TestValueType_<TEnumerable>.Enumerator>
+            public TestValueType Current
+            {
+                [MethodImpl(MethodImplOptions.AggressiveInlining)]
+                get => source.Current;
+            }
+
+            object? IEnumerator.Current => source.Current;
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public Enumerator GetEnumerator() => new(source.GetEnumerator());
+            public bool MoveNext() => source.MoveNext();
 
-            IEnumerator<TestValueType> IEnumerable<TestValueType>.GetEnumerator() => new Enumerator(source.GetEnumerator());
+            public void Reset() => throw new NotSupportedException();
 
-            IEnumerator IEnumerable.GetEnumerator() => new Enumerator(source.GetEnumerator());
-
-            public struct Enumerator : IEnumerator<TestValueType>
-            {
-                readonly TestEnumerableWithInterfacelessPublicEnumerator<TestValueType>.Enumerator source;
-
-                internal Enumerator(TestEnumerableWithInterfacelessPublicEnumerator<TestValueType>.Enumerator source)
-                    => this.source = source;
-
-                public TestValueType Current => source.Current;
-
-                object? IEnumerator.Current => source.Current;
-
-                [MethodImpl(MethodImplOptions.AggressiveInlining)]
-                public bool MoveNext() => source.MoveNext();
-
-                public void Reset() => throw new NotSupportedException();
-
-                [MethodImpl(MethodImplOptions.AggressiveInlining)]
-                public void Dispose() { }
-            }
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public void Dispose() { }
         }
     }
 }

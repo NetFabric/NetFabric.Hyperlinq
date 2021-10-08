@@ -9,9 +9,8 @@ using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
 
-namespace NetFabric.Hyperlinq
+namespace NetFabric.Hyperlinq;
+
+static partial class GeneratedExtensionMethods
 {
-    static partial class GeneratedExtensionMethods
-    {
-    }
 }

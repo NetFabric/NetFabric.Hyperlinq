@@ -163,9 +163,10 @@ namespace NetFabric.Hyperlinq.SourceGenerator
                 .Line("using System.Diagnostics;")
                 .Line("using System.Diagnostics.CodeAnalysis;")
                 .Line("using System.Runtime.CompilerServices;")
+                .Line()
+                .Line("namespace NetFabric.Hyperlinq;")
                 .Line();
 
-            using (builder.Block("namespace NetFabric.Hyperlinq"))
             using (builder.Block("static partial class GeneratedExtensionMethods"))
             {
                 foreach (var expressionSyntax in memberAccessExpressions)

@@ -9,99 +9,125 @@ using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
 
-namespace NetFabric.Hyperlinq
+namespace NetFabric.Hyperlinq;
+
+static partial class GeneratedExtensionMethods
 {
-    static partial class GeneratedExtensionMethods
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static AsValueEnumerable_System_Collections_Generic_IReadOnlyList_TestValueType_ AsValueEnumerable(this System.Collections.Generic.IReadOnlyList<TestValueType> source)
+        => new(source);
+
+    public readonly struct AsValueEnumerable_System_Collections_Generic_IReadOnlyList_TestValueType_
+        : IValueReadOnlyList<TestValueType, ValueEnumerator<TestValueType>>, IList<TestValueType>
     {
+        readonly System.Collections.Generic.IReadOnlyList<TestValueType> source;
+
+        internal AsValueEnumerable_System_Collections_Generic_IReadOnlyList_TestValueType_(System.Collections.Generic.IReadOnlyList<TestValueType> source)
+            => this.source = source;
+
+        // Implement IValueEnumerable<TestValueType, ValueEnumerator<TestValueType>>
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static AsValueEnumerable_System_Collections_Generic_IReadOnlyList_TestValueType_<System.Collections.Generic.IReadOnlyList<TestValueType>> AsValueEnumerable(this System.Collections.Generic.IReadOnlyList<TestValueType> source)
-            => new(source, source);
+        public ValueEnumerator<TestValueType> GetEnumerator() => new(source.GetEnumerator());
 
-        public readonly struct AsValueEnumerable_System_Collections_Generic_IReadOnlyList_TestValueType_<TEnumerable>
-            : IValueReadOnlyList<TestValueType, ValueEnumerator<TestValueType>>, IList<TestValueType>
-            where TEnumerable : IReadOnlyList<TestValueType>
+        IEnumerator<TestValueType> IEnumerable<TestValueType>.GetEnumerator() => source.GetEnumerator();
+
+        IEnumerator IEnumerable.GetEnumerator() => source.GetEnumerator();
+
+        // Implement ICollection<TestValueType>
+
+        public int Count => source.Count;
+
+        public bool IsReadOnly => true;
+
+        void ICollection<TestValueType>.Add(TestValueType item) => throw new NotSupportedException();
+
+        bool ICollection<TestValueType>.Remove(TestValueType item) => throw new NotSupportedException();
+
+        void ICollection<TestValueType>.Clear() => throw new NotSupportedException();
+
+        public bool Contains(TestValueType item)
         {
-            readonly System.Collections.Generic.IReadOnlyList<TestValueType> source;
-            readonly TEnumerable source2;
+            if (Count is 0)
+                return false;
 
-            internal AsValueEnumerable_System_Collections_Generic_IReadOnlyList_TestValueType_(System.Collections.Generic.IReadOnlyList<TestValueType> source, TEnumerable source2)
-                => (this.source, this.source2) = (source, source2);
+            if (source is ICollection<TestValueType> collection)
+                return collection.Contains(item);
 
-            // Implement IValueEnumerable<TestValueType, ValueEnumerator<TestValueType>>
-
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public ValueEnumerator<TestValueType> GetEnumerator() => new(source2.GetEnumerator());
-
-            IEnumerator<TestValueType> IEnumerable<TestValueType>.GetEnumerator() => source2.GetEnumerator();
-
-            IEnumerator IEnumerable.GetEnumerator() => source2.GetEnumerator();
-
-            // Implement ICollection<TestValueType>
-
-            public int Count => source2.Count;
-
-            public bool IsReadOnly => true;
-
-            void ICollection<TestValueType>.Add(TestValueType item) => throw new NotSupportedException();
-
-            bool ICollection<TestValueType>.Remove(TestValueType item) => throw new NotSupportedException();
-
-            void ICollection<TestValueType>.Clear() => throw new NotSupportedException();
-
-            public void CopyTo(Span<TestValueType> span)
+            using var enumerator = GetEnumerator();
+            while (enumerator.MoveNext())
             {
-                if (Count is 0) return;
-                if (span.Length < Count) throw new ArgumentException("Destination span was not long enough.", nameof(span));
+                if (EqualityComparer<TestValueType>.Default.Equals(enumerator.Current, item))
+                    return true;
+            }
+            return false;
+        }
 
-                var index = 0;
-                foreach (var current in this)
+        public void CopyTo(TestValueType[] array, int arrayIndex)
+        {
+            if (Count is 0)
+                return;
+
+            if (array.Length - arrayIndex < Count)
+                throw new ArgumentException("Destination array was not long enough. Check the destination index, length, and the array's lower bounds.", nameof(array));
+
+            if (source is ICollection<TestValueType> collection)
+            {
+                collection.CopyTo(array, arrayIndex);
+                return;
+            }
+
+            using var enumerator = GetEnumerator();
+            if (arrayIndex is 0 && array.Length == Count)
+            {
+                for (var index = 0; index < array.Length && enumerator.MoveNext(); index++)
+                    array[index] = enumerator.Current;
+            }
+            else
+            {
+                checked
                 {
-                    span[index] = current;
-                    checked { index++; }
+                    for (var index = arrayIndex; enumerator.MoveNext(); index++)
+                        array[index] = enumerator.Current;
                 }
             }
+        }
 
-            public bool Contains(TestValueType item)
+        // Implement IList<TestValueType>
+
+        public TestValueType this[int index] => source[index];
+
+        TestValueType IList<TestValueType>.this[int index]
+        {
+            get => source[index];
+            set => throw new NotSupportedException();
+        }
+
+        void IList<TestValueType>.Insert(int index, TestValueType item) => throw new NotSupportedException();
+
+        void IList<TestValueType>.RemoveAt(int index) => throw new NotSupportedException();
+
+        public int IndexOf(TestValueType item)
+        {
+            if (Count is not 0)
             {
-                foreach (var current in this)
-                {
-                    if (EqualityComparer<TestValueType>.Default.Equals(current, item)) return true;
-                }
-                return true;
-            }
+                if (source is IList<TestValueType> list)
+                    return list.IndexOf(item);
 
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public void CopyTo(TestValueType[] array, int arrayIndex) => CopyTo(array.AsSpan(arrayIndex));
-
-            // Implement IList<TestValueType>
-
-            public TestValueType this[int index] => source2[index];
-
-            TestValueType IList<TestValueType>.this[int index]
-            {
-                get => source2[index];
-                set => throw new NotSupportedException();
-            }
-
-            void IList<TestValueType>.Insert(int index, TestValueType item) => throw new NotSupportedException();
-
-            void IList<TestValueType>.RemoveAt(int index) => throw new NotSupportedException();
-
-            public int IndexOf(TestValueType item)
-            {
-                if (Count is not 0)
+                checked
                 {
                     var index = 0;
-                    foreach (var current in this)
+                    foreach (var current in source)
                     {
-                        if (EqualityComparer<TestValueType>.Default.Equals(current, item)) return index;
+                        if (EqualityComparer<TestValueType>.Default.Equals(current, item))
+                            return index;
 
-                        checked { index++; }
+                        index++;
                     }
                 }
-                return -1;
             }
+            return -1;
         }
     }
 }

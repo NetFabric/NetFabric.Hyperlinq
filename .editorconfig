@@ -12,7 +12,7 @@ indent_style = space
 tab_width = 4
 
 # New line preferences
-end_of_line = crlf
+# end_of_line = crlf
 insert_final_newline = false
 
 #### .NET Coding Conventions ####
@@ -58,7 +58,7 @@ dotnet_style_prefer_is_null_check_over_reference_equality_method = true:error
 dotnet_style_readonly_field = true:error
 
 # Parameter preferences
-dotnet_code_quality_unused_parameters = all:error
+dotnet_code_quality_unused_parameters = all:warning
 
 #### C# Coding Conventions ####
 
@@ -216,6 +216,3 @@ dotnet_naming_style.camel_case.required_prefix =
 dotnet_naming_style.camel_case.required_suffix = 
 dotnet_naming_style.camel_case.word_separator = 
 dotnet_naming_style.camel_case.capitalization = camel_case
-
-[*.{cs,vb}]
-dotnet_code_quality_unused_parameters=all:warning

@@ -100,25 +100,15 @@ namespace NetFabric.Hyperlinq.SourceGenerator
 
                 // Define what value enumerator type will be used
                 var enumeratorIsIEnumerator = getEnumeratorReturnType.ImplementsInterface(SpecialType.System_Collections_Generic_IEnumerator_T, out _);
-                var useConstraints = enumerableIsIEnumerable;
 
                 var enumeratorTypeString = enumeratorIsIEnumerator
                     ? getEnumeratorReturnType.IsValueType
                         ? getEnumeratorReturnTypeString
                         : $"ValueEnumerator<{itemTypeString}>"
-                    : useConstraints
-                        ? $"{enumerableTypeString}<TEnumerable>.Enumerator"
-                        : $"{enumerableTypeString}.Enumerator";
+                    : $"{enumerableTypeString}.Enumerator";
 
                 // Generate the method
-                _ = useConstraints
-                    ? builder
-                        .Line()
-                        .GeneratedCodeMethodAttributes()
-                        .AggressiveInliningAttribute()
-                        .Line($"public static {enumerableTypeString}<{receiverTypeString}> AsValueEnumerable(this {receiverTypeString} source)")
-                        .Indent().Line($"=> new(source, source);")
-                    : builder
+                _ = builder
                         .Line()
                         .GeneratedCodeMethodAttributes()
                         .AggressiveInliningAttribute()
@@ -126,14 +116,9 @@ namespace NetFabric.Hyperlinq.SourceGenerator
                         .Indent().Line($"=> new(source);");
 
                 // Generate the value enumerable wrapper
-                string valueEnumerableTypeName;
-                valueEnumerableTypeName = useConstraints
-                    ? $"{enumerableTypeString}<TEnumerable>"
-                    : enumerableTypeString;
-
                 _ = builder
                         .Line()
-                        .Line($"public readonly struct {valueEnumerableTypeName}");
+                        .Line($"public readonly struct {enumerableTypeString}");
 
                 // Define what interfaces the wrapper implements
                 if (enumerableIsIList || enumerableIsIReadOnlyList)
@@ -143,34 +128,11 @@ namespace NetFabric.Hyperlinq.SourceGenerator
                 else
                     _ = builder.Indent().Line($": IValueEnumerable<{itemTypeString}, {enumeratorTypeString}>");
 
-                if (useConstraints)
-                {
-                    if (enumerableIsIList)
-                        _ = builder.Indent().Line($"where TEnumerable : IList<TestValueType>");
-                    else if (enumerableIsIReadOnlyList)
-                        _ = builder.Indent().Line($"where TEnumerable : IReadOnlyList<TestValueType>");
-                    else if (enumerableIsICollection)
-                        _ = builder.Indent().Line($"where TEnumerable : ICollection<TestValueType>");
-                    else if (enumerableIsIReadOnlyCollection)
-                        _ = builder.Indent().Line($"where TEnumerable : IReadOnlyCollection<TestValueType>");
-                    else if (enumerableIsIEnumerable)
-                        _ = builder.Indent().Line($"where TEnumerable : IEnumerable<TestValueType>");
-                }
-
                 using (builder.Block())
                 {
-                    // Define fields
-                    _ = builder.Line($"readonly {receiverTypeString} source;");
-                    if (useConstraints)
-                        _ = builder.Line($"readonly TEnumerable source2;");
-
-                    // Define constructor
-                    _ = useConstraints
-                        ? builder
-                            .Line()
-                            .Line($"internal {enumerableTypeString}({receiverTypeString} source, TEnumerable source2)")
-                            .Indent().Line($"=> (this.source, this.source2) = (source, source2);")
-                        : builder
+                    // Define field and constructor
+                    _ = builder
+                            .Line($"readonly {receiverTypeString} source;")
                             .Line()
                             .Line($"internal {enumerableTypeString}({receiverTypeString} source)")
                             .Indent().Line($"=> this.source = source;");
@@ -179,16 +141,17 @@ namespace NetFabric.Hyperlinq.SourceGenerator
                     ImplementIValueEnumerable(builder, enumerableSymbols, enumeratorTypeString, itemTypeString, enumeratorIsIEnumerator);
                     if (enumerableIsICollection || enumerableIsIReadOnlyCollection)
                     {
-                        var isValueType = itemType.IsValueType;
-                        ImplementICollection(builder, itemTypeString, isValueType, enumerableIsICollection);
+                        var sourceIsReferenceType = receiverTypeSymbol.IsReferenceType;
+                        var itemIsReferenceType = itemType.IsReferenceType;
+                        ImplementICollection(builder, itemTypeString, sourceIsReferenceType, itemIsReferenceType, enumerableIsICollection);
 
                         if (enumerableIsIList || enumerableIsIReadOnlyList)
-                            ImplementIList(builder, itemTypeString, isValueType, enumerableIsIList);
+                            ImplementIList(builder, itemTypeString, sourceIsReferenceType, itemIsReferenceType, enumerableIsIList);
                     }
 
                     // A new AsValueEnumerable() method has been generated
                     valueEnumerableType = new ValueEnumerableType(
-                        Name: valueEnumerableTypeName,
+                        Name: enumerableTypeString,
                         EnumeratorType: enumeratorTypeString,
                         ItemType: itemTypeString,
                         IsCollection: enumerableIsICollection || enumerableIsIReadOnlyCollection,
@@ -218,42 +181,33 @@ namespace NetFabric.Hyperlinq.SourceGenerator
                     // No enumerator wrapper required
                     _ = builder
                         .AggressiveInliningAttribute()
-                        .Line($"public {enumeratorTypeString} GetEnumerator()")
-                        .Indent().Line($"=> source.GetEnumerator();")
+                        .Line($"public {enumeratorTypeString} GetEnumerator() => source.GetEnumerator();")
                         .Line()
-                        .Line($"IEnumerator<{itemTypeString}> IEnumerable<{itemTypeString}>.GetEnumerator()")
-                        .Indent().Line($"=> source2.GetEnumerator();")
+                        .Line($"IEnumerator<{itemTypeString}> IEnumerable<{itemTypeString}>.GetEnumerator() => GetEnumerator();")
                         .Line()
-                        .Line($"IEnumerator IEnumerable.GetEnumerator()")
-                        .Indent().Line($"=> source2.GetEnumerator();");
+                        .Line($"IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();");
                 }
                 else if (enumerableSymbols.GetEnumerator.ContainingType.IsInterface())
                 {
                     // Use the ValueEnumerator<> enumerator wrapper
                     _ = builder
                         .AggressiveInliningAttribute()
-                        .Line($"public ValueEnumerator<{itemTypeString}> GetEnumerator()")
-                        .Indent().Line($"=> new(source2.GetEnumerator());")
+                        .Line($"public ValueEnumerator<{itemTypeString}> GetEnumerator() => new(source.GetEnumerator());")
                         .Line()
-                        .Line($"IEnumerator<{itemTypeString}> IEnumerable<{itemTypeString}>.GetEnumerator()")
-                        .Indent().Line($"=> source2.GetEnumerator();")
+                        .Line($"IEnumerator<{itemTypeString}> IEnumerable<{itemTypeString}>.GetEnumerator() => source.GetEnumerator();")
                         .Line()
-                        .Line($"IEnumerator IEnumerable.GetEnumerator()")
-                        .Indent().Line($"=> source2.GetEnumerator();");
+                        .Line($"IEnumerator IEnumerable.GetEnumerator() => source.GetEnumerator();");
                 }
                 else
                 {
                     // Use the ValueEnumerator<> enumerator wrapper
                     _ = builder
                         .AggressiveInliningAttribute()
-                        .Line($"public ValueEnumerator<{itemTypeString}> GetEnumerator()")
-                        .Indent().Line($"=> new(source.GetEnumerator());")
+                        .Line($"public ValueEnumerator<{itemTypeString}> GetEnumerator() => new(source.GetEnumerator());")
                         .Line()
-                        .Line($"IEnumerator<{itemTypeString}> IEnumerable<{itemTypeString}>.GetEnumerator()")
-                        .Indent().Line($"=> source2.GetEnumerator();")
+                        .Line($"IEnumerator<{itemTypeString}> IEnumerable<{itemTypeString}>.GetEnumerator() => source.GetEnumerator();")
                         .Line()
-                        .Line($"IEnumerator IEnumerable.GetEnumerator()")
-                        .Indent().Line($"source2.GetEnumerator();");
+                        .Line($"IEnumerator IEnumerable.GetEnumerator() => source.GetEnumerator();");
                 }
             }
             else
@@ -262,14 +216,11 @@ namespace NetFabric.Hyperlinq.SourceGenerator
 
                 _ = builder
                     .AggressiveInliningAttribute()
-                    .Line($"public Enumerator GetEnumerator()")
-                    .Indent().Line($"=> new(source.GetEnumerator());")
+                    .Line($"public Enumerator GetEnumerator() => new(source.GetEnumerator());")
                     .Line()
-                    .Line($"IEnumerator<{itemTypeString}> IEnumerable<{itemTypeString}>.GetEnumerator()")
-                    .Indent().Line($"=> new Enumerator(source.GetEnumerator());")
+                    .Line($"IEnumerator<{itemTypeString}> IEnumerable<{itemTypeString}>.GetEnumerator() => GetEnumerator();")
                     .Line()
-                    .Line($"IEnumerator IEnumerable.GetEnumerator()")
-                    .Indent().Line($"=> new Enumerator(source.GetEnumerator());")
+                    .Line($"IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();")
                     .Line();
 
                 // define a value type enumerator wrapper
@@ -282,24 +233,23 @@ namespace NetFabric.Hyperlinq.SourceGenerator
                         .Indent().Line("=> this.source = source;")
                         .Line()
                         .Line($"public {itemTypeString} Current")
-                        .Indent().Line($"=> source.Current;")
+                        .Line("{")
+                        .Indent().AggressiveInliningAttribute()
+                        .Indent().Line($"get => source.Current;")
+                        .Line("}")
                         .Line()
-                        .Line("object? IEnumerator.Current")
-                        .Indent().Line("=> source.Current;")
+                        .Line("object? IEnumerator.Current => source.Current;")
                         .Line()
                         .AggressiveInliningAttribute()
-                        .Line("public bool MoveNext()")
-                        .Indent().Line("=> source.MoveNext();")
+                        .Line("public bool MoveNext() => source.MoveNext();")
                         .Line();
 
                     _ = enumerableSymbols.EnumeratorSymbols.Reset is null
                         ? builder
-                            .Line("public void Reset()")
-                            .Indent().Line("=> throw new NotSupportedException();")
+                            .Line("public void Reset() => throw new NotSupportedException();")
                         : builder
                             .AggressiveInliningAttribute()
-                            .Line("public void Reset()")
-                            .Indent().Line("=> source.Reset();");
+                            .Line("public void Reset() => source.Reset();");
 
                     _ = enumerableSymbols.EnumeratorSymbols.Dispose is null
                         ? builder
@@ -309,19 +259,18 @@ namespace NetFabric.Hyperlinq.SourceGenerator
                         : builder
                             .Line()
                             .AggressiveInliningAttribute()
-                            .Line("public void Dispose()")
-                            .Indent().Line("=> source.Dispose();");
+                            .Line("public void Dispose() => source.Dispose();");
                 }
             }
         }
 
-        static void ImplementICollection(CodeBuilder builder, string itemTypeString, bool itemTypeIsValueType, bool sourceIsICollection)
+        static void ImplementICollection(CodeBuilder builder, string itemTypeString, bool sourceIsReferenceType, bool itemIsReferenceType, bool sourceIsICollection)
         {
             _ = builder
                 .Line()
                 .Line($"// Implement ICollection<{itemTypeString}>")
                 .Line()
-                .Line("public int Count => source2.Count;")
+                .Line("public int Count => source.Count;")
                 .Line()
                 .Line("public bool IsReadOnly => true;")
                 .Line()
@@ -329,8 +278,7 @@ namespace NetFabric.Hyperlinq.SourceGenerator
                 .Line()
                 .Line($"bool ICollection<{itemTypeString}>.Remove({itemTypeString} item) => throw new NotSupportedException();")
                 .Line()
-                .Line($"void ICollection<{itemTypeString}>.Clear() => throw new NotSupportedException();")
-                .Line();
+                .Line($"void ICollection<{itemTypeString}>.Clear() => throw new NotSupportedException();");
 
             if (sourceIsICollection)
             {
@@ -338,10 +286,10 @@ namespace NetFabric.Hyperlinq.SourceGenerator
                 _ = builder
                     .Line()
                     .AggressiveInliningAttribute()
-                    .Line($"public bool Contains({itemTypeString} item) => source2.Contains(item);")
+                    .Line($"public bool Contains({itemTypeString} item) => source.Contains(item);")
                     .Line()
                     .AggressiveInliningAttribute()
-                    .Line($"public void CopyTo({itemTypeString}[] array, int arrayIndex) => source2.CopyTo(array, arrayIndex);");
+                    .Line($"public void CopyTo({itemTypeString}[] array, int arrayIndex) => source.CopyTo(array, arrayIndex);");
 
                 return; // nothing else to do
             }
@@ -349,90 +297,104 @@ namespace NetFabric.Hyperlinq.SourceGenerator
             // The source does not implement these methods so we have to add an implementation
             _ = builder
                 .Line()
-                .MethodBlock($"public bool Contains({itemTypeString}[] value)",
-                    codeBuilder => codeBuilder
-                        .Line("if (Count is 0)")
-                        .Indent().Line("return;")
-                        .Line()
-                        .IfBlock("source is ICollection<{itemTypeString}> collection",
-                            codeBuilder => codeBuilder
-                                .Line("collection.Contains(values);"),
-                            codeBuilder =>
-                            {
-                                codeBuilder
-                                    .Line("using var enumerator = GetEnumerator();");
+                .MethodBlock($"public bool Contains({itemTypeString} item)",
+                    codeBuilder =>
+                        {
+                            _ = codeBuilder
+                                .Line("if (Count is 0)")
+                                .Indent().Line("return false;");
 
-                                if (itemTypeIsValueType) // devirtualize the comparer
-                                {
-                                    codeBuilder
-                                        .WhileBlock("enumerator.MoveNext()",
-                                            codeBuilder => codeBuilder
-                                                .Line("if (EqualityComparer<{itemTypeString}>.Default.Equals(enumerator.Current, value))")
-                                                .Indent().Line("return true;")
-                                        )
-                                        .Line("return true;");
-                                }
-                                else
-                                {
-                                    codeBuilder
-                                        .Line($"var comparer = EqualityComparer<{itemTypeString}>.Default;")
-                                        .WhileBlock("enumerator.MoveNext()",
-                                            codeBuilder => codeBuilder
-                                                .Line("if (comparer.Equals(enumerator.Current, value))")
-                                                .Indent().Line("return true;")
-                                        )
-                                        .Line("return true;");
-                                }
-                            })
-                        );
+                            if (sourceIsReferenceType)
+                            {
+                                _ = codeBuilder
+                                    .Line()
+                                    .Line($"if (source is ICollection<{itemTypeString}> collection)")
+                                    .Indent().Line("return collection.Contains(item);");
+                            }
+
+                            if (itemIsReferenceType) 
+                            {
+                                _ = codeBuilder
+                                    .Line()
+                                    .Line($"var comparer = EqualityComparer<{itemTypeString}>.Default;")
+                                    .Line("using var enumerator = GetEnumerator();")
+                                    .WhileBlock("enumerator.MoveNext()",
+                                        codeBuilder => _ = codeBuilder
+                                            .Line("if (comparer.Equals(enumerator.Current, item))")
+                                            .Indent().Line("return true;")
+                                    );
+                            }
+                            else // devirtualize the comparer
+                            {
+                                _ = codeBuilder
+                                    .Line()
+                                    .Line("using var enumerator = GetEnumerator();")
+                                    .WhileBlock("enumerator.MoveNext()",
+                                        codeBuilder => _ = codeBuilder
+                                            .Line($"if (EqualityComparer<{itemTypeString}>.Default.Equals(enumerator.Current, item))")
+                                            .Indent().Line("return true;")
+                                    );
+                            }
+
+                            _ = codeBuilder
+                                .Line("return false;");
+                        });
 
             _ = builder
                 .Line()
                 .MethodBlock($"public void CopyTo({itemTypeString}[] array, int arrayIndex)",
-                    codeBuilder => codeBuilder
-                        .Line("if (Count is 0)")
-                        .Indent().Line("return;")
-                        .Line()
-                        .Line("if (array.Length - arrayIndex < Count)")
-                        .Indent().Line("Throw.ArgumentException(Resource.DestinationNotLongEnough, nameof(array));")
-                        .Line()
-                        .IfBlock("source is ICollection<{itemTypeString}> collection",
-                            codeBuilder => codeBuilder
-                                .Line("collection.CopyTo(array, arrayIndex);"),
-                            codeBuilder => codeBuilder
-                                .Line("using var enumerator = GetEnumerator();")
-                                .IfBlock(
-                                    "arrayIndex is 0 && array.Length == Count", // to enable range check elimination
-                                    codeBuilder => codeBuilder
-                                        .ForBlock("var index = 0; index < array.Length; index++",
-                                            codeBuilder => codeBuilder
-                                                .Line("_ = enumerator.MoveNext();")
-                                                .Line("array[index] = enumerator.Current;")
-                                        ),
-                                    codeBuilder => codeBuilder
-                                        .CheckedBlock(
-                                            codeBuilder => codeBuilder
-                                                .Line("for (var index = arrayIndex; enumerator.MoveNext(); index++)")
-                                                .Indent().Line("array[index] = enumerator.Current;")
-                                        )
-                                )
-                        )
-                );
+                    codeBuilder =>
+                    {
+                        _ = codeBuilder
+                            .Line("if (Count is 0)")
+                            .Indent().Line("return;")
+                            .Line()
+                            .Line("if (array.Length - arrayIndex < Count)")
+                            .Indent().Line($"throw new ArgumentException(\"{Resource.DestinationNotLongEnough}\", nameof(array));");
+
+                        if (sourceIsReferenceType)
+                        {
+                            codeBuilder
+                                .Line()
+                                .IfBlock($"source is ICollection<{itemTypeString}> collection",
+                                    codeBuilder => _ = codeBuilder
+                                        .Line("collection.CopyTo(array, arrayIndex);")
+                                        .Line("return;"));
+                        }
+                            
+                        _ = codeBuilder
+                            .Line()
+                            .Line("using var enumerator = GetEnumerator();")
+                            .IfBlock(
+                                "arrayIndex is 0 && array.Length == Count", // to enable range check elimination
+                                codeBuilder => _ = codeBuilder
+                                    .Line(
+                                        "for (var index = 0; index < array.Length && enumerator.MoveNext(); index++)")
+                                    .Indent().Line("array[index] = enumerator.Current;"),
+                                codeBuilder => _ = codeBuilder
+                                    .CheckedBlock(
+                                        codeBuilder => _ = codeBuilder
+                                            .Line(
+                                                "for (var index = arrayIndex; enumerator.MoveNext(); index++)")
+                                            .Indent().Line("array[index] = enumerator.Current;")
+                                    )
+                            );
+                    });
         }
 
-        static void ImplementIList(CodeBuilder builder, string itemTypeString, bool itemTypeIsValueType, bool sourceIsIList)
+        static void ImplementIList(CodeBuilder builder, string itemTypeString, bool sourceIsReferenceType, bool itemIsReferenceType, bool sourceIsIList)
         {
             _ = builder
                 .Line()
                 .Line($"// Implement IList<{itemTypeString}>")
                 .Line()
-                .Line($"public {itemTypeString} this[int index] => source2[index];")
+                .Line($"public {itemTypeString} this[int index] => source[index];")
                 .Line();
 
             using (builder.Block($"{itemTypeString} IList<{itemTypeString}>.this[int index]"))
             {
                 _ = builder
-                    .Line("get => source2[index];")
+                    .Line("get => source[index];")
                     .Line("set => throw new NotSupportedException();");
             }
 
@@ -448,7 +410,7 @@ namespace NetFabric.Hyperlinq.SourceGenerator
                 // Call the methods implemented by the source
                 _ = builder
                     .AggressiveInliningAttribute()
-                    .Line($"public int IndexOf({itemTypeString} item) => source2.IndexOf(item);");
+                    .Line($"public int IndexOf({itemTypeString} item) => source.IndexOf(item);");
 
                 return;
             }
@@ -457,45 +419,49 @@ namespace NetFabric.Hyperlinq.SourceGenerator
             builder
                 .MethodBlock($"public int IndexOf({itemTypeString} item)",
                     codeBuilder => codeBuilder
-                        .IfBlock("if (Count is not 0)",
-                            codeBuilder => codeBuilder
-                        .IfBlock("source is IList<{itemTypeString}> list",
-                            codeBuilder => codeBuilder
-                                .Line("return list.IndexOf(item);"),
+                        .IfBlock("Count is not 0",
                             codeBuilder =>
                             {
-                                codeBuilder
-                                    .CheckedBlock(codeBuilder =>
-                                    {
-                                        codeBuilder
-                                            .Line("var index = 0;");
+                                if (sourceIsReferenceType)
+                                {
+                                    codeBuilder
+                                        .Line($"if (source is IList<{itemTypeString}> list)")
+                                        .Indent().Line("return list.IndexOf(item);")
+                                        .Line();
+                                }
 
-                                        if (itemTypeIsValueType) // devirtualize the comparer
+                                codeBuilder
+                                    .CheckedBlock(
+                                        codeBuilder =>
                                         {
-                                            codeBuilder
-                                                .ForEachBlock("var current in source2", 
-                                                    codeBuilder => codeBuilder
-                                                        .Line($"if (EqualityComparer<{itemTypeString}>.Default.Equals(current, item))")
-                                                        .Indent().Line("return index;")
-                                                        .Line()
-                                                        .Line("checked { index++; }")
-                                                );
-                                        }
-                                        else
-                                        {
-                                            codeBuilder
-                                                .Line($"var comparer = EqualityComparer<{itemTypeString}>.Default;")
-                                                .ForEachBlock("var current in source2", 
-                                                    codeBuilder => codeBuilder
-                                                        .Line($"if (comparer.Equals(current, item))")
-                                                        .Indent().Line("return index;")
-                                                        .Line()
-                                                        .Line("checked { index++; }")
-                                                );
-                                        }
-                                    });
+                                            if (itemIsReferenceType) 
+                                            {
+                                                codeBuilder
+                                                    .Line($"var comparer = EqualityComparer<{itemTypeString}>.Default;")
+                                                    .Line("var index = 0;")
+                                                    .ForEachBlock("var current in source",
+                                                        codeBuilder => codeBuilder
+                                                            .Line($"if (comparer.Equals(current, item))")
+                                                            .Indent().Line("return index;")
+                                                            .Line()
+                                                            .Line("index++;")
+                                                    );
+                                            }
+                                            else // devirtualize the comparer
+                                            {
+                                                codeBuilder
+                                                    .Line("var index = 0;")
+                                                    .ForEachBlock("var current in source",
+                                                        codeBuilder => codeBuilder
+                                                            .Line(
+                                                                $"if (EqualityComparer<{itemTypeString}>.Default.Equals(current, item))")
+                                                            .Indent().Line("return index;")
+                                                            .Line()
+                                                            .Line("index++;")
+                                                    );
+                                            }
+                                        });
                             })
-                        )
                         .Line("return -1;")
                 );
         }

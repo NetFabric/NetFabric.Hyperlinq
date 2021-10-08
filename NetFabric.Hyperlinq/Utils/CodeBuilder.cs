@@ -85,7 +85,7 @@ namespace NetFabric.Hyperlinq.SourceGenerator
 
         public CodeBuilder IfBlock(string condition, Action<CodeBuilder> trueBlock, Action<CodeBuilder> falseBlock)
         {
-            using (Block($"if ({condition}))"))
+            using (Block($"if ({condition})"))
             {
                 trueBlock(this);
             }

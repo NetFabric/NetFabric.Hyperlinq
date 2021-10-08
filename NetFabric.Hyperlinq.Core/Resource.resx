@@ -121,7 +121,7 @@
     <value>The array in the ArraySegment is null</value>
   </data>
   <data name="DestinationNotLongEnough" xml:space="preserve">
-    <value>Destination array was not long enough. Check the destination index, length, and the rentedArray's lower bounds.</value>
+    <value>Destination array was not long enough. Check the destination index, length, and the array's lower bounds.</value>
   </data>
   <data name="EmptySequence" xml:space="preserve">
     <value>Sequence contains no elements</value>
