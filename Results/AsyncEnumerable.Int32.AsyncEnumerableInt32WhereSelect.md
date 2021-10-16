@@ -12,24 +12,24 @@
 - SpanLinq: [0.0.1](https://www.nuget.org/packages/SpanLinq/0.0.1)
 - Streams.CSharp: [0.6.0](https://www.nuget.org/packages/Streams.CSharp/0.6.0)
 - StructLinq.BCL: [0.27.0](https://www.nuget.org/packages/StructLinq/0.27.0)
-- NetFabric.Hyperlinq: [3.0.0-beta46](https://www.nuget.org/packages/NetFabric.Hyperlinq/3.0.0-beta46)
+- NetFabric.Hyperlinq: [3.0.0-beta48](https://www.nuget.org/packages/NetFabric.Hyperlinq/3.0.0-beta48)
 - System.Linq.Async: [5.0.0](https://www.nuget.org/packages/System.Linq.Async/5.0.0)
 
 ### Results:
 ``` ini
 
-BenchmarkDotNet=v0.13.1, OS=macOS Catalina 10.15.7 (19H1417) [Darwin 19.6.0]
+BenchmarkDotNet=v0.13.1, OS=macOS Catalina 10.15.7 (19H1419) [Darwin 19.6.0]
 Intel Core i5-7360U CPU 2.30GHz (Kaby Lake), 1 CPU, 4 logical and 2 physical cores
-.NET SDK=6.0.100-rc.1.21458.32
+.NET SDK=6.0.100-rc.2.21505.57
   [Host]     : .NET 5.0.6 (5.0.621.22011), X64 RyuJIT
-  .NET 6 PGO : .NET 6.0.0 (6.0.21.45113), X64 RyuJIT
+  .NET 6 PGO : .NET 6.0.0 (6.0.21.48005), X64 RyuJIT
 
 Job=.NET 6 PGO  EnvironmentVariables=COMPlus_ReadyToRun=0,COMPlus_TC_QuickJitForLoops=1,COMPlus_TieredPGO=1  Runtime=.NET 6.0  
 
 ```
 |                  Method | Count |     Mean |   Error |  StdDev |        Ratio | RatioSD | Allocated |
 |------------------------ |------ |---------:|--------:|--------:|-------------:|--------:|----------:|
-|             ForeachLoop |   100 | 140.3 ms | 2.39 ms | 1.86 ms |     baseline |         |     22 KB |
-|                    Linq |   100 | 142.0 ms | 0.59 ms | 0.55 ms | 1.01x slower |   0.01x |     51 KB |
-|               Hyperlinq |   100 | 142.0 ms | 0.84 ms | 0.79 ms | 1.01x slower |   0.01x |     42 KB |
-| Hyperlinq_ValueDelegate |   100 | 141.0 ms | 1.53 ms | 1.36 ms | 1.00x slower |   0.02x |     42 KB |
+|             ForeachLoop |   100 | 168.6 ms | 0.97 ms | 0.91 ms |     baseline |         |     21 KB |
+|                    Linq |   100 | 169.2 ms | 1.51 ms | 1.42 ms | 1.00x slower |   0.01x |     53 KB |
+|               Hyperlinq |   100 | 168.3 ms | 2.88 ms | 2.69 ms | 1.00x faster |   0.01x |     43 KB |
+| Hyperlinq_ValueDelegate |   100 | 167.3 ms | 2.52 ms | 2.36 ms | 1.01x faster |   0.02x |     43 KB |

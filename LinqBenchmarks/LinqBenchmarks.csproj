@@ -4,6 +4,8 @@
     <OutputType>Exe</OutputType>
     <TargetFramework>net5.0</TargetFramework>
     <LangVersion>10.0</LangVersion>
+    <Configuration>Release</Configuration>
+    <DebugSymbols>false</DebugSymbols>
   </PropertyGroup>
   
   <ItemGroup>
@@ -14,7 +16,7 @@
     <PackageReference Include="LinqFaster.SIMD" Version="1.0.3" />
     <PackageReference Include="LinqFasterer" Version="2.1.0" />
     <PackageReference Include="LinqOptimizer.CSharp" Version="0.7.0" />
-    <PackageReference Include="NetFabric.Hyperlinq" Version="3.0.0-beta46" />
+    <PackageReference Include="NetFabric.Hyperlinq" Version="3.0.0-beta48" />
     <PackageReference Include="NetFabric.Hyperlinq.Analyzer" Version="2.0.1">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>

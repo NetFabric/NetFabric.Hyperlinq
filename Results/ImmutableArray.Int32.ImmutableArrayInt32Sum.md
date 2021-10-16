@@ -12,29 +12,29 @@
 - SpanLinq: [0.0.1](https://www.nuget.org/packages/SpanLinq/0.0.1)
 - Streams.CSharp: [0.6.0](https://www.nuget.org/packages/Streams.CSharp/0.6.0)
 - StructLinq.BCL: [0.27.0](https://www.nuget.org/packages/StructLinq/0.27.0)
-- NetFabric.Hyperlinq: [3.0.0-beta46](https://www.nuget.org/packages/NetFabric.Hyperlinq/3.0.0-beta46)
+- NetFabric.Hyperlinq: [3.0.0-beta48](https://www.nuget.org/packages/NetFabric.Hyperlinq/3.0.0-beta48)
 - System.Linq.Async: [5.0.0](https://www.nuget.org/packages/System.Linq.Async/5.0.0)
 
 ### Results:
 ``` ini
 
-BenchmarkDotNet=v0.13.1, OS=macOS Catalina 10.15.7 (19H1417) [Darwin 19.6.0]
+BenchmarkDotNet=v0.13.1, OS=macOS Catalina 10.15.7 (19H1419) [Darwin 19.6.0]
 Intel Core i5-7360U CPU 2.30GHz (Kaby Lake), 1 CPU, 4 logical and 2 physical cores
-.NET SDK=6.0.100-rc.1.21458.32
+.NET SDK=6.0.100-rc.2.21505.57
   [Host]     : .NET 5.0.6 (5.0.621.22011), X64 RyuJIT
-  .NET 6 PGO : .NET 6.0.0 (6.0.21.45113), X64 RyuJIT
+  .NET 6 PGO : .NET 6.0.0 (6.0.21.48005), X64 RyuJIT
 
 Job=.NET 6 PGO  EnvironmentVariables=COMPlus_ReadyToRun=0,COMPlus_TC_QuickJitForLoops=1,COMPlus_TieredPGO=1  Runtime=.NET 6.0  
 
 ```
-|                   Method | Count |         Mean |        Error |       StdDev |       Median |          Ratio | RatioSD |  Gen 0 | Allocated |
-|------------------------- |------ |-------------:|-------------:|-------------:|-------------:|---------------:|--------:|-------:|----------:|
-|                  ForLoop |   100 |     52.12 ns |     1.122 ns |     2.464 ns |     51.78 ns |       baseline |         |      - |         - |
-|              ForeachLoop |   100 |     50.97 ns |     1.025 ns |     1.950 ns |     50.32 ns |   1.03x faster |   0.05x |      - |         - |
-|                     Linq |   100 |    332.18 ns |     7.915 ns |    22.325 ns |    327.20 ns |   6.58x slower |   0.49x | 0.0267 |      56 B |
-|             LinqFasterer |   100 |    164.86 ns |     5.171 ns |    14.837 ns |    160.07 ns |   3.29x slower |   0.33x | 0.2141 |     448 B |
-|            LinqOptimizer |   100 | 33,577.81 ns | 1,043.238 ns | 2,890.808 ns | 33,228.02 ns | 648.56x slower |  63.28x | 8.3008 |  17,415 B |
-|                  Streams |   100 |    445.41 ns |     8.988 ns |    19.917 ns |    438.04 ns |   8.56x slower |   0.52x | 0.1259 |     264 B |
-|               StructLinq |   100 |     97.53 ns |     2.606 ns |     7.306 ns |     95.90 ns |   1.91x slower |   0.17x | 0.0153 |      32 B |
-| StructLinq_ValueDelegate |   100 |     67.91 ns |     1.438 ns |     2.592 ns |     67.14 ns |   1.30x slower |   0.07x |      - |         - |
-|                Hyperlinq |   100 |     19.93 ns |     0.470 ns |     0.859 ns |     19.96 ns |   2.63x faster |   0.13x |      - |         - |
+|                   Method | Count |         Mean |      Error |     StdDev |          Ratio | RatioSD |  Gen 0 | Allocated |
+|------------------------- |------ |-------------:|-----------:|-----------:|---------------:|--------:|-------:|----------:|
+|                  ForLoop |   100 |     48.38 ns |   0.090 ns |   0.084 ns |       baseline |         |      - |         - |
+|              ForeachLoop |   100 |     48.10 ns |   0.124 ns |   0.110 ns |   1.01x faster |   0.00x |      - |         - |
+|                     Linq |   100 |    308.06 ns |   0.961 ns |   0.899 ns |   6.37x slower |   0.02x | 0.0267 |      56 B |
+|             LinqFasterer |   100 |    149.46 ns |   0.773 ns |   0.723 ns |   3.09x slower |   0.01x | 0.2141 |     448 B |
+|            LinqOptimizer |   100 | 28,590.40 ns | 183.827 ns | 171.952 ns | 590.97x slower |   4.02x | 8.3008 |  17,414 B |
+|                  Streams |   100 |    430.89 ns |   8.301 ns |   8.882 ns |   8.90x slower |   0.20x | 0.1259 |     264 B |
+|               StructLinq |   100 |    102.05 ns |   1.528 ns |   1.429 ns |   2.11x slower |   0.03x | 0.0153 |      32 B |
+| StructLinq_ValueDelegate |   100 |     66.59 ns |   0.129 ns |   0.121 ns |   1.38x slower |   0.00x |      - |         - |
+|                Hyperlinq |   100 |     20.32 ns |   0.057 ns |   0.047 ns |   2.38x faster |   0.01x |      - |         - |
