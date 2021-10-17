@@ -1,78 +1,78 @@
-﻿using BenchmarkDotNet.Attributes;
-using NetFabric.Hyperlinq;
-using StructLinq;
-using System.Linq;
-using LinqFasterer;
-using Nessos.LinqOptimizer.CSharp;
-using Nessos.Streams.CSharp;
+﻿namespace LinqBenchmarks.ImmutableArray.Int32;
 
-namespace LinqBenchmarks.ImmutableArray.Int32
+public class ImmutableArrayInt32Sum: ImmutableArrayInt32BenchmarkBase
 {
-    public class ImmutableArrayInt32Sum: ImmutableArrayInt32BenchmarkBase
+    Func<int> linqOptimizerQuery;
+
+    protected override void Setup()
     {
-        [Benchmark(Baseline = true)]
-        public int ForLoop()
-        {
-            var sum = 0;
-            var array = source;
-            for (var index = 0; index < array.Length; index++)
-            {
-                var item = array[index];
-                sum += item;
-            }
-            return sum;
-        }
+        base.Setup();
 
-        [Benchmark]
-        public int ForeachLoop()
-        {
-            var sum = 0;
-            foreach (var item in source)
-            {
-                sum += item;
-            }
-            return sum;
-        }
-
-        [Benchmark]
-        public int Linq()
-            => source.Sum();
-
-        [Benchmark]
-        public int LinqFasterer()
-            => EnumerableF.SumF(source);
-
-        [Benchmark]
-        public int LinqOptimizer()
-            => source
-                .AsQueryExpr()
-                .Sum()
-                .Run();
-
-        [Benchmark]
-        public int Streams()
-            => source
-                .AsStream()
-                .Sum();
-
-        [Benchmark]
-        public int StructLinq()
-            => source
-                .ToStructEnumerable()
-                .Sum();
-
-        [Benchmark]
-        public int StructLinq_ValueDelegate()
-        {
-            return source
-                .ToStructEnumerable()
-                .Sum(x => x);
-        }
-
-        [Benchmark]
-        public int Hyperlinq()
-            => source
-                .AsValueEnumerable()
-                .Sum();
+        linqOptimizerQuery = source
+            .AsQueryExpr()
+            .Sum()
+            .Compile();
     }
+
+    [Benchmark(Baseline = true)]
+    public int ForLoop()
+    {
+        var sum = 0;
+        var array = source;
+        for (var index = 0; index < array.Length; index++)
+        {
+            var item = array[index];
+            sum += item;
+        }
+        return sum;
+    }
+
+    [Benchmark]
+    public int ForeachLoop()
+    {
+        var sum = 0;
+        foreach (var item in source)
+        {
+            sum += item;
+        }
+        return sum;
+    }
+
+    [Benchmark]
+    public int Linq()
+        => source.Sum();
+
+    [Benchmark]
+    public int LinqFasterer()
+        => EnumerableF.SumF(source);
+
+    [Benchmark]
+    public int LinqOptimizer()
+        => linqOptimizerQuery.Invoke();
+
+    [Benchmark]
+    public int Streams()
+        => source
+            .AsStream()
+            .Sum();
+
+    [Benchmark]
+    public int StructLinq()
+        => source
+            .ToStructEnumerable()
+            .Sum();
+
+    [Benchmark]
+    public int StructLinq_ValueDelegate()
+    {
+        return source
+            .ToStructEnumerable()
+            .Sum(x => x);
+    }
+
+    [Benchmark]
+    public int Hyperlinq()
+        => source
+            .AsValueEnumerable()
+            .Sum();
 }

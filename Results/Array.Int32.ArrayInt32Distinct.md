@@ -29,11 +29,11 @@ Job=.NET 6 PGO  EnvironmentVariables=COMPlus_ReadyToRun=0,COMPlus_TC_QuickJitFor
 ```
 |                   Method | Duplicates | Count |     Mean |     Error |    StdDev |        Ratio | RatioSD |  Gen 0 | Allocated |
 |------------------------- |----------- |------ |---------:|----------:|----------:|-------------:|--------:|-------:|----------:|
-|                  ForLoop |          4 |   100 | 3.231 μs | 0.0070 μs | 0.0065 μs |     baseline |         | 2.8687 |   6,000 B |
-|              ForeachLoop |          4 |   100 | 3.349 μs | 0.0186 μs | 0.0145 μs | 1.04x slower |   0.00x | 2.8687 |   6,000 B |
-|                     Linq |          4 |   100 | 4.264 μs | 0.0084 μs | 0.0070 μs | 1.32x slower |   0.00x | 2.8610 |   5,992 B |
-|             LinqFasterer |          4 |   100 | 4.186 μs | 0.0079 μs | 0.0070 μs | 1.30x slower |   0.00x | 4.4250 |   9,272 B |
-|                   LinqAF |          4 |   100 | 7.050 μs | 0.0252 μs | 0.0224 μs | 2.18x slower |   0.01x | 5.9280 |  12,400 B |
-|               StructLinq |          4 |   100 | 3.996 μs | 0.0040 μs | 0.0064 μs | 1.24x slower |   0.00x | 0.0153 |      32 B |
-| StructLinq_ValueDelegate |          4 |   100 | 3.799 μs | 0.0019 μs | 0.0016 μs | 1.18x slower |   0.00x |      - |         - |
-|                Hyperlinq |          4 |   100 | 3.195 μs | 0.0022 μs | 0.0017 μs | 1.01x faster |   0.00x |      - |         - |
+|                  ForLoop |          4 |   100 | 3.369 μs | 0.0174 μs | 0.0163 μs |     baseline |         | 2.8687 |   6,000 B |
+|              ForeachLoop |          4 |   100 | 3.254 μs | 0.0149 μs | 0.0132 μs | 1.04x faster |   0.01x | 2.8687 |   6,000 B |
+|                     Linq |          4 |   100 | 4.240 μs | 0.0336 μs | 0.0298 μs | 1.26x slower |   0.01x | 2.8610 |   5,992 B |
+|             LinqFasterer |          4 |   100 | 4.052 μs | 0.0331 μs | 0.0310 μs | 1.20x slower |   0.01x | 4.4250 |   9,272 B |
+|                   LinqAF |          4 |   100 | 7.091 μs | 0.0687 μs | 0.0609 μs | 2.10x slower |   0.02x | 5.9280 |  12,400 B |
+|               StructLinq |          4 |   100 | 4.041 μs | 0.0127 μs | 0.0106 μs | 1.20x slower |   0.01x | 0.0153 |      32 B |
+| StructLinq_ValueDelegate |          4 |   100 | 3.855 μs | 0.0155 μs | 0.0129 μs | 1.14x slower |   0.01x |      - |         - |
+|                Hyperlinq |          4 |   100 | 3.177 μs | 0.0102 μs | 0.0085 μs | 1.06x faster |   0.01x |      - |         - |

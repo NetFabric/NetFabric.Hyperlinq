@@ -1,14 +1,13 @@
-﻿using BenchmarkDotNet.Attributes;
-using System.Collections.Generic;
+﻿namespace LinqBenchmarks;
 
-namespace LinqBenchmarks
+public class AsyncEnumerableInt32SkipTakeBenchmarkBase : SkipTakeBenchmarkBase
 {
-    public class AsyncEnumerableInt32SkipTakeBenchmarkBase : SkipTakeBenchmarkBase
-    {
-        protected IAsyncEnumerable<int> source;
+    protected IAsyncEnumerable<int> source;
 
-        [GlobalSetup]
-        public void GlobalSetup()
-            => source = Utils.AsyncEnumerable<int>(Skip + Count);
+    protected override void Setup()
+    {
+        base.Setup();
+            
+        source = Utils.AsyncEnumerable<int>(Skip + Count);
     }
 }

@@ -29,13 +29,13 @@ Job=.NET 6 PGO  EnvironmentVariables=COMPlus_ReadyToRun=0,COMPlus_TC_QuickJitFor
 ```
 |                   Method | Count |         Mean |      Error |     StdDev |          Ratio | RatioSD |   Gen 0 | Allocated |
 |------------------------- |------ |-------------:|-----------:|-----------:|---------------:|--------:|--------:|----------:|
-|                  ForLoop |   100 |     72.47 ns |   0.742 ns |   0.694 ns |       baseline |         |       - |         - |
-|              ForeachLoop |   100 |     72.64 ns |   0.364 ns |   0.304 ns |   1.00x faster |   0.01x |       - |         - |
-|                     Linq |   100 |    348.24 ns |   0.921 ns |   0.769 ns |   4.79x slower |   0.02x |  0.0229 |      48 B |
-|             LinqFasterer |   100 |    422.42 ns |   1.964 ns |   1.741 ns |   5.82x slower |   0.05x |  0.3443 |     720 B |
-|            LinqOptimizer |   100 | 47,410.21 ns | 175.833 ns | 164.474 ns | 654.29x slower |   7.24x | 13.8550 |  29,051 B |
-|                  Streams |   100 |  1,260.58 ns |   6.119 ns |   5.724 ns |  17.40x slower |   0.18x |  0.2899 |     608 B |
-|               StructLinq |   100 |    368.39 ns |   5.183 ns |   4.848 ns |   5.08x slower |   0.10x |  0.0153 |      32 B |
-| StructLinq_ValueDelegate |   100 |    197.87 ns |   0.311 ns |   0.291 ns |   2.73x slower |   0.03x |       - |         - |
-|                Hyperlinq |   100 |    322.88 ns |   5.118 ns |   4.787 ns |   4.46x slower |   0.07x |       - |         - |
-|  Hyperlinq_ValueDelegate |   100 |    225.60 ns |   0.261 ns |   0.218 ns |   3.10x slower |   0.02x |       - |         - |
+|                  ForLoop |   100 |     73.45 ns |   0.595 ns |   0.557 ns |       baseline |         |       - |         - |
+|              ForeachLoop |   100 |     72.74 ns |   0.467 ns |   0.390 ns |   1.01x faster |   0.01x |       - |         - |
+|                     Linq |   100 |    347.68 ns |   1.529 ns |   1.430 ns |   4.73x slower |   0.04x |  0.0229 |      48 B |
+|             LinqFasterer |   100 |    427.53 ns |   2.358 ns |   2.206 ns |   5.82x slower |   0.05x |  0.3443 |     720 B |
+|            LinqOptimizer |   100 | 47,611.62 ns | 468.426 ns | 415.248 ns | 647.85x slower |   7.82x | 13.8550 |  29,051 B |
+|                  Streams |   100 |  1,237.33 ns |   1.793 ns |   1.400 ns |  16.83x slower |   0.13x |  0.2899 |     608 B |
+|               StructLinq |   100 |    366.90 ns |   4.172 ns |   3.902 ns |   5.00x slower |   0.07x |  0.0153 |      32 B |
+| StructLinq_ValueDelegate |   100 |    198.05 ns |   0.626 ns |   0.586 ns |   2.70x slower |   0.02x |       - |         - |
+|                Hyperlinq |   100 |    339.41 ns |   5.032 ns |   4.707 ns |   4.62x slower |   0.06x |       - |         - |
+|  Hyperlinq_ValueDelegate |   100 |    223.18 ns |   0.414 ns |   0.367 ns |   3.04x slower |   0.02x |       - |         - |

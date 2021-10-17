@@ -1,17 +1,15 @@
-﻿using BenchmarkDotNet.Attributes;
-using System.Collections.Generic;
-using System.Linq;
+﻿namespace LinqBenchmarks;
 
-namespace LinqBenchmarks
+public class ValueTypeListSkipTakeBenchmarkBase: SkipTakeBenchmarkBase
 {
-    public class ValueTypeListSkipTakeBenchmarkBase: SkipTakeBenchmarkBase
-    {
-        protected List<FatValueType> source;
+    protected List<FatValueType> source;
 
-        [GlobalSetup]
-        public void GlobalSetup()
-            => source = GetRandomValues(Skip + Count)
-                .Select(value => new FatValueType(value))
-                .ToList();
+    protected override void Setup()
+    {
+        base.Setup();
+            
+        source = GetRandomValues(Skip + Count)
+            .Select(value => new FatValueType(value))
+            .ToList();
     }
 }

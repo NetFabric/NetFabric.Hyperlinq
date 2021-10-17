@@ -1,13 +1,13 @@
-﻿using BenchmarkDotNet.Attributes;
+﻿namespace LinqBenchmarks;
 
-namespace LinqBenchmarks
+public class ArrayInt32SkipTakeBenchmarkBase : SkipTakeBenchmarkBase
 {
-    public class ArrayInt32SkipTakeBenchmarkBase : SkipTakeBenchmarkBase
-    {
-        protected int[] source;
+    protected int[] source;
 
-        [GlobalSetup]
-        public void GlobalSetup()
-            => source = GetRandomValues(Skip + Count);
+    protected override void Setup()
+    {
+        base.Setup();
+            
+        source = GetRandomValues(Skip + Count);
     }
 }

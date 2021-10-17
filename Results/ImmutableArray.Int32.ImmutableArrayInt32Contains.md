@@ -29,11 +29,11 @@ Job=.NET 6 PGO  EnvironmentVariables=COMPlus_ReadyToRun=0,COMPlus_TC_QuickJitFor
 ```
 |                   Method | Count |      Mean |    Error |   StdDev |        Ratio | RatioSD |  Gen 0 | Allocated |
 |------------------------- |------ |----------:|---------:|---------:|-------------:|--------:|-------:|----------:|
-|                  ForLoop |   100 |  48.83 ns | 0.104 ns | 0.097 ns |     baseline |         |      - |         - |
-|              ForeachLoop |   100 |  49.46 ns | 0.083 ns | 0.074 ns | 1.01x slower |   0.00x |      - |         - |
-|                     Linq |   100 |  21.90 ns | 0.060 ns | 0.111 ns | 2.23x faster |   0.01x |      - |         - |
-|             LinqFasterer |   100 |  72.36 ns | 0.492 ns | 0.436 ns | 1.48x slower |   0.01x | 0.2142 |     448 B |
-|               StructLinq |   100 | 106.17 ns | 0.244 ns | 0.228 ns | 2.17x slower |   0.01x | 0.0153 |      32 B |
-| StructLinq_ValueDelegate |   100 |  87.42 ns | 0.302 ns | 0.268 ns | 1.79x slower |   0.01x |      - |         - |
-|                Hyperlinq |   100 |  35.75 ns | 0.145 ns | 0.113 ns | 1.37x faster |   0.01x | 0.0153 |      32 B |
-|           Hyperlinq_SIMD |   100 |  25.26 ns | 0.477 ns | 0.398 ns | 1.93x faster |   0.03x |      - |         - |
+|                  ForLoop |   100 |  48.59 ns | 0.161 ns | 0.142 ns |     baseline |         |      - |         - |
+|              ForeachLoop |   100 |  49.18 ns | 0.187 ns | 0.166 ns | 1.01x slower |   0.00x |      - |         - |
+|                     Linq |   100 |  24.16 ns | 0.131 ns | 0.122 ns | 2.01x faster |   0.01x |      - |         - |
+|             LinqFasterer |   100 |  71.43 ns | 0.588 ns | 0.550 ns | 1.47x slower |   0.01x | 0.2142 |     448 B |
+|               StructLinq |   100 | 105.57 ns | 0.429 ns | 0.401 ns | 2.17x slower |   0.01x | 0.0153 |      32 B |
+| StructLinq_ValueDelegate |   100 |  86.85 ns | 0.475 ns | 0.444 ns | 1.79x slower |   0.01x |      - |         - |
+|                Hyperlinq |   100 |  35.54 ns | 0.199 ns | 0.187 ns | 1.37x faster |   0.01x | 0.0153 |      32 B |
+|           Hyperlinq_SIMD |   100 |  24.93 ns | 0.070 ns | 0.066 ns | 1.95x faster |   0.01x |      - |         - |

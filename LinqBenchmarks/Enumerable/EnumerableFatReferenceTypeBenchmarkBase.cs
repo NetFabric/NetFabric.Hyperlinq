@@ -1,14 +1,13 @@
-﻿using BenchmarkDotNet.Attributes;
-using System.Collections.Generic;
+﻿namespace LinqBenchmarks;
 
-namespace LinqBenchmarks
+public class EnumerableFatReferenceTypeBenchmarkBase : BenchmarkBase
 {
-    public class EnumerableFatReferenceTypeBenchmarkBase : BenchmarkBase
-    {
-        protected IEnumerable<FatReferenceType> source;
+    protected IEnumerable<FatReferenceType> source;
 
-        [GlobalSetup]
-        public void GlobalSetup()
-            => source = Utils.Enumerable<FatReferenceType>(Count);
+    protected override void Setup()
+    {
+        base.Setup();
+            
+        source = Utils.Enumerable<FatReferenceType>(Count);
     }
 }

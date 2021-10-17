@@ -1,0 +1,11 @@
+global using System;
+global using System.Collections.Generic;
+global using System.Linq;
+global using BenchmarkDotNet.Attributes;
+global using JM.LinqFaster;
+global using JM.LinqFaster.SIMD;
+global using LinqFasterer;
+global using Nessos.LinqOptimizer.CSharp;
+global using Nessos.Streams.CSharp;
+global using NetFabric.Hyperlinq;
+global using StructLinq;

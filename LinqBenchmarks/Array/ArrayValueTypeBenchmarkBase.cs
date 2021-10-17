@@ -1,16 +1,15 @@
-﻿using BenchmarkDotNet.Attributes;
-using System.Linq;
+﻿namespace LinqBenchmarks;
 
-namespace LinqBenchmarks
+public class ValueTypeArrayBenchmarkBase: BenchmarkBase
 {
-    public class ValueTypeArrayBenchmarkBase: BenchmarkBase
-    {
-        protected FatValueType[] source;
+    protected FatValueType[] source;
 
-        [GlobalSetup]
-        public void GlobalSetup()
-            => source = GetRandomValues(Count)
-                .Select(value => new FatValueType(value))
-                .ToArray();
+    protected override void Setup()
+    {
+        base.Setup();
+            
+        source = GetRandomValues(Count)
+            .Select(value => new FatValueType(value))
+            .ToArray();
     }
 }

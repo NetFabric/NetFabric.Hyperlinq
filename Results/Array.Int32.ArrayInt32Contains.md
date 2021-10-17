@@ -27,16 +27,16 @@ Intel Core i5-7360U CPU 2.30GHz (Kaby Lake), 1 CPU, 4 logical and 2 physical cor
 Job=.NET 6 PGO  EnvironmentVariables=COMPlus_ReadyToRun=0,COMPlus_TC_QuickJitForLoops=1,COMPlus_TieredPGO=1  Runtime=.NET 6.0  
 
 ```
-|                   Method | Count |      Mean |    Error |   StdDev |    Median |        Ratio | RatioSD |  Gen 0 | Allocated |
-|------------------------- |------ |----------:|---------:|---------:|----------:|-------------:|--------:|-------:|----------:|
-|                  ForLoop |   100 |  48.86 ns | 0.104 ns | 0.092 ns |  48.83 ns |     baseline |         |      - |         - |
-|              ForeachLoop |   100 |  49.04 ns | 0.045 ns | 0.040 ns |  49.04 ns | 1.00x slower |   0.00x |      - |         - |
-|                     Linq |   100 |  22.92 ns | 0.310 ns | 0.290 ns |  22.98 ns | 2.12x faster |   0.01x |      - |         - |
-|               LinqFaster |   100 |  17.80 ns | 0.153 ns | 0.284 ns |  17.74 ns | 2.76x faster |   0.00x |      - |         - |
-|          LinqFaster_SIMD |   100 |  10.93 ns | 0.054 ns | 0.096 ns |  10.91 ns | 4.48x faster |   0.02x |      - |         - |
-|             LinqFasterer |   100 |  23.42 ns | 0.029 ns | 0.024 ns |  23.41 ns | 2.09x faster |   0.00x |      - |         - |
-|                   LinqAF |   100 |  29.14 ns | 0.217 ns | 0.170 ns |  29.19 ns | 1.68x faster |   0.01x |      - |         - |
-|               StructLinq |   100 | 163.59 ns | 0.268 ns | 0.238 ns | 163.58 ns | 3.35x slower |   0.01x | 0.0153 |      32 B |
-| StructLinq_ValueDelegate |   100 |  72.15 ns | 0.042 ns | 0.037 ns |  72.14 ns | 1.48x slower |   0.00x |      - |         - |
-|                Hyperlinq |   100 |  34.82 ns | 0.756 ns | 1.221 ns |  33.97 ns | 1.35x faster |   0.04x | 0.0153 |      32 B |
-|           Hyperlinq_SIMD |   100 |  25.55 ns | 0.012 ns | 0.011 ns |  25.55 ns | 1.91x faster |   0.00x |      - |         - |
+|                   Method | Count |      Mean |    Error |    StdDev |    Median |        Ratio | RatioSD |  Gen 0 | Allocated |
+|------------------------- |------ |----------:|---------:|----------:|----------:|-------------:|--------:|-------:|----------:|
+|                  ForLoop |   100 |  68.56 ns | 2.122 ns |  6.021 ns |  67.31 ns |     baseline |         |      - |         - |
+|              ForeachLoop |   100 |  71.26 ns | 1.539 ns |  3.776 ns |  70.92 ns | 1.03x slower |   0.07x |      - |         - |
+|                     Linq |   100 |  39.61 ns | 0.902 ns |  1.532 ns |  39.73 ns | 1.81x faster |   0.18x |      - |         - |
+|               LinqFaster |   100 |  25.43 ns | 4.676 ns | 13.787 ns |  15.25 ns | 3.27x faster |   1.34x |      - |         - |
+|          LinqFaster_SIMD |   100 |  14.17 ns | 0.129 ns |  0.121 ns |  14.09 ns | 5.50x faster |   0.42x |      - |         - |
+|             LinqFasterer |   100 |  22.79 ns | 0.129 ns |  0.114 ns |  22.73 ns | 3.45x faster |   0.23x |      - |         - |
+|                   LinqAF |   100 |  28.38 ns | 0.112 ns |  0.105 ns |  28.33 ns | 2.74x faster |   0.20x |      - |         - |
+|               StructLinq |   100 | 162.04 ns | 0.454 ns |  0.379 ns | 161.99 ns | 2.05x slower |   0.12x | 0.0153 |      32 B |
+| StructLinq_ValueDelegate |   100 |  71.44 ns | 0.172 ns |  0.144 ns |  71.38 ns | 1.11x faster |   0.06x |      - |         - |
+|                Hyperlinq |   100 |  34.38 ns | 0.758 ns |  1.202 ns |  33.65 ns | 2.10x faster |   0.15x | 0.0153 |      32 B |
+|           Hyperlinq_SIMD |   100 |  24.70 ns | 0.056 ns |  0.050 ns |  24.67 ns | 3.18x faster |   0.21x |      - |         - |

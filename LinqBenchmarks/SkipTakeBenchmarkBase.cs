@@ -1,10 +1,7 @@
-﻿using BenchmarkDotNet.Attributes;
+﻿namespace LinqBenchmarks;
 
-namespace LinqBenchmarks
+public class SkipTakeBenchmarkBase: BenchmarkBase
 {
-    public class SkipTakeBenchmarkBase: BenchmarkBase
-    {
-        [Params(1_000)]
-        public int Skip { get; set; }
-    }
+    [Params(1_000)]
+    public int Skip { get; set; }
 }

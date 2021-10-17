@@ -1,43 +1,40 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Runtime.CompilerServices;
+﻿using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 
-namespace LinqBenchmarks
+namespace LinqBenchmarks;
+
+static class Utils
 {
-    static class Utils
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static bool IsEven(this int value)
+        => (value & 0x01) == 0;
+
+    public static IEnumerable<T> Enumerable<T>(int count)
     {
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool IsEven(this int value)
-            => (value & 0x01) == 0;
+        if (count < 0) 
+            throw new ArgumentOutOfRangeException(nameof(count));
+        return GetEnumerable(count);
 
-        public static IEnumerable<T> Enumerable<T>(int count)
+        static IEnumerable<T> GetEnumerable(int count)
         {
-            if (count < 0) 
-                throw new ArgumentOutOfRangeException(nameof(count));
-            return GetEnumerable(count);
+            for (var value = 0; value < count; value++)
+                yield return default;
+        }
+    }
 
-            static IEnumerable<T> GetEnumerable(int count)
+    public static IAsyncEnumerable<T> AsyncEnumerable<T>(int count)
+    {
+        if (count < 0) 
+            throw new ArgumentOutOfRangeException(nameof(count));
+        return GetEnumerableAsync(count);
+
+        static async IAsyncEnumerable<T> GetEnumerableAsync(int count)
+        {
+            for (var value = 0; value < count; value++)
             {
-                for (var value = 0; value < count; value++)
-                    yield return default;
+                await Task.Delay(1);
+                yield return default;
             }
         }
-
-        public static IAsyncEnumerable<T> AsyncEnumerable<T>(int count)
-        {
-            if (count < 0) 
-                throw new ArgumentOutOfRangeException(nameof(count));
-            return GetEnumerableAsync(count);
-
-            static async IAsyncEnumerable<T> GetEnumerableAsync(int count)
-            {
-                for (var value = 0; value < count; value++)
-                {
-                    await Task.Delay(1);
-                    yield return default;
-                }
-            }
-        }    
-    }
+    }    
 }

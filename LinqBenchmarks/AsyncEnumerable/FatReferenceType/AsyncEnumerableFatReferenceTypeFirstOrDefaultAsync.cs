@@ -1,31 +1,27 @@
-﻿using BenchmarkDotNet.Attributes;
-using NetFabric.Hyperlinq;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 
-namespace LinqBenchmarks.AsyncEnumerable.FatReferenceType
+namespace LinqBenchmarks.AsyncEnumerable.FatReferenceType;
+
+public class AsyncEnumerableFatReferenceTypeFirstOrDefaultAsync: AsyncEnumerableFatReferenceTypeBenchmarkBase
 {
-    public class AsyncEnumerableFatReferenceTypeFirstOrDefaultAsync: AsyncEnumerableFatReferenceTypeBenchmarkBase
+    [Benchmark(Baseline = true)]
+    public async ValueTask<bool> ForeachLoop()
     {
-        [Benchmark(Baseline = true)]
-        public async ValueTask<bool> ForeachLoop()
+        await foreach (var _ in source)
         {
-            await foreach (var _ in source)
-            {
-                return true;
-            }
-
-            return false;
+            return true;
         }
-        
-        [Benchmark]        
-        public async ValueTask<bool> Linq()
-            => await source.FirstOrDefaultAsync() is not null;
-        
-        [Benchmark]
-        public async ValueTask<bool> Hyperlinq()
-            => (await source
-                .AsAsyncValueEnumerable()
-                .FirstAsync()).IsSome;
+
+        return false;
     }
+        
+    [Benchmark]        
+    public async ValueTask<bool> Linq()
+        => await source.FirstOrDefaultAsync() is not null;
+        
+    [Benchmark]
+    public async ValueTask<bool> Hyperlinq()
+        => (await source
+            .AsAsyncValueEnumerable()
+            .FirstAsync()).IsSome;
 }

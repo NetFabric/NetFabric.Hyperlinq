@@ -1,13 +1,12 @@
-﻿using BenchmarkDotNet.Attributes;
+﻿namespace LinqBenchmarks;
 
-namespace LinqBenchmarks
+public class ArrayInt32BenchmarkBase : BenchmarkBase
 {
-    public class ArrayInt32BenchmarkBase : BenchmarkBase
-    {
-        protected int[] source;
+    protected int[] source;
 
-        [GlobalSetup]
-        public void GlobalSetup()
-            => source = GetRandomValues(Count);
+    protected override void Setup()
+    {
+        base.Setup(); 
+        source = GetRandomValues(Count);
     }
 }

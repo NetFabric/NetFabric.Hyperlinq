@@ -1,14 +1,15 @@
 ﻿using System.Collections.Immutable;
-using BenchmarkDotNet.Attributes;
 
-namespace LinqBenchmarks
+namespace LinqBenchmarks;
+
+public class ImmutableArrayInt32SkipTakeBenchmarkBase : SkipTakeBenchmarkBase
 {
-    public class ImmutableArrayInt32SkipTakeBenchmarkBase : SkipTakeBenchmarkBase
-    {
-        protected ImmutableArray<int> source;
+    protected ImmutableArray<int> source;
 
-        [GlobalSetup]
-        public void GlobalSetup()
-            => source = GetRandomValues(Skip + Count).ToImmutableArray();
+    protected override void Setup()
+    {
+        base.Setup();
+            
+        source = GetRandomValues(Skip + Count).ToImmutableArray();
     }
 }

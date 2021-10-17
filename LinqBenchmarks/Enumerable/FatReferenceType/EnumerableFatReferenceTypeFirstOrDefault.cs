@@ -1,47 +1,41 @@
-﻿using BenchmarkDotNet.Attributes;
-using NetFabric.Hyperlinq;
-using StructLinq;
-using System.Linq;
+﻿namespace LinqBenchmarks.Enumerable.FatReferenceType;
 
-namespace LinqBenchmarks.Enumerable.FatReferenceType
+public class EnumerableFatReferenceTypeFirstOrDefault: EnumerableFatReferenceTypeBenchmarkBase
 {
-    public class EnumerableFatReferenceTypeFirstOrDefault: EnumerableFatReferenceTypeBenchmarkBase
+    [Benchmark(Baseline = true)]
+    public bool ForeachLoop()
     {
-        [Benchmark(Baseline = true)]
-        public bool ForeachLoop()
+        foreach (var _ in source)
         {
-            foreach (var _ in source)
-            {
-                return true;
-            }
-
-            return false;
+            return true;
         }
-        
-        [Benchmark]
-        public bool Linq()
-            => source.FirstOrDefault() is not null;
 
-        [Benchmark]
-        public bool LinqAF()
-            => global::LinqAF.IEnumerableExtensionMethods.FirstOrDefault(source) is not null;
-
-        [Benchmark]
-        public bool StructLinq()
-            => source
-                .ToStructEnumerable()
-                .FirstOrDefault() is not null;
-
-        [Benchmark]
-        public bool StructLinq_ValueDelegate()
-            => source
-                .ToStructEnumerable()
-                .FirstOrDefault(x => x) is not null;
-
-        [Benchmark]
-        public bool Hyperlinq()
-            => source
-                .AsValueEnumerable()
-                .FirstOrDefault() is not null;
+        return false;
     }
+        
+    [Benchmark]
+    public bool Linq()
+        => source.FirstOrDefault() is not null;
+
+    [Benchmark]
+    public bool LinqAF()
+        => global::LinqAF.IEnumerableExtensionMethods.FirstOrDefault(source) is not null;
+
+    [Benchmark]
+    public bool StructLinq()
+        => source
+            .ToStructEnumerable()
+            .FirstOrDefault() is not null;
+
+    [Benchmark]
+    public bool StructLinq_ValueDelegate()
+        => source
+            .ToStructEnumerable()
+            .FirstOrDefault(x => x) is not null;
+
+    [Benchmark]
+    public bool Hyperlinq()
+        => source
+            .AsValueEnumerable()
+            .FirstOrDefault() is not null;
 }

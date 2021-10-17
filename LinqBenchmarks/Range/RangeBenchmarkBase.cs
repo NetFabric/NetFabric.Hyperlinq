@@ -1,10 +1,7 @@
-﻿using BenchmarkDotNet.Attributes;
+﻿namespace LinqBenchmarks;
 
-namespace LinqBenchmarks
+public class RangeBenchmarkBase : BenchmarkBase
 {
-    public class RangeBenchmarkBase : BenchmarkBase
-    {
-        [Params(0)]
-        public int Start { get; set; }
-    }
+    [Params(0)]
+    public int Start { get; set; }
 }
