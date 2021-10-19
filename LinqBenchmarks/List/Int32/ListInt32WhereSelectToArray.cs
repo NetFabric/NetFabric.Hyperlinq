@@ -73,13 +73,15 @@ public partial class ListInt32WhereSelectToArray: Int32ListBenchmarkBase
     public int[] LinqOptimizer()
         => linqOptimizerQuery.Invoke();
 
+#if DOTNET5_0_OR_GREATER
     [Benchmark]
     public int[] SpanLinq()
         => CollectionsMarshal.AsSpan(source)
             .Where(item => item.IsEven())
             .Select(item => item * 3)
             .ToArray();
-
+#endif
+    
     [Benchmark]
     public int[] Streams()
         => source.AsStream()

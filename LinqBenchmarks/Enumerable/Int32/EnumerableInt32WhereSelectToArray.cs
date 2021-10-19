@@ -2,6 +2,19 @@
 
 public partial class EnumerableInt32WhereSelectToArray: EnumerableInt32BenchmarkBase
 {
+    Func<int[]> linqOptimizerQuery;
+
+    protected override void Setup()
+    {
+        base.Setup();
+
+        linqOptimizerQuery = source.AsQueryExpr()
+            .Where(item => item.IsEven())
+            .Select(item => item * 3)
+            .ToArray()
+            .Compile();
+    }
+
     [Benchmark(Baseline = true)]
     public int[] ForeachLoop()
     {
@@ -30,11 +43,7 @@ public partial class EnumerableInt32WhereSelectToArray: EnumerableInt32Benchmark
 
     [Benchmark]
     public int[] LinqOptimizer()
-        => source.AsQueryExpr()
-            .Where(item => item.IsEven())
-            .Select(item => item * 3)
-            .ToArray()
-            .Run();
+        => linqOptimizerQuery.Invoke();
 
     [Benchmark]
     public int[] Streams()

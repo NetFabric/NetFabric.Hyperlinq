@@ -78,6 +78,7 @@ public class ListInt32SkipTakeSelect: Int32ListSkipTakeBenchmarkBase
         return sum;
     }
 
+#if DOTNET5_0_OR_GREATER
     [Benchmark]
     public int SpanLinq()
     {
@@ -90,7 +91,8 @@ public class ListInt32SkipTakeSelect: Int32ListSkipTakeBenchmarkBase
             sum += item;
         return sum;
     }
-
+#endif
+    
     [Benchmark]
     public int Streams()
     {

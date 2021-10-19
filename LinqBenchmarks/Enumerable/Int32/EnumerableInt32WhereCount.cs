@@ -2,6 +2,19 @@
 
 public class EnumerableInt32WhereCount: EnumerableInt32BenchmarkBase
 {
+    Func<int> linqOptimizerQuery;
+
+    protected override void Setup()
+    {
+        base.Setup();
+
+        linqOptimizerQuery = source
+            .AsQueryExpr()
+            .Where(item => item.IsEven())
+            .Count()
+            .Compile();
+    }
+
     [Benchmark(Baseline = true)]
     public int ForeachLoop()
     {
@@ -24,11 +37,7 @@ public class EnumerableInt32WhereCount: EnumerableInt32BenchmarkBase
 
     [Benchmark]
     public int LinqOptimizer()
-        => source
-            .AsQueryExpr()
-            .Where(item => item.IsEven())
-            .Count()
-            .Run();
+        => linqOptimizerQuery.Invoke();
 
     [Benchmark]
     public int Streams()

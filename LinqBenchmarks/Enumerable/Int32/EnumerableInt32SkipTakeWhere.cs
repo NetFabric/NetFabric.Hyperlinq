@@ -1,13 +1,30 @@
-﻿namespace LinqBenchmarks.Enumerable.Int32;
+﻿// ReSharper disable LoopCanBeConvertedToQuery
+// ReSharper disable ForeachCanBeConvertedToQueryUsingAnotherGetEnumerator
+namespace LinqBenchmarks.Enumerable.Int32;
 
 [BenchmarkCategory("Enumerable", "Int32")]
 public class EnumerableInt32SkipTakeWhere: EnumerableInt32SkipTakeBenchmarkBase
 {
+    Func<IEnumerable<int>> linqOptimizerQuery;
+
+    protected override void Setup()
+    {
+        base.Setup();
+
+        linqOptimizerQuery = source
+            .AsQueryExpr()
+            .Skip(Skip)
+            .Take(Count)
+            .Where(item => item.IsEven())
+            .Compile();
+    }
+
     [Benchmark(Baseline = true)]
     public int Linq()
     {
+        var items = source.Skip(Skip).Take(Count).Where(item => item.IsEven());
         var sum = 0;
-        foreach (var item in source.Skip(Skip).Take(Count).Where(item => item.IsEven()))
+        foreach (var item in items)
             sum += item;
         return sum;
     }
@@ -15,8 +32,10 @@ public class EnumerableInt32SkipTakeWhere: EnumerableInt32SkipTakeBenchmarkBase
     [Benchmark]
     public int LinqAF()
     {
+        var items = global::LinqAF.IEnumerableExtensionMethods.Skip(source, Skip).Take(Count)
+            .Where(item => item.IsEven());
         var sum = 0;
-        foreach (var item in global::LinqAF.IEnumerableExtensionMethods.Skip(source, Skip).Take(Count).Where(item => item.IsEven()))
+        foreach (var item in items)
             sum += item;
         return sum;
     }
@@ -24,13 +43,9 @@ public class EnumerableInt32SkipTakeWhere: EnumerableInt32SkipTakeBenchmarkBase
     [Benchmark]
     public int LinqOptimizer()
     {
+        var items = linqOptimizerQuery.Invoke();
         var sum = 0;
-        foreach (var item in source
-            .AsQueryExpr()
-            .Skip(Skip)
-            .Take(Count)
-            .Where(item => item.IsEven())
-            .Run())
+        foreach (var item in items)
             sum += item;
         return sum;
     }
@@ -38,13 +53,14 @@ public class EnumerableInt32SkipTakeWhere: EnumerableInt32SkipTakeBenchmarkBase
     [Benchmark]
     public int Streams()
     {
-        var sum = 0;
-        foreach (var item in source
+        var items = source
             .AsStream()
             .Skip(Skip)
             .Take(Count)
             .Where(item => item.IsEven())
-            .ToEnumerable())
+            .ToEnumerable();
+        var sum = 0;
+        foreach (var item in items)
             sum += item;
         return sum;
     }
@@ -52,12 +68,13 @@ public class EnumerableInt32SkipTakeWhere: EnumerableInt32SkipTakeBenchmarkBase
     [Benchmark]
     public int StructLinq()
     {
-        var sum = 0;
-        foreach (var item in source
+        var items = source
             .ToStructEnumerable()
             .Skip(Skip)
             .Take(Count)
-            .Where(item => item.IsEven()))
+            .Where(item => item.IsEven());
+        var sum = 0;
+        foreach (var item in items)
             sum += item;
         return sum;
     }
@@ -65,13 +82,14 @@ public class EnumerableInt32SkipTakeWhere: EnumerableInt32SkipTakeBenchmarkBase
     [Benchmark]
     public int StructLinq_ValueDelegate()
     {
-        var sum = 0;
         var predicate = new Int32IsEven();
-        foreach (var item in source
+        var items = source
             .ToStructEnumerable()
-            .Skip(Skip, x=> x)
+            .Skip(Skip, x => x)
             .Take(Count, x => x)
-            .Where(ref predicate, x => x))
+            .Where(ref predicate, x => x);
+        var sum = 0;
+        foreach (var item in items)
             sum += item;
         return sum;
     }
@@ -79,11 +97,13 @@ public class EnumerableInt32SkipTakeWhere: EnumerableInt32SkipTakeBenchmarkBase
     [Benchmark]
     public int Hyperlinq()
     {
-        var sum = 0;
-        foreach (var item in source.AsValueEnumerable()
+        var items = source
+            .AsValueEnumerable()
             .Skip(Skip)
             .Take(Count)
-            .Where(item => item.IsEven()))
+            .Where(item => item.IsEven());
+        var sum = 0;
+        foreach (var item in items)
             sum += item;
         return sum;
     }
@@ -91,11 +111,13 @@ public class EnumerableInt32SkipTakeWhere: EnumerableInt32SkipTakeBenchmarkBase
     [Benchmark]
     public int Hyperlinq_ValueDelegate()
     {
-        var sum = 0;
-        foreach (var item in source.AsValueEnumerable()
+        var items = source
+            .AsValueEnumerable()
             .Skip(Skip)
             .Take(Count)
-            .Where<Int32IsEven>())
+            .Where<Int32IsEven>();
+        var sum = 0;
+        foreach (var item in items)
             sum += item;
         return sum;
     }

@@ -64,12 +64,14 @@ public class ListInt32SelectToList: Int32ListBenchmarkBase
     public List<int> LinqOptimizer()
         => linqOptimizerQuery.Invoke();
 
+#if DOTNET5_0_OR_GREATER
     [Benchmark]
     public List<int> SpanLinq()
         => CollectionsMarshal.AsSpan(source)
             .Select(item => item * 3)
             .ToList();
-
+#endif
+    
     [Benchmark]
     public List<int> Streams()
         => source.AsStream()

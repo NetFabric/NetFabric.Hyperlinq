@@ -77,13 +77,15 @@ public partial class ListValueTypeWhereSelectToArray: ValueTypeListBenchmarkBase
     public FatValueType[] LinqOptimizer()
         => linqOptimizerQuery.Invoke();
 
+#if DOTNET5_0_OR_GREATER
     [Benchmark]
     public FatValueType[] SpanLinq()
         => CollectionsMarshal.AsSpan(source)
             .Where(item => item.IsEven())
             .Select(item => item * 3)
             .ToArray();
-
+#endif
+    
     [Benchmark]
     public FatValueType[] Streams()
         => source

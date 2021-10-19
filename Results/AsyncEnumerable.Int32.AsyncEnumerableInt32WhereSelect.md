@@ -21,15 +21,26 @@
 BenchmarkDotNet=v0.13.1, OS=macOS Catalina 10.15.7 (19H1419) [Darwin 19.6.0]
 Intel Core i5-7360U CPU 2.30GHz (Kaby Lake), 1 CPU, 4 logical and 2 physical cores
 .NET SDK=6.0.100-rc.2.21505.57
-  [Host]     : .NET 5.0.6 (5.0.621.22011), X64 RyuJIT
-  .NET 6 PGO : .NET 6.0.0 (6.0.21.48005), X64 RyuJIT
+  [Host]        : .NET Core 3.1.20 (CoreCLR 4.700.21.47003, CoreFX 4.700.21.47101), X64 RyuJIT
+  .NET 6        : .NET 6.0.0 (6.0.21.48005), X64 RyuJIT
+  .NET 6 PGO    : .NET 6.0.0 (6.0.21.48005), X64 RyuJIT
+  .NET Core 3.1 : .NET Core 3.1.20 (CoreCLR 4.700.21.47003, CoreFX 4.700.21.47101), X64 RyuJIT
 
-Job=.NET 6 PGO  EnvironmentVariables=COMPlus_ReadyToRun=0,COMPlus_TC_QuickJitForLoops=1,COMPlus_TieredPGO=1  Runtime=.NET 6.0  
 
 ```
-|                  Method | Count |     Mean |   Error |  StdDev |        Ratio | RatioSD | Allocated |
-|------------------------ |------ |---------:|--------:|--------:|-------------:|--------:|----------:|
-|             ForeachLoop |   100 | 168.6 ms | 0.97 ms | 0.91 ms |     baseline |         |     21 KB |
-|                    Linq |   100 | 169.2 ms | 1.51 ms | 1.42 ms | 1.00x slower |   0.01x |     53 KB |
-|               Hyperlinq |   100 | 168.3 ms | 2.88 ms | 2.69 ms | 1.00x faster |   0.01x |     43 KB |
-| Hyperlinq_ValueDelegate |   100 | 167.3 ms | 2.52 ms | 2.36 ms | 1.01x faster |   0.02x |     43 KB |
+|                  Method |           Job | Count |     Mean |   Error |  StdDev |        Ratio | RatioSD | Allocated |
+|------------------------ |-------------- |------ |---------:|--------:|--------:|-------------:|--------:|----------:|
+|             ForeachLoop |        .NET 6 |   100 | 172.6 ms | 2.11 ms | 1.98 ms |     baseline |         |     22 KB |
+|                    Linq |        .NET 6 |   100 | 171.6 ms | 2.59 ms | 2.42 ms | 1.01x faster |   0.02x |     52 KB |
+|               Hyperlinq |        .NET 6 |   100 | 171.2 ms | 2.36 ms | 2.21 ms | 1.01x faster |   0.02x |     42 KB |
+| Hyperlinq_ValueDelegate |        .NET 6 |   100 | 172.7 ms | 1.65 ms | 1.54 ms | 1.00x slower |   0.01x |     42 KB |
+|                         |               |       |          |         |         |              |         |           |
+|             ForeachLoop |    .NET 6 PGO |   100 | 170.1 ms | 3.29 ms | 3.38 ms |     baseline |         |     23 KB |
+|                    Linq |    .NET 6 PGO |   100 | 172.1 ms | 1.53 ms | 1.43 ms | 1.01x slower |   0.02x |     51 KB |
+|               Hyperlinq |    .NET 6 PGO |   100 | 172.3 ms | 1.56 ms | 1.46 ms | 1.02x slower |   0.02x |     41 KB |
+| Hyperlinq_ValueDelegate |    .NET 6 PGO |   100 | 172.5 ms | 1.65 ms | 1.55 ms | 1.02x slower |   0.02x |     43 KB |
+|                         |               |       |          |         |         |              |         |           |
+|             ForeachLoop | .NET Core 3.1 |   100 | 174.2 ms | 3.46 ms | 3.40 ms |     baseline |         |     17 KB |
+|                    Linq | .NET Core 3.1 |   100 | 174.4 ms | 1.92 ms | 1.80 ms | 1.00x slower |   0.02x |     47 KB |
+|               Hyperlinq | .NET Core 3.1 |   100 | 173.6 ms | 1.80 ms | 1.69 ms | 1.00x faster |   0.03x |     37 KB |
+| Hyperlinq_ValueDelegate | .NET Core 3.1 |   100 | 169.4 ms | 3.29 ms | 4.51 ms | 1.04x faster |   0.04x |     37 KB |

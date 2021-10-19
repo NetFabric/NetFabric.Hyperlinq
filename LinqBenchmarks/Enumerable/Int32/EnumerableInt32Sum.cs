@@ -2,6 +2,18 @@
 
 public class EnumerableInt32Sum: EnumerableInt32BenchmarkBase
 {
+    Func<int> linqOptimizerQuery;
+
+    protected override void Setup()
+    {
+        base.Setup();
+
+        linqOptimizerQuery = source
+            .AsQueryExpr()
+            .Sum()
+            .Compile();
+    }
+
     [Benchmark(Baseline = true)]
     public int ForeachLoop()
     {
@@ -21,10 +33,7 @@ public class EnumerableInt32Sum: EnumerableInt32BenchmarkBase
 
     [Benchmark]
     public int LinqOptimizer()
-        => source
-            .AsQueryExpr()
-            .Sum()
-            .Run();
+        => linqOptimizerQuery.Invoke();
 
     [Benchmark]
     public int Streams()

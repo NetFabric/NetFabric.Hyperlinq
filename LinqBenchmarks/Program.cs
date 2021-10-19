@@ -20,14 +20,18 @@ class Program
         var config = DefaultConfig.Instance
             .WithSummaryStyle(SummaryStyle.Default.WithRatioStyle(RatioStyle.Trend))
             .AddDiagnoser(MemoryDiagnoser.Default)
-            // .AddJob(Job.Default
-            //     .WithRuntime(CoreRuntime.Core31)
-            //     .WithId(".NET Core 3.1")
-            // )
+            .AddJob(Job.Default
+                .WithRuntime(CoreRuntime.Core31)
+                .WithId(".NET Core 3.1")
+            )
             // .AddJob(Job.Default
             //     .WithRuntime(CoreRuntime.Core50)
             //     .WithId(".NET 5")
             // )
+            .AddJob(Job.Default
+                .WithRuntime(CoreRuntime.Core60)
+                .WithId(".NET 6")
+            )
             .AddJob(Job.Default
                 .WithRuntime(CoreRuntime.Core60)
                 .WithEnvironmentVariables(

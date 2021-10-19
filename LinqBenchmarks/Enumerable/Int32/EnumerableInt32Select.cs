@@ -1,7 +1,21 @@
-﻿namespace LinqBenchmarks.Enumerable.Int32;
+﻿// ReSharper disable LoopCanBeConvertedToQuery
+// ReSharper disable ForeachCanBeConvertedToQueryUsingAnotherGetEnumerator
+namespace LinqBenchmarks.Enumerable.Int32;
 
 public class EnumerableInt32Select: EnumerableInt32BenchmarkBase
 {
+    Func<IEnumerable<int>> linqOptimizerQuery;
+
+    protected override void Setup()
+    {
+        base.Setup();
+
+        linqOptimizerQuery = source
+            .AsQueryExpr()
+            .Select(item => item * 3)
+            .Compile();
+    }
+
     [Benchmark(Baseline = true)]
     public int ForeachLoop()
     {
@@ -36,10 +50,7 @@ public class EnumerableInt32Select: EnumerableInt32BenchmarkBase
     [Benchmark]
     public int LinqOptimizer()
     {
-        var items = source
-            .AsQueryExpr()
-            .Select(item => item * 3)
-            .Run();
+        var items = linqOptimizerQuery.Invoke();
         var sum = 0;
         foreach (var item in items)
             sum += item;

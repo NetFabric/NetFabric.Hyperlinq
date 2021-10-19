@@ -77,12 +77,14 @@ public partial class ListValueTypeWhereSelectToList: ValueTypeListBenchmarkBase
     public List<FatValueType> LinqOptimizer()
         => linqOptimizerQuery.Invoke();
 
+#if DOTNET5_0_OR_GREATER
     [Benchmark]
     public List<FatValueType> SpanLinq()
         => CollectionsMarshal.AsSpan(source)
             .Where(item => item.IsEven())
             .Select(item => item * 3)
             .ToList();
+#endif
 
     [Benchmark]
     public List<FatValueType> Streams()

@@ -98,6 +98,7 @@ public class ListInt32WhereSelect: Int32ListBenchmarkBase
         return sum;
     }
 
+#if DOTNET5_0_OR_GREATER
     [Benchmark]
     public int SpanLinq()
     {
@@ -109,7 +110,8 @@ public class ListInt32WhereSelect: Int32ListBenchmarkBase
             sum += item;
         return sum;
     }
-
+#endif
+    
     [Benchmark]
     public int Streams()
     {

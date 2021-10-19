@@ -1,12 +1,29 @@
-﻿namespace LinqBenchmarks.Enumerable.Int32;
+﻿// ReSharper disable ForeachCanBeConvertedToQueryUsingAnotherGetEnumerator
+// ReSharper disable LoopCanBeConvertedToQuery
+namespace LinqBenchmarks.Enumerable.Int32;
 
 public class EnumerableInt32SkipTakeSelect: EnumerableInt32SkipTakeBenchmarkBase
 {
+    Func<IEnumerable<int>> linqOptimizerQuery;
+
+    protected override void Setup()
+    {
+        base.Setup();
+
+        linqOptimizerQuery = source
+            .AsQueryExpr()
+            .Skip(Skip)
+            .Take(Count)
+            .Select(item => item * 3)
+            .Compile();
+    }
+
     [Benchmark(Baseline = true)]
     public int Linq()
     {
+        var items = source.Skip(Skip).Take(Count).Select(item => item * 3);
         var sum = 0;
-        foreach (var item in source.Skip(Skip).Take(Count).Select(item => item * 3))
+        foreach (var item in items)
             sum += item;
         return sum;
     }
@@ -14,8 +31,9 @@ public class EnumerableInt32SkipTakeSelect: EnumerableInt32SkipTakeBenchmarkBase
     [Benchmark]
     public int LinqAF()
     {
+        var items = global::LinqAF.IEnumerableExtensionMethods.Skip(source, Skip).Take(Count).Select(item => item * 3);
         var sum = 0;
-        foreach (var item in global::LinqAF.IEnumerableExtensionMethods.Skip(source, Skip).Take(Count).Select(item => item * 3))
+        foreach (var item in items)
             sum += item;
         return sum;
     }
@@ -23,13 +41,9 @@ public class EnumerableInt32SkipTakeSelect: EnumerableInt32SkipTakeBenchmarkBase
     [Benchmark]
     public int LinqOptimizer()
     {
+        var items = linqOptimizerQuery.Invoke();
         var sum = 0;
-        foreach (var item in source
-            .AsQueryExpr()
-            .Skip(Skip)
-            .Take(Count)
-            .Select(item => item * 3)
-            .Run())
+        foreach (var item in items)
             sum += item;
         return sum;
     }
@@ -37,13 +51,14 @@ public class EnumerableInt32SkipTakeSelect: EnumerableInt32SkipTakeBenchmarkBase
     [Benchmark]
     public int Streams()
     {
-        var sum = 0;
-        foreach (var item in source
+        var items = source
             .AsStream()
             .Skip(Skip)
             .Take(Count)
             .Select(item => item * 3)
-            .ToEnumerable())
+            .ToEnumerable();
+        var sum = 0;
+        foreach (var item in items)
             sum += item;
         return sum;
     }
@@ -51,12 +66,13 @@ public class EnumerableInt32SkipTakeSelect: EnumerableInt32SkipTakeBenchmarkBase
     [Benchmark]
     public int StructLinq()
     {
-        var sum = 0;
-        foreach (var item in source
+        var items = source
             .ToStructEnumerable()
             .Skip(Skip)
             .Take(Count)
-            .Select(item => item * 3))
+            .Select(item => item * 3);
+        var sum = 0;
+        foreach (var item in items)
             sum += item;
         return sum;
     }
@@ -64,13 +80,14 @@ public class EnumerableInt32SkipTakeSelect: EnumerableInt32SkipTakeBenchmarkBase
     [Benchmark]
     public int StructLinq_ValueDelegate()
     {
-        var sum = 0;
         var selector = new TripleOfInt32();
-        foreach (var item in source
+        var items = source
             .ToStructEnumerable()
-            .Skip(Skip, x=> x)
+            .Skip(Skip, x => x)
             .Take(Count, x => x)
-            .Select(ref selector, x=> x, x => x))
+            .Select(ref selector, x => x, x => x);
+        var sum = 0;
+        foreach (var item in items)
             sum += item;
         return sum;
     }
@@ -78,8 +95,9 @@ public class EnumerableInt32SkipTakeSelect: EnumerableInt32SkipTakeBenchmarkBase
     [Benchmark]
     public int Hyperlinq()
     {
+        var items = source.AsValueEnumerable().Skip(Skip).Take(Count).Select(item => item * 3);
         var sum = 0;
-        foreach (var item in source.AsValueEnumerable().Skip(Skip).Take(Count).Select(item => item * 3))
+        foreach (var item in items)
             sum += item;
         return sum;
     }
@@ -87,8 +105,9 @@ public class EnumerableInt32SkipTakeSelect: EnumerableInt32SkipTakeBenchmarkBase
     [Benchmark]
     public int Hyperlinq_ValueDelegate()
     {
+        var items = source.AsValueEnumerable().Skip(Skip).Take(Count).Select<int, TripleOfInt32>();
         var sum = 0;
-        foreach (var item in source.AsValueEnumerable().Skip(Skip).Take(Count).Select<int, TripleOfInt32>())
+        foreach (var item in items)
             sum += item;
         return sum;
     }

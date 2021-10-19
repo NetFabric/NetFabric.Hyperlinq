@@ -82,6 +82,7 @@ public class ListValueTypeSkipTakeWhere: ValueTypeListSkipTakeBenchmarkBase
         return sum;
     }
 
+#if DOTNET5_0_OR_GREATER
     [Benchmark]
     public FatValueType SpanLinq()
     {
@@ -94,7 +95,8 @@ public class ListValueTypeSkipTakeWhere: ValueTypeListSkipTakeBenchmarkBase
             sum += item;
         return sum;
     }
-
+#endif
+    
     [Benchmark]
     public FatValueType Streams()
     {

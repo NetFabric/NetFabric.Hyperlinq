@@ -21,14 +21,23 @@
 BenchmarkDotNet=v0.13.1, OS=macOS Catalina 10.15.7 (19H1419) [Darwin 19.6.0]
 Intel Core i5-7360U CPU 2.30GHz (Kaby Lake), 1 CPU, 4 logical and 2 physical cores
 .NET SDK=6.0.100-rc.2.21505.57
-  [Host]     : .NET 5.0.6 (5.0.621.22011), X64 RyuJIT
-  .NET 6 PGO : .NET 6.0.0 (6.0.21.48005), X64 RyuJIT
+  [Host]        : .NET Core 3.1.20 (CoreCLR 4.700.21.47003, CoreFX 4.700.21.47101), X64 RyuJIT
+  .NET 6        : .NET 6.0.0 (6.0.21.48005), X64 RyuJIT
+  .NET 6 PGO    : .NET 6.0.0 (6.0.21.48005), X64 RyuJIT
+  .NET Core 3.1 : .NET Core 3.1.20 (CoreCLR 4.700.21.47003, CoreFX 4.700.21.47101), X64 RyuJIT
 
-Job=.NET 6 PGO  EnvironmentVariables=COMPlus_ReadyToRun=0,COMPlus_TC_QuickJitForLoops=1,COMPlus_TieredPGO=1  Runtime=.NET 6.0  
 
 ```
-|      Method | Count |     Mean |     Error |    StdDev |   Median |        Ratio | RatioSD | Allocated |
-|------------ |------ |---------:|----------:|----------:|---------:|-------------:|--------:|----------:|
-| ForeachLoop |   100 | 1.480 ms | 0.0293 ms | 0.0762 ms | 1.500 ms |     baseline |         |     538 B |
-|        Linq |   100 | 1.509 ms | 0.0198 ms | 0.0185 ms | 1.503 ms | 1.08x slower |   0.13x |     894 B |
-|   Hyperlinq |   100 | 1.383 ms | 0.0434 ms | 0.1194 ms | 1.439 ms | 1.08x faster |   0.12x |     722 B |
+|      Method |           Job | Count |     Mean |     Error |    StdDev |        Ratio | RatioSD | Allocated |
+|------------ |-------------- |------ |---------:|----------:|----------:|-------------:|--------:|----------:|
+| ForeachLoop |        .NET 6 |   100 | 1.490 ms | 0.0127 ms | 0.0119 ms |     baseline |         |     538 B |
+|        Linq |        .NET 6 |   100 | 1.489 ms | 0.0102 ms | 0.0095 ms | 1.00x faster |   0.01x |     882 B |
+|   Hyperlinq |        .NET 6 |   100 | 1.491 ms | 0.0107 ms | 0.0100 ms | 1.00x slower |   0.01x |     722 B |
+|             |               |       |          |           |           |              |         |           |
+| ForeachLoop |    .NET 6 PGO |   100 | 1.713 ms | 0.0340 ms | 0.0364 ms |     baseline |         |     539 B |
+|        Linq |    .NET 6 PGO |   100 | 1.720 ms | 0.0331 ms | 0.0325 ms | 1.01x slower |   0.03x |     916 B |
+|   Hyperlinq |    .NET 6 PGO |   100 | 1.727 ms | 0.0134 ms | 0.0125 ms | 1.01x slower |   0.03x |     737 B |
+|             |               |       |          |           |           |              |         |           |
+| ForeachLoop | .NET Core 3.1 |   100 | 1.727 ms | 0.0170 ms | 0.0159 ms |     baseline |         |     519 B |
+|        Linq | .NET Core 3.1 |   100 | 1.730 ms | 0.0213 ms | 0.0199 ms | 1.00x slower |   0.01x |     865 B |
+|   Hyperlinq | .NET Core 3.1 |   100 | 1.709 ms | 0.0325 ms | 0.0348 ms | 1.01x faster |   0.02x |     716 B |

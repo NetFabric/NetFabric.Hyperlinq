@@ -95,6 +95,7 @@ public class ListValueTypeWhere: ValueTypeListBenchmarkBase
         return sum;
     }
 
+#if DOTNET5_0_OR_GREATER
     [Benchmark]
     public FatValueType SpanLinq()
     {
@@ -105,7 +106,8 @@ public class ListValueTypeWhere: ValueTypeListBenchmarkBase
             sum += item;
         return sum;
     }
-
+#endif
+    
     [Benchmark]
     public FatValueType Streams()
     {
