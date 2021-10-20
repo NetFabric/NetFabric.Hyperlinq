@@ -1,4 +1,6 @@
-﻿namespace LinqBenchmarks.Array.Int32;
+﻿using ArrayExtensions = Faslinq.ArrayExtensions;
+
+namespace LinqBenchmarks.Array.Int32;
 
 public class ArrayInt32Contains: ArrayInt32BenchmarkBase
 {
@@ -75,4 +77,8 @@ public class ArrayInt32Contains: ArrayInt32BenchmarkBase
         => source
             .AsValueEnumerable()
             .ContainsVector(value);
+
+    [Benchmark]
+    public bool Faslinq()
+        => ArrayExtensions.Any(source, i => i.Equals(value));
 }

@@ -1,4 +1,6 @@
 ﻿using System.Runtime.InteropServices;
+using Microsoft.CodeAnalysis.Host;
+using ListExtensions = Faslinq.ListExtensions;
 
 namespace LinqBenchmarks.List.Int32;
 
@@ -153,6 +155,17 @@ public class ListInt32Select: Int32ListBenchmarkBase
     {
         var items = source.AsValueEnumerable()
             .Select<int, TripleOfInt32>();
+        var sum = 0;
+        foreach (var item in items)
+            sum += item;
+        return sum;
+    }
+
+    [Benchmark]
+    public int Faslinq()
+    {
+        var items = 
+            ListExtensions.Select(source, item => item * 3);
         var sum = 0;
         foreach (var item in items)
             sum += item;

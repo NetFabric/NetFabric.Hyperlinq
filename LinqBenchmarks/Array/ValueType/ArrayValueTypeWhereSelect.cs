@@ -1,4 +1,6 @@
-﻿namespace LinqBenchmarks.Array.ValueType;
+﻿using ArrayExtensions = Faslinq.ArrayExtensions;
+
+namespace LinqBenchmarks.Array.ValueType;
 
 public class ArrayValueTypeWhereSelect: ValueTypeArrayBenchmarkBase
 {
@@ -166,6 +168,20 @@ public class ArrayValueTypeWhereSelect: ValueTypeArrayBenchmarkBase
         var items = source.AsValueEnumerable()
             .Where<FatValueTypeIsEven>()
             .Select<FatValueType, TripleOfFatValueType>();
+        var sum = default(FatValueType);
+        foreach (var item in items)
+            sum += item;
+        return sum;
+    }
+
+    [Benchmark]
+    public FatValueType Faslinq()
+    {
+        var items = 
+            ArrayExtensions.WhereSelect(
+                source,
+                item => item.IsEven(),
+                item => item * 3);
         var sum = default(FatValueType);
         foreach (var item in items)
             sum += item;

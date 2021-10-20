@@ -1,4 +1,6 @@
 ﻿using System.Runtime.InteropServices;
+using ListExtensions = Faslinq.ListExtensions;
+
 // ReSharper disable ForeachCanBeConvertedToQueryUsingAnotherGetEnumerator
 // ReSharper disable LoopCanBeConvertedToQuery
 
@@ -153,6 +155,17 @@ public class ListValueTypeSelect: ValueTypeListBenchmarkBase
     public FatValueType Hyperlinq_ValueDelegate()
     {
         var items = source.AsValueEnumerable().Select<FatValueType, TripleOfFatValueType>();
+        var sum = default(FatValueType);
+        foreach (var item in items)
+            sum += item;
+        return sum;
+    }
+
+    [Benchmark]
+    public FatValueType Faslinq()
+    {
+        var items = 
+            ListExtensions.Select(source, item => item * 3);
         var sum = default(FatValueType);
         foreach (var item in items)
             sum += item;

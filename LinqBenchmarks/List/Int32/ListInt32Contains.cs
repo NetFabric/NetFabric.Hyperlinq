@@ -1,4 +1,7 @@
-﻿namespace LinqBenchmarks.List.Int32;
+﻿using ArrayExtensions = Faslinq.ArrayExtensions;
+using ListExtensions = Faslinq.ListExtensions;
+
+namespace LinqBenchmarks.List.Int32;
 
 public partial class ListInt32Contains: Int32ListBenchmarkBase
 {
@@ -71,4 +74,8 @@ public partial class ListInt32Contains: Int32ListBenchmarkBase
         => source
             .AsValueEnumerable()
             .ContainsVector(value);
+
+    [Benchmark]
+    public bool Faslinq()
+        => ListExtensions.Any(source, i => i.Equals(value));
 }

@@ -9,3 +9,4 @@ global using Nessos.LinqOptimizer.CSharp;
 global using Nessos.Streams.CSharp;
 global using NetFabric.Hyperlinq;
 global using StructLinq;
+global using Faslinq;

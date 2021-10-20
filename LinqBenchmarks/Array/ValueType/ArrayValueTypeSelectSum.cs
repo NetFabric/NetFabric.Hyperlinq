@@ -1,4 +1,6 @@
-﻿namespace LinqBenchmarks.Array.ValueType;
+﻿using ArrayExtensions = Faslinq.ArrayExtensions;
+
+namespace LinqBenchmarks.Array.ValueType;
 
 public class ArrayValueTypeSelectSum: ValueTypeArrayBenchmarkBase
 {
@@ -91,5 +93,12 @@ public class ArrayValueTypeSelectSum: ValueTypeArrayBenchmarkBase
     public int Hyperlinq_ValueDelegate()
         => source.AsValueEnumerable()
             .Select<int, Value0Selector>()
+            .Sum();
+
+    [Benchmark]
+    public int Faslinq()
+        => ArrayExtensions.Select(
+                source,
+                item => item.Value0 * 3)
             .Sum();
 }

@@ -1,4 +1,7 @@
 ﻿// ReSharper disable LoopCanBeConvertedToQuery
+
+using ArrayExtensions = Faslinq.ArrayExtensions;
+
 namespace LinqBenchmarks.Array.ValueType;
 
 public class ArrayValueTypeSelect: ValueTypeArrayBenchmarkBase
@@ -153,6 +156,17 @@ public class ArrayValueTypeSelect: ValueTypeArrayBenchmarkBase
     {
         var items = source.AsValueEnumerable()
             .Select<FatValueType, TripleOfFatValueType>();
+        var sum = default(FatValueType);
+        foreach (var item in items)
+            sum += item;
+        return sum;
+    }
+
+    [Benchmark]
+    public FatValueType Faslinq()
+    {
+        var items = 
+            ArrayExtensions.Select(source, item => item * 3);
         var sum = default(FatValueType);
         foreach (var item in items)
             sum += item;

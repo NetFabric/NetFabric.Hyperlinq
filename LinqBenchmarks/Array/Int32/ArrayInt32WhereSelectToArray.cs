@@ -1,4 +1,6 @@
-﻿namespace LinqBenchmarks.Array.Int32;
+﻿using ArrayExtensions = Faslinq.ArrayExtensions;
+
+namespace LinqBenchmarks.Array.Int32;
 
 public partial class ArrayInt32WhereSelectToArray: ArrayInt32BenchmarkBase
 {
@@ -114,4 +116,10 @@ public partial class ArrayInt32WhereSelectToArray: ArrayInt32BenchmarkBase
             .Select<int, TripleOfInt32>()
             .ToArray();
 
+    [Benchmark]
+    public int[] Faslinq()
+        => ArrayExtensions.WhereSelect(
+            source,
+            item => item.IsEven(),
+            item => item * 3);
 }

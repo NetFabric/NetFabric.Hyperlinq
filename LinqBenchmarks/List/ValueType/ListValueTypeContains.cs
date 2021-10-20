@@ -1,4 +1,6 @@
-﻿namespace LinqBenchmarks.List.ValueType;
+﻿using ListExtensions = Faslinq.ListExtensions;
+
+namespace LinqBenchmarks.List.ValueType;
 
 public class ListValueTypeContains : ValueTypeListBenchmarkBase
 {
@@ -60,4 +62,8 @@ public class ListValueTypeContains : ValueTypeListBenchmarkBase
     public bool Hyperlinq()
         => source.AsValueEnumerable()
             .Contains(value);
+
+    [Benchmark]
+    public bool Faslinq()
+        => ListExtensions.Any(source, i => i.Equals(value));
 }

@@ -17,20 +17,18 @@ class Program
 {
     static void Main(string[] args)
     {
-        var config = DefaultConfig.Instance
-            .WithSummaryStyle(SummaryStyle.Default.WithRatioStyle(RatioStyle.Trend))
-            .AddDiagnoser(MemoryDiagnoser.Default)
+        var config =
+#if DEBUG
+            new DebugInProcessConfig()
+#else
+            DefaultConfig.Instance
+#endif
+                .WithSummaryStyle(SummaryStyle.Default.WithRatioStyle(RatioStyle.Trend))
+                .AddDiagnoser(MemoryDiagnoser.Default)
+#if !DEBUG
             .AddJob(Job.Default
                 .WithRuntime(CoreRuntime.Core31)
                 .WithId(".NET Core 3.1")
-            )
-            // .AddJob(Job.Default
-            //     .WithRuntime(CoreRuntime.Core50)
-            //     .WithId(".NET 5")
-            // )
-            .AddJob(Job.Default
-                .WithRuntime(CoreRuntime.Core60)
-                .WithId(".NET 6")
             )
             .AddJob(Job.Default
                 .WithRuntime(CoreRuntime.Core60)
@@ -39,7 +37,22 @@ class Program
                     new EnvironmentVariable("COMPlus_TC_QuickJitForLoops", "1"),
                     new EnvironmentVariable("COMPlus_TieredPGO", "1"))
                 .WithId(".NET 6 PGO")
-            );
+            )
+            // .AddJob(Job.Default
+            //     .WithRuntime(CoreRuntime.Core50)
+            //     .WithId(".NET 5")
+            // )
+                .AddJob(Job.Default
+                    .WithRuntime(CoreRuntime.Core60)
+                    .WithId(".NET 6")
+                )
+#else
+                //.AddJob(Job.Dry
+                //    .WithRuntime(CoreRuntime.Core60)
+                //    .WithId(".NET 6 (DRY)")
+                //)
+#endif
+            ;
             
         foreach (var summary in BenchmarkSwitcher.FromAssembly(typeof(Program).Assembly).Run(args, config))
             SaveSummary(summary);
@@ -116,6 +129,9 @@ class Program
 
         var linqAsyncVersion = GetInformationalVersion(typeof(System.Linq.AsyncEnumerable).Assembly);
         logger.WriteLine($"- System.Linq.Async: [{linqAsyncVersion}](https://www.nuget.org/packages/System.Linq.Async/{linqAsyncVersion})");
+
+        var faslinqVersion = GetInformationalVersion(typeof(Faslinq.ArrayExtensions).Assembly);
+        logger.WriteLine($"- Faslinq: [{faslinqVersion}](https://www.nuget.org/packages/Faslinq/{faslinqVersion})");
 
         logger.WriteLine();
 

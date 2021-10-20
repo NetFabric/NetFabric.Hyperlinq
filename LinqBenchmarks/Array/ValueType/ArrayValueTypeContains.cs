@@ -1,4 +1,6 @@
-﻿namespace LinqBenchmarks.Array.ValueType;
+﻿using ArrayExtensions = Faslinq.ArrayExtensions;
+
+namespace LinqBenchmarks.Array.ValueType;
 
 public class ArrayValueTypeContains: ValueTypeArrayBenchmarkBase
 {
@@ -60,4 +62,8 @@ public class ArrayValueTypeContains: ValueTypeArrayBenchmarkBase
     public bool Hyperlinq()
         => source.AsValueEnumerable()
             .Contains(value);
+
+    [Benchmark]
+    public bool Faslinq()
+        => ArrayExtensions.Any(source, i => i.Equals(value));
 }

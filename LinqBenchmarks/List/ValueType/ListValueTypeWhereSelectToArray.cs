@@ -1,4 +1,5 @@
 ﻿using System.Runtime.InteropServices;
+using ListExtensions = Faslinq.ListExtensions;
 
 namespace LinqBenchmarks.List.ValueType;
 
@@ -125,5 +126,13 @@ public partial class ListValueTypeWhereSelectToArray: ValueTypeListBenchmarkBase
         => source.AsValueEnumerable()
             .Where<FatValueTypeIsEven>()
             .Select<FatValueType, TripleOfFatValueType>()
+            .ToArray();
+
+    [Benchmark]
+    public FatValueType[] Faslinq() 
+        => ListExtensions.WhereSelect(
+                source, 
+                item => item.IsEven(), 
+                item => item * 3)
             .ToArray();
 }

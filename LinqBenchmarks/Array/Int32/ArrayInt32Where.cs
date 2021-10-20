@@ -1,4 +1,6 @@
-﻿namespace LinqBenchmarks.Array.Int32;
+﻿using ArrayExtensions = Faslinq.ArrayExtensions;
+
+namespace LinqBenchmarks.Array.Int32;
 
 public class ArrayInt32Where: ArrayInt32BenchmarkBase
 {
@@ -156,6 +158,19 @@ public class ArrayInt32Where: ArrayInt32BenchmarkBase
     {
         var items = source.AsValueEnumerable()
             .Where<Int32IsEven>();
+        var sum = 0;
+        foreach (var item in items)
+            sum += item;
+        return sum;
+    }
+
+    [Benchmark]
+    public int Faslinq()
+    {
+        var items =
+            ArrayExtensions.Where(
+                source,
+                item => item.IsEven());
         var sum = 0;
         foreach (var item in items)
             sum += item;

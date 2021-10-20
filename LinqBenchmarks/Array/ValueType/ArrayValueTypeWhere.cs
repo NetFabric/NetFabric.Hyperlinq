@@ -1,4 +1,7 @@
 ﻿// ReSharper disable LoopCanBeConvertedToQuery
+
+using ArrayExtensions = Faslinq.ArrayExtensions;
+
 namespace LinqBenchmarks.Array.ValueType;
 
 public class ArrayValueTypeWhere: ValueTypeArrayBenchmarkBase
@@ -157,6 +160,17 @@ public class ArrayValueTypeWhere: ValueTypeArrayBenchmarkBase
     {
         var items = source.AsValueEnumerable()
             .Where<FatValueTypeIsEven>();
+        var sum = default(FatValueType);
+        foreach (var item in items)
+            sum += item;
+        return sum;
+    }
+
+    [Benchmark]
+    public FatValueType Faslinq()
+    {
+        var items = 
+            ArrayExtensions.Where(source, item => item.IsEven());
         var sum = default(FatValueType);
         foreach (var item in items)
             sum += item;

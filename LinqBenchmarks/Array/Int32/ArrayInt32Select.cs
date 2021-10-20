@@ -2,6 +2,8 @@
 
 // ReSharper disable LoopCanBeConvertedToQuery
 
+using ArrayExtensions = Faslinq.ArrayExtensions;
+
 namespace LinqBenchmarks.Array.Int32;
 
 public class ArrayInt32Select: ArrayInt32BenchmarkBase
@@ -151,6 +153,19 @@ public class ArrayInt32Select: ArrayInt32BenchmarkBase
     {
         var items = source.AsValueEnumerable()
             .Select<int, TripleOfInt32>();
+        var sum = 0;
+        foreach (var item in items)
+            sum += item;
+        return sum;
+    }
+
+    [Benchmark]
+    public int Faslinq()
+    {
+        var items = 
+            ArrayExtensions.Select(
+                source, 
+                item => item * 3);
         var sum = 0;
         foreach (var item in items)
             sum += item;

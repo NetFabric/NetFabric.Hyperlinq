@@ -1,4 +1,6 @@
-﻿namespace LinqBenchmarks.List.ValueType;
+﻿using ListExtensions = Faslinq.ListExtensions;
+
+namespace LinqBenchmarks.List.ValueType;
 
 public class ListValueTypeSelectSum: ValueTypeListBenchmarkBase
 {
@@ -84,5 +86,10 @@ public class ListValueTypeSelectSum: ValueTypeListBenchmarkBase
     public int Hyperlinq_ValueDelegate()
         => source.AsValueEnumerable()
             .Select<int, Value0Selector>()
+            .Sum();
+
+    [Benchmark]
+    public int Faslinq()
+        => ListExtensions.Select(source, item => item.Value0 * 3)
             .Sum();
 }

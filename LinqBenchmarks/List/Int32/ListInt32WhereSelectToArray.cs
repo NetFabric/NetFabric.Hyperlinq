@@ -1,4 +1,5 @@
 ﻿using System.Runtime.InteropServices;
+using ListExtensions = Faslinq.ListExtensions;
 
 namespace LinqBenchmarks.List.Int32;
 
@@ -120,5 +121,13 @@ public partial class ListInt32WhereSelectToArray: Int32ListBenchmarkBase
         => source.AsValueEnumerable()
             .Where<Int32IsEven>()
             .Select<int, TripleOfInt32>()
+            .ToArray();
+
+    [Benchmark]
+    public int[] Faslinq() 
+        => ListExtensions.WhereSelect(
+                source, 
+                item => item.IsEven(), 
+                item => item * 3)
             .ToArray();
 }

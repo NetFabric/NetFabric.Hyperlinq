@@ -2,6 +2,7 @@
 
 Benchmarks comparing the performance of [LINQ](https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/concepts/linq/) against `for`/`foreach` loops and the following libraries: 
 
+- [Faslinq](https://github.com/gatewayprogrammingschool/Faslinq)
 - [Cistern.ValueLinq](https://github.com/manofstick/Cistern.ValueLinq)
 - [JM.LinqFaster](https://github.com/jackmott/LinqFaster)
 - [LinqFasterer](https://github.com/Zaczero/LinqFasterer)

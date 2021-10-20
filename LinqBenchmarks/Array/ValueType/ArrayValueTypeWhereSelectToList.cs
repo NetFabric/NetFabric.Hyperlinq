@@ -1,4 +1,7 @@
 ﻿// ReSharper disable ForCanBeConvertedToForeach
+
+using ArrayExtensions = Faslinq.ArrayExtensions;
+
 namespace LinqBenchmarks.Array.ValueType;
 
 public partial class ArrayValueTypeWhereSelectToList: ValueTypeArrayBenchmarkBase
@@ -117,5 +120,13 @@ public partial class ArrayValueTypeWhereSelectToList: ValueTypeArrayBenchmarkBas
         => source.AsValueEnumerable()
             .Where<FatValueTypeIsEven>()
             .Select<FatValueType, TripleOfFatValueType>()
+            .ToList();
+
+    [Benchmark]
+    public List<FatValueType> Faslinq()
+        => ArrayExtensions.WhereSelect(
+                source,
+                item => item.IsEven(),
+                item => item * 3)
             .ToList();
 }

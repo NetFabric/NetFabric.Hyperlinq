@@ -1,4 +1,5 @@
 ﻿using System.Runtime.InteropServices;
+using ListExtensions = Faslinq.ListExtensions;
 
 namespace LinqBenchmarks.List.Int32;
 
@@ -116,4 +117,8 @@ public class ListInt32SelectToList: Int32ListBenchmarkBase
         => source.AsValueEnumerable()
             .SelectVector<int, int, TripleOfInt32>()
             .ToList();
+
+    [Benchmark]
+    public List<int> Faslinq()
+        => ListExtensions.Select(source, item => item * 3);
 }

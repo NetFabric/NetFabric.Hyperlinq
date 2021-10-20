@@ -1,4 +1,6 @@
 ﻿using System.Runtime.InteropServices;
+using ListExtensions = Faslinq.ListExtensions;
+
 // ReSharper disable ForeachCanBeConvertedToQueryUsingAnotherGetEnumerator
 // ReSharper disable LoopCanBeConvertedToQuery
 
@@ -164,6 +166,17 @@ public class ListValueTypeWhere: ValueTypeListBenchmarkBase
             .Where<FatValueTypeIsEven>();
         var sum = default(FatValueType);
         foreach (var item in arraySegmentWhereEnumerable)
+            sum += item;
+        return sum;
+    }
+
+    [Benchmark]
+    public FatValueType Faslinq()
+    {
+        var items = 
+            ListExtensions.Where(source, item => item.IsEven());
+        var sum = default(FatValueType);
+        foreach (var item in items)
             sum += item;
         return sum;
     }

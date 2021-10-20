@@ -1,4 +1,6 @@
 ﻿using System.Runtime.InteropServices;
+using ListExtensions = Faslinq.ListExtensions;
+
 // ReSharper disable ForCanBeConvertedToForeach
 // ReSharper disable LoopCanBeConvertedToQuery
 
@@ -126,4 +128,11 @@ public partial class ListValueTypeWhereSelectToList: ValueTypeListBenchmarkBase
             .Where<FatValueTypeIsEven>()
             .Select<FatValueType, TripleOfFatValueType>()
             .ToList();
+
+    [Benchmark]
+    public List<FatValueType> Faslinq() 
+        => ListExtensions.WhereSelect(
+            source, 
+            item => item.IsEven(), 
+            item => item * 3);
 }

@@ -1,4 +1,6 @@
 ﻿using System.Runtime.InteropServices;
+using ListExtensions = Faslinq.ListExtensions;
+
 // ReSharper disable LoopCanBeConvertedToQuery
 // ReSharper disable ForeachCanBeConvertedToQueryUsingAnotherGetEnumerator
 
@@ -172,6 +174,20 @@ public class ListInt32WhereSelect: Int32ListBenchmarkBase
         var items = source.AsValueEnumerable()
             .Where<Int32IsEven>()
             .Select<int, TripleOfInt32>();
+        var sum = 0;
+        foreach (var item in items)
+            sum += item;
+        return sum;
+    }
+
+    [Benchmark]
+    public int Faslinq()
+    {
+        var items = 
+            ListExtensions.WhereSelect(
+                source, 
+                item => item.IsEven(), 
+                item => item * 3);
         var sum = 0;
         foreach (var item in items)
             sum += item;
