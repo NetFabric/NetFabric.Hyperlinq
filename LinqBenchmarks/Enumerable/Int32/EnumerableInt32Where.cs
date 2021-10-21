@@ -27,7 +27,7 @@ public class EnumerableInt32Where: EnumerableInt32BenchmarkBase
     [Benchmark]
     public int LinqAF()
     {
-        var items = global::LinqAF.IEnumerableExtensionMethods
+        var items = LinqAfExtensions
             .Where(source, item => item.IsEven());
         var sum = 0;
         foreach (var item in items)

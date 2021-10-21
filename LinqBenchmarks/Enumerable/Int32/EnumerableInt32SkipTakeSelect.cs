@@ -31,7 +31,7 @@ public class EnumerableInt32SkipTakeSelect: EnumerableInt32SkipTakeBenchmarkBase
     [Benchmark]
     public int LinqAF()
     {
-        var items = global::LinqAF.IEnumerableExtensionMethods.Skip(source, Skip).Take(Count).Select(item => item * 3);
+        var items = LinqAfExtensions.Skip(source, Skip).Take(Count).Select(item => item * 3);
         var sum = 0;
         foreach (var item in items)
             sum += item;

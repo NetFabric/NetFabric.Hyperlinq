@@ -19,7 +19,7 @@ public class EnumerableFatReferenceTypeFirstOrDefault: EnumerableFatReferenceTyp
 
     [Benchmark]
     public bool LinqAF()
-        => global::LinqAF.IEnumerableExtensionMethods.FirstOrDefault(source) is not null;
+        => LinqAfExtensions.FirstOrDefault(source) is not null;
 
     [Benchmark]
     public bool StructLinq()

@@ -9,4 +9,5 @@ global using Nessos.LinqOptimizer.CSharp;
 global using Nessos.Streams.CSharp;
 global using NetFabric.Hyperlinq;
 global using StructLinq;
-global using Faslinq;
+global using LinqAfExtensions = LinqAF.IEnumerableExtensionMethods;
+global using FaslinqExtensions = Faslinq.ArrayExtensions;

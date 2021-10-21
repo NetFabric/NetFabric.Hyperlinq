@@ -1,6 +1,4 @@
-﻿using ArrayExtensions = Faslinq.ArrayExtensions;
-
-namespace LinqBenchmarks.Array.ValueType;
+﻿namespace LinqBenchmarks.Array.ValueType;
 
 public class ArrayValueTypeWhereCount: ValueTypeArrayBenchmarkBase
 {
@@ -101,7 +99,7 @@ public class ArrayValueTypeWhereCount: ValueTypeArrayBenchmarkBase
 
     [Benchmark]
     public int Faslinq()
-        => ArrayExtensions
+        => FaslinqExtensions
             .Where(source, item => item.IsEven())
             .Count();
 }

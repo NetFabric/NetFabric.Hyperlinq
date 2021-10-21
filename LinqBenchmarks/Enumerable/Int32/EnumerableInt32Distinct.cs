@@ -29,7 +29,7 @@ public class EnumerableInt32Distinct : EnumerableInt32BenchmarkBase
     [Benchmark]
     public int LinqAF()
     {
-        var items = global::LinqAF.IEnumerableExtensionMethods
+        var items = LinqAfExtensions
             .Distinct(source);
         var sum = 0;
         foreach (var item in items)

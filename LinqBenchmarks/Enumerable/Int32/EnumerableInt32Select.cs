@@ -39,7 +39,7 @@ public class EnumerableInt32Select: EnumerableInt32BenchmarkBase
     [Benchmark]
     public int LinqAF()
     {
-        var items = global::LinqAF.IEnumerableExtensionMethods
+        var items = LinqAfExtensions
             .Select(source, item => item * 3);
         var sum = 0;
         foreach (var item in items)

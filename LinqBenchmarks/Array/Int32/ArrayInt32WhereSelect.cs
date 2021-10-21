@@ -1,6 +1,4 @@
-﻿using ArrayExtensions = Faslinq.ArrayExtensions;
-
-namespace LinqBenchmarks.Array.Int32;
+﻿namespace LinqBenchmarks.Array.Int32;
 
 public class ArrayInt32WhereSelect: ArrayInt32BenchmarkBase
 {
@@ -176,7 +174,7 @@ public class ArrayInt32WhereSelect: ArrayInt32BenchmarkBase
     public int Faslinq()
     {
         var items = 
-            ArrayExtensions.WhereSelect(
+            FaslinqExtensions.WhereSelect(
                     source,
                     item => item.IsEven(),
                     item => item * 3);

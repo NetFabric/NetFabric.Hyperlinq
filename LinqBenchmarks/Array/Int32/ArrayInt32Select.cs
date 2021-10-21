@@ -1,9 +1,5 @@
-﻿
-
-// ReSharper disable LoopCanBeConvertedToQuery
-
-using ArrayExtensions = Faslinq.ArrayExtensions;
-
+﻿// ReSharper disable LoopCanBeConvertedToQuery
+// ReSharper disable ForCanBeConvertedToForeach
 namespace LinqBenchmarks.Array.Int32;
 
 public class ArrayInt32Select: ArrayInt32BenchmarkBase
@@ -163,7 +159,7 @@ public class ArrayInt32Select: ArrayInt32BenchmarkBase
     public int Faslinq()
     {
         var items = 
-            ArrayExtensions.Select(
+            FaslinqExtensions.Select(
                 source, 
                 item => item * 3);
         var sum = 0;

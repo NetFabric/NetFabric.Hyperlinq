@@ -42,7 +42,7 @@ public class EnumerableInt32WhereSelect: EnumerableInt32BenchmarkBase
     [Benchmark]
     public int LinqAF()
     {
-        var items = global::LinqAF.IEnumerableExtensionMethods
+        var items = LinqAfExtensions
             .Where(source, item => item.IsEven())
             .Select(item => item * 3);
         var sum = 0;

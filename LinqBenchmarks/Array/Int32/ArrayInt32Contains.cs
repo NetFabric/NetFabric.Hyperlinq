@@ -1,5 +1,5 @@
-﻿using ArrayExtensions = Faslinq.ArrayExtensions;
-
+﻿// ReSharper disable ForCanBeConvertedToForeach
+// ReSharper disable LoopCanBeConvertedToQuery
 namespace LinqBenchmarks.Array.Int32;
 
 public class ArrayInt32Contains: ArrayInt32BenchmarkBase
@@ -80,5 +80,5 @@ public class ArrayInt32Contains: ArrayInt32BenchmarkBase
 
     [Benchmark]
     public bool Faslinq()
-        => ArrayExtensions.Any(source, i => i.Equals(value));
+        => FaslinqExtensions.Any(source, i => i.Equals(value));
 }

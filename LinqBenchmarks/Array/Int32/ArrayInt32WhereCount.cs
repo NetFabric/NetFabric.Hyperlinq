@@ -1,6 +1,4 @@
-﻿using ArrayExtensions = Faslinq.ArrayExtensions;
-
-namespace LinqBenchmarks.Array.Int32;
+﻿namespace LinqBenchmarks.Array.Int32;
 
 public class ArrayInt32WhereCount: ArrayInt32BenchmarkBase
 {
@@ -108,7 +106,7 @@ public class ArrayInt32WhereCount: ArrayInt32BenchmarkBase
 
     [Benchmark]
     public int Faslinq()
-        => ArrayExtensions
+        => FaslinqExtensions
             .Where(source, item => item.IsEven())
             .Count();
 }

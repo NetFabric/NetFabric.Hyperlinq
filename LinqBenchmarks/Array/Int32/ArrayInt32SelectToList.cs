@@ -1,6 +1,4 @@
-﻿using ArrayExtensions = Faslinq.ArrayExtensions;
-
-namespace LinqBenchmarks.Array.Int32;
+﻿namespace LinqBenchmarks.Array.Int32;
 
 public class ArrayInt32SelectToList: ArrayInt32BenchmarkBase
 {
@@ -121,7 +119,7 @@ public class ArrayInt32SelectToList: ArrayInt32BenchmarkBase
 
     [Benchmark]
     public List<int> Faslinq()
-        => ArrayExtensions.Select(
+        => FaslinqExtensions.Select(
                 source,
                 item => item * 3)
             .ToList();

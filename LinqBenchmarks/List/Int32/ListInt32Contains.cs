@@ -1,5 +1,4 @@
-﻿using ArrayExtensions = Faslinq.ArrayExtensions;
-using ListExtensions = Faslinq.ListExtensions;
+﻿using ListExtensions = Faslinq.ListExtensions;
 
 namespace LinqBenchmarks.List.Int32;
 

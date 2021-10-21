@@ -32,7 +32,7 @@ public class EnumerableInt32SkipTakeWhere: EnumerableInt32SkipTakeBenchmarkBase
     [Benchmark]
     public int LinqAF()
     {
-        var items = global::LinqAF.IEnumerableExtensionMethods.Skip(source, Skip).Take(Count)
+        var items = LinqAfExtensions.Skip(source, Skip).Take(Count)
             .Where(item => item.IsEven());
         var sum = 0;
         foreach (var item in items)

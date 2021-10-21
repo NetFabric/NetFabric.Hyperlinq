@@ -37,7 +37,7 @@ public partial class EnumerableInt32WhereSelectToList: EnumerableInt32BenchmarkB
 
     [Benchmark]
     public List<int> LinqAF()
-        => global::LinqAF.IEnumerableExtensionMethods
+        => LinqAfExtensions
             .Where(source, item => item.IsEven())
             .Select(item => item * 3)
             .ToList();

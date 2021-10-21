@@ -1,4 +1,5 @@
-﻿namespace LinqBenchmarks.Enumerable.Int32;
+﻿// ReSharper disable LoopCanBeConvertedToQuery
+namespace LinqBenchmarks.Enumerable.Int32;
 
 public class EnumerableInt32Sum: EnumerableInt32BenchmarkBase
 {
@@ -29,7 +30,7 @@ public class EnumerableInt32Sum: EnumerableInt32BenchmarkBase
 
     [Benchmark]
     public int LinqAF()
-        => global::LinqAF.IEnumerableExtensionMethods.Sum(source);
+        => LinqAfExtensions.Sum(source);
 
     [Benchmark]
     public int LinqOptimizer()

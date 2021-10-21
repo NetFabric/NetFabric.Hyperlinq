@@ -1,6 +1,4 @@
-﻿using ArrayExtensions = Faslinq.ArrayExtensions;
-
-namespace LinqBenchmarks.Array.ValueType;
+﻿namespace LinqBenchmarks.Array.ValueType;
 
 public class ArrayValueTypeWhereSelect: ValueTypeArrayBenchmarkBase
 {
@@ -178,7 +176,7 @@ public class ArrayValueTypeWhereSelect: ValueTypeArrayBenchmarkBase
     public FatValueType Faslinq()
     {
         var items = 
-            ArrayExtensions.WhereSelect(
+            FaslinqExtensions.WhereSelect(
                 source,
                 item => item.IsEven(),
                 item => item * 3);

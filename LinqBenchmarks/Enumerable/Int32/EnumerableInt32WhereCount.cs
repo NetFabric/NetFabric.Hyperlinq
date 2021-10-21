@@ -33,7 +33,7 @@ public class EnumerableInt32WhereCount: EnumerableInt32BenchmarkBase
 
     [Benchmark]
     public int LinqAF()
-        => global::LinqAF.IEnumerableExtensionMethods.Count(source, item => item.IsEven());
+        => LinqAfExtensions.Count(source, item => item.IsEven());
 
     [Benchmark]
     public int LinqOptimizer()

@@ -21,7 +21,7 @@ public class EnumerableInt32Contains: EnumerableInt32BenchmarkBase
 
     [Benchmark]
     public bool LinqAF()
-        => global::LinqAF.IEnumerableExtensionMethods.Contains(source, value);
+        => LinqAfExtensions.Contains(source, value);
 
     [Benchmark]
     public bool StructLinq()

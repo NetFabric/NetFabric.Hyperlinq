@@ -19,7 +19,7 @@ public class EnumerableFatReferenceTypeAny: EnumerableFatReferenceTypeBenchmarkB
 
     [Benchmark]
     public bool LinqAF()
-        => global::LinqAF.IEnumerableExtensionMethods.Any(source);
+        => LinqAfExtensions.Any(source);
 
     [Benchmark]
     public bool StructLinq()

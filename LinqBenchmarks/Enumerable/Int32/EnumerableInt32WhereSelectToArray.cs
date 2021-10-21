@@ -1,4 +1,5 @@
-﻿namespace LinqBenchmarks.Enumerable.Int32;
+﻿// ReSharper disable LoopCanBeConvertedToQuery
+namespace LinqBenchmarks.Enumerable.Int32;
 
 public partial class EnumerableInt32WhereSelectToArray: EnumerableInt32BenchmarkBase
 {
@@ -36,7 +37,7 @@ public partial class EnumerableInt32WhereSelectToArray: EnumerableInt32Benchmark
 
     [Benchmark]
     public int[] LinqAF()
-        => global::LinqAF.IEnumerableExtensionMethods
+        => LinqAfExtensions
             .Where(source, item => item.IsEven())
             .Select(item => item * 3)
             .ToArray();

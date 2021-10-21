@@ -1,6 +1,4 @@
-﻿using ArrayExtensions = Faslinq.ArrayExtensions;
-
-namespace LinqBenchmarks.Array.ValueType;
+﻿namespace LinqBenchmarks.Array.ValueType;
 
 public class ArrayValueTypeContains: ValueTypeArrayBenchmarkBase
 {
@@ -65,5 +63,5 @@ public class ArrayValueTypeContains: ValueTypeArrayBenchmarkBase
 
     [Benchmark]
     public bool Faslinq()
-        => ArrayExtensions.Any(source, i => i.Equals(value));
+        => FaslinqExtensions.Any(source, i => i.Equals(value));
 }
