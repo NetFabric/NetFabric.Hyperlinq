@@ -14,6 +14,7 @@
 - StructLinq.BCL: [0.27.0](https://www.nuget.org/packages/StructLinq/0.27.0)
 - NetFabric.Hyperlinq: [3.0.0-beta48](https://www.nuget.org/packages/NetFabric.Hyperlinq/3.0.0-beta48)
 - System.Linq.Async: [5.0.0](https://www.nuget.org/packages/System.Linq.Async/5.0.0)
+- Faslinq: [1.0.5](https://www.nuget.org/packages/Faslinq/1.0.5)
 
 ### Results:
 ``` ini
@@ -28,16 +29,16 @@ Intel Core i5-7360U CPU 2.30GHz (Kaby Lake), 1 CPU, 4 logical and 2 physical cor
 
 
 ```
-|      Method |           Job | Count |     Mean |     Error |    StdDev |        Ratio | RatioSD | Allocated |
-|------------ |-------------- |------ |---------:|----------:|----------:|-------------:|--------:|----------:|
-| ForeachLoop |        .NET 6 |   100 | 1.490 ms | 0.0127 ms | 0.0119 ms |     baseline |         |     538 B |
-|        Linq |        .NET 6 |   100 | 1.489 ms | 0.0102 ms | 0.0095 ms | 1.00x faster |   0.01x |     882 B |
-|   Hyperlinq |        .NET 6 |   100 | 1.491 ms | 0.0107 ms | 0.0100 ms | 1.00x slower |   0.01x |     722 B |
-|             |               |       |          |           |           |              |         |           |
-| ForeachLoop |    .NET 6 PGO |   100 | 1.713 ms | 0.0340 ms | 0.0364 ms |     baseline |         |     539 B |
-|        Linq |    .NET 6 PGO |   100 | 1.720 ms | 0.0331 ms | 0.0325 ms | 1.01x slower |   0.03x |     916 B |
-|   Hyperlinq |    .NET 6 PGO |   100 | 1.727 ms | 0.0134 ms | 0.0125 ms | 1.01x slower |   0.03x |     737 B |
-|             |               |       |          |           |           |              |         |           |
-| ForeachLoop | .NET Core 3.1 |   100 | 1.727 ms | 0.0170 ms | 0.0159 ms |     baseline |         |     519 B |
-|        Linq | .NET Core 3.1 |   100 | 1.730 ms | 0.0213 ms | 0.0199 ms | 1.00x slower |   0.01x |     865 B |
-|   Hyperlinq | .NET Core 3.1 |   100 | 1.709 ms | 0.0325 ms | 0.0348 ms | 1.01x faster |   0.02x |     716 B |
+|      Method |           Job |                                                   EnvironmentVariables |       Runtime | Count |     Mean |     Error |    StdDev |   Median |        Ratio | RatioSD | Allocated |
+|------------ |-------------- |----------------------------------------------------------------------- |-------------- |------ |---------:|----------:|----------:|---------:|-------------:|--------:|----------:|
+| ForeachLoop |        .NET 6 |                                                                  Empty |      .NET 6.0 |   100 | 1.728 ms | 0.0185 ms | 0.0173 ms | 1.730 ms |     baseline |         |     538 B |
+|        Linq |        .NET 6 |                                                                  Empty |      .NET 6.0 |   100 | 1.734 ms | 0.0116 ms | 0.0109 ms | 1.736 ms | 1.00x slower |   0.01x |     882 B |
+|   Hyperlinq |        .NET 6 |                                                                  Empty |      .NET 6.0 |   100 | 1.735 ms | 0.0131 ms | 0.0122 ms | 1.734 ms | 1.00x slower |   0.01x |     722 B |
+|             |               |                                                                        |               |       |          |           |           |          |              |         |           |
+| ForeachLoop |    .NET 6 PGO | COMPlus_ReadyToRun=0,COMPlus_TC_QuickJitForLoops=1,COMPlus_TieredPGO=1 |      .NET 6.0 |   100 | 1.707 ms | 0.0335 ms | 0.0551 ms | 1.726 ms |     baseline |         |     538 B |
+|        Linq |    .NET 6 PGO | COMPlus_ReadyToRun=0,COMPlus_TC_QuickJitForLoops=1,COMPlus_TieredPGO=1 |      .NET 6.0 |   100 | 1.733 ms | 0.0141 ms | 0.0132 ms | 1.739 ms | 1.04x slower |   0.05x |     896 B |
+|   Hyperlinq |    .NET 6 PGO | COMPlus_ReadyToRun=0,COMPlus_TC_QuickJitForLoops=1,COMPlus_TieredPGO=1 |      .NET 6.0 |   100 | 1.727 ms | 0.0209 ms | 0.0196 ms | 1.730 ms | 1.03x slower |   0.05x |     723 B |
+|             |               |                                                                        |               |       |          |           |           |          |              |         |           |
+| ForeachLoop | .NET Core 3.1 |                                                                  Empty | .NET Core 3.1 |   100 | 1.729 ms | 0.0190 ms | 0.0178 ms | 1.730 ms |     baseline |         |     523 B |
+|        Linq | .NET Core 3.1 |                                                                  Empty | .NET Core 3.1 |   100 | 1.732 ms | 0.0257 ms | 0.0241 ms | 1.739 ms | 1.00x slower |   0.02x |     865 B |
+|   Hyperlinq | .NET Core 3.1 |                                                                  Empty | .NET Core 3.1 |   100 | 1.653 ms | 0.0508 ms | 0.1499 ms | 1.731 ms | 1.15x faster |   0.05x |     696 B |

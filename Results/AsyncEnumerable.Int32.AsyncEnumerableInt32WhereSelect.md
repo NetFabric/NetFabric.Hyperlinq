@@ -14,6 +14,7 @@
 - StructLinq.BCL: [0.27.0](https://www.nuget.org/packages/StructLinq/0.27.0)
 - NetFabric.Hyperlinq: [3.0.0-beta48](https://www.nuget.org/packages/NetFabric.Hyperlinq/3.0.0-beta48)
 - System.Linq.Async: [5.0.0](https://www.nuget.org/packages/System.Linq.Async/5.0.0)
+- Faslinq: [1.0.5](https://www.nuget.org/packages/Faslinq/1.0.5)
 
 ### Results:
 ``` ini
@@ -28,19 +29,19 @@ Intel Core i5-7360U CPU 2.30GHz (Kaby Lake), 1 CPU, 4 logical and 2 physical cor
 
 
 ```
-|                  Method |           Job | Count |     Mean |   Error |  StdDev |        Ratio | RatioSD | Allocated |
-|------------------------ |-------------- |------ |---------:|--------:|--------:|-------------:|--------:|----------:|
-|             ForeachLoop |        .NET 6 |   100 | 172.6 ms | 2.11 ms | 1.98 ms |     baseline |         |     22 KB |
-|                    Linq |        .NET 6 |   100 | 171.6 ms | 2.59 ms | 2.42 ms | 1.01x faster |   0.02x |     52 KB |
-|               Hyperlinq |        .NET 6 |   100 | 171.2 ms | 2.36 ms | 2.21 ms | 1.01x faster |   0.02x |     42 KB |
-| Hyperlinq_ValueDelegate |        .NET 6 |   100 | 172.7 ms | 1.65 ms | 1.54 ms | 1.00x slower |   0.01x |     42 KB |
-|                         |               |       |          |         |         |              |         |           |
-|             ForeachLoop |    .NET 6 PGO |   100 | 170.1 ms | 3.29 ms | 3.38 ms |     baseline |         |     23 KB |
-|                    Linq |    .NET 6 PGO |   100 | 172.1 ms | 1.53 ms | 1.43 ms | 1.01x slower |   0.02x |     51 KB |
-|               Hyperlinq |    .NET 6 PGO |   100 | 172.3 ms | 1.56 ms | 1.46 ms | 1.02x slower |   0.02x |     41 KB |
-| Hyperlinq_ValueDelegate |    .NET 6 PGO |   100 | 172.5 ms | 1.65 ms | 1.55 ms | 1.02x slower |   0.02x |     43 KB |
-|                         |               |       |          |         |         |              |         |           |
-|             ForeachLoop | .NET Core 3.1 |   100 | 174.2 ms | 3.46 ms | 3.40 ms |     baseline |         |     17 KB |
-|                    Linq | .NET Core 3.1 |   100 | 174.4 ms | 1.92 ms | 1.80 ms | 1.00x slower |   0.02x |     47 KB |
-|               Hyperlinq | .NET Core 3.1 |   100 | 173.6 ms | 1.80 ms | 1.69 ms | 1.00x faster |   0.03x |     37 KB |
-| Hyperlinq_ValueDelegate | .NET Core 3.1 |   100 | 169.4 ms | 3.29 ms | 4.51 ms | 1.04x faster |   0.04x |     37 KB |
+|                  Method |           Job |                                                   EnvironmentVariables |       Runtime | Count |     Mean |   Error |  StdDev |        Ratio | RatioSD | Allocated |
+|------------------------ |-------------- |----------------------------------------------------------------------- |-------------- |------ |---------:|--------:|--------:|-------------:|--------:|----------:|
+|             ForeachLoop |        .NET 6 |                                                                  Empty |      .NET 6.0 |   100 | 169.8 ms | 3.37 ms | 9.22 ms |     baseline |         |     20 KB |
+|                    Linq |        .NET 6 |                                                                  Empty |      .NET 6.0 |   100 | 170.3 ms | 3.34 ms | 3.28 ms | 1.07x slower |   0.17x |     51 KB |
+|               Hyperlinq |        .NET 6 |                                                                  Empty |      .NET 6.0 |   100 | 171.9 ms | 2.32 ms | 2.17 ms | 1.08x slower |   0.17x |     45 KB |
+| Hyperlinq_ValueDelegate |        .NET 6 |                                                                  Empty |      .NET 6.0 |   100 | 172.8 ms | 2.22 ms | 1.97 ms | 1.09x slower |   0.18x |     42 KB |
+|                         |               |                                                                        |               |       |          |         |         |              |         |           |
+|             ForeachLoop |    .NET 6 PGO | COMPlus_ReadyToRun=0,COMPlus_TC_QuickJitForLoops=1,COMPlus_TieredPGO=1 |      .NET 6.0 |   100 | 171.0 ms | 2.80 ms | 2.48 ms |     baseline |         |     21 KB |
+|                    Linq |    .NET 6 PGO | COMPlus_ReadyToRun=0,COMPlus_TC_QuickJitForLoops=1,COMPlus_TieredPGO=1 |      .NET 6.0 |   100 | 171.9 ms | 1.94 ms | 1.81 ms | 1.01x slower |   0.02x |     51 KB |
+|               Hyperlinq |    .NET 6 PGO | COMPlus_ReadyToRun=0,COMPlus_TC_QuickJitForLoops=1,COMPlus_TieredPGO=1 |      .NET 6.0 |   100 | 170.8 ms | 2.68 ms | 2.51 ms | 1.00x faster |   0.03x |     41 KB |
+| Hyperlinq_ValueDelegate |    .NET 6 PGO | COMPlus_ReadyToRun=0,COMPlus_TC_QuickJitForLoops=1,COMPlus_TieredPGO=1 |      .NET 6.0 |   100 | 171.3 ms | 1.25 ms | 1.17 ms | 1.00x slower |   0.02x |     46 KB |
+|                         |               |                                                                        |               |       |          |         |         |              |         |           |
+|             ForeachLoop | .NET Core 3.1 |                                                                  Empty | .NET Core 3.1 |   100 | 173.4 ms | 2.77 ms | 2.59 ms |     baseline |         |     20 KB |
+|                    Linq | .NET Core 3.1 |                                                                  Empty | .NET Core 3.1 |   100 | 173.6 ms | 1.49 ms | 1.39 ms | 1.00x slower |   0.02x |     47 KB |
+|               Hyperlinq | .NET Core 3.1 |                                                                  Empty | .NET Core 3.1 |   100 | 173.6 ms | 2.71 ms | 2.54 ms | 1.00x slower |   0.02x |     37 KB |
+| Hyperlinq_ValueDelegate | .NET Core 3.1 |                                                                  Empty | .NET Core 3.1 |   100 | 173.6 ms | 1.98 ms | 1.85 ms | 1.00x slower |   0.01x |     38 KB |
