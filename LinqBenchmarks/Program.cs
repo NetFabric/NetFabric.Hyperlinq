@@ -31,9 +31,9 @@ var config = DefaultConfig.Instance
     .AddJob(Job.Default
         .WithRuntime(CoreRuntime.Core60)
         .WithEnvironmentVariables(
-            new EnvironmentVariable("COMPlus_ReadyToRun", "0"),
-            new EnvironmentVariable("COMPlus_TC_QuickJitForLoops", "1"),
-            new EnvironmentVariable("COMPlus_TieredPGO", "1"))
+            new EnvironmentVariable("DOTNET_ReadyToRun", "0"), // Disable AOT
+            new EnvironmentVariable("DOTNET_TC_QuickJitForLoops", "1"), // Enable Quick Jit for loop
+            new EnvironmentVariable("DOTNET_TieredPGO", "1")) // Turn on layered PGO
         .WithId(".NET 6 PGO")
     )
     // .AddJob(Job.Default
