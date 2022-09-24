@@ -1,7 +1,6 @@
 using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Configs;
 using StructLinq;
-using System;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -14,55 +13,55 @@ namespace NetFabric.Hyperlinq.Benchmarks
         [BenchmarkCategory("Array")]
         [Benchmark(Baseline = true)]
         public int Linq_Array()
-            => Enumerable.Select(array, item => item)
+            => array.Select(item => item)
                 .Count();
 
         [BenchmarkCategory("Enumerable_Value")]
         [Benchmark(Baseline = true)]
         public int Linq_Enumerable_Value()
-            => Enumerable.Select(enumerableValue, item => item)
+            => enumerableValue.Select(item => item)
                 .Count();
 
         [BenchmarkCategory("Collection_Value")]
         [Benchmark(Baseline = true)]
         public int Linq_Collection_Value()
-            => Enumerable.Select(collectionValue, item => item)
+            => collectionValue.Select(item => item)
                 .Count();
 
         [BenchmarkCategory("List_Value")]
         [Benchmark(Baseline = true)]
         public int Linq_List_Value()
-            => Enumerable.Select(listValue, item => item)
+            => listValue.Select(item => item)
                 .Count();
 
         [BenchmarkCategory("AsyncEnumerable_Value")]
         [Benchmark(Baseline = true)]
         public ValueTask<int> Linq_AsyncEnumerable_Value()
-            => AsyncEnumerable.Select(asyncEnumerableValue, item => item)
+            => asyncEnumerableValue.Select(item => item)
                 .CountAsync();
 
         [BenchmarkCategory("Enumerable_Reference")]
         [Benchmark(Baseline = true)]
         public int Linq_Enumerable_Reference()
-            => Enumerable.Select(enumerableReference, item => item)
+            => enumerableReference.Select(item => item)
                 .Count();
 
         [BenchmarkCategory("Collection_Reference")]
         [Benchmark(Baseline = true)]
         public int Linq_Collection_Reference()
-            => Enumerable.Select(collectionReference, item => item)
+            => collectionReference.Select(item => item)
                 .Count();
 
         [BenchmarkCategory("List_Reference")]
         [Benchmark(Baseline = true)]
         public int Linq_List_Reference()
-            => Enumerable.Select(listReference, item => item)
+            => listReference.Select(item => item)
                 .Count();
 
         [BenchmarkCategory("AsyncEnumerable_Reference")]
         [Benchmark(Baseline = true)]
         public ValueTask<int> Linq_AsyncEnumerable_Reference()
-            => AsyncEnumerable.Select(asyncEnumerableReference, item => item)
+            => asyncEnumerableReference.Select(item => item)
                 .CountAsync();
 
         // ---------------------------------------------------------------------
@@ -128,36 +127,21 @@ namespace NetFabric.Hyperlinq.Benchmarks
         [BenchmarkCategory("Array")]
         [Benchmark]
         public int Hyperlinq_Array()
-            => array
+            => array.AsValueEnumerable()
                 .Select(item => item)
                 .Count();
-
-        [BenchmarkCategory("Array")]
-        [Benchmark]
-        public int Hyperlinq_Span()
-            => array.AsSpan()
-                .Select(item => item)
-                .Count();
-
-        [BenchmarkCategory("Array")]
-        [Benchmark]
-        public int Hyperlinq_Memory()
-            => memory.AsValueEnumerable()
-                .Select(item => item)
-                .Count();
-
 
         [BenchmarkCategory("Enumerable_Value")]
         [Benchmark]
         public int Hyperlinq_Enumerable_Value()
-            => EnumerableExtensions.AsValueEnumerable<TestEnumerable.Enumerable, TestEnumerable.Enumerable.Enumerator, int>(enumerableValue, enumerable => enumerable.GetEnumerator())
+            => enumerableValue.AsValueEnumerable()
                 .Select(item => item)
                 .Count();
 
         [BenchmarkCategory("Collection_Value")]
         [Benchmark]
         public int Hyperlinq_Collection_Value()
-            => ReadOnlyCollectionExtensions.AsValueEnumerable<TestCollection.Enumerable, TestCollection.Enumerable.Enumerator, int>(collectionValue, enumerable => enumerable.GetEnumerator())
+            => collectionValue.AsValueEnumerable()
                 .Select(item => item)
                 .Count();
 
@@ -173,8 +157,8 @@ namespace NetFabric.Hyperlinq.Benchmarks
         [Benchmark]
         public ValueTask<int> Hyperlinq_AsyncEnumerable_Value()
             => asyncEnumerableValue
-                .AsAsyncValueEnumerable<TestAsyncEnumerable.Enumerable, TestAsyncEnumerable.Enumerable.Enumerator, int>((enumerable, cancellationToke) => enumerable.GetAsyncEnumerator(cancellationToke))
-                .Select(item => item)
+                .AsAsyncValueEnumerable()
+                .Select((item, _) => new ValueTask<int>(item))
                 .CountAsync();
 
         [BenchmarkCategory("Enumerable_Reference")]
@@ -206,7 +190,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public ValueTask<int> Hyperlinq_AsyncEnumerable_Reference()
             => asyncEnumerableReference
                 .AsAsyncValueEnumerable()
-                .Select(item => item)
+                .Select((item, _) => new ValueTask<int>(item))
                 .CountAsync();
     }
 }

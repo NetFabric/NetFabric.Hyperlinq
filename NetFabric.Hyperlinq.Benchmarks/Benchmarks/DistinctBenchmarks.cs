@@ -4,6 +4,8 @@ using StructLinq;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+// ReSharper disable ForeachCanBeConvertedToQueryUsingAnotherGetEnumerator
+// ReSharper disable LoopCanBeConvertedToQuery
 
 namespace NetFabric.Hyperlinq.Benchmarks
 {
@@ -16,7 +18,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public int Linq_Array()
         {
             var sum = 0;
-            foreach (var item in Enumerable.Distinct(array))
+            foreach (var item in array.Distinct())
                 sum += item;
             return sum;
         }
@@ -26,7 +28,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public int Linq_Enumerable_Value()
         {
             var sum = 0;
-            foreach (var item in Enumerable.Distinct(enumerableValue))
+            foreach (var item in enumerableValue.Distinct())
                 sum += item;
             return sum;
         }
@@ -36,7 +38,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public int Linq_Collection_Value()
         {
             var sum = 0;
-            foreach (var item in Enumerable.Distinct(collectionValue))
+            foreach (var item in collectionValue.Distinct())
                 sum += item;
             return sum;
         }
@@ -46,17 +48,17 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public int Linq_List_Value()
         {
             var sum = 0;
-            foreach (var item in Enumerable.Distinct(listValue))
+            foreach (var item in listValue.Distinct())
                 sum += item;
             return sum;
         }
 
         [BenchmarkCategory("AsyncEnumerable_Value")]
         [Benchmark(Baseline = true)]
-        public async Task<int> Linq_AsyncEnumerable_Value()
+        public async ValueTask<int> Linq_AsyncEnumerable_Value()
         {
             var sum = 0;
-            await foreach (var item in AsyncEnumerable.Distinct(asyncEnumerableValue))
+            await foreach (var item in asyncEnumerableValue.Distinct())
                 sum += item;
             return sum;
         }
@@ -66,7 +68,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public int Linq_Enumerable_Reference()
         {
             var sum = 0;
-            foreach (var item in Enumerable.Distinct(enumerableReference))
+            foreach (var item in enumerableReference.Distinct())
                 sum += item;
             return sum;
         }
@@ -76,7 +78,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public int Linq_Collection_Reference()
         {
             var sum = 0;
-            foreach (var item in Enumerable.Distinct(collectionReference))
+            foreach (var item in collectionReference.Distinct())
                 sum += item;
             return sum;
         }
@@ -86,17 +88,17 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public int Linq_List_Reference()
         {
             var sum = 0;
-            foreach (var item in Enumerable.Distinct(listReference))
+            foreach (var item in listReference.Distinct())
                 sum += item;
             return sum;
         }
 
         [BenchmarkCategory("AsyncEnumerable_Reference")]
         [Benchmark(Baseline = true)]
-        public async Task<int> Linq_AsyncEnumerable_Reference()
+        public async ValueTask<int> Linq_AsyncEnumerable_Reference()
         {
             var sum = 0;
-            await foreach (var item in AsyncEnumerable.Distinct(asyncEnumerableReference))
+            await foreach (var item in asyncEnumerableReference.Distinct())
                 sum += item;
             return sum;
         }
@@ -108,7 +110,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public int StructLinq_Array()
         {
             var sum = 0;
-            foreach (var item in array.Distinct(x => x))
+            foreach (var item in array.ToStructEnumerable().Distinct(x => x))
                 sum += item;
             return sum;
         }
@@ -180,7 +182,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public int Hyperlinq_Array()
         {
             var sum = 0;
-            foreach (var item in array.Distinct())
+            foreach (var item in array.AsValueEnumerable().Distinct())
                 sum += item;
             return sum;
         }
@@ -190,7 +192,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public int Hyperlinq_Span()
         {
             var sum = 0;
-            foreach (ref readonly var item in array.AsSpan().Distinct())
+            foreach (ref readonly var item in array.AsSpan().AsValueEnumerable().Distinct())
                 sum += item;
             return sum;
         }
@@ -210,7 +212,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public int Hyperlinq_Enumerable_Value()
         {
             var sum = 0;
-            foreach (var item in EnumerableExtensions.AsValueEnumerable<TestEnumerable.Enumerable, TestEnumerable.Enumerable.Enumerator, int>(enumerableValue, enumerable => enumerable.GetEnumerator()).Distinct())
+            foreach (var item in enumerableValue.AsValueEnumerable().Distinct())
                 sum += item;
             return sum;
         }
@@ -220,7 +222,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public int Hyperlinq_Collection_Value()
         {
             var sum = 0;
-            foreach (var item in ReadOnlyCollectionExtensions.AsValueEnumerable<TestCollection.Enumerable, TestCollection.Enumerable.Enumerator, int>(collectionValue, enumerable => enumerable.GetEnumerator()).Distinct())
+            foreach (var item in collectionValue.AsValueEnumerable().Distinct())
                 sum += item;
             return sum;
         }
@@ -237,10 +239,12 @@ namespace NetFabric.Hyperlinq.Benchmarks
 
         [BenchmarkCategory("AsyncEnumerable_Value")]
         [Benchmark]
-        public async Task<int> Hyperlinq_AsyncEnumerable_Value()
+        public async ValueTask<int> Hyperlinq_AsyncEnumerable_Value()
         {
             var sum = 0;
-            await foreach (var item in asyncEnumerableValue.AsAsyncValueEnumerable<TestAsyncEnumerable.Enumerable, TestAsyncEnumerable.Enumerable.Enumerator, int>((enumerable, cancellationToke) => enumerable.GetAsyncEnumerator(cancellationToke)).Distinct())
+            await foreach (var item in asyncEnumerableValue
+                .AsAsyncValueEnumerable()
+                .Distinct())
                 sum += item;
             return sum;
         }
@@ -277,7 +281,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
 
         [BenchmarkCategory("AsyncEnumerable_Reference")]
         [Benchmark]
-        public async Task<int> Hyperlinq_AsyncEnumerable_Reference()
+        public async ValueTask<int> Hyperlinq_AsyncEnumerable_Reference()
         {
             var sum = 0;
             await foreach (var item in asyncEnumerableReference.AsAsyncValueEnumerable().Distinct())

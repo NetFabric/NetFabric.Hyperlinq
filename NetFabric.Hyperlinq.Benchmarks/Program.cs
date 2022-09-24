@@ -1,12 +1,18 @@
-﻿using System;
+﻿using BenchmarkDotNet.Columns;
+using BenchmarkDotNet.Configs;
+using BenchmarkDotNet.Diagnosers;
+using BenchmarkDotNet.Environments;
+using System;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
 using BenchmarkDotNet.Exporters;
+using BenchmarkDotNet.Jobs;
 using BenchmarkDotNet.Loggers;
 using BenchmarkDotNet.Reports;
 using BenchmarkDotNet.Running;
+using BenchmarkDotNet.Validators;
 
 namespace NetFabric.Hyperlinq.Benchmarks
 {
@@ -14,7 +20,18 @@ namespace NetFabric.Hyperlinq.Benchmarks
     {
         static void Main(string[] args)
         {
-            foreach (var summary in BenchmarkSwitcher.FromAssembly(typeof(Program).Assembly).Run(args))
+            var config = DefaultConfig.Instance
+                .WithSummaryStyle(SummaryStyle.Default.WithRatioStyle(RatioStyle.Trend))
+                .AddJob(Job.Default
+                    .WithRuntime(CoreRuntime.Core60)
+                    .WithEnvironmentVariables(
+                        new EnvironmentVariable("COMPlus_ReadyToRun", "0"),
+                        new EnvironmentVariable("COMPlus_TC_QuickJitForLoops", "1"),
+                        new EnvironmentVariable("COMPlus_TieredPGO", "1"))
+                    .WithId(".NET 6 PGO"))
+                .AddDiagnoser(MemoryDiagnoser.Default);
+                
+            foreach (var summary in BenchmarkSwitcher.FromAssembly(typeof(Program).Assembly).Run(args, config))
                 SaveSummary(summary);
         }
 
@@ -75,22 +92,22 @@ namespace NetFabric.Hyperlinq.Benchmarks
         }
 
         static string GetInformationalVersion(Assembly assembly)
-            => GetCustomAttribute<AssemblyInformationalVersionAttribute>(assembly)?.InformationalVersion.Split('+')[0];
+            => GetCustomAttribute<AssemblyInformationalVersionAttribute>(assembly)?.InformationalVersion.Split('+')[0] ?? "<unknown>";
 
-        static T GetCustomAttribute<T>(Assembly assembly) where T : Attribute
-            => (T)Attribute.GetCustomAttribute(assembly, typeof(T), false);
+        static T? GetCustomAttribute<T>(Assembly assembly) where T : Attribute
+            => (T?)Attribute.GetCustomAttribute(assembly, typeof(T), false);
 
-        static Type GetTargetType(Summary summary)
+        static Type? GetTargetType(Summary summary)
         {
             var targetTypes = summary.BenchmarksCases.Select(i => i.Descriptor.Type).Distinct().ToList();
             return targetTypes.Count == 1 ? targetTypes[0] : null;
         }
 
-        static string GetSolutionDirectory()
+        static string? GetSolutionDirectory()
         {
-            var dir = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
+            var dir = Path.GetDirectoryName(Assembly.GetEntryAssembly()?.Location);
 
-            while (!string.IsNullOrEmpty(dir))
+            while (dir is not null and { Length: not 0 })
             {
                 if (Directory.EnumerateFiles(dir, "*.sln", SearchOption.TopDirectoryOnly).Any())
                     return dir;
@@ -98,7 +115,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
                 dir = Path.GetDirectoryName(dir);
             }
 
-            return null;
+            return default;
         }
     }
 }

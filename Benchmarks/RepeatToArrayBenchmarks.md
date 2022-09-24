@@ -4,32 +4,32 @@
 [RepeatToArrayBenchmarks.cs](../NetFabric.Hyperlinq.Benchmarks/Benchmarks/RepeatToArrayBenchmarks.cs)
 
 ### References:
-- Linq: 5.0.2
+- Linq: 6.0.0-preview.7.21377.19
 - System.Linq.Async: [5.0.0](https://www.nuget.org/packages/System.Linq.Async/5.0.0)
 - System.Interactive: [5.0.0](https://www.nuget.org/packages/System.Interactive/5.0.0)
 - System.Interactive.Async: [5.0.0](https://www.nuget.org/packages/System.Interactive.Async/5.0.0)
-- StructLinq: [0.25.3](https://www.nuget.org/packages/StructLinq/0.25.3)
-- NetFabric.Hyperlinq: [3.0.0-beta34](https://www.nuget.org/packages/NetFabric.Hyperlinq/3.0.0-beta34)
+- StructLinq: [0.27.0](https://www.nuget.org/packages/StructLinq/0.27.0)
+- NetFabric.Hyperlinq: [3.0.0-beta45](https://www.nuget.org/packages/NetFabric.Hyperlinq/3.0.0-beta45)
 
 ### Results:
 ``` ini
 
-BenchmarkDotNet=v0.12.1, OS=Windows 10.0.19042
-Intel Core i7-7567U CPU 3.50GHz (Kaby Lake), 1 CPU, 4 logical and 2 physical cores
-.NET Core SDK=5.0.200-preview.20614.14
-  [Host]        : .NET Core 5.0.2 (CoreCLR 5.0.220.61120, CoreFX 5.0.220.61120), X64 RyuJIT
-  .NET Core 5.0 : .NET Core 5.0.2 (CoreCLR 5.0.220.61120, CoreFX 5.0.220.61120), X64 RyuJIT
+BenchmarkDotNet=v0.13.1.1606-nightly, OS=macOS Catalina 10.15.7 (19H1323) [Darwin 19.6.0]
+Intel Core i5-7360U CPU 2.30GHz (Kaby Lake), 1 CPU, 4 logical and 2 physical cores
+.NET SDK=6.0.100-preview.7.21379.14
+  [Host]     : .NET 6.0.0 (6.0.21.37719), X64 RyuJIT
+  .NET 6 PGO : .NET 6.0.0 (6.0.21.37719), X64 RyuJIT
 
-Job=.NET Core 5.0  Runtime=.NET Core 5.0  
+Job=.NET 6 PGO  EnvironmentVariables=COMPlus_ReadyToRun=0,COMPlus_TC_QuickJitForLoops=1,COMPlus_TieredPGO=1  Runtime=.NET 6.0  
 
 ```
-|          Method |   Categories | Count |      Mean |    Error |   StdDev | Ratio | RatioSD |  Gen 0 | Gen 1 | Gen 2 | Allocated |
-|---------------- |------------- |------ |----------:|---------:|---------:|------:|--------:|-------:|------:|------:|----------:|
-|            Linq |       Repeat |   100 | 140.08 ns | 2.839 ns | 2.915 ns |  1.00 |    0.00 | 0.2179 |     - |     - |     456 B |
-|      StructLinq |       Repeat |   100 | 164.29 ns | 3.302 ns | 3.391 ns |  1.17 |    0.03 | 0.2141 |     - |     - |     448 B |
-| LinqFaster_SIMD |       Repeat |   100 |  36.61 ns | 0.810 ns | 1.053 ns |  0.26 |    0.01 | 0.2027 |     - |     - |     424 B |
-|       Hyperlinq |       Repeat |   100 |  63.87 ns | 1.072 ns | 1.053 ns |  0.46 |    0.01 | 0.2027 |     - |     - |     424 B |
-|  Hyperlinq_SIMD |       Repeat |   100 |  52.59 ns | 0.871 ns | 0.815 ns |  0.38 |    0.01 | 0.2027 |     - |     - |     424 B |
-|                 |              |       |           |          |          |       |         |        |       |       |           |
-|      Linq_Async | Repeat_Async |   100 | 162.26 ns | 3.103 ns | 3.048 ns |  1.00 |    0.00 | 0.2255 |     - |     - |     472 B |
-| Hyperlinq_Async | Repeat_Async |   100 | 178.38 ns | 1.134 ns | 0.947 ns |  1.10 |    0.02 | 0.2027 |     - |     - |     424 B |
+|          Method |   Categories | Count |      Mean |    Error |   StdDev |        Ratio | RatioSD |  Gen 0 | Allocated |
+|---------------- |------------- |------ |----------:|---------:|---------:|-------------:|--------:|-------:|----------:|
+|            Linq |       Repeat |   100 |  48.20 ns | 0.986 ns | 1.923 ns |     baseline |         | 0.2180 |     456 B |
+|      StructLinq |       Repeat |   100 |  87.02 ns | 0.783 ns | 0.694 ns | 1.72x slower |   0.06x | 0.2142 |     448 B |
+| LinqFaster_SIMD |       Repeat |   100 |  40.09 ns | 0.580 ns | 0.542 ns | 1.25x faster |   0.05x | 0.2027 |     424 B |
+|       Hyperlinq |       Repeat |   100 |  42.98 ns | 0.979 ns | 1.690 ns | 1.12x faster |   0.05x | 0.2027 |     424 B |
+|  Hyperlinq_SIMD |       Repeat |   100 |  51.60 ns | 1.154 ns | 1.830 ns | 1.07x slower |   0.03x | 0.2027 |     424 B |
+|                 |              |       |           |          |          |              |         |        |           |
+|      Linq_Async | Repeat_Async |   100 | 120.20 ns | 1.425 ns | 1.333 ns |     baseline |         | 0.2255 |     472 B |
+| Hyperlinq_Async | Repeat_Async |   100 | 146.16 ns | 2.165 ns | 2.025 ns | 1.22x slower |   0.03x | 0.2027 |     424 B |

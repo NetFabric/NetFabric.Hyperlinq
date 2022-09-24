@@ -4,49 +4,50 @@
 [ElementAtBenchmarks.cs](../NetFabric.Hyperlinq.Benchmarks/Benchmarks/ElementAtBenchmarks.cs)
 
 ### References:
-- Linq: 4.8.4300.0
+- Linq: 6.0.0-preview.5.21301.5
 - System.Linq.Async: [5.0.0](https://www.nuget.org/packages/System.Linq.Async/5.0.0)
 - System.Interactive: [5.0.0](https://www.nuget.org/packages/System.Interactive/5.0.0)
 - System.Interactive.Async: [5.0.0](https://www.nuget.org/packages/System.Interactive.Async/5.0.0)
-- StructLinq: [0.25.3](https://www.nuget.org/packages/StructLinq/0.25.3)
-- NetFabric.Hyperlinq: [3.0.0-beta29](https://www.nuget.org/packages/NetFabric.Hyperlinq/3.0.0-beta29)
+- StructLinq: [0.26.0](https://www.nuget.org/packages/StructLinq/0.26.0)
+- NetFabric.Hyperlinq: [3.0.0-beta44](https://www.nuget.org/packages/NetFabric.Hyperlinq/3.0.0-beta44)
 
 ### Results:
 ``` ini
 
-BenchmarkDotNet=v0.12.1, OS=Windows 10.0.19042
+BenchmarkDotNet=v0.13.0.1555-nightly, OS=Windows 10.0.19043.1055 (21H1/May2021Update)
 Intel Core i7-7567U CPU 3.50GHz (Kaby Lake), 1 CPU, 4 logical and 2 physical cores
-  [Host]        : .NET Framework 4.8 (4.8.4300.0), X64 RyuJIT
-  .NET Core 5.0 : .NET Core 5.0.2 (CoreCLR 5.0.220.61120, CoreFX 5.0.220.61120), X64 RyuJIT
+.NET SDK=6.0.100-preview.5.21302.13
+  [Host]     : .NET 6.0.0 (6.0.21.30105), X64 RyuJIT
+  Job-UNTOJZ : .NET 6.0.0 (6.0.21.30105), X64 RyuJIT
 
-Job=.NET Core 5.0  Runtime=.NET Core 5.0  
+Runtime=.NET 6.0  
 
 ```
-|                         Method |                Categories | Count |         Mean |     Error |    StdDev | Ratio |  Gen 0 | Gen 1 | Gen 2 | Allocated |
-|------------------------------- |-------------------------- |------ |-------------:|----------:|----------:|------:|-------:|------:|------:|----------:|
-|                     Linq_Array |                     Array |   100 |    23.360 ns | 0.0504 ns | 0.0447 ns |  1.00 |      - |     - |     - |         - |
-|                Hyperlinq_Array |                     Array |   100 |     5.306 ns | 0.0090 ns | 0.0084 ns |  0.23 |      - |     - |     - |         - |
-|                 Hyperlinq_Span |                     Array |   100 |     5.032 ns | 0.0040 ns | 0.0031 ns |  0.22 |      - |     - |     - |         - |
-|               Hyperlinq_Memory |                     Array |   100 |     6.595 ns | 0.0121 ns | 0.0113 ns |  0.28 |      - |     - |     - |         - |
-|                                |                           |       |              |           |           |       |        |       |       |           |
-|          Linq_Enumerable_Value |          Enumerable_Value |   100 |   359.232 ns | 0.5723 ns | 0.4779 ns |  1.00 | 0.0153 |     - |     - |      32 B |
-|     Hyperlinq_Enumerable_Value |          Enumerable_Value |   100 |   137.595 ns | 0.2246 ns | 0.1991 ns |  0.38 |      - |     - |     - |         - |
-|                                |                           |       |              |           |           |       |        |       |       |           |
-|          Linq_Collection_Value |          Collection_Value |   100 |   317.957 ns | 5.4123 ns | 4.5195 ns |  1.00 | 0.0153 |     - |     - |      32 B |
-|     Hyperlinq_Collection_Value |          Collection_Value |   100 |   143.821 ns | 0.2611 ns | 0.2443 ns |  0.45 |      - |     - |     - |         - |
-|                                |                           |       |              |           |           |       |        |       |       |           |
-|                Linq_List_Value |                List_Value |   100 |    10.390 ns | 0.0256 ns | 0.0227 ns |  1.00 |      - |     - |     - |         - |
-|           Hyperlinq_List_Value |                List_Value |   100 |     6.672 ns | 0.0243 ns | 0.0215 ns |  0.64 |      - |     - |     - |         - |
-|                                |                           |       |              |           |           |       |        |       |       |           |
-|     Linq_AsyncEnumerable_Value |     AsyncEnumerable_Value |   100 | 2,078.866 ns | 4.3966 ns | 4.1125 ns |  1.00 | 0.0191 |     - |     - |      40 B |
-|                                |                           |       |              |           |           |       |        |       |       |           |
-|      Linq_Enumerable_Reference |      Enumerable_Reference |   100 |   231.469 ns | 0.3659 ns | 0.3243 ns |  1.00 | 0.0153 |     - |     - |      32 B |
-| Hyperlinq_Enumerable_Reference |      Enumerable_Reference |   100 |   241.359 ns | 1.1134 ns | 1.0415 ns |  1.04 | 0.0153 |     - |     - |      32 B |
-|                                |                           |       |              |           |           |       |        |       |       |           |
-|      Linq_Collection_Reference |      Collection_Reference |   100 |   231.936 ns | 0.3911 ns | 0.3659 ns |  1.00 | 0.0153 |     - |     - |      32 B |
-| Hyperlinq_Collection_Reference |      Collection_Reference |   100 |   255.067 ns | 0.8164 ns | 0.7237 ns |  1.10 | 0.0153 |     - |     - |      32 B |
-|                                |                           |       |              |           |           |       |        |       |       |           |
-|            Linq_List_Reference |            List_Reference |   100 |    10.386 ns | 0.0318 ns | 0.0282 ns |  1.00 |      - |     - |     - |         - |
-|       Hyperlinq_List_Reference |            List_Reference |   100 |     6.670 ns | 0.0148 ns | 0.0132 ns |  0.64 |      - |     - |     - |         - |
-|                                |                           |       |              |           |           |       |        |       |       |           |
-| Linq_AsyncEnumerable_Reference | AsyncEnumerable_Reference |   100 | 1,945.874 ns | 4.9947 ns | 4.4276 ns |  1.00 | 0.0191 |     - |     - |      40 B |
+|                              Method |                Categories | Count |         Mean |     Error |    StdDev | Ratio | RatioSD |  Gen 0 | Gen 1 | Gen 2 | Allocated |
+|------------------------------------ |-------------------------- |------ |-------------:|----------:|----------:|------:|--------:|-------:|------:|------:|----------:|
+|                          Linq_Array |                     Array |   100 |    16.456 ns | 0.0966 ns | 0.0904 ns |  1.00 |    0.00 |      - |     - |     - |         - |
+|                     Hyperlinq_Array |                     Array |   100 |    12.952 ns | 0.0361 ns | 0.0320 ns |  0.79 |    0.00 |      - |     - |     - |         - |
+|                                     |                           |       |              |           |           |       |         |        |       |       |           |
+|               Linq_Enumerable_Value |          Enumerable_Value |   100 |   321.772 ns | 2.7943 ns | 2.6138 ns |  1.00 |    0.00 | 0.0153 |     - |     - |      32 B |
+|          Hyperlinq_Enumerable_Value |          Enumerable_Value |   100 |   131.436 ns | 0.4074 ns | 0.3611 ns |  0.41 |    0.00 |      - |     - |     - |         - |
+|                                     |                           |       |              |           |           |       |         |        |       |       |           |
+|               Linq_Collection_Value |          Collection_Value |   100 |   320.549 ns | 5.2212 ns | 4.6284 ns |  1.00 |    0.00 | 0.0153 |     - |     - |      32 B |
+|          Hyperlinq_Collection_Value |          Collection_Value |   100 |   136.995 ns | 0.5484 ns | 0.4861 ns |  0.43 |    0.01 |      - |     - |     - |         - |
+|                                     |                           |       |              |           |           |       |         |        |       |       |           |
+|                     Linq_List_Value |                List_Value |   100 |     9.673 ns | 0.0693 ns | 0.0648 ns |  1.00 |    0.00 |      - |     - |     - |         - |
+|                Hyperlinq_List_Value |                List_Value |   100 |   330.177 ns | 2.9100 ns | 2.5796 ns | 34.15 |    0.38 | 0.0153 |     - |     - |      32 B |
+|                                     |                           |       |              |           |           |       |         |        |       |       |           |
+|          Linq_AsyncEnumerable_Value |     AsyncEnumerable_Value |   100 | 1,620.433 ns | 4.6504 ns | 4.1224 ns |  1.00 |    0.00 | 0.0153 |     - |     - |      32 B |
+|     Hyperlinq_AsyncEnumerable_Value |     AsyncEnumerable_Value |   100 |   805.497 ns | 3.5011 ns | 3.1036 ns |  0.50 |    0.00 |      - |     - |     - |         - |
+|                                     |                           |       |              |           |           |       |         |        |       |       |           |
+|           Linq_Enumerable_Reference |      Enumerable_Reference |   100 |   322.075 ns | 1.6159 ns | 1.4324 ns |  1.00 |    0.00 | 0.0153 |     - |     - |      32 B |
+|      Hyperlinq_Enumerable_Reference |      Enumerable_Reference |   100 |   335.420 ns | 2.7009 ns | 2.2554 ns |  1.04 |    0.01 | 0.0153 |     - |     - |      32 B |
+|                                     |                           |       |              |           |           |       |         |        |       |       |           |
+|           Linq_Collection_Reference |      Collection_Reference |   100 |   319.994 ns | 3.3920 ns | 3.0069 ns |  1.00 |    0.00 | 0.0153 |     - |     - |      32 B |
+|      Hyperlinq_Collection_Reference |      Collection_Reference |   100 |   364.654 ns | 1.4024 ns | 1.2432 ns |  1.14 |    0.01 | 0.0153 |     - |     - |      32 B |
+|                                     |                           |       |              |           |           |       |         |        |       |       |           |
+|                 Linq_List_Reference |            List_Reference |   100 |     9.695 ns | 0.0674 ns | 0.0527 ns |  1.00 |    0.00 |      - |     - |     - |         - |
+|            Hyperlinq_List_Reference |            List_Reference |   100 |   328.172 ns | 1.9735 ns | 1.6480 ns | 33.84 |    0.28 | 0.0153 |     - |     - |      32 B |
+|                                     |                           |       |              |           |           |       |         |        |       |       |           |
+|      Linq_AsyncEnumerable_Reference | AsyncEnumerable_Reference |   100 | 1,627.227 ns | 6.8413 ns | 6.0646 ns |  1.00 |    0.00 | 0.0153 |     - |     - |      32 B |
+| Hyperlinq_AsyncEnumerable_Reference | AsyncEnumerable_Reference |   100 | 1,412.723 ns | 7.4225 ns | 6.5799 ns |  0.87 |    0.00 | 0.0153 |     - |     - |      32 B |

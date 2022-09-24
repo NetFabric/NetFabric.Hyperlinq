@@ -1,7 +1,6 @@
 using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Configs;
 using StructLinq;
-using System;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -14,55 +13,55 @@ namespace NetFabric.Hyperlinq.Benchmarks
         [BenchmarkCategory("Array")]
         [Benchmark(Baseline = true)]
         public int[] Linq_Array()
-            => Enumerable.Where(array, item => (item & 0x01) == 0)
+            => array.Where(item => (item & 0x01) == 0)
                 .ToArray();
 
         [BenchmarkCategory("Enumerable_Value")]
         [Benchmark(Baseline = true)]
         public int[] Linq_Enumerable_Value()
-            => Enumerable.Where(enumerableValue, item => (item & 0x01) == 0)
+            => enumerableValue.Where(item => (item & 0x01) == 0)
                 .ToArray();
 
         [BenchmarkCategory("Collection_Value")]
         [Benchmark(Baseline = true)]
         public int[] Linq_Collection_Value()
-            => Enumerable.Where(collectionValue, item => (item & 0x01) == 0)
+            => collectionValue.Where(item => (item & 0x01) == 0)
                 .ToArray();
 
         [BenchmarkCategory("List_Value")]
         [Benchmark(Baseline = true)]
         public int[] Linq_List_Value()
-            => Enumerable.Where(listValue, item => (item & 0x01) == 0)
+            => listValue.Where(item => (item & 0x01) == 0)
                 .ToArray();
 
         [BenchmarkCategory("AsyncEnumerable_Value")]
         [Benchmark(Baseline = true)]
         public ValueTask<int[]> Linq_AsyncEnumerable_Value()
-            => AsyncEnumerable.Where(asyncEnumerableValue, item => (item & 0x01) == 0)
+            => asyncEnumerableValue.Where(item => (item & 0x01) == 0)
                 .ToArrayAsync();
 
         [BenchmarkCategory("Enumerable_Reference")]
         [Benchmark(Baseline = true)]
         public int[] Linq_Enumerable_Reference()
-            => Enumerable.Where(enumerableReference, item => (item & 0x01) == 0)
+            => enumerableReference.Where(item => (item & 0x01) == 0)
                 .ToArray();
 
         [BenchmarkCategory("Collection_Reference")]
         [Benchmark(Baseline = true)]
         public int[] Linq_Collection_Reference()
-            => Enumerable.Where(collectionReference, item => (item & 0x01) == 0)
+            => collectionReference.Where(item => (item & 0x01) == 0)
                 .ToArray();
 
         [BenchmarkCategory("List_Reference")]
         [Benchmark(Baseline = true)]
         public int[] Linq_List_Reference()
-            => Enumerable.Where(listReference, item => (item & 0x01) == 0)
+            => listReference.Where(item => (item & 0x01) == 0)
                 .ToArray();
 
         [BenchmarkCategory("AsyncEnumerable_Reference")]
         [Benchmark(Baseline = true)]
         public ValueTask<int[]> Linq_AsyncEnumerable_Reference()
-            => AsyncEnumerable.Where(asyncEnumerableReference, item => (item & 0x01) == 0)
+            => asyncEnumerableReference.Where(item => (item & 0x01) == 0)
                 .ToArrayAsync();
 
         // ---------------------------------------------------------------------
@@ -128,35 +127,21 @@ namespace NetFabric.Hyperlinq.Benchmarks
         [BenchmarkCategory("Array")]
         [Benchmark]
         public int[] Hyperlinq_Array()
-            => array
-                .Where(item => (item & 0x01) == 0)
-                .ToArray();
-
-        [BenchmarkCategory("Array")]
-        [Benchmark]
-        public int[] Hyperlinq_Span()
-            => array.AsSpan()
-                .Where(item => (item & 0x01) == 0)
-                .ToArray();
-
-        [BenchmarkCategory("Array")]
-        [Benchmark]
-        public int[] Hyperlinq_Memory()
-            => memory.AsValueEnumerable()
+            => array.AsValueEnumerable()
                 .Where(item => (item & 0x01) == 0)
                 .ToArray();
 
         [BenchmarkCategory("Enumerable_Value")]
         [Benchmark]
         public int[] Hyperlinq_Enumerable_Value()
-            => EnumerableExtensions.AsValueEnumerable<TestEnumerable.Enumerable, TestEnumerable.Enumerable.Enumerator, int>(enumerableValue, enumerable => enumerable.GetEnumerator())
+            => enumerableValue.AsValueEnumerable()
                 .Where(item => (item & 0x01) == 0)
                 .ToArray();
 
         [BenchmarkCategory("Collection_Value")]
         [Benchmark]
         public int[] Hyperlinq_Collection_Value()
-            => ReadOnlyCollectionExtensions.AsValueEnumerable<TestCollection.Enumerable, TestCollection.Enumerable.Enumerator, int>(collectionValue, enumerable => enumerable.GetEnumerator())
+            => collectionValue.AsValueEnumerable()
                 .Where(item => (item & 0x01) == 0)
                 .ToArray();
 
@@ -172,8 +157,8 @@ namespace NetFabric.Hyperlinq.Benchmarks
         [Benchmark]
         public ValueTask<int[]> Hyperlinq_AsyncEnumerable_Value()
             => asyncEnumerableValue
-                .AsAsyncValueEnumerable<TestAsyncEnumerable.Enumerable, TestAsyncEnumerable.Enumerable.Enumerator, int>((enumerable, cancellationToke) => enumerable.GetAsyncEnumerator(cancellationToke))
-                .Where(item => (item & 0x01) == 0)
+                .AsAsyncValueEnumerable()
+                .Where((item, _) => new ValueTask<bool>((item & 0x01) == 0))
                 .ToArrayAsync();
 
         [BenchmarkCategory("Enumerable_Reference")]
@@ -205,7 +190,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public ValueTask<int[]> Hyperlinq_AsyncEnumerable_Reference()
             => asyncEnumerableReference
                 .AsAsyncValueEnumerable()
-                .Where(item => (item & 0x01) == 0)
+                .Where((item, _) => new ValueTask<bool>((item & 0x01) == 0))
                 .ToArrayAsync();
     }
 }

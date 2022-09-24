@@ -1,7 +1,6 @@
 using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Configs;
 using StructLinq;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -15,37 +14,47 @@ namespace NetFabric.Hyperlinq.Benchmarks
         [BenchmarkCategory("Array")]
         [Benchmark(Baseline = true)]
         public List<int> Linq_Array()
-            => Enumerable.ToList(array);
+            => array.ToList();
 
         [BenchmarkCategory("Enumerable_Value")]
         [Benchmark(Baseline = true)]
         public List<int> Linq_Enumerable_Value()
-            => Enumerable.ToList(enumerableValue);
+            => enumerableValue.ToList();
 
         [BenchmarkCategory("Collection_Value")]
         [Benchmark(Baseline = true)]
         public List<int> Linq_Collection_Value()
-            => Enumerable.ToList(collectionValue);
+            => collectionValue.ToList();
 
         [BenchmarkCategory("List_Value")]
         [Benchmark(Baseline = true)]
         public List<int> Linq_List_Value()
-            => Enumerable.ToList(listValue);
+            => listValue.ToList();
+
+        [BenchmarkCategory("AsyncEnumerable_Value")]
+        [Benchmark(Baseline = true)]
+        public ValueTask<List<int>> Linq_AsyncEnumerable_Value()
+            => asyncEnumerableValue.ToListAsync();
 
         [BenchmarkCategory("Enumerable_Reference")]
         [Benchmark(Baseline = true)]
         public List<int> Linq_Enumerable_Reference()
-            => Enumerable.ToList(enumerableReference);
+            => enumerableReference.ToList();
 
         [BenchmarkCategory("Collection_Reference")]
         [Benchmark(Baseline = true)]
         public List<int> Linq_Collection_Reference()
-            => Enumerable.ToList(collectionReference);
+            => collectionReference.ToList();
 
         [BenchmarkCategory("List_Reference")]
         [Benchmark(Baseline = true)]
         public List<int> Linq_List_Reference()
-            => Enumerable.ToList(listReference);
+            => listReference.ToList();
+
+        [BenchmarkCategory("AsyncEnumerable_Reference")]
+        [Benchmark(Baseline = true)]
+        public ValueTask<List<int>> Linq_AsyncEnumerable_Reference()
+            => asyncEnumerableReference.ToListAsync();
 
         // ---------------------------------------------------------------------
 
@@ -103,31 +112,19 @@ namespace NetFabric.Hyperlinq.Benchmarks
         [BenchmarkCategory("Array")]
         [Benchmark]
         public List<int> Hyperlinq_Array()
-            => array
-                .ToList();
-
-        [BenchmarkCategory("Array")]
-        [Benchmark]
-        public List<int> Hyperlinq_Span()
-            => array.AsSpan()
-                .ToList();
-
-        [BenchmarkCategory("Array")]
-        [Benchmark]
-        public List<int> Hyperlinq_Memory()
-            => memory.AsValueEnumerable()
+            => array.AsValueEnumerable()
                 .ToList();
 
         [BenchmarkCategory("Enumerable_Value")]
         [Benchmark]
         public List<int> Hyperlinq_Enumerable_Value()
-            => EnumerableExtensions.AsValueEnumerable<TestEnumerable.Enumerable, TestEnumerable.Enumerable.Enumerator, int>(enumerableValue, enumerable => enumerable.GetEnumerator())
+            => enumerableValue.AsValueEnumerable()
                 .ToList();
 
         [BenchmarkCategory("Collection_Value")]
         [Benchmark]
         public List<int> Hyperlinq_Collection_Value()
-            => ReadOnlyCollectionExtensions.AsValueEnumerable<TestCollection.Enumerable, TestCollection.Enumerable.Enumerator, int>(collectionValue, enumerable => enumerable.GetEnumerator())
+            => collectionValue.AsValueEnumerable()
                 .ToList();
 
         [BenchmarkCategory("List_Value")]
@@ -141,7 +138,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         [Benchmark]
         public ValueTask<List<int>> Hyperlinq_AsyncEnumerable_Value()
             => asyncEnumerableValue
-                .AsAsyncValueEnumerable<TestAsyncEnumerable.Enumerable, TestAsyncEnumerable.Enumerable.Enumerator, int>((enumerable, cancellationToke) => enumerable.GetAsyncEnumerator(cancellationToke))
+                .AsAsyncValueEnumerable()
                 .ToListAsync();
 
         [BenchmarkCategory("Enumerable_Reference")]

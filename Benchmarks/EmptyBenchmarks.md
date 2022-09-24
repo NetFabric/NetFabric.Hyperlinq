@@ -4,28 +4,29 @@
 [EmptyBenchmarks.cs](../NetFabric.Hyperlinq.Benchmarks/Benchmarks/EmptyBenchmarks.cs)
 
 ### References:
-- Linq: 4.8.4300.0
+- Linq: 6.0.0-preview.5.21301.5
 - System.Linq.Async: [5.0.0](https://www.nuget.org/packages/System.Linq.Async/5.0.0)
 - System.Interactive: [5.0.0](https://www.nuget.org/packages/System.Interactive/5.0.0)
 - System.Interactive.Async: [5.0.0](https://www.nuget.org/packages/System.Interactive.Async/5.0.0)
-- StructLinq: [0.25.3](https://www.nuget.org/packages/StructLinq/0.25.3)
-- NetFabric.Hyperlinq: [3.0.0-beta29](https://www.nuget.org/packages/NetFabric.Hyperlinq/3.0.0-beta29)
+- StructLinq: [0.26.0](https://www.nuget.org/packages/StructLinq/0.26.0)
+- NetFabric.Hyperlinq: [3.0.0-beta44](https://www.nuget.org/packages/NetFabric.Hyperlinq/3.0.0-beta44)
 
 ### Results:
 ``` ini
 
-BenchmarkDotNet=v0.12.1, OS=Windows 10.0.19042
+BenchmarkDotNet=v0.13.0.1555-nightly, OS=Windows 10.0.19043.1055 (21H1/May2021Update)
 Intel Core i7-7567U CPU 3.50GHz (Kaby Lake), 1 CPU, 4 logical and 2 physical cores
-  [Host]        : .NET Framework 4.8 (4.8.4300.0), X64 RyuJIT
-  .NET Core 5.0 : .NET Core 5.0.2 (CoreCLR 5.0.220.61120, CoreFX 5.0.220.61120), X64 RyuJIT
+.NET SDK=6.0.100-preview.5.21302.13
+  [Host]     : .NET 6.0.0 (6.0.21.30105), X64 RyuJIT
+  Job-UNTOJZ : .NET 6.0.0 (6.0.21.30105), X64 RyuJIT
 
-Job=.NET Core 5.0  Runtime=.NET Core 5.0  
+Runtime=.NET 6.0  
 
 ```
-|                Method |  Categories |      Mean |     Error |    StdDev | Ratio | Gen 0 | Gen 1 | Gen 2 | Allocated |
-|---------------------- |------------ |----------:|----------:|----------:|------:|------:|------:|------:|----------:|
-|            Linq_Empty |       Empty |  6.261 ns | 0.0193 ns | 0.0151 ns |  1.00 |     - |     - |     - |         - |
-|       Hyperlinq_Empty |       Empty |  1.429 ns | 0.0070 ns | 0.0054 ns |  0.23 |     - |     - |     - |         - |
-|                       |             |           |           |           |       |       |       |       |           |
-|      Linq_Empty_Async | Empty_Async | 40.172 ns | 0.0809 ns | 0.0717 ns |  1.00 |     - |     - |     - |         - |
-| Hyperlinq_Empty_Async | Empty_Async | 21.537 ns | 0.0361 ns | 0.0282 ns |  0.54 |     - |     - |     - |         - |
+|                Method |  Categories |       Mean |     Error |    StdDev |     Median | Ratio | Gen 0 | Gen 1 | Gen 2 | Allocated |
+|---------------------- |------------ |-----------:|----------:|----------:|-----------:|------:|------:|------:|------:|----------:|
+|            Linq_Empty |       Empty |  6.4057 ns | 0.0357 ns | 0.0316 ns |  6.4039 ns | 1.000 |     - |     - |     - |         - |
+|       Hyperlinq_Empty |       Empty |  0.0060 ns | 0.0064 ns | 0.0053 ns |  0.0044 ns | 0.001 |     - |     - |     - |         - |
+|                       |             |            |           |           |            |       |       |       |       |           |
+|      Linq_Empty_Async | Empty_Async | 39.8805 ns | 0.1600 ns | 0.1418 ns | 39.8955 ns |  1.00 |     - |     - |     - |         - |
+| Hyperlinq_Empty_Async | Empty_Async | 20.9157 ns | 0.0982 ns | 0.0871 ns | 20.9092 ns |  0.52 |     - |     - |     - |         - |
