@@ -11,61 +11,47 @@
 - LinqOptimizer.CSharp: [0.7.0](https://www.nuget.org/packages/LinqOptimizer.CSharp/0.7.0)
 - SpanLinq: [0.0.1](https://www.nuget.org/packages/SpanLinq/0.0.1)
 - Streams.CSharp: [0.6.0](https://www.nuget.org/packages/Streams.CSharp/0.6.0)
-- StructLinq.BCL: [0.27.0](https://www.nuget.org/packages/StructLinq/0.27.0)
+- StructLinq.BCL: [0.28.1](https://www.nuget.org/packages/StructLinq/0.28.1)
 - NetFabric.Hyperlinq: [3.0.0-beta48](https://www.nuget.org/packages/NetFabric.Hyperlinq/3.0.0-beta48)
-- System.Linq.Async: [5.0.0](https://www.nuget.org/packages/System.Linq.Async/5.0.0)
+- System.Linq.Async: [6.0.1](https://www.nuget.org/packages/System.Linq.Async/6.0.1)
 - Faslinq: [1.0.5](https://www.nuget.org/packages/Faslinq/1.0.5)
 
 ### Results:
 ``` ini
 
-BenchmarkDotNet=v0.13.1, OS=macOS Catalina 10.15.7 (19H1519) [Darwin 19.6.0]
-Intel Core i5-7360U CPU 2.30GHz (Kaby Lake), 1 CPU, 4 logical and 2 physical cores
-.NET SDK=6.0.100
-  [Host]        : .NET Core 3.1.20 (CoreCLR 4.700.21.47003, CoreFX 4.700.21.47101), X64 RyuJIT
-  .NET 6        : .NET 6.0.0 (6.0.21.52210), X64 RyuJIT
-  .NET 6 PGO    : .NET 6.0.0 (6.0.21.52210), X64 RyuJIT
-  .NET Core 3.1 : .NET Core 3.1.20 (CoreCLR 4.700.21.47003, CoreFX 4.700.21.47101), X64 RyuJIT
+BenchmarkDotNet=v0.13.5, OS=Windows 10 (10.0.19045.3086/22H2/2022Update)
+Intel Core i7-7567U CPU 3.50GHz (Kaby Lake), 1 CPU, 4 logical and 2 physical cores
+.NET SDK=8.0.100-preview.5.23303.2
+  [Host] : .NET 6.0.18 (6.0.1823.26907), X64 RyuJIT AVX2
+  .NET 6 : .NET 6.0.18 (6.0.1823.26907), X64 RyuJIT AVX2
+  .NET 8 : .NET 8.0.0 (8.0.23.28008), X64 RyuJIT AVX2
 
 
 ```
-|                   Method |           Job |                                                EnvironmentVariables |       Runtime | Skip | Count |        Mean |     Error |    StdDev |          Ratio | RatioSD |  Gen 0 | Allocated |
-|------------------------- |-------------- |-------------------------------------------------------------------- |-------------- |----- |------ |------------:|----------:|----------:|---------------:|--------:|-------:|----------:|
-|                  ForLoop |        .NET 6 |                                                               Empty |      .NET 6.0 | 1000 |   100 |    65.39 ns |  0.098 ns |  0.092 ns |       baseline |         |      - |         - |
-|                     Linq |        .NET 6 |                                                               Empty |      .NET 6.0 | 1000 |   100 | 1,170.91 ns |  2.012 ns |  1.783 ns |  17.91x slower |   0.03x | 0.0725 |     152 B |
-|               LinqFaster |        .NET 6 |                                                               Empty |      .NET 6.0 | 1000 |   100 |   387.81 ns |  4.193 ns |  3.922 ns |   5.93x slower |   0.06x | 0.6080 |   1,272 B |
-|             LinqFasterer |        .NET 6 |                                                               Empty |      .NET 6.0 | 1000 |   100 |   859.81 ns |  3.845 ns |  3.211 ns |  13.15x slower |   0.05x | 0.4206 |     880 B |
-|                   LinqAF |        .NET 6 |                                                               Empty |      .NET 6.0 | 1000 |   100 | 2,570.11 ns |  2.756 ns |  2.302 ns |  39.30x slower |   0.06x |      - |         - |
-|            LinqOptimizer |        .NET 6 |                                                               Empty |      .NET 6.0 | 1000 |   100 | 3,104.83 ns | 12.051 ns | 11.273 ns |  47.48x slower |   0.17x | 4.2343 |   8,866 B |
-|                 SpanLinq |        .NET 6 |                                                               Empty |      .NET 6.0 | 1000 |   100 |   249.95 ns |  0.321 ns |  0.300 ns |   3.82x slower |   0.01x |      - |         - |
-|                  Streams |        .NET 6 |                                                               Empty |      .NET 6.0 | 1000 |   100 | 8,167.22 ns | 25.188 ns | 21.033 ns | 124.88x slower |   0.42x | 0.4272 |     912 B |
-|               StructLinq |        .NET 6 |                                                               Empty |      .NET 6.0 | 1000 |   100 |   265.13 ns |  0.314 ns |  0.278 ns |   4.05x slower |   0.01x | 0.0458 |      96 B |
-| StructLinq_ValueDelegate |        .NET 6 |                                                               Empty |      .NET 6.0 | 1000 |   100 |   175.47 ns |  0.124 ns |  0.097 ns |   2.68x slower |   0.00x |      - |         - |
-|                Hyperlinq |        .NET 6 |                                                               Empty |      .NET 6.0 | 1000 |   100 |   222.83 ns |  0.181 ns |  0.142 ns |   3.41x slower |   0.00x |      - |         - |
-|  Hyperlinq_ValueDelegate |        .NET 6 |                                                               Empty |      .NET 6.0 | 1000 |   100 |   218.85 ns |  0.529 ns |  0.494 ns |   3.35x slower |   0.01x |      - |         - |
-|                          |               |                                                                     |               |      |       |             |           |           |                |         |        |           |
-|                  ForLoop |    .NET 6 PGO | DOTNET_ReadyToRun=0,DOTNET_TC_QuickJitForLoops=1,DOTNET_TieredPGO=1 |      .NET 6.0 | 1000 |   100 |    69.95 ns |  0.155 ns |  0.129 ns |       baseline |         |      - |         - |
-|                     Linq |    .NET 6 PGO | DOTNET_ReadyToRun=0,DOTNET_TC_QuickJitForLoops=1,DOTNET_TieredPGO=1 |      .NET 6.0 | 1000 |   100 |   731.89 ns | 12.758 ns | 11.310 ns |  10.47x slower |   0.17x | 0.0725 |     152 B |
-|               LinqFaster |    .NET 6 PGO | DOTNET_ReadyToRun=0,DOTNET_TC_QuickJitForLoops=1,DOTNET_TieredPGO=1 |      .NET 6.0 | 1000 |   100 |   395.49 ns |  4.458 ns |  4.170 ns |   5.65x slower |   0.06x | 0.6080 |   1,272 B |
-|             LinqFasterer |    .NET 6 PGO | DOTNET_ReadyToRun=0,DOTNET_TC_QuickJitForLoops=1,DOTNET_TieredPGO=1 |      .NET 6.0 | 1000 |   100 |   574.41 ns |  2.453 ns |  2.294 ns |   8.21x slower |   0.03x | 0.4206 |     880 B |
-|                   LinqAF |    .NET 6 PGO | DOTNET_ReadyToRun=0,DOTNET_TC_QuickJitForLoops=1,DOTNET_TieredPGO=1 |      .NET 6.0 | 1000 |   100 | 2,568.57 ns |  4.303 ns |  3.593 ns |  36.72x slower |   0.08x |      - |         - |
-|            LinqOptimizer |    .NET 6 PGO | DOTNET_ReadyToRun=0,DOTNET_TC_QuickJitForLoops=1,DOTNET_TieredPGO=1 |      .NET 6.0 | 1000 |   100 | 2,779.70 ns | 13.875 ns | 12.300 ns |  39.76x slower |   0.20x | 4.2343 |   8,866 B |
-|                 SpanLinq |    .NET 6 PGO | DOTNET_ReadyToRun=0,DOTNET_TC_QuickJitForLoops=1,DOTNET_TieredPGO=1 |      .NET 6.0 | 1000 |   100 |   274.75 ns |  2.511 ns |  2.349 ns |   3.93x slower |   0.03x |      - |         - |
-|                  Streams |    .NET 6 PGO | DOTNET_ReadyToRun=0,DOTNET_TC_QuickJitForLoops=1,DOTNET_TieredPGO=1 |      .NET 6.0 | 1000 |   100 | 6,400.11 ns |  8.352 ns |  7.403 ns |  91.51x slower |   0.16x | 0.4349 |     912 B |
-|               StructLinq |    .NET 6 PGO | DOTNET_ReadyToRun=0,DOTNET_TC_QuickJitForLoops=1,DOTNET_TieredPGO=1 |      .NET 6.0 | 1000 |   100 |   278.56 ns |  2.814 ns |  2.350 ns |   3.98x slower |   0.03x | 0.0458 |      96 B |
-| StructLinq_ValueDelegate |    .NET 6 PGO | DOTNET_ReadyToRun=0,DOTNET_TC_QuickJitForLoops=1,DOTNET_TieredPGO=1 |      .NET 6.0 | 1000 |   100 |   177.65 ns |  0.122 ns |  0.114 ns |   2.54x slower |   0.00x |      - |         - |
-|                Hyperlinq |    .NET 6 PGO | DOTNET_ReadyToRun=0,DOTNET_TC_QuickJitForLoops=1,DOTNET_TieredPGO=1 |      .NET 6.0 | 1000 |   100 |   269.59 ns |  0.125 ns |  0.104 ns |   3.85x slower |   0.01x |      - |         - |
-|  Hyperlinq_ValueDelegate |    .NET 6 PGO | DOTNET_ReadyToRun=0,DOTNET_TC_QuickJitForLoops=1,DOTNET_TieredPGO=1 |      .NET 6.0 | 1000 |   100 |   218.29 ns |  0.241 ns |  0.214 ns |   3.12x slower |   0.01x |      - |         - |
-|                          |               |                                                                     |               |      |       |             |           |           |                |         |        |           |
-|                  ForLoop | .NET Core 3.1 |                                                               Empty | .NET Core 3.1 | 1000 |   100 |    65.97 ns |  0.084 ns |  0.078 ns |       baseline |         |      - |         - |
-|                     Linq | .NET Core 3.1 |                                                               Empty | .NET Core 3.1 | 1000 |   100 | 1,301.11 ns |  2.948 ns |  2.613 ns |  19.72x slower |   0.04x | 0.0725 |     152 B |
-|               LinqFaster | .NET Core 3.1 |                                                               Empty | .NET Core 3.1 | 1000 |   100 |   384.99 ns |  1.144 ns |  0.955 ns |   5.84x slower |   0.02x | 0.6080 |   1,272 B |
-|             LinqFasterer | .NET Core 3.1 |                                                               Empty | .NET Core 3.1 | 1000 |   100 |   831.38 ns |  1.226 ns |  1.024 ns |  12.60x slower |   0.02x | 0.4206 |     880 B |
-|                   LinqAF | .NET Core 3.1 |                                                               Empty | .NET Core 3.1 | 1000 |   100 | 3,165.15 ns |  3.598 ns |  3.189 ns |  47.97x slower |   0.06x |      - |         - |
-|            LinqOptimizer | .NET Core 3.1 |                                                               Empty | .NET Core 3.1 | 1000 |   100 | 3,436.61 ns | 12.609 ns | 10.529 ns |  52.10x slower |   0.19x | 4.2458 |   8,896 B |
-|                 SpanLinq | .NET Core 3.1 |                                                               Empty | .NET Core 3.1 | 1000 |   100 |   447.02 ns |  0.238 ns |  0.198 ns |   6.78x slower |   0.01x |      - |         - |
-|                  Streams | .NET Core 3.1 |                                                               Empty | .NET Core 3.1 | 1000 |   100 | 8,502.40 ns | 12.300 ns |  9.603 ns | 128.88x slower |   0.19x | 0.4272 |     912 B |
-|               StructLinq | .NET Core 3.1 |                                                               Empty | .NET Core 3.1 | 1000 |   100 |   462.54 ns |  0.677 ns |  0.528 ns |   7.01x slower |   0.01x | 0.0458 |      96 B |
-| StructLinq_ValueDelegate | .NET Core 3.1 |                                                               Empty | .NET Core 3.1 | 1000 |   100 |   190.55 ns |  0.276 ns |  0.245 ns |   2.89x slower |   0.00x |      - |         - |
-|                Hyperlinq | .NET Core 3.1 |                                                               Empty | .NET Core 3.1 | 1000 |   100 |   330.83 ns |  0.217 ns |  0.193 ns |   5.01x slower |   0.01x |      - |         - |
-|  Hyperlinq_ValueDelegate | .NET Core 3.1 |                                                               Empty | .NET Core 3.1 | 1000 |   100 |   233.07 ns |  0.353 ns |  0.330 ns |   3.53x slower |   0.01x |      - |         - |
+|                   Method |    Job |  Runtime | Skip | Count |        Mean |      Error |     StdDev |      Median |          Ratio | RatioSD |   Gen0 | Allocated | Alloc Ratio |
+|------------------------- |------- |--------- |----- |------ |------------:|-----------:|-----------:|------------:|---------------:|--------:|-------:|----------:|------------:|
+|                  ForLoop | .NET 6 | .NET 6.0 | 1000 |   100 |    59.53 ns |   0.537 ns |   0.448 ns |    59.39 ns |       baseline |         |      - |         - |          NA |
+|                     Linq | .NET 6 | .NET 6.0 | 1000 |   100 | 1,025.47 ns |  10.007 ns |   8.356 ns | 1,023.25 ns |  17.23x slower |   0.12x | 0.0725 |     152 B |          NA |
+|               LinqFaster | .NET 6 | .NET 6.0 | 1000 |   100 |   326.38 ns |   3.172 ns |   2.649 ns |   325.22 ns |   5.48x slower |   0.06x | 0.6080 |    1272 B |          NA |
+|             LinqFasterer | .NET 6 | .NET 6.0 | 1000 |   100 |   725.98 ns |  25.226 ns |  73.187 ns |   686.71 ns |  12.27x slower |   1.30x | 0.4206 |     880 B |          NA |
+|                   LinqAF | .NET 6 | .NET 6.0 | 1000 |   100 | 2,527.53 ns |  39.779 ns |  50.308 ns | 2,510.80 ns |  42.81x slower |   1.07x |      - |         - |          NA |
+|            LinqOptimizer | .NET 6 | .NET 6.0 | 1000 |   100 | 2,148.98 ns |  25.124 ns |  20.980 ns | 2,155.85 ns |  36.10x slower |   0.52x | 4.2343 |    8866 B |          NA |
+|                 SpanLinq | .NET 6 | .NET 6.0 | 1000 |   100 |   257.00 ns |   0.730 ns |   0.610 ns |   256.90 ns |   4.32x slower |   0.03x |      - |         - |          NA |
+|                  Streams | .NET 6 | .NET 6.0 | 1000 |   100 | 7,618.54 ns | 231.742 ns | 676.003 ns | 7,255.97 ns | 128.47x slower |  11.82x | 0.4349 |     912 B |          NA |
+|               StructLinq | .NET 6 | .NET 6.0 | 1000 |   100 |   276.26 ns |   5.483 ns |   8.853 ns |   272.03 ns |   4.68x slower |   0.19x | 0.0458 |      96 B |          NA |
+| StructLinq_ValueDelegate | .NET 6 | .NET 6.0 | 1000 |   100 |   164.50 ns |   1.643 ns |   1.372 ns |   164.05 ns |   2.76x slower |   0.02x |      - |         - |          NA |
+|                Hyperlinq | .NET 6 | .NET 6.0 | 1000 |   100 |   253.13 ns |   4.678 ns |   3.652 ns |   251.85 ns |   4.25x slower |   0.06x |      - |         - |          NA |
+|  Hyperlinq_ValueDelegate | .NET 6 | .NET 6.0 | 1000 |   100 |   200.88 ns |   3.814 ns |   3.746 ns |   199.42 ns |   3.39x slower |   0.07x |      - |         - |          NA |
+|                          |        |          |      |       |             |            |            |             |                |         |        |           |             |
+|                  ForLoop | .NET 8 | .NET 8.0 | 1000 |   100 |    58.37 ns |   0.365 ns |   0.285 ns |    58.38 ns |       baseline |         |      - |         - |          NA |
+|                     Linq | .NET 8 | .NET 8.0 | 1000 |   100 |   630.10 ns |   2.498 ns |   1.950 ns |   630.34 ns |  10.79x slower |   0.05x | 0.0725 |     152 B |          NA |
+|               LinqFaster | .NET 8 | .NET 8.0 | 1000 |   100 |   211.15 ns |   1.695 ns |   1.586 ns |   210.99 ns |   3.61x slower |   0.03x | 0.6080 |    1272 B |          NA |
+|             LinqFasterer | .NET 8 | .NET 8.0 | 1000 |   100 |   359.36 ns |   5.011 ns |   4.922 ns |   357.67 ns |   6.15x slower |   0.07x | 0.4206 |     880 B |          NA |
+|                   LinqAF | .NET 8 | .NET 8.0 | 1000 |   100 | 1,972.54 ns |  27.854 ns |  23.259 ns | 1,964.64 ns |  33.80x slower |   0.38x |      - |         - |          NA |
+|            LinqOptimizer | .NET 8 | .NET 8.0 | 1000 |   100 | 1,759.94 ns |  28.678 ns |  28.166 ns | 1,757.84 ns |  30.16x slower |   0.51x | 4.2362 |    8865 B |          NA |
+|                 SpanLinq | .NET 8 | .NET 8.0 | 1000 |   100 |   199.22 ns |   3.919 ns |   6.439 ns |   196.15 ns |   3.40x slower |   0.09x |      - |         - |          NA |
+|                  Streams | .NET 8 | .NET 8.0 | 1000 |   100 | 5,681.95 ns |  66.565 ns |  51.970 ns | 5,666.70 ns |  97.34x slower |   0.72x | 0.4349 |     912 B |          NA |
+|               StructLinq | .NET 8 | .NET 8.0 | 1000 |   100 |   206.61 ns |   4.117 ns |   9.292 ns |   201.33 ns |   3.56x slower |   0.18x | 0.0458 |      96 B |          NA |
+| StructLinq_ValueDelegate | .NET 8 | .NET 8.0 | 1000 |   100 |   155.53 ns |   0.988 ns |   0.825 ns |   155.40 ns |   2.66x slower |   0.02x |      - |         - |          NA |
+|                Hyperlinq | .NET 8 | .NET 8.0 | 1000 |   100 |   171.22 ns |   3.019 ns |   5.443 ns |   168.45 ns |   2.96x slower |   0.12x |      - |         - |          NA |
+|  Hyperlinq_ValueDelegate | .NET 8 | .NET 8.0 | 1000 |   100 |   152.79 ns |   1.735 ns |   1.355 ns |   152.47 ns |   2.62x slower |   0.02x |      - |         - |          NA |

@@ -24,18 +24,18 @@ var config = new DebugInProcessConfig()
 var config = DefaultConfig.Instance
     .WithSummaryStyle(SummaryStyle.Default.WithRatioStyle(RatioStyle.Trend))
     .AddDiagnoser(MemoryDiagnoser.Default)
-    .AddJob(Job.Default
-        .WithRuntime(CoreRuntime.Core31)
-        .WithId(".NET Core 3.1")
-    )
-    .AddJob(Job.Default
-        .WithRuntime(CoreRuntime.Core60)
-        .WithEnvironmentVariables(
-            new EnvironmentVariable("DOTNET_ReadyToRun", "0"), // Disable AOT
-            new EnvironmentVariable("DOTNET_TC_QuickJitForLoops", "1"), // Enable Quick Jit for loop
-            new EnvironmentVariable("DOTNET_TieredPGO", "1")) // Turn on layered PGO
-        .WithId(".NET 6 PGO")
-    )
+    //.AddJob(Job.Default
+    //    .WithRuntime(CoreRuntime.Core31)
+    //    .WithId(".NET Core 3.1")
+    //)
+    //.AddJob(Job.Default
+    //    .WithRuntime(CoreRuntime.Core60)
+    //    .WithEnvironmentVariables(
+    //        new EnvironmentVariable("DOTNET_ReadyToRun", "0"), // Disable AOT
+    //        new EnvironmentVariable("DOTNET_TC_QuickJitForLoops", "1"), // Enable Quick Jit for loop
+    //        new EnvironmentVariable("DOTNET_TieredPGO", "1")) // Turn on layered PGO
+    //    .WithId(".NET 6 PGO")
+    //)
     // .AddJob(Job.Default
     //     .WithRuntime(CoreRuntime.Core50)
     //     .WithId(".NET 5")
@@ -43,10 +43,14 @@ var config = DefaultConfig.Instance
     .AddJob(Job.Default
         .WithRuntime(CoreRuntime.Core60)
         .WithId(".NET 6")
+    )
+    .AddJob(Job.Default
+        .WithRuntime(CoreRuntime.Core80)
+        .WithId(".NET 8")
     );
 
 #endif
-            
+
 foreach (var summary in BenchmarkSwitcher.FromAssembly(typeof(LinqBenchmarks.Utils).Assembly).Run(args, config))
     SaveSummary(summary);
 

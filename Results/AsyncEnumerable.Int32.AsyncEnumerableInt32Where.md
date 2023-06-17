@@ -11,34 +11,29 @@
 - LinqOptimizer.CSharp: [0.7.0](https://www.nuget.org/packages/LinqOptimizer.CSharp/0.7.0)
 - SpanLinq: [0.0.1](https://www.nuget.org/packages/SpanLinq/0.0.1)
 - Streams.CSharp: [0.6.0](https://www.nuget.org/packages/Streams.CSharp/0.6.0)
-- StructLinq.BCL: [0.27.0](https://www.nuget.org/packages/StructLinq/0.27.0)
+- StructLinq.BCL: [0.28.1](https://www.nuget.org/packages/StructLinq/0.28.1)
 - NetFabric.Hyperlinq: [3.0.0-beta48](https://www.nuget.org/packages/NetFabric.Hyperlinq/3.0.0-beta48)
-- System.Linq.Async: [5.0.0](https://www.nuget.org/packages/System.Linq.Async/5.0.0)
+- System.Linq.Async: [6.0.1](https://www.nuget.org/packages/System.Linq.Async/6.0.1)
 - Faslinq: [1.0.5](https://www.nuget.org/packages/Faslinq/1.0.5)
 
 ### Results:
 ``` ini
 
-BenchmarkDotNet=v0.13.1, OS=macOS Catalina 10.15.7 (19H1519) [Darwin 19.6.0]
-Intel Core i5-7360U CPU 2.30GHz (Kaby Lake), 1 CPU, 4 logical and 2 physical cores
-.NET SDK=6.0.100
-  [Host]        : .NET Core 3.1.20 (CoreCLR 4.700.21.47003, CoreFX 4.700.21.47101), X64 RyuJIT
-  .NET 6        : .NET 6.0.0 (6.0.21.52210), X64 RyuJIT
-  .NET 6 PGO    : .NET 6.0.0 (6.0.21.52210), X64 RyuJIT
-  .NET Core 3.1 : .NET Core 3.1.20 (CoreCLR 4.700.21.47003, CoreFX 4.700.21.47101), X64 RyuJIT
+BenchmarkDotNet=v0.13.5, OS=Windows 10 (10.0.19045.3086/22H2/2022Update)
+Intel Core i7-7567U CPU 3.50GHz (Kaby Lake), 1 CPU, 4 logical and 2 physical cores
+.NET SDK=8.0.100-preview.5.23303.2
+  [Host] : .NET 6.0.18 (6.0.1823.26907), X64 RyuJIT AVX2
+  .NET 6 : .NET 6.0.18 (6.0.1823.26907), X64 RyuJIT AVX2
+  .NET 8 : .NET 8.0.0 (8.0.23.28008), X64 RyuJIT AVX2
 
 
 ```
-|                  Method |           Job |                                                EnvironmentVariables |       Runtime | Count |     Mean |   Error |  StdDev |   Median |        Ratio | RatioSD | Allocated |
-|------------------------ |-------------- |-------------------------------------------------------------------- |-------------- |------ |---------:|--------:|--------:|---------:|-------------:|--------:|----------:|
-|                    Linq |        .NET 6 |                                                               Empty |      .NET 6.0 |   100 | 172.9 ms | 1.58 ms | 1.48 ms | 173.1 ms |     baseline |         |     51 KB |
-|               Hyperlinq |        .NET 6 |                                                               Empty |      .NET 6.0 |   100 | 171.9 ms | 3.39 ms | 8.12 ms | 173.8 ms | 1.05x faster |   0.12x |     37 KB |
-| Hyperlinq_ValueDelegate |        .NET 6 |                                                               Empty |      .NET 6.0 |   100 | 174.6 ms | 1.67 ms | 1.57 ms | 174.4 ms | 1.01x slower |   0.01x |     37 KB |
-|                         |               |                                                                     |               |       |          |         |         |          |              |         |           |
-|                    Linq |    .NET 6 PGO | DOTNET_ReadyToRun=0,DOTNET_TC_QuickJitForLoops=1,DOTNET_TieredPGO=1 |      .NET 6.0 |   100 | 173.2 ms | 2.31 ms | 2.16 ms | 174.0 ms |     baseline |         |     53 KB |
-|               Hyperlinq |    .NET 6 PGO | DOTNET_ReadyToRun=0,DOTNET_TC_QuickJitForLoops=1,DOTNET_TieredPGO=1 |      .NET 6.0 |   100 | 174.3 ms | 0.87 ms | 0.81 ms | 174.3 ms | 1.01x slower |   0.01x |     37 KB |
-| Hyperlinq_ValueDelegate |    .NET 6 PGO | DOTNET_ReadyToRun=0,DOTNET_TC_QuickJitForLoops=1,DOTNET_TieredPGO=1 |      .NET 6.0 |   100 | 170.5 ms | 3.37 ms | 6.33 ms | 173.3 ms | 1.05x faster |   0.05x |     37 KB |
-|                         |               |                                                                     |               |       |          |         |         |          |              |         |           |
-|                    Linq | .NET Core 3.1 |                                                               Empty | .NET Core 3.1 |   100 | 174.8 ms | 1.57 ms | 1.39 ms | 174.9 ms |     baseline |         |     51 KB |
-|               Hyperlinq | .NET Core 3.1 |                                                               Empty | .NET Core 3.1 |   100 | 174.6 ms | 1.76 ms | 1.65 ms | 174.6 ms | 1.00x faster |   0.01x |     34 KB |
-| Hyperlinq_ValueDelegate | .NET Core 3.1 |                                                               Empty | .NET Core 3.1 |   100 | 175.6 ms | 1.73 ms | 1.62 ms | 175.8 ms | 1.01x slower |   0.01x |     33 KB |
+|                  Method |    Job |  Runtime | Count |    Mean |    Error |   StdDev |        Ratio | RatioSD | Allocated | Alloc Ratio |
+|------------------------ |------- |--------- |------ |--------:|---------:|---------:|-------------:|--------:|----------:|------------:|
+|               Hyperlinq | .NET 6 | .NET 6.0 |   100 | 1.570 s | 0.0109 s | 0.0102 s | 1.00x faster |   0.01x |  41.84 KB |  1.34x less |
+| Hyperlinq_ValueDelegate | .NET 6 | .NET 6.0 |   100 | 1.569 s | 0.0104 s | 0.0097 s | 1.00x faster |   0.00x |  41.84 KB |  1.34x less |
+|                    Linq | .NET 6 | .NET 6.0 |   100 | 1.570 s | 0.0113 s | 0.0105 s |     baseline |         |  55.89 KB |             |
+|                         |        |          |       |         |          |          |              |         |           |             |
+|               Hyperlinq | .NET 8 | .NET 8.0 |   100 | 1.569 s | 0.0103 s | 0.0097 s | 1.00x slower |   0.00x |   32.9 KB |  1.37x less |
+| Hyperlinq_ValueDelegate | .NET 8 | .NET 8.0 |   100 | 1.569 s | 0.0104 s | 0.0098 s | 1.00x slower |   0.01x |  32.29 KB |  1.40x less |
+|                    Linq | .NET 8 | .NET 8.0 |   100 | 1.569 s | 0.0100 s | 0.0093 s |     baseline |         |  45.11 KB |             |
