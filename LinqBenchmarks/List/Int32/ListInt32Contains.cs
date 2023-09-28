@@ -33,6 +33,10 @@ public partial class ListInt32Contains: Int32ListBenchmarkBase
 #pragma warning restore HLQ010 // Consider using a 'for' loop instead.
 
     [Benchmark]
+    public bool List_Exists()
+        => source.Exists(item => item == value);
+
+    [Benchmark]
     public bool Linq()
         => System.Linq.Enumerable
             .Contains(source, value);

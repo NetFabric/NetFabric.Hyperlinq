@@ -31,6 +31,10 @@ public class ListValueTypeContains : ValueTypeListBenchmarkBase
     }
 
     [Benchmark]
+    public bool List_Exists()
+        => source.Exists(item => item == value);
+
+    [Benchmark]
     public bool Linq()
         => System.Linq.Enumerable.Contains(source, value);
 

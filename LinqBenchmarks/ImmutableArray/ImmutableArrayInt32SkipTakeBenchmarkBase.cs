@@ -10,6 +10,6 @@ public class ImmutableArrayInt32SkipTakeBenchmarkBase : SkipTakeBenchmarkBase
     {
         base.Setup();
             
-        source = GetRandomValues(Skip + Count).ToImmutableArray();
+        source = Utils.GetRandomValues(Skip + Count, Seed).ToImmutableArray();
     }
 }

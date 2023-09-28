@@ -8,6 +8,6 @@ public class Int32ListBenchmarkBase : BenchmarkBase
     {
         base.Setup();
             
-        source = GetRandomValues(Count).ToList();
+        source = Utils.GetRandomValues(Count, Seed).ToList();
     }
 }

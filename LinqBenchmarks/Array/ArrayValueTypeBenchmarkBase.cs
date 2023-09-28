@@ -8,7 +8,7 @@ public class ValueTypeArrayBenchmarkBase: BenchmarkBase
     {
         base.Setup();
             
-        source = GetRandomValues(Count)
+        source = Utils.GetRandomValues(Count, Seed)
             .Select(value => new FatValueType(value))
             .ToArray();
     }

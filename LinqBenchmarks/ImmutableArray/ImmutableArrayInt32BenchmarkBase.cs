@@ -10,6 +10,6 @@ public class ImmutableArrayInt32BenchmarkBase : BenchmarkBase
     {
         base.Setup();
             
-        source = GetRandomValues(Count).ToImmutableArray();
+        source = Utils.GetRandomValues(Count, Seed).ToImmutableArray();
     }
 }

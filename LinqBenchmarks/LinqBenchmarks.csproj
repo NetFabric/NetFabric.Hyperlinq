@@ -16,6 +16,7 @@
     <PackageReference Include="JM.LinqFaster" Version="1.1.2" />
     <PackageReference Include="LinqFaster.SIMD" Version="1.0.3" />
     <PackageReference Include="LinqFasterer" Version="2.1.0" />
+    <PackageReference Include="NetFabric" Version="1.3.0" />
     <PackageReference Include="NetFabric.Hyperlinq" Version="3.0.0-beta48" />
     <PackageReference Include="StructLinq" Version="0.28.1" />
     <PackageReference Include="System.Interactive" Version="6.0.1" />

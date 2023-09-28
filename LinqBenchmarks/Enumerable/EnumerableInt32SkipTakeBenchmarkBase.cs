@@ -8,6 +8,6 @@ public class EnumerableInt32SkipTakeBenchmarkBase : SkipTakeBenchmarkBase
     {
         base.Setup();
             
-        source = Utils.Enumerable<int>(Skip + Count);
+        source = new EnumerableWrapper<int>(Utils.GetRandomValues(Skip + Count, Seed));
     }
 }

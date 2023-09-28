@@ -1,5 +1,4 @@
 ﻿using System.Runtime.CompilerServices;
-using System.Threading.Tasks;
 
 namespace LinqBenchmarks;
 
@@ -9,32 +8,25 @@ static class Utils
     public static bool IsEven(this int value)
         => (value & 0x01) == 0;
 
-    public static IEnumerable<T> Enumerable<T>(int count)
+    public static int[] GetSequentialValues(int count)
     {
-        if (count < 0) 
-            throw new ArgumentOutOfRangeException(nameof(count));
-        return GetEnumerable(count);
+        var array = new int[count];
 
-        static IEnumerable<T> GetEnumerable(int count)
-        {
-            for (var value = 0; value < count; value++)
-                yield return default;
-        }
+        for (var index = 0; index < array.Length; index++)
+            array[index] = index;
+
+        return array;
     }
 
-    public static IAsyncEnumerable<T> AsyncEnumerable<T>(int count)
+    public static int[] GetRandomValues(int count, int seed)
     {
-        if (count < 0) 
-            throw new ArgumentOutOfRangeException(nameof(count));
-        return GetEnumerableAsync(count);
+        var array = new int[count];
+        var random = new Random(seed);
 
-        static async IAsyncEnumerable<T> GetEnumerableAsync(int count)
-        {
-            for (var value = 0; value < count; value++)
-            {
-                await Task.Delay(1);
-                yield return default;
-            }
-        }
-    }    
+        for (var index = 0; index < array.Length; index++)
+            array[index] = random.Next(count);
+
+        return array;
+    }
 }
+

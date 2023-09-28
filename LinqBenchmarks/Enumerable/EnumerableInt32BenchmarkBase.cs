@@ -8,6 +8,6 @@ public class EnumerableInt32BenchmarkBase : BenchmarkBase
     {
         base.Setup();
             
-        source = Utils.Enumerable<int>(Count);
+        source = new EnumerableWrapper<int>(Utils.GetRandomValues(Count, Seed));
     }
 }

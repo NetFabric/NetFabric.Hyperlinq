@@ -7,6 +7,6 @@ public class ArrayInt32BenchmarkBase : BenchmarkBase
     protected override void Setup()
     {
         base.Setup(); 
-        source = GetRandomValues(Count);
+        source = Utils.GetRandomValues(Count, Seed);
     }
 }

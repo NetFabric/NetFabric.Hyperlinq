@@ -8,7 +8,7 @@ public class ValueTypeListSkipTakeBenchmarkBase: SkipTakeBenchmarkBase
     {
         base.Setup();
             
-        source = GetRandomValues(Skip + Count)
+        source = Utils.GetRandomValues(Skip + Count, Seed)
             .Select(value => new FatValueType(value))
             .ToList();
     }

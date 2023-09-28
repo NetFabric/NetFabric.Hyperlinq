@@ -8,6 +8,6 @@ public class Int32ListSkipTakeBenchmarkBase : SkipTakeBenchmarkBase
     {
         base.Setup();
             
-        source = GetRandomValues(Skip + Count).ToList();
+        source = Utils.GetRandomValues(Skip + Count, Seed).ToList();
     }
 }

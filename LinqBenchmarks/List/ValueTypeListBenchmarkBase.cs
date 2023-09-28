@@ -8,7 +8,7 @@ public class ValueTypeListBenchmarkBase: BenchmarkBase
     {
         base.Setup();
             
-        source = GetRandomValues(Count)
+        source = Utils.GetRandomValues(Count, Seed)
             .Select(value => new FatValueType(value))
             .ToList();
     }
