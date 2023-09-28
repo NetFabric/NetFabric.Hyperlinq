@@ -24,32 +24,27 @@ var config = new DebugInProcessConfig()
 var config = DefaultConfig.Instance
     .WithSummaryStyle(SummaryStyle.Default.WithRatioStyle(RatioStyle.Trend))
     .AddDiagnoser(MemoryDiagnoser.Default)
-    .AddJob(Job.Default
-        .WithRuntime(ClrRuntime.Net481)
-    )
+    //.AddJob(Job.Default
+    //    .WithRuntime(ClrRuntime.Net481)
+    //)
     //.AddJob(Job.Default
     //    .WithRuntime(CoreRuntime.Core31)
-    //    .WithId(".NET Core 3.1")
     //)
+    // .AddJob(Job.Default
+    //     .WithRuntime(CoreRuntime.Core50)
+    // )
+    .AddJob(Job.Default
+        .WithRuntime(CoreRuntime.Core60)
+    )
     //.AddJob(Job.Default
     //    .WithRuntime(CoreRuntime.Core60)
     //    .WithEnvironmentVariables(
     //        new EnvironmentVariable("DOTNET_ReadyToRun", "0"), // Disable AOT
     //        new EnvironmentVariable("DOTNET_TC_QuickJitForLoops", "1"), // Enable Quick Jit for loop
     //        new EnvironmentVariable("DOTNET_TieredPGO", "1")) // Turn on layered PGO
-    //    .WithId(".NET 6 PGO")
     //)
-    // .AddJob(Job.Default
-    //     .WithRuntime(CoreRuntime.Core50)
-    //     .WithId(".NET 5")
-    // )
-    .AddJob(Job.Default
-        .WithRuntime(CoreRuntime.Core60)
-        //.WithId(".NET 6")
-    )
     .AddJob(Job.Default
         .WithRuntime(CoreRuntime.Core80)
-        //.WithId(".NET 8")
     );
 
 #endif
@@ -112,14 +107,8 @@ static void SaveSummary(Summary summary)
     var linqAfVersion = GetFileVersion(typeof(LinqAF.Enumerable).Assembly);
     logger.WriteLine($"- LinqAF: [{linqAfVersion}](https://www.nuget.org/packages/LinqAF/{linqAfVersion})");
 
-    var linqOptimizerVersion = GetFileVersion(typeof(Nessos.LinqOptimizer.CSharp.Extensions).Assembly);
-    logger.WriteLine($"- LinqOptimizer.CSharp: [{linqOptimizerVersion}](https://www.nuget.org/packages/LinqOptimizer.CSharp/{linqOptimizerVersion})");
-
     var spanLinqVersion = GetInformationalVersion(typeof(SpanLinq.SourceGenerator).Assembly);
     logger.WriteLine($"- SpanLinq: [{spanLinqVersion}](https://www.nuget.org/packages/SpanLinq/{spanLinqVersion})");
-
-    var streamsVersion = GetInformationalVersion(typeof(Nessos.Streams.CSharp.Streams).Assembly);
-    logger.WriteLine($"- Streams.CSharp: [{streamsVersion}](https://www.nuget.org/packages/Streams.CSharp/{streamsVersion})");
 
     var structLinqVersion = GetInformationalVersion(typeof(StructLinq.List.ListEnumerable<>).Assembly);
     logger.WriteLine($"- StructLinq.BCL: [{structLinqVersion}](https://www.nuget.org/packages/StructLinq/{structLinqVersion})");
