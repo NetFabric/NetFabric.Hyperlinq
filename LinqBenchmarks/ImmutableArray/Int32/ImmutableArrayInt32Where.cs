@@ -2,18 +2,6 @@
 
 public class ImmutableArrayInt32Where: ImmutableArrayInt32BenchmarkBase
 {
-    Func<IEnumerable<int>> linqOptimizerQuery;
-
-    protected override void Setup()
-    {
-        base.Setup();
-
-        linqOptimizerQuery = source
-            .AsQueryExpr()
-            .Where(item => item.IsEven())
-            .Compile();
-    }
-
     [Benchmark(Baseline = true)]
     public int ForLoop()
     {
@@ -54,29 +42,6 @@ public class ImmutableArrayInt32Where: ImmutableArrayInt32BenchmarkBase
     public int LinqFasterer()
     {
         var items = EnumerableF.WhereF(source, item => item.IsEven());
-        var sum = 0;
-        foreach (var item in items)
-            sum += item;
-        return sum;
-    }
-
-    [Benchmark]
-    public int LinqOptimizer()
-    {
-        var items = linqOptimizerQuery.Invoke();
-        var sum = 0;
-        foreach (var item in items)
-            sum += item;
-        return sum;
-    }
-
-    [Benchmark]
-    public int Streams()
-    {
-        var items = source
-            .AsStream()
-            .Where(item => item.IsEven())
-            .ToEnumerable();
         var sum = 0;
         foreach (var item in items)
             sum += item;

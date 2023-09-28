@@ -2,18 +2,6 @@
 
 public class ArrayInt32SelectToList: ArrayInt32BenchmarkBase
 {
-    Func<List<int>> linqOptimizerQuery;
-
-    protected override void Setup()
-    {
-        base.Setup();
-
-        linqOptimizerQuery = source.AsQueryExpr()
-            .Select(item => item * 3)
-            .ToList()
-            .Compile();
-    }
-
     [Benchmark(Baseline = true)]
     public List<int> ForLoop()
     {
@@ -63,18 +51,8 @@ public class ArrayInt32SelectToList: ArrayInt32BenchmarkBase
             .ToList();
 
     [Benchmark]
-    public List<int> LinqOptimizer()
-        => linqOptimizerQuery.Invoke();
-
-    [Benchmark]
     public List<int> SpanLinq()
         => source.AsSpan()
-            .Select(item => item * 3)
-            .ToList();
-
-    [Benchmark]
-    public List<int> Streams()
-        => source.AsStream()
             .Select(item => item * 3)
             .ToList();
 

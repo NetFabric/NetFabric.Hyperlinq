@@ -8,11 +8,11 @@ Benchmarks comparing the performance of [LINQ](https://docs.microsoft.com/en-us/
 - [LinqFasterer](https://github.com/Zaczero/LinqFasterer)
 - [LinqAF](https://github.com/kevin-montrose/LinqAF)
 - [SpanLinq](https://github.com/YairHalberstadt/SpanLinq)
-- [Streams](https://github.com/nessos/Streams)
-- [LinqOptimizer](https://github.com/nessos/LinqOptimizer)
 - [StructLinq](https://github.com/reegeek/StructLinq)
 - [NetFabric.Hyperlinq](https://github.com/NetFabric/NetFabric.Hyperlinq)
 - [System.Linq.Async](https://github.com/dotnet/reactive)
+
+NOTE: Removed [LinqOptimizer](https://github.com/nessos/LinqOptimizer) and [Streams](https://github.com/nessos/Streams) from the benchmarks as they are slower than LINQ on every benchmark.
 
 ## Results
 

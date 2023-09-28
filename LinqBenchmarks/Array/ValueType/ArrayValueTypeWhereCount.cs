@@ -2,19 +2,6 @@
 
 public class ArrayValueTypeWhereCount: ValueTypeArrayBenchmarkBase
 {
-    Func<int> linqOptimizerQuery;
-
-    protected override void Setup()
-    {
-        base.Setup();
-
-        linqOptimizerQuery = source
-            .AsQueryExpr()
-            .Where(item => item.IsEven())
-            .Count()
-            .Compile();
-    }
-        
     [Benchmark(Baseline = true)]
     public int ForLoop()
     {
@@ -62,17 +49,6 @@ public class ArrayValueTypeWhereCount: ValueTypeArrayBenchmarkBase
         => source
             .ToRefStructEnumerable()
             .Where((in FatValueType item) => item.IsEven())
-            .Count();
-
-    [Benchmark]
-    public int LinqOptimizer()
-        => linqOptimizerQuery.Invoke();
-
-    [Benchmark]
-    public int Streams()
-        => source
-            .AsStream()
-            .Where(item => item.IsEven())
             .Count();
 
     [Benchmark]

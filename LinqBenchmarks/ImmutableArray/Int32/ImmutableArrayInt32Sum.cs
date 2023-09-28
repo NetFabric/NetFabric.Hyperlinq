@@ -2,18 +2,6 @@
 
 public class ImmutableArrayInt32Sum: ImmutableArrayInt32BenchmarkBase
 {
-    Func<int> linqOptimizerQuery;
-
-    protected override void Setup()
-    {
-        base.Setup();
-
-        linqOptimizerQuery = source
-            .AsQueryExpr()
-            .Sum()
-            .Compile();
-    }
-
     [Benchmark(Baseline = true)]
     public int ForLoop()
     {
@@ -45,16 +33,6 @@ public class ImmutableArrayInt32Sum: ImmutableArrayInt32BenchmarkBase
     [Benchmark]
     public int LinqFasterer()
         => EnumerableF.SumF(source);
-
-    [Benchmark]
-    public int LinqOptimizer()
-        => linqOptimizerQuery.Invoke();
-
-    [Benchmark]
-    public int Streams()
-        => source
-            .AsStream()
-            .Sum();
 
     [Benchmark]
     public int StructLinq()

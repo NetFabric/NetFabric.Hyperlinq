@@ -4,18 +4,6 @@ namespace LinqBenchmarks.List.ValueType;
 
 public class ListValueTypeSelectSum: ValueTypeListBenchmarkBase
 {
-    Func<int> linqOptimizerQuery;
-
-    protected override void Setup()
-    {
-        base.Setup();
-
-        linqOptimizerQuery = source.AsQueryExpr()
-            .Select(x => x.Value0)
-            .Sum()
-            .Compile();
-    }
-
     [Benchmark(Baseline = true)]
     public int ForLoop()
     {
@@ -51,16 +39,6 @@ public class ListValueTypeSelectSum: ValueTypeListBenchmarkBase
     [Benchmark]
     public int LinqAF()
         => global::LinqAF.ListExtensionMethods.Sum(source, item => item.Value0);
-
-    [Benchmark]
-    public int LinqOptimizer()
-        => linqOptimizerQuery.Invoke();
-
-    [Benchmark]
-    public int Streams()
-        => source.AsStream()
-            .Select(x => x.Value0)
-            .Sum();
 
     [Benchmark]
     public int StructLinq()

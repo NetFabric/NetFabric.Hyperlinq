@@ -2,19 +2,6 @@
 
 public class ArrayValueTypeSelectSum: ValueTypeArrayBenchmarkBase
 {
-    Func<int> linqOptimizerQuery;
-
-    protected override void Setup()
-    {
-        base.Setup();
-
-        linqOptimizerQuery = source
-            .AsQueryExpr()
-            .Select(item => item.Value0)
-            .Sum()
-            .Compile();
-    }
-
     [Benchmark(Baseline = true)]
     public int ForLoop()
     {
@@ -54,17 +41,6 @@ public class ArrayValueTypeSelectSum: ValueTypeArrayBenchmarkBase
     [Benchmark]
     public int LinqAF()
         => global::LinqAF.ArrayExtensionMethods.Sum(source, item => item.Value0);
-
-    [Benchmark]
-    public int LinqOptimizer()
-        => linqOptimizerQuery.Invoke();
-        
-    [Benchmark]
-    public int Streams()
-        => source
-            .AsStream()
-            .Select(item => item.Value0)
-            .Sum();
 
     [Benchmark]
     public int StructLinq()

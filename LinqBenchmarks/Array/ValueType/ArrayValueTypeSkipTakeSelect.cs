@@ -2,20 +2,6 @@
 
 public class ArrayValueTypeSkipTakeSelect: ValueTypeArraySkipTakeBenchmarkBase
 {
-    Func<IEnumerable<FatValueType>> linqOptimizerQuery;
-
-    protected override void Setup()
-    {
-        base.Setup();
-
-        linqOptimizerQuery = source
-            .AsQueryExpr()
-            .Skip(Skip)
-            .Take(Count)
-            .Select(item => item * 3)
-            .Compile();
-    }
-
     [Benchmark(Baseline = true)]
     public FatValueType ForLoop()
     {
@@ -70,16 +56,6 @@ public class ArrayValueTypeSkipTakeSelect: ValueTypeArraySkipTakeBenchmarkBase
     }
 
     [Benchmark]
-    public FatValueType LinqOptimizer()
-    {
-        var items = linqOptimizerQuery.Invoke();
-        var sum = default(FatValueType);
-        foreach (var item in items)
-            sum += item;
-        return sum;
-    }
-
-    [Benchmark]
     public FatValueType SpanLinq()
     {
         var items = source
@@ -87,21 +63,6 @@ public class ArrayValueTypeSkipTakeSelect: ValueTypeArraySkipTakeBenchmarkBase
             .Skip(Skip)
             .Take(Count)
             .Select(item => item * 3);
-        var sum = default(FatValueType);
-        foreach (var item in items)
-            sum += item;
-        return sum;
-    }
-
-    [Benchmark]
-    public FatValueType Streams()
-    {
-        var items = source
-            .AsStream()
-            .Skip(Skip)
-            .Take(Count)
-            .Select(item => item * 3)
-            .ToEnumerable();
         var sum = default(FatValueType);
         foreach (var item in items)
             sum += item;

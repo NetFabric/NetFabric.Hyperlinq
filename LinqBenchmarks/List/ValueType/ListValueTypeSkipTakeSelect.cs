@@ -6,20 +6,6 @@ namespace LinqBenchmarks.List.ValueType;
 
 public class ListValueTypeSkipTakeSelect: ValueTypeListSkipTakeBenchmarkBase
 {
-    Func<IEnumerable<FatValueType>> linqOptimizerQuery;
-
-    protected override void Setup()
-    {
-        base.Setup();
-
-        linqOptimizerQuery = source
-            .AsQueryExpr()
-            .Skip(Skip)
-            .Take(Count)
-            .Select(item => item * 3)
-            .Compile();
-    }
-
     [Benchmark(Baseline = true)]
     public FatValueType ForLoop()
     {
@@ -70,16 +56,6 @@ public class ListValueTypeSkipTakeSelect: ValueTypeListSkipTakeBenchmarkBase
         return sum;
     }
 
-    [Benchmark]
-    public FatValueType LinqOptimizer()
-    {
-        var items = linqOptimizerQuery.Invoke();
-        var sum = default(FatValueType);
-        foreach (var item in items)
-            sum += item;
-        return sum;
-    }
-
 #if DOTNET5_0_OR_GREATER
     [Benchmark]
     public FatValueType SpanLinq()
@@ -94,21 +70,6 @@ public class ListValueTypeSkipTakeSelect: ValueTypeListSkipTakeBenchmarkBase
         return sum;
     }
 #endif
-    
-    [Benchmark]
-    public FatValueType Streams()
-    {
-        var items = source
-            .AsStream()
-            .Skip(Skip)
-            .Take(Count)
-            .Select(item => item * 3)
-            .ToEnumerable();
-        var sum = default(FatValueType);
-        foreach (var item in items)
-            sum += item;
-        return sum;
-    }
 
     [Benchmark]
     public FatValueType StructLinq()

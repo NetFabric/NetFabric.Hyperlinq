@@ -2,20 +2,6 @@
 
 public class ArrayInt32SkipTakeWhere: ArrayInt32SkipTakeBenchmarkBase
 {
-    Func<IEnumerable<int>> linqOptimizerQuery;
-
-    protected override void Setup()
-    {
-        base.Setup();
-
-        linqOptimizerQuery = source
-            .AsQueryExpr()
-            .Skip(Skip)
-            .Take(Count)
-            .Where(item => item.IsEven())
-            .Compile();
-    }
-
     [Benchmark(Baseline = true)]
     public int ForLoop()
     {
@@ -71,16 +57,6 @@ public class ArrayInt32SkipTakeWhere: ArrayInt32SkipTakeBenchmarkBase
     }
 
     [Benchmark]
-    public int LinqOptimizer()
-    {
-        var items = linqOptimizerQuery.Invoke();
-        var sum = 0;
-        foreach (var item in items)
-            sum += item;
-        return sum;
-    }
-
-    [Benchmark]
     public int SpanLinq()
     {
         var items = source
@@ -88,21 +64,6 @@ public class ArrayInt32SkipTakeWhere: ArrayInt32SkipTakeBenchmarkBase
             .Skip(Skip)
             .Take(Count)
             .Where(item => item.IsEven());
-        var sum = 0;
-        foreach (var item in items)
-            sum += item;
-        return sum;
-    }
-
-    [Benchmark]
-    public int Streams()
-    {
-        var items = source
-            .AsStream()
-            .Skip(Skip)
-            .Take(Count)
-            .Where(item => item.IsEven())
-            .ToEnumerable();
         var sum = 0;
         foreach (var item in items)
             sum += item;

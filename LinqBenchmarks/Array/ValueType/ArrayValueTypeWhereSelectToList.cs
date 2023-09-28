@@ -4,20 +4,6 @@ namespace LinqBenchmarks.Array.ValueType;
 
 public partial class ArrayValueTypeWhereSelectToList: ValueTypeArrayBenchmarkBase
 {
-    Func<List<FatValueType>> linqOptimizerQuery;
-
-    protected override void Setup()
-    {
-        base.Setup();
-
-        linqOptimizerQuery = source
-            .AsQueryExpr()
-            .Where(item => item.IsEven())
-            .Select(item => item * 3)
-            .ToList()
-            .Compile();
-    }
-        
     [Benchmark(Baseline = true)]
     public List<FatValueType> ForLoop()
     {
@@ -68,21 +54,9 @@ public partial class ArrayValueTypeWhereSelectToList: ValueTypeArrayBenchmarkBas
         => global::LinqAF.ArrayExtensionMethods.Where(source, item => item.IsEven()).Select(item => item * 3).ToList();
 
     [Benchmark]
-    public List<FatValueType> LinqOptimizer()
-        => linqOptimizerQuery.Invoke();
-
-    [Benchmark]
     public List<FatValueType> SpanLinq()
         => source
             .AsSpan()
-            .Where(item => item.IsEven())
-            .Select(item => item * 3)
-            .ToList();
-
-    [Benchmark]
-    public List<FatValueType> Streams()
-        => source
-            .AsStream()
             .Where(item => item.IsEven())
             .Select(item => item * 3)
             .ToList();

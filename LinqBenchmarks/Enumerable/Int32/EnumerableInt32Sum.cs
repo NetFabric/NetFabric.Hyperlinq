@@ -3,18 +3,6 @@ namespace LinqBenchmarks.Enumerable.Int32;
 
 public class EnumerableInt32Sum: EnumerableInt32BenchmarkBase
 {
-    Func<int> linqOptimizerQuery;
-
-    protected override void Setup()
-    {
-        base.Setup();
-
-        linqOptimizerQuery = source
-            .AsQueryExpr()
-            .Sum()
-            .Compile();
-    }
-
     [Benchmark(Baseline = true)]
     public int ForeachLoop()
     {
@@ -31,16 +19,6 @@ public class EnumerableInt32Sum: EnumerableInt32BenchmarkBase
     [Benchmark]
     public int LinqAF()
         => LinqAfExtensions.Sum(source);
-
-    [Benchmark]
-    public int LinqOptimizer()
-        => linqOptimizerQuery.Invoke();
-
-    [Benchmark]
-    public int Streams()
-        => source
-            .AsStream()
-            .Sum();
 
     [Benchmark]
     public int StructLinq()

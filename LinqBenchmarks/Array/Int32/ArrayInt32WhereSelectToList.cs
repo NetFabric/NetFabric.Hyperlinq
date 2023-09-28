@@ -2,19 +2,6 @@
 
 public partial class ArrayInt32WhereSelectToList: ArrayInt32BenchmarkBase
 {
-    Func<List<int>> linqOptimizerQuery;
-
-    protected override void Setup()
-    {
-        base.Setup();
-
-        linqOptimizerQuery = source.AsQueryExpr()
-            .Where(item => item.IsEven())
-            .Select(item => item * 3)
-            .ToList()
-            .Compile();
-    }
-
     [Benchmark(Baseline = true)]
     public List<int> ForLoop()
     {
@@ -62,19 +49,8 @@ public partial class ArrayInt32WhereSelectToList: ArrayInt32BenchmarkBase
         => global::LinqAF.ArrayExtensionMethods.Where(source, item => item.IsEven()).Select(item => item * 3).ToList();
 
     [Benchmark]
-    public List<int> LinqOptimizer()
-        => linqOptimizerQuery.Invoke();
-
-    [Benchmark]
     public List<int> SpanLinq()
         => source.AsSpan()
-            .Where(item => item.IsEven())
-            .Select(item => item * 3)
-            .ToList();
-
-    [Benchmark]
-    public List<int> Streams()
-        => source.AsStream()
             .Where(item => item.IsEven())
             .Select(item => item * 3)
             .ToList();

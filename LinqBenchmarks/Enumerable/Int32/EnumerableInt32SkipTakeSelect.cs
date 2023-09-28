@@ -4,20 +4,6 @@ namespace LinqBenchmarks.Enumerable.Int32;
 
 public class EnumerableInt32SkipTakeSelect: EnumerableInt32SkipTakeBenchmarkBase
 {
-    Func<IEnumerable<int>> linqOptimizerQuery;
-
-    protected override void Setup()
-    {
-        base.Setup();
-
-        linqOptimizerQuery = source
-            .AsQueryExpr()
-            .Skip(Skip)
-            .Take(Count)
-            .Select(item => item * 3)
-            .Compile();
-    }
-
     [Benchmark(Baseline = true)]
     public int Linq()
     {
@@ -32,31 +18,6 @@ public class EnumerableInt32SkipTakeSelect: EnumerableInt32SkipTakeBenchmarkBase
     public int LinqAF()
     {
         var items = LinqAfExtensions.Skip(source, Skip).Take(Count).Select(item => item * 3);
-        var sum = 0;
-        foreach (var item in items)
-            sum += item;
-        return sum;
-    }
-
-    [Benchmark]
-    public int LinqOptimizer()
-    {
-        var items = linqOptimizerQuery.Invoke();
-        var sum = 0;
-        foreach (var item in items)
-            sum += item;
-        return sum;
-    }
-
-    [Benchmark]
-    public int Streams()
-    {
-        var items = source
-            .AsStream()
-            .Skip(Skip)
-            .Take(Count)
-            .Select(item => item * 3)
-            .ToEnumerable();
         var sum = 0;
         foreach (var item in items)
             sum += item;

@@ -5,18 +5,6 @@ namespace LinqBenchmarks.List.Int32;
 
 public class ListInt32SelectToList: Int32ListBenchmarkBase
 {
-    Func<List<int>> linqOptimizerQuery;
-
-    protected override void Setup()
-    {
-        base.Setup();
-
-        linqOptimizerQuery = source.AsQueryExpr()
-            .Select(item => item * 3)
-            .ToList()
-            .Compile();
-    }
-
     [Benchmark(Baseline = true)]
     public List<int> ForLoop()
     {
@@ -61,10 +49,6 @@ public class ListInt32SelectToList: Int32ListBenchmarkBase
             .Select(source, item => item * 3)
             .ToList();
 
-    [Benchmark]
-    public List<int> LinqOptimizer()
-        => linqOptimizerQuery.Invoke();
-
 #if DOTNET5_0_OR_GREATER
     [Benchmark]
     public List<int> SpanLinq()
@@ -72,12 +56,6 @@ public class ListInt32SelectToList: Int32ListBenchmarkBase
             .Select(item => item * 3)
             .ToList();
 #endif
-    
-    [Benchmark]
-    public List<int> Streams()
-        => source.AsStream()
-            .Select(item => item * 3)
-            .ToList();
 
     [Benchmark]
     public List<int> StructLinq()

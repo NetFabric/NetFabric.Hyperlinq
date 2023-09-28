@@ -4,18 +4,6 @@ namespace LinqBenchmarks.Array.ValueType;
 
 public class ArrayValueTypeWhere: ValueTypeArrayBenchmarkBase
 {
-    Func<IEnumerable<FatValueType>> linqOptimizerQuery;
-
-    protected override void Setup()
-    {
-        base.Setup();
-
-        linqOptimizerQuery = source
-            .AsQueryExpr()
-            .Where(item => item.IsEven())
-            .Compile();
-    }
-        
     [Benchmark(Baseline = true)]
     public FatValueType ForLoop()
     {
@@ -83,34 +71,11 @@ public class ArrayValueTypeWhere: ValueTypeArrayBenchmarkBase
     }
 
     [Benchmark]
-    public FatValueType LinqOptimizer()
-    {
-        var items = linqOptimizerQuery.Invoke();
-        var sum = default(FatValueType);
-        foreach (var item in items)
-            sum += item;
-        return sum;
-    }
-
-    [Benchmark]
     public FatValueType SpanLinq()
     {
         var fatValueTypes = source
             .AsSpan()
             .Where(item => item.IsEven());
-        var sum = default(FatValueType);
-        foreach (var item in fatValueTypes)
-            sum += item;
-        return sum;
-    }
-
-    [Benchmark]
-    public FatValueType Streams()
-    {
-        var fatValueTypes = source
-            .AsStream()
-            .Where(item => item.IsEven())
-            .ToEnumerable();
         var sum = default(FatValueType);
         foreach (var item in fatValueTypes)
             sum += item;

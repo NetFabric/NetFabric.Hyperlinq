@@ -5,18 +5,6 @@ namespace LinqBenchmarks.List.Int32;
 
 public partial class ListInt32Sum: Int32ListBenchmarkBase
 {
-    Func<int> linqOptimizerQuery;
-
-    protected override void Setup()
-    {
-        base.Setup();
-
-        linqOptimizerQuery = source
-            .AsQueryExpr()
-            .Sum()
-            .Compile();
-    }
-
     [Benchmark(Baseline = true)]
     public int ForLoop()
     {
@@ -59,16 +47,6 @@ public partial class ListInt32Sum: Int32ListBenchmarkBase
     [Benchmark]
     public int LinqAF()
         => global::LinqAF.ListExtensionMethods.Sum(source);
-
-    [Benchmark]
-    public int LinqOptimizer()
-        => linqOptimizerQuery.Invoke();
-
-    [Benchmark]
-    public int Streams()
-        => source
-            .AsStream()
-            .Sum();
 
     [Benchmark]
     public int StructLinq()

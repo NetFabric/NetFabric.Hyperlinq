@@ -5,20 +5,6 @@ namespace LinqBenchmarks.List.ValueType;
 
 public partial class ListValueTypeWhereSelectToArray: ValueTypeListBenchmarkBase
 {
-    Func<FatValueType[]> linqOptimizerQuery;
-
-    protected override void Setup()
-    {
-        base.Setup();
-
-        linqOptimizerQuery = source
-            .AsQueryExpr()
-            .Where(item => item.IsEven())
-            .Select(item => item * 3)
-            .ToArray()
-            .Compile();
-    }
-
     [Benchmark(Baseline = true)]
     public FatValueType[] ForLoop()
     {
@@ -74,10 +60,6 @@ public partial class ListValueTypeWhereSelectToArray: ValueTypeListBenchmarkBase
             .Select(item => item * 3)
             .ToArray();
 
-    [Benchmark]
-    public FatValueType[] LinqOptimizer()
-        => linqOptimizerQuery.Invoke();
-
 #if DOTNET5_0_OR_GREATER
     [Benchmark]
     public FatValueType[] SpanLinq()
@@ -86,14 +68,6 @@ public partial class ListValueTypeWhereSelectToArray: ValueTypeListBenchmarkBase
             .Select(item => item * 3)
             .ToArray();
 #endif
-    
-    [Benchmark]
-    public FatValueType[] Streams()
-        => source
-            .AsStream()
-            .Where(item => item.IsEven())
-            .Select(item => item * 3)
-            .ToArray();
 
     [Benchmark]
     public FatValueType[] StructLinq()

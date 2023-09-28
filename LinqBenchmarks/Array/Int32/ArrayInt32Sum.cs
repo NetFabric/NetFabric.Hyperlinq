@@ -2,18 +2,6 @@
 
 public class ArrayInt32Sum: ArrayInt32BenchmarkBase
 {
-    Func<int> linqOptimizerQuery;
-
-    protected override void Setup()
-    {
-        base.Setup();
-
-        linqOptimizerQuery = source
-            .AsQueryExpr()
-            .Sum()
-            .Compile();
-    }
-
     [Benchmark(Baseline = true)]
     public int ForLoop()
     {
@@ -57,16 +45,6 @@ public class ArrayInt32Sum: ArrayInt32BenchmarkBase
     [Benchmark]
     public int LinqAF()
         => global::LinqAF.ArrayExtensionMethods.Sum(source);
-
-    [Benchmark]
-    public int LinqOptimizer()
-        => linqOptimizerQuery.Invoke();
-
-    [Benchmark]
-    public int Streams()
-        => source
-            .AsStream()
-            .Sum();
 
     [Benchmark]
     public int StructLinq()

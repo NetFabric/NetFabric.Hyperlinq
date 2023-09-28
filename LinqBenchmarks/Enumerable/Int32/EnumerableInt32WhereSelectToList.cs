@@ -2,20 +2,6 @@
 
 public partial class EnumerableInt32WhereSelectToList: EnumerableInt32BenchmarkBase
 {
-    Func<List<int>> linqOptimizerQuery;
-
-    protected override void Setup()
-    {
-        base.Setup();
-
-        linqOptimizerQuery = source
-            .AsQueryExpr()
-            .Where(item => item.IsEven())
-            .Select(item => item * 3)
-            .ToList()
-            .Compile();
-    }
-
     [Benchmark(Baseline = true)]
     public List<int> ForeachLoop()
     {
@@ -39,18 +25,6 @@ public partial class EnumerableInt32WhereSelectToList: EnumerableInt32BenchmarkB
     public List<int> LinqAF()
         => LinqAfExtensions
             .Where(source, item => item.IsEven())
-            .Select(item => item * 3)
-            .ToList();
-
-    [Benchmark]
-    public List<int> LinqOptimizer()
-        => linqOptimizerQuery.Invoke();
-
-    [Benchmark]
-    public List<int> Streams()
-        => source
-            .AsStream()
-            .Where(item => item.IsEven())
             .Select(item => item * 3)
             .ToList();
 

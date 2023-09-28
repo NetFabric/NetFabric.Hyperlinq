@@ -2,19 +2,6 @@
 
 public class ArrayInt32WhereCount: ArrayInt32BenchmarkBase
 {
-    Func<int> linqOptimizerQuery;
-
-    protected override void Setup()
-    {
-        base.Setup(); 
-
-        linqOptimizerQuery = source
-            .AsQueryExpr()
-            .Where(item => item.IsEven())
-            .Count()
-            .Compile();            
-    }
-        
     [Benchmark(Baseline = true)]
     public int ForLoop()
     {
@@ -58,20 +45,9 @@ public class ArrayInt32WhereCount: ArrayInt32BenchmarkBase
         => global::LinqAF.ArrayExtensionMethods.Count(source, item => item.IsEven());
 
     [Benchmark]
-    public int LinqOptimizer()
-        => linqOptimizerQuery.Invoke();
-
-    [Benchmark]
     public int SpanLinq()
         => source
             .AsSpan()
-            .Where(item => item.IsEven())
-            .Count();
-
-    [Benchmark]
-    public int Streams()
-        => source
-            .AsStream()
             .Where(item => item.IsEven())
             .Count();
 

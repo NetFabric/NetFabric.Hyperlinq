@@ -9,19 +9,6 @@ namespace LinqBenchmarks.List.ValueType;
 
 public class ListValueTypeWhereSelect: ValueTypeListBenchmarkBase
 {
-    Func<IEnumerable<FatValueType>> linqOptimizerQuery;
-
-    protected override void Setup()
-    {
-        base.Setup();
-
-        linqOptimizerQuery = source
-            .AsQueryExpr()
-            .Where(item => item.IsEven())
-            .Select(item => item * 3)
-            .Compile();
-    }
-
     [Benchmark(Baseline = true)]
     public FatValueType ForLoop()
     {
@@ -93,16 +80,6 @@ public class ListValueTypeWhereSelect: ValueTypeListBenchmarkBase
         return sum;
     }
 
-    [Benchmark]
-    public FatValueType LinqOptimizer()
-    {
-        var items = linqOptimizerQuery.Invoke();
-        var sum = default(FatValueType);
-        foreach (var item in items)
-            sum += item;
-        return sum;
-    }
-
 #if DOTNET5_0_OR_GREATER
     [Benchmark]
     public FatValueType SpanLinq()
@@ -116,20 +93,6 @@ public class ListValueTypeWhereSelect: ValueTypeListBenchmarkBase
         return sum;
     }
 #endif
-    
-    [Benchmark]
-    public FatValueType Streams()
-    {
-        var items = source
-            .AsStream()
-            .Where(item => item.IsEven())
-            .Select(item => item * 3)
-            .ToEnumerable();
-        var sum = default(FatValueType);
-        foreach (var item in items)
-            sum += item;
-        return sum;
-    }
 
     [Benchmark]
     public FatValueType StructLinq()

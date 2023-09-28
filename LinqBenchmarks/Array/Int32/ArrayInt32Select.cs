@@ -4,15 +4,6 @@ namespace LinqBenchmarks.Array.Int32;
 
 public class ArrayInt32Select: ArrayInt32BenchmarkBase
 {
-    Func<IEnumerable<int>> linqOptimizerQuery;
-
-    protected override void Setup()
-    {
-        base.Setup();
-
-        linqOptimizerQuery = source.AsQueryExpr().Select(item => item * 3).Compile();
-    }
-
     [Benchmark(Baseline = true)]
     public int ForLoop()
     {
@@ -83,29 +74,9 @@ public class ArrayInt32Select: ArrayInt32BenchmarkBase
     }
 
     [Benchmark]
-    public int LinqOptimizer()
-    {
-        var items = linqOptimizerQuery.Invoke();
-        var sum = 0;
-        foreach (var item in items)
-            sum += item;
-        return sum;
-    }
-
-    [Benchmark]
     public int SpanLinq()
     {
         var items = source.AsSpan().Select(item => item * 3);
-        var sum = 0;
-        foreach (var item in items)
-            sum += item;
-        return sum;
-    }
-
-    [Benchmark]
-    public int Streams()
-    {
-        var items = source.AsStream().Select(item => item * 3).ToEnumerable();
         var sum = 0;
         foreach (var item in items)
             sum += item;

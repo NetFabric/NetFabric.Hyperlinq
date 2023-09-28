@@ -2,19 +2,6 @@
 
 public class EnumerableInt32WhereSelect: EnumerableInt32BenchmarkBase
 {
-    Func<IEnumerable<int>> linqOptimizerQuery;
-
-    protected override void Setup()
-    {
-        base.Setup();
-
-        linqOptimizerQuery = source
-            .AsQueryExpr()
-            .Where(item => item.IsEven())
-            .Select(item => item * 3)
-            .Compile();
-    }
-
     [Benchmark(Baseline = true)]
     public int ForeachLoop()
     {
@@ -45,30 +32,6 @@ public class EnumerableInt32WhereSelect: EnumerableInt32BenchmarkBase
         var items = LinqAfExtensions
             .Where(source, item => item.IsEven())
             .Select(item => item * 3);
-        var sum = 0;
-        foreach (var item in items)
-            sum += item;
-        return sum;
-    }
-
-    [Benchmark]
-    public int LinqOptimizer()
-    {
-        var items = linqOptimizerQuery.Invoke();
-        var sum = 0;
-        foreach (var item in items)
-            sum += item;
-        return sum;
-    }
-
-    [Benchmark]
-    public int Streams()
-    {
-        var items = source
-            .AsStream()
-            .Where(item => item.IsEven())
-            .Select(item => item * 3)
-            .ToEnumerable();
         var sum = 0;
         foreach (var item in items)
             sum += item;

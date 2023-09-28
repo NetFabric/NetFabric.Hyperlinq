@@ -8,20 +8,6 @@ namespace LinqBenchmarks.List.ValueType;
 
 public partial class ListValueTypeWhereSelectToList: ValueTypeListBenchmarkBase
 {
-    Func<List<FatValueType>> linqOptimizerQuery;
-
-    protected override void Setup()
-    {
-        base.Setup();
-
-        linqOptimizerQuery = source
-            .AsQueryExpr()
-            .Where(item => item.IsEven())
-            .Select(item => item * 3)
-            .ToList()
-            .Compile();
-    }
-
     [Benchmark(Baseline = true)]
     public List<FatValueType> ForLoop()
     {
@@ -75,10 +61,6 @@ public partial class ListValueTypeWhereSelectToList: ValueTypeListBenchmarkBase
             .Select(item => item * 3)
             .ToList();
 
-    [Benchmark]
-    public List<FatValueType> LinqOptimizer()
-        => linqOptimizerQuery.Invoke();
-
 #if DOTNET5_0_OR_GREATER
     [Benchmark]
     public List<FatValueType> SpanLinq()
@@ -87,14 +69,6 @@ public partial class ListValueTypeWhereSelectToList: ValueTypeListBenchmarkBase
             .Select(item => item * 3)
             .ToList();
 #endif
-
-    [Benchmark]
-    public List<FatValueType> Streams()
-        => source
-            .AsStream()
-            .Where(item => item.IsEven())
-            .Select(item => item * 3)
-            .ToList();
 
     [Benchmark]
     public List<FatValueType> StructLinq()

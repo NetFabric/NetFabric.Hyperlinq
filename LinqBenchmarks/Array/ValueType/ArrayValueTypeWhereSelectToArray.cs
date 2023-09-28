@@ -2,20 +2,6 @@
 
 public partial class ArrayValueTypeWhereSelectToArray: ValueTypeArrayBenchmarkBase
 {
-    Func<FatValueType[]> linqOptimizerQuery;
-
-    protected override void Setup()
-    {
-        base.Setup();
-
-        linqOptimizerQuery = source
-            .AsQueryExpr()
-            .Where(item => item.IsEven())
-            .Select(item => item * 3)
-            .ToArray()
-            .Compile();
-    }
-        
     [Benchmark(Baseline = true)]
     public FatValueType[] ForLoop()
     {
@@ -67,21 +53,9 @@ public partial class ArrayValueTypeWhereSelectToArray: ValueTypeArrayBenchmarkBa
         => global::LinqAF.ArrayExtensionMethods.Where(source, item => item.IsEven()).Select(item => item * 3).ToArray();
 
     [Benchmark]
-    public FatValueType[] LinqOptimizer()
-        => linqOptimizerQuery.Invoke();
-
-    [Benchmark]
     public FatValueType[] SpanLinq()
         => source
             .AsSpan()
-            .Where(item => item.IsEven())
-            .Select(item => item * 3)
-            .ToArray();
-
-    [Benchmark]
-    public FatValueType[] Streams()
-        => source
-            .AsStream()
             .Where(item => item.IsEven())
             .Select(item => item * 3)
             .ToArray();
