@@ -3,10 +3,11 @@
 
   <PropertyGroup>
     <Authors>Antao Almada</Authors>
-    <Copyright>Copyright 2019-2021 Antao Almada</Copyright>
+    <Copyright>Copyright 2019-2023 Antao Almada</Copyright>
     <LangVersion>latest</LangVersion>
     <Features>strict</Features>
     <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
 </Project>
