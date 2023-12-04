@@ -17,7 +17,8 @@ namespace NetFabric.Hyperlinq;
 public readonly struct ActionWrapper<T>(Action<T> action) 
     : IAction<T>
 {
-    readonly Action<T> action = action ?? Throw.ArgumentNullException<Action<T>>(nameof(action));
+    readonly Action<T> action 
+        = action ?? Throw.ArgumentNullException<Action<T>>(nameof(action));
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     void IAction<T>.Invoke(ref readonly T arg)
@@ -42,7 +43,8 @@ public readonly struct ActionWrapper<T>(Action<T> action)
 public readonly struct ActionWrapper<T1, T2>(Action<T1, T2> action) 
     : IAction<T1, T2>
 {
-    readonly Action<T1, T2> action = action ?? Throw.ArgumentNullException<Action<T1, T2>>(nameof(action));
+    readonly Action<T1, T2> action 
+        = action ?? Throw.ArgumentNullException<Action<T1, T2>>(nameof(action));
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     void IAction<T1, T2>.Invoke(ref readonly T1 arg1, ref readonly T2 arg2)
@@ -68,7 +70,8 @@ public readonly struct ActionWrapper<T1, T2>(Action<T1, T2> action)
 public readonly struct ActionWrapper<T1, T2, T3>(Action<T1, T2, T3> action) 
     : IAction<T1, T2, T3>
 {
-    readonly Action<T1, T2, T3> action = action ?? Throw.ArgumentNullException<Action<T1, T2, T3>>(nameof(action));
+    readonly Action<T1, T2, T3> action 
+        = action ?? Throw.ArgumentNullException<Action<T1, T2, T3>>(nameof(action));
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     void IAction<T1, T2, T3>.Invoke(ref readonly T1 arg1, ref readonly T2 arg2, ref readonly T3 arg3)
@@ -95,7 +98,8 @@ public readonly struct ActionWrapper<T1, T2, T3>(Action<T1, T2, T3> action)
 public readonly struct ActionWrapper<T1, T2, T3, T4>(Action<T1, T2, T3, T4> action) 
     : IAction<T1, T2, T3, T4>
 {
-    readonly Action<T1, T2, T3, T4> action = action ?? Throw.ArgumentNullException<Action<T1, T2, T3, T4>>(nameof(action));
+    readonly Action<T1, T2, T3, T4> action 
+        = action ?? Throw.ArgumentNullException<Action<T1, T2, T3, T4>>(nameof(action));
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     void IAction<T1, T2, T3, T4>.Invoke(ref readonly T1 arg1, ref readonly T2 arg2, ref readonly T3 arg3, ref readonly T4 arg4)
@@ -123,7 +127,8 @@ public readonly struct ActionWrapper<T1, T2, T3, T4>(Action<T1, T2, T3, T4> acti
 public readonly struct ActionWrapper<T1, T2, T3, T4, T5>(Action<T1, T2, T3, T4, T5> action) 
     : IAction<T1, T2, T3, T4, T5>
 {
-    readonly Action<T1, T2, T3, T4, T5> action = action ?? Throw.ArgumentNullException<Action<T1, T2, T3, T4, T5>>(nameof(action));
+    readonly Action<T1, T2, T3, T4, T5> action 
+        = action ?? Throw.ArgumentNullException<Action<T1, T2, T3, T4, T5>>(nameof(action));
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     void IAction<T1, T2, T3, T4, T5>.Invoke(ref readonly T1 arg1, ref readonly T2 arg2, ref readonly T3 arg3, ref readonly T4 arg4, ref readonly T5 arg5)
@@ -152,7 +157,8 @@ public readonly struct ActionWrapper<T1, T2, T3, T4, T5>(Action<T1, T2, T3, T4, 
 public readonly struct ActionWrapper<T1, T2, T3, T4, T5, T6>(Action<T1, T2, T3, T4, T5, T6> action) 
     : IAction<T1, T2, T3, T4, T5, T6>
 {
-    readonly Action<T1, T2, T3, T4, T5, T6> action = action ?? Throw.ArgumentNullException<Action<T1, T2, T3, T4, T5, T6>>(nameof(action));
+    readonly Action<T1, T2, T3, T4, T5, T6> action 
+        = action ?? Throw.ArgumentNullException<Action<T1, T2, T3, T4, T5, T6>>(nameof(action));
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     void IAction<T1, T2, T3, T4, T5, T6>.Invoke(ref readonly T1 arg1, ref readonly T2 arg2, ref readonly T3 arg3, ref readonly T4 arg4, ref readonly T5 arg5, ref readonly T6 arg6)
@@ -182,7 +188,8 @@ public readonly struct ActionWrapper<T1, T2, T3, T4, T5, T6>(Action<T1, T2, T3, 
 public readonly struct ActionWrapper<T1, T2, T3, T4, T5, T6, T7>(Action<T1, T2, T3, T4, T5, T6, T7> action) 
     : IAction<T1, T2, T3, T4, T5, T6, T7>
 {
-    readonly Action<T1, T2, T3, T4, T5, T6, T7> action = action ?? Throw.ArgumentNullException<Action<T1, T2, T3, T4, T5, T6, T7>>(nameof(action));
+    readonly Action<T1, T2, T3, T4, T5, T6, T7> action 
+        = action ?? Throw.ArgumentNullException<Action<T1, T2, T3, T4, T5, T6, T7>>(nameof(action));
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     void IAction<T1, T2, T3, T4, T5, T6, T7>.Invoke(ref readonly T1 arg1, ref readonly T2 arg2, ref readonly T3 arg3, ref readonly T4 arg4, ref readonly T5 arg5, ref readonly T6 arg6, ref readonly T7 arg7)
@@ -213,7 +220,8 @@ public readonly struct ActionWrapper<T1, T2, T3, T4, T5, T6, T7>(Action<T1, T2, 
 public readonly struct ActionWrapper<T1, T2, T3, T4, T5, T6, T7, T8>(Action<T1, T2, T3, T4, T5, T6, T7, T8> action) 
     : IAction<T1, T2, T3, T4, T5, T6, T7, T8>
 {
-    readonly Action<T1, T2, T3, T4, T5, T6, T7, T8> action = action ?? Throw.ArgumentNullException<Action<T1, T2, T3, T4, T5, T6, T7, T8>>(nameof(action));
+    readonly Action<T1, T2, T3, T4, T5, T6, T7, T8> action 
+        = action ?? Throw.ArgumentNullException<Action<T1, T2, T3, T4, T5, T6, T7, T8>>(nameof(action));
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     void IAction<T1, T2, T3, T4, T5, T6, T7, T8>.Invoke(ref readonly T1 arg1, ref readonly T2 arg2, ref readonly T3 arg3, ref readonly T4 arg4, ref readonly T5 arg5, ref readonly T6 arg6, ref readonly T7 arg7, ref readonly T8 arg8)
@@ -245,7 +253,8 @@ public readonly struct ActionWrapper<T1, T2, T3, T4, T5, T6, T7, T8>(Action<T1, 
 public readonly struct ActionWrapper<T1, T2, T3, T4, T5, T6, T7, T8, T9>(Action<T1, T2, T3, T4, T5, T6, T7, T8, T9> action) 
     : IAction<T1, T2, T3, T4, T5, T6, T7, T8, T9>
 {
-    readonly Action<T1, T2, T3, T4, T5, T6, T7, T8, T9> action = action ?? Throw.ArgumentNullException<Action<T1, T2, T3, T4, T5, T6, T7, T8, T9>>(nameof(action));
+    readonly Action<T1, T2, T3, T4, T5, T6, T7, T8, T9> action 
+        = action ?? Throw.ArgumentNullException<Action<T1, T2, T3, T4, T5, T6, T7, T8, T9>>(nameof(action));
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     void IAction<T1, T2, T3, T4, T5, T6, T7, T8, T9>.Invoke(ref readonly T1 arg1, ref readonly T2 arg2, ref readonly T3 arg3, ref readonly T4 arg4, ref readonly T5 arg5, ref readonly T6 arg6, ref readonly T7 arg7, ref readonly T8 arg8, ref readonly T9 arg9)

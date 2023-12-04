@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Threading;
-
-namespace NetFabric.Hyperlinq;
+﻿namespace NetFabric.Hyperlinq;
 
 public interface IAsyncValueEnumerable<out T, out TEnumerator>
     : IAsyncEnumerable<T>

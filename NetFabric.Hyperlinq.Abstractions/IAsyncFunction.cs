@@ -1,7 +1,4 @@
-﻿using System.Threading;
-using System.Threading.Tasks;
-
-namespace NetFabric.Hyperlinq;
+﻿namespace NetFabric.Hyperlinq;
 
 public interface IAsyncFunction<T, TResult>
 {

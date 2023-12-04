@@ -1,17 +1,14 @@
-﻿using System;
-using System.Runtime.CompilerServices;
+﻿using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 namespace NetFabric.Hyperlinq;
 
 [StructLayout(LayoutKind.Auto)]
-public readonly struct FunctionWrapper<TResult>
+public readonly struct FunctionWrapper<TResult>(Func<TResult> function)
     : IFunction<TResult>
 {
-    readonly Func<TResult> function;
-
-    public FunctionWrapper(Func<TResult> function)
-        => this.function = function ?? throw new ArgumentNullException(nameof(function));
+    readonly Func<TResult> function 
+        = function ?? throw new ArgumentNullException(nameof(function));
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public TResult Invoke()
@@ -22,13 +19,11 @@ public readonly struct FunctionWrapper<TResult>
 }
 
 [StructLayout(LayoutKind.Auto)]
-public readonly struct FunctionWrapper<T, TResult>
+public readonly struct FunctionWrapper<T, TResult>(Func<T, TResult> function)
     : IFunction<T, TResult>
 {
-    readonly Func<T, TResult> function;
-
-    public FunctionWrapper(Func<T, TResult> function)
-        => this.function = function ?? throw new ArgumentNullException(nameof(function));
+    readonly Func<T, TResult> function 
+        = function ?? throw new ArgumentNullException(nameof(function));
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public TResult Invoke(T arg)
@@ -39,13 +34,11 @@ public readonly struct FunctionWrapper<T, TResult>
 }
 
 [StructLayout(LayoutKind.Auto)]
-public readonly struct FunctionWrapper<T1, T2, TResult>
+public readonly struct FunctionWrapper<T1, T2, TResult>(Func<T1, T2, TResult> function)
     : IFunction<T1, T2, TResult>
 {
-    readonly Func<T1, T2, TResult> function;
-
-    public FunctionWrapper(Func<T1, T2, TResult> function)
-        => this.function = function ?? throw new ArgumentNullException(nameof(function));
+    readonly Func<T1, T2, TResult> function 
+        = function ?? throw new ArgumentNullException(nameof(function));
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public TResult Invoke(T1 arg1, T2 arg2)
@@ -56,13 +49,11 @@ public readonly struct FunctionWrapper<T1, T2, TResult>
 }
 
 [StructLayout(LayoutKind.Auto)]
-public readonly struct FunctionWrapper<T1, T2, T3, TResult>
+public readonly struct FunctionWrapper<T1, T2, T3, TResult>(Func<T1, T2, T3, TResult> function)
     : IFunction<T1, T2, T3, TResult>
 {
-    readonly Func<T1, T2, T3, TResult> function;
-
-    public FunctionWrapper(Func<T1, T2, T3, TResult> function)
-        => this.function = function ?? throw new ArgumentNullException(nameof(function));
+    readonly Func<T1, T2, T3, TResult> function 
+        = function ?? throw new ArgumentNullException(nameof(function));
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public TResult Invoke(T1 arg1, T2 arg2, T3 arg3)
@@ -73,13 +64,11 @@ public readonly struct FunctionWrapper<T1, T2, T3, TResult>
 }
 
 [StructLayout(LayoutKind.Auto)]
-public readonly struct FunctionWrapper<T1, T2, T3, T4, TResult>
+public readonly struct FunctionWrapper<T1, T2, T3, T4, TResult>(Func<T1, T2, T3, T4, TResult> function)
     : IFunction<T1, T2, T3, T4, TResult>
 {
-    readonly Func<T1, T2, T3, T4, TResult> function;
-
-    public FunctionWrapper(Func<T1, T2, T3, T4, TResult> function)
-        => this.function = function ?? throw new ArgumentNullException(nameof(function));
+    readonly Func<T1, T2, T3, T4, TResult> function 
+        = function ?? throw new ArgumentNullException(nameof(function));
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public TResult Invoke(T1 arg1, T2 arg2, T3 arg3, T4 arg4)
@@ -90,13 +79,11 @@ public readonly struct FunctionWrapper<T1, T2, T3, T4, TResult>
 }
 
 [StructLayout(LayoutKind.Auto)]
-public readonly struct FunctionWrapper<T1, T2, T3, T4, T5, TResult>
+public readonly struct FunctionWrapper<T1, T2, T3, T4, T5, TResult>(Func<T1, T2, T3, T4, T5, TResult> function)
     : IFunction<T1, T2, T3, T4, T5, TResult>
 {
-    readonly Func<T1, T2, T3, T4, T5, TResult> function;
-
-    public FunctionWrapper(Func<T1, T2, T3, T4, T5, TResult> function)
-        => this.function = function ?? throw new ArgumentNullException(nameof(function));
+    readonly Func<T1, T2, T3, T4, T5, TResult> function 
+        = function ?? throw new ArgumentNullException(nameof(function));
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public TResult Invoke(T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5)
@@ -107,13 +94,11 @@ public readonly struct FunctionWrapper<T1, T2, T3, T4, T5, TResult>
 }
 
 [StructLayout(LayoutKind.Auto)]
-public readonly struct FunctionWrapper<T1, T2, T3, T4, T5, T6, TResult>
+public readonly struct FunctionWrapper<T1, T2, T3, T4, T5, T6, TResult>(Func<T1, T2, T3, T4, T5, T6, TResult> function)
     : IFunction<T1, T2, T3, T4, T5, T6, TResult>
 {
-    readonly Func<T1, T2, T3, T4, T5, T6, TResult> function;
-
-    public FunctionWrapper(Func<T1, T2, T3, T4, T5, T6, TResult> function)
-        => this.function = function ?? throw new ArgumentNullException(nameof(function));
+    readonly Func<T1, T2, T3, T4, T5, T6, TResult> function
+        = function ?? throw new ArgumentNullException(nameof(function));
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public TResult Invoke(T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6)
@@ -124,13 +109,11 @@ public readonly struct FunctionWrapper<T1, T2, T3, T4, T5, T6, TResult>
 }
 
 [StructLayout(LayoutKind.Auto)]
-public readonly struct FunctionWrapper<T1, T2, T3, T4, T5, T6, T7, TResult>
+public readonly struct FunctionWrapper<T1, T2, T3, T4, T5, T6, T7, TResult>(Func<T1, T2, T3, T4, T5, T6, T7, TResult> function)
     : IFunction<T1, T2, T3, T4, T5, T6, T7, TResult>
 {
-    readonly Func<T1, T2, T3, T4, T5, T6, T7, TResult> function;
-
-    public FunctionWrapper(Func<T1, T2, T3, T4, T5, T6, T7, TResult> function)
-        => this.function = function ?? throw new ArgumentNullException(nameof(function));
+    readonly Func<T1, T2, T3, T4, T5, T6, T7, TResult> function 
+        = function ?? throw new ArgumentNullException(nameof(function));
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public TResult Invoke(T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7)
@@ -141,13 +124,11 @@ public readonly struct FunctionWrapper<T1, T2, T3, T4, T5, T6, T7, TResult>
 }
 
 [StructLayout(LayoutKind.Auto)]
-public readonly struct FunctionWrapper<T1, T2, T3, T4, T5, T6, T7, T8, TResult>
+public readonly struct FunctionWrapper<T1, T2, T3, T4, T5, T6, T7, T8, TResult>(Func<T1, T2, T3, T4, T5, T6, T7, T8, TResult> function)
     : IFunction<T1, T2, T3, T4, T5, T6, T7, T8, TResult>
 {
-    readonly Func<T1, T2, T3, T4, T5, T6, T7, T8, TResult> function;
-
-    public FunctionWrapper(Func<T1, T2, T3, T4, T5, T6, T7, T8, TResult> function)
-        => this.function = function ?? throw new ArgumentNullException(nameof(function));
+    readonly Func<T1, T2, T3, T4, T5, T6, T7, T8, TResult> function 
+        = function ?? throw new ArgumentNullException(nameof(function));
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public TResult Invoke(T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8)
@@ -158,13 +139,11 @@ public readonly struct FunctionWrapper<T1, T2, T3, T4, T5, T6, T7, T8, TResult>
 }
 
 [StructLayout(LayoutKind.Auto)]
-public readonly struct FunctionWrapper<T1, T2, T3, T4, T5, T6, T7, T8, T9, TResult>
+public readonly struct FunctionWrapper<T1, T2, T3, T4, T5, T6, T7, T8, T9, TResult>(Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, TResult> function)
     : IFunction<T1, T2, T3, T4, T5, T6, T7, T8, T9, TResult>
 {
-    readonly Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, TResult> function;
-
-    public FunctionWrapper(Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, TResult> function)
-        => this.function = function ?? throw new ArgumentNullException(nameof(function));
+    readonly Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, TResult> function 
+        = function ?? throw new ArgumentNullException(nameof(function));
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public TResult Invoke(T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9)
