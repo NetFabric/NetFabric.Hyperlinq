@@ -51,12 +51,6 @@ public class ArrayInt32SelectToList: ArrayInt32BenchmarkBase
             .ToList();
 
     [Benchmark]
-    public List<int> SpanLinq()
-        => source.AsSpan()
-            .Select(item => item * 3)
-            .ToList();
-
-    [Benchmark]
     public List<int> StructLinq()
         => source.ToStructEnumerable()
             .Select(item => item * 3)

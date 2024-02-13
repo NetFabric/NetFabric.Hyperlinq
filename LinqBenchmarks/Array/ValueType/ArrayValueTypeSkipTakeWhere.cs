@@ -57,20 +57,6 @@ public class ArrayValueTypeSkipTakeWhere: ValueTypeArraySkipTakeBenchmarkBase
     }
 
     [Benchmark]
-    public FatValueType SpanLinq()
-    {
-        var items = source
-            .AsSpan()
-            .Skip(Skip)
-            .Take(Count)
-            .Where(item => item.IsEven());
-        var sum = default(FatValueType);
-        foreach (var item in items)
-            sum += item;
-        return sum;
-    }
-
-    [Benchmark]
     public FatValueType StructLinq()
     {
         var items = source

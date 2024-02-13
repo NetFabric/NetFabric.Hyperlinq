@@ -33,9 +33,9 @@ var config = DefaultConfig.Instance
     // .AddJob(Job.Default
     //     .WithRuntime(CoreRuntime.Core50)
     // )
-    .AddJob(Job.Default
-        .WithRuntime(CoreRuntime.Core60)
-    )
+    //.AddJob(Job.Default
+    //    .WithRuntime(CoreRuntime.Core60)
+    //)
     //.AddJob(Job.Default
     //    .WithRuntime(CoreRuntime.Core60)
     //    .WithEnvironmentVariables(
@@ -45,6 +45,9 @@ var config = DefaultConfig.Instance
     //)
     .AddJob(Job.Default
         .WithRuntime(CoreRuntime.Core80)
+    )
+    .AddJob(Job.Default
+        .WithRuntime(CoreRuntime.Core90)
     );
 
 #endif
@@ -106,9 +109,6 @@ static void SaveSummary(Summary summary)
 
     var linqAfVersion = GetFileVersion(typeof(LinqAF.Enumerable).Assembly);
     logger.WriteLine($"- LinqAF: [{linqAfVersion}](https://www.nuget.org/packages/LinqAF/{linqAfVersion})");
-
-    var spanLinqVersion = GetInformationalVersion(typeof(SpanLinq.SourceGenerator).Assembly);
-    logger.WriteLine($"- SpanLinq: [{spanLinqVersion}](https://www.nuget.org/packages/SpanLinq/{spanLinqVersion})");
 
     var structLinqVersion = GetInformationalVersion(typeof(StructLinq.List.ListEnumerable<>).Assembly);
     logger.WriteLine($"- StructLinq.BCL: [{structLinqVersion}](https://www.nuget.org/packages/StructLinq/{structLinqVersion})");

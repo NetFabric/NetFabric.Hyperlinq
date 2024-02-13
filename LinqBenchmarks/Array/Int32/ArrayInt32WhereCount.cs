@@ -45,13 +45,6 @@ public class ArrayInt32WhereCount: ArrayInt32BenchmarkBase
         => global::LinqAF.ArrayExtensionMethods.Count(source, item => item.IsEven());
 
     [Benchmark]
-    public int SpanLinq()
-        => source
-            .AsSpan()
-            .Where(item => item.IsEven())
-            .Count();
-
-    [Benchmark]
     public int StructLinq()
         => source
             .ToStructEnumerable()

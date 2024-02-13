@@ -52,13 +52,6 @@ public partial class ArrayInt32WhereSelectToArray: ArrayInt32BenchmarkBase
         => global::LinqAF.ArrayExtensionMethods.Where(source, item => item.IsEven()).Select(item => item * 3).ToArray();
 
     [Benchmark]
-    public int[] SpanLinq()
-        => source.AsSpan()
-            .Where(item => item.IsEven())
-            .Select(item => item * 3)
-            .ToArray();
-
-    [Benchmark]
     public int[] StructLinq()
         => source.ToStructEnumerable()
             .Where(item => item.IsEven())

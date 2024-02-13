@@ -9,19 +9,18 @@
   </PropertyGroup>
   
   <ItemGroup>
-    <PackageReference Include="BenchmarkDotNet" Version="0.13.5" />
-    <PackageReference Include="BenchmarkDotNet.Diagnostics.Windows" Version="0.13.5" />
+    <PackageReference Include="BenchmarkDotNet" Version="0.13.12" />
+    <PackageReference Include="BenchmarkDotNet.Diagnostics.Windows" Version="0.13.12" />
     <PackageReference Include="Faslinq" Version="1.0.5" />
     <PackageReference Include="LinqAF" Version="3.0.0" />
     <PackageReference Include="JM.LinqFaster" Version="1.1.2" />
     <PackageReference Include="LinqFaster.SIMD" Version="1.0.3" />
     <PackageReference Include="LinqFasterer" Version="2.1.0" />
-    <PackageReference Include="NetFabric" Version="1.3.0" />
+    <PackageReference Include="NetFabric" Version="1.5.0" />
     <PackageReference Include="NetFabric.Hyperlinq" Version="3.0.0-beta48" />
-    <PackageReference Include="StructLinq" Version="0.28.1" />
+    <PackageReference Include="StructLinq" Version="0.28.2" />
     <PackageReference Include="System.Interactive" Version="6.0.1" />
     <PackageReference Include="System.Linq.Async" Version="6.0.1" />
-    <PackageReference Include="SpanLinq" Version="0.0.1" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == 'net5.0'">

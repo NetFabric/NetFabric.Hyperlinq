@@ -71,18 +71,6 @@ public class ArrayValueTypeWhere: ValueTypeArrayBenchmarkBase
     }
 
     [Benchmark]
-    public FatValueType SpanLinq()
-    {
-        var fatValueTypes = source
-            .AsSpan()
-            .Where(item => item.IsEven());
-        var sum = default(FatValueType);
-        foreach (var item in fatValueTypes)
-            sum += item;
-        return sum;
-    }
-
-    [Benchmark]
     public FatValueType StructLinq()
     {
         var items = source

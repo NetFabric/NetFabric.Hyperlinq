@@ -57,20 +57,6 @@ public class ArrayInt32SkipTakeWhere: ArrayInt32SkipTakeBenchmarkBase
     }
 
     [Benchmark]
-    public int SpanLinq()
-    {
-        var items = source
-            .AsSpan()
-            .Skip(Skip)
-            .Take(Count)
-            .Where(item => item.IsEven());
-        var sum = 0;
-        foreach (var item in items)
-            sum += item;
-        return sum;
-    }
-
-    [Benchmark]
     public int StructLinq()
     {
         var items = source

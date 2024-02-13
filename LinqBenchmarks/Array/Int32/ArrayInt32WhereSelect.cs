@@ -69,19 +69,6 @@ public class ArrayInt32WhereSelect: ArrayInt32BenchmarkBase
     }
 
     [Benchmark]
-    public int SpanLinq()
-    {
-        var items = source
-            .AsSpan()
-            .Where(item => item.IsEven())
-            .Select(item => item * 3);
-        var sum = 0;
-        foreach (var item in items)
-            sum += item;
-        return sum;
-    }
-
-    [Benchmark]
     public int StructLinq()
     {
         var items = source

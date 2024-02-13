@@ -53,14 +53,6 @@ public partial class ArrayValueTypeWhereSelectToArray: ValueTypeArrayBenchmarkBa
         => global::LinqAF.ArrayExtensionMethods.Where(source, item => item.IsEven()).Select(item => item * 3).ToArray();
 
     [Benchmark]
-    public FatValueType[] SpanLinq()
-        => source
-            .AsSpan()
-            .Where(item => item.IsEven())
-            .Select(item => item * 3)
-            .ToArray();
-
-    [Benchmark]
     public FatValueType[] StructLinq()
         => source
             .ToRefStructEnumerable()

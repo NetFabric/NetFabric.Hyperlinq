@@ -1,6 +1,4 @@
-﻿using System.Runtime.InteropServices;
-using Microsoft.CodeAnalysis.Host;
-using ListExtensions = Faslinq.ListExtensions;
+﻿using ListExtensions = Faslinq.ListExtensions;
 
 namespace LinqBenchmarks.List.Int32;
 
